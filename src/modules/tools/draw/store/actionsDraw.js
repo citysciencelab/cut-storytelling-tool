@@ -511,6 +511,20 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
             }
             commit("setSelectedFeature", feature);
 
+            // styleSettings for imported KML-Lines has wrong entries
+            if (feature.getGeometry().getType() === "LineString" && styleSettings.colorContour === undefined) {
+                const styles = feature.getStyle()(feature);
+
+                if (styles && styles.length > 0) {
+                    const style = styles[styles.length - 1],
+                        color = style.getStroke().getColor();
+
+                    styleSettings.colorContour = color;
+                    styleSettings.opacityContour = color.length === 4 ? color[3] : 1;
+                    styleSettings.strokeWidth = style.getStroke().getWidth();
+                }
+            }
+
             Object.assign(styleSettings,
                 drawState.color,
                 drawState.colorContour,

@@ -295,7 +295,7 @@ export default {
         prepareLegend (legendInfos) {
             let preparedLegend = [];
 
-            if (Array.isArray(legendInfos) && legendInfos.every(value => typeof value === "string")) {
+            if (Array.isArray(legendInfos) && legendInfos.every(value => typeof value === "string") && legendInfos.length > 0) {
                 preparedLegend = legendInfos;
             }
             else if (Array.isArray(legendInfos)) {
@@ -308,7 +308,6 @@ export default {
                     };
 
                     if (geometryType) {
-
                         if (geometryType === "Point") {
                             legendObj = this.prepareLegendForPoint(legendObj, style);
                         }

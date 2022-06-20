@@ -10,22 +10,13 @@ import isObject from "./isObject";
  * @returns {Number} A negative number if referenceStr occurs before compareString; positive if the referenceStr occurs after compareString; 0 if they are equivalent.
  */
 export default function localeCompare (referenceStr, compareString, locale, options) {
-    let localeCode = locale,
-        optionsParams = options;
+    const localeCode = typeof locale === "string" ? locale : store.getters["Language/currentLocale"];
 
-    if (!localeCompareSupportsLocales()) {
+    if (!localeCode || !localeCompareSupportsLocales()) {
         return String(referenceStr).localeCompare(String(compareString));
     }
 
-    if (typeof localeCode !== "string") {
-        localeCode = store.getters["Language/currentLocale"];
-    }
-
-    if (!isObject(optionsParams)) {
-        optionsParams = {};
-    }
-
-    return String(referenceStr).localeCompare(String(compareString), localeCode, optionsParams);
+    return String(referenceStr).localeCompare(String(compareString), localeCode, isObject(options) ? options : {});
 }
 
 /**

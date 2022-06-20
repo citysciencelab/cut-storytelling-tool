@@ -99,6 +99,8 @@ export default {
         active (isActive) {
             if (isActive) {
                 this.setFocusToFirstControl();
+                this.setSelectOptions([]);
+                this.loadSelectOptions();
             }
         }
     },

@@ -60,6 +60,11 @@ export default {
             required: false,
             default: "default"
         },
+        filterId: {
+            type: Number,
+            required: false,
+            default: 0
+        },
         info: {
             type: [String, Boolean],
             required: false,
@@ -109,6 +114,13 @@ export default {
             type: [String, Object],
             required: false,
             default: undefined
+        },
+        fixedRules: {
+            type: Array,
+            required: false,
+            default: () => {
+                return [];
+            }
         },
         snippetId: {
             type: Number,
@@ -179,15 +191,17 @@ export default {
                     dropdownValue.push(value);
                 });
             }
-            dropdownValue.sort((a, b) => {
-                if (typeof this.localeCompareParams === "string") {
-                    return localeCompare(a, b, this.localeCompareParams);
-                }
-                else if (isObject(this.localeCompareParams)) {
-                    return localeCompare(a, b, this.localeCompareParams.locale, this.localeCompareParams.options);
-                }
-                return localeCompare(a, b);
-            });
+            if (!Array.isArray(this.value)) {
+                dropdownValue.sort((a, b) => {
+                    if (typeof this.localeCompareParams === "string") {
+                        return localeCompare(a, b, this.localeCompareParams);
+                    }
+                    else if (isObject(this.localeCompareParams)) {
+                        return localeCompare(a, b, this.localeCompareParams.locale, this.localeCompareParams.options);
+                    }
+                    return localeCompare(a, b);
+                });
+            }
 
             if (this.multiselect && this.addSelectAll) {
                 return [{
@@ -225,7 +239,7 @@ export default {
             }
 
             if (adjusting?.start) {
-                if (this.snippetId !== adjusting.snippetId) {
+                if (this.snippetId !== adjusting.snippetId && (!Array.isArray(adjusting.snippetId) || !adjusting.snippetId.includes(this.snippetId))) {
                     this.dropdownValue = [];
                 }
                 this.isAdjusting = true;
@@ -254,42 +268,6 @@ export default {
     },
     created () {
         this.dropdownSelected = Array.isArray(this.prechecked) ? this.prechecked : [];
-
-        if (!this.visible) {
-            this.dropdownValue = Array.isArray(this.prechecked) ? this.prechecked : [];
-            this.$nextTick(() => {
-                this.isInitializing = false;
-                this.disable = false;
-            });
-        }
-        else if (Array.isArray(this.value)) {
-            this.dropdownValue = this.value;
-            this.$nextTick(() => {
-                this.isInitializing = false;
-                this.disable = false;
-            });
-        }
-        else if (this.api && this.autoInit !== false) {
-            this.api.getUniqueValues(this.attrName, list => {
-                this.dropdownValue = this.splitListWithDelimitor(list, this.delimitor);
-                this.$nextTick(() => {
-                    this.isInitializing = false;
-                    this.disable = false;
-                });
-            }, error => {
-                this.disable = false;
-                this.isInitializing = false;
-                console.warn(error);
-            });
-        }
-        else {
-            this.dropdownValue = [];
-            this.$nextTick(() => {
-                this.isInitializing = false;
-                this.disable = false;
-            });
-        }
-
         if (this.visible && Array.isArray(this.prechecked) && this.prechecked.length) {
             this.emitCurrentRule(this.prechecked, true);
         }
@@ -309,7 +287,44 @@ export default {
             this.iconList = this.renderIcons;
         }
 
-        this.$emit("setSnippetPrechecked", this.visible && Array.isArray(this.prechecked) && this.prechecked.length);
+        this.$nextTick(() => {
+            if (!this.visible) {
+                this.dropdownValue = Array.isArray(this.prechecked) ? this.prechecked : [];
+                this.$nextTick(() => {
+                    this.isInitializing = false;
+                    this.disable = false;
+                });
+            }
+            else if (Array.isArray(this.value)) {
+                this.dropdownValue = this.value;
+                this.$nextTick(() => {
+                    this.isInitializing = false;
+                    this.disable = false;
+                });
+            }
+            else if (this.api && this.autoInit !== false) {
+                this.api.getUniqueValues(this.attrName, list => {
+                    this.dropdownValue = this.splitListWithDelimitor(list, this.delimitor);
+                    this.$nextTick(() => {
+                        this.isInitializing = false;
+                        this.disable = false;
+                    });
+                }, error => {
+                    this.disable = false;
+                    this.isInitializing = false;
+                    console.warn(error);
+                }, {rules: this.fixedRules, filterId: this.filterId});
+            }
+            else {
+                this.dropdownValue = [];
+                this.$nextTick(() => {
+                    this.isInitializing = false;
+                    this.disable = false;
+                });
+            }
+
+            this.$emit("setSnippetPrechecked", this.visible && Array.isArray(this.prechecked) && this.prechecked.length);
+        });
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -336,6 +351,21 @@ export default {
          */
         getTitle () {
             return this.title || this.attrName;
+        },
+        /**
+         * Returns the computed dropdown value to display in the list.
+         * @returns {String[]} An array of value to display.
+         */
+        getDropdownValueForList () {
+            const dropdownValue = this.dropdownValueComputed;
+
+            if (!Array.isArray(dropdownValue) || !dropdownValue.length) {
+                return [];
+            }
+            else if (isObject(dropdownValue[0])) {
+                return Array.isArray(dropdownValue[0].list) ? dropdownValue[0].list : [];
+            }
+            return dropdownValue;
         },
         /**
          * Emits the current rule to whoever is listening.
@@ -437,7 +467,7 @@ export default {
                 if (delimitor && typeof value === "string" && value.indexOf(delimitor)) {
                     this.addDropdownValueForAdjustment(dropdownValue, configValue, value.split(delimitor), false);
                 }
-                else if (!dropdownValueAssoc[value] && (!Array.isArray(configValue) || configValue[value])) {
+                else if (!dropdownValueAssoc[value] && (!Array.isArray(configValue) || Array.isArray(configValue) && configValueAssoc[value])) {
                     dropdownValueAssoc[value] = true;
                     this.dropdownValue.push(value);
                 }
@@ -519,7 +549,7 @@ export default {
                     :multiple="multiselect"
                     :placeholder="placeholder"
                     :show-labels="false"
-                    open-direction="bottom"
+                    open-direction="auto"
                     :options-limit="optionsLimit"
                     :hide-selected="true"
                     :close-on-select="true"
@@ -557,8 +587,8 @@ export default {
                     </a>
                 </div>
                 <div
-                    v-for="val in dropdownValue"
-                    :key="val"
+                    v-for="val in getDropdownValueForList()"
+                    :key="snippetId + '-' + val"
                     class="grid-item"
                 >
                     <span

@@ -1,3 +1,6 @@
+import {getLayerWhere} from "@masterportal/masterportalapi/src/rawLayerList";
+import {getCenter} from "ol/extent";
+
 export default {
     /**
      * Switches to the feature list of the selected layer.
@@ -27,22 +30,27 @@ export default {
      * @param {String} featureIndex index of the clicked Feature
      * @returns {void}
      */
-    clickOnFeature ({state, commit, dispatch, rootGetters}, featureIndex) {
+    clickOnFeature ({state, commit, dispatch}, featureIndex) {
         if (featureIndex !== "" && featureIndex >= 0 && featureIndex <= state.shownFeatures) {
             const feature = state.gfiFeaturesOfLayer[featureIndex],
                 featureGeometry = state.rawFeaturesOfLayer[featureIndex].getGeometry(),
-                mapView = rootGetters["Maps/getView"];
+                styleObj = state.layer.geometryType.toLowerCase().indexOf("polygon") > -1 ? state.highlightVectorRulesPolygon : state.highlightVectorRulesPointLine;
 
             commit("setSelectedFeature", feature);
 
             dispatch("switchToDetails");
 
-            mapView.fit(featureGeometry, {
-                duration: 800,
-                callback: () => {
-                    dispatch("Maps/setCenter", mapView.getCenter(), {root: true});
+            if (styleObj && styleObj.zoomLevel) {
+                if (featureGeometry && typeof featureGeometry.getType === "function") {
+                    if (featureGeometry.getType() === "Point") {
+                        dispatch("Maps/setCenter", featureGeometry.getCoordinates(), {root: true});
+                    }
+                    else {
+                        dispatch("Maps/setCenter", getCenter(featureGeometry.getExtent()), {root: true});
+                    }
+                    dispatch("Maps/setZoomLevel", styleObj.zoomLevel, {root: true});
                 }
-            });
+            }
         }
     },
     /**
@@ -75,6 +83,7 @@ export default {
                 featureGeometryType = feat.getGeometry().getType();
                 return feat.getId().toString() === featureId;
             }),
+            rawLayer = getLayerWhere({id: state.layer.id}),
             styleObj = state.layer.geometryType.toLowerCase().indexOf("polygon") > -1 ? state.highlightVectorRulesPolygon : state.highlightVectorRulesPointLine,
             highlightObject = {
                 type: featureGeometryType === "Point" || featureGeometryType === "MultiPoint" ? "increase" : "highlightPolygon",
@@ -84,15 +93,22 @@ export default {
                 scale: styleObj.image?.scale
             };
 
-        layer.id = state.layer.id;
-
-        if (highlightObject.type === "highlightPolygon") {
-            highlightObject.highlightStyle = {
-                fill: styleObj.fill,
-                stroke: styleObj.stroke,
-                image: styleObj.image
-            };
+        if (featureGeometryType === "LineString") {
+            highlightObject.type = "highlightLine";
         }
+        layer.id = state.layer.id;
+        if (styleObj.zoomLevel) {
+            highlightObject.zoomLevel = styleObj.zoomLevel;
+        }
+        if (rawLayer && rawLayer.styleId) {
+            highlightObject.styleId = rawLayer.styleId;
+        }
+
+        highlightObject.highlightStyle = {
+            fill: styleObj.fill,
+            stroke: styleObj.stroke,
+            image: styleObj.image
+        };
         dispatch("Maps/highlightFeature", highlightObject, {root: true});
     },
     /**
