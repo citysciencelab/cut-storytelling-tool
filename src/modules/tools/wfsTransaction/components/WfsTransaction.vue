@@ -130,7 +130,7 @@ export default {
                 return "text";
             }
             if (type === "integer" || type === "int" || type === "decimal") {
-                // TODO(roehlipa): (Possibly) If input type is a float, the input should automatically change to a float (1,2 => 1.2; 1 => 1.0)
+                // TODO(roehlipa): (Possibly) If input type is a float, the input should automatically change to a consistent input variant for floats (1,2 => 1.2; 1 => 1.0)
                 return "number";
             }
             if (type === "boolean") {
