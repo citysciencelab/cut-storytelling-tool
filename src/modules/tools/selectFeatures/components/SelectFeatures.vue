@@ -105,8 +105,7 @@ export default {
         setFeaturesFromDrag: function () {
             const extent = this.dragBoxInteraction.getGeometry().getExtent();
 
-            Radio
-                .request("Map", "getLayers")
+            mapCollection.getMap("2D").getLayers()
                 .getArray()
                 .filter(layer => layer.get("visible") && layer.get("source") instanceof VectorSource)
                 .forEach(

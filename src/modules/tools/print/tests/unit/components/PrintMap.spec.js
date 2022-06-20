@@ -33,7 +33,8 @@ describe("src/modules/tools/Print/components/PrintMap.vue", () => {
             id: "ol",
             mode: "2D",
             render: sinon.spy(),
-            updateSize: sinon.spy()
+            updateSize: sinon.spy(),
+            getLayers: sinon.spy()
         };
 
         mapCollection.clear();

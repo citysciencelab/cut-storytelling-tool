@@ -53,6 +53,7 @@ export default {
             "importKML",
             "setSelectedFiletype"
         ]),
+        ...mapActions("Maps", ["addNewLayerIfNotExists"]),
         ...mapMutations("Tools/FileImport", Object.keys(mutations)),
 
         /**
@@ -94,7 +95,7 @@ export default {
                 const reader = new FileReader();
 
                 reader.onload = async f => {
-                    const vectorLayer = await Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+                    const vectorLayer = await this.addNewLayerIfNotExists("import_draw_layer");
 
                     this.importKML({raw: f.target.result, layer: vectorLayer, filename: file.name});
                 };

@@ -128,7 +128,7 @@ function setParserAttributeByLayerId (layerId, key, value) {
  * @returns {ol/Layer[]} a list of layers
  */
 function getLayers () {
-    return Radio.request("Map", "getLayers");
+    return mapCollection.getMap("2D").getLayers();
 }
 
 /**

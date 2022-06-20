@@ -215,7 +215,7 @@ export default {
             const scale = parseInt(event.target.value, 10),
                 resolution = {
                     "scale": scale,
-                    "mapSize": Radio.request("Map", "getSize"),
+                    "mapSize": mapCollection.getMap("2D").getSize(),
                     "printMapSize": this.layoutMapInfo
                 };
 

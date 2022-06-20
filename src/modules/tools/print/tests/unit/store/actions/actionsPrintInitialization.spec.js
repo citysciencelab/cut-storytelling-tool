@@ -29,7 +29,8 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
         map = {
             id: "ol",
             mode: "2D",
-            render: sinon.spy()
+            render: sinon.spy(),
+            getLayers: sinon.spy()
         };
 
         mapCollection.clear();

@@ -7,7 +7,7 @@ import store from "../../../../app-store/index";
  * @returns {void}
  */
 export default function getVisibleLayer (printMapMarker = false) {
-    const layers = Radio.request("Map", "getLayers"),
+    const layers = mapCollection.getMap("2D").getLayers(),
         visibleLayerList = typeof layers?.getArray !== "function" ? [] : layers.getArray().filter(layer => {
             return layer.getVisible() === true &&
                 (

@@ -74,7 +74,7 @@ export function createGeoJSON (features, geometryType, epsg = 4326) {
  */
 export function getFeatureIds (layerId) {
     const featureArray = [],
-        layer = Radio.request("Map", "getLayers").getArray().find(l => l.get("id") === layerId);
+        layer = mapCollection.getMap("2D").getLayers().getArray().find(l => l.get("id") === layerId);
 
     if (typeof layer === "undefined") {
         console.warn(i18next.t("common:modules.featureViaURL.messages.layerNotFound"));

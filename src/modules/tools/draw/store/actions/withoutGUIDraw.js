@@ -228,7 +228,7 @@ async function initializeWithoutGUI ({state, commit, dispatch, getters, rootStat
             setters.setStyleSettings({getters, commit}, styleSettings);
         }
 
-        commit("setLayer", await Radio.request("Map", "createLayerIfNotExists", "import_draw_layer"));
+        commit("setLayer", await dispatch("Maps/addNewLayerIfNotExists", "import_draw_layer", {root: true}));
 
         dispatch("createDrawInteractionAndAddToMap", {active: true, maxFeatures});
         dispatch("createSelectInteractionAndAddToMap", false);
