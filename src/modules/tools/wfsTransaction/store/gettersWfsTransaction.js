@@ -41,7 +41,7 @@ const getters = {
             let geometryConfiguration,
                 layerConfiguration = null;
 
-            if (val === "Polygon" && state.areaButton !== undefined) {
+            if (val === "Polygon" && state.areaButton !== undefined && state.areaButton.length > 0) {
                 // TODO: Shrink this to a single const when areaButton is removed
                 console.warn("WfsTransaction: The configuration parameter 'areaButton' has been deprecated. Please use 'polygonButton' instead.");
                 geometryConfiguration = state.areaButton;
