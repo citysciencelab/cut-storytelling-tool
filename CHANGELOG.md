@@ -13,7 +13,7 @@
 
 ### Added
 - FilterModule:
-- A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
+    - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
 - api/highlightFeaturesByAttribute URL mechanism to query WFS data by parameters and configuration
 
 ### Changed
