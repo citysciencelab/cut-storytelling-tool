@@ -3,6 +3,7 @@ import {Draw, Modify} from "ol/interaction";
 import prepareFeatureProperties from "../utils/prepareFeatureProperties";
 import writeTransaction from "../utils/writeTransaction";
 import loader from "../../../../utils/loaderOverlay";
+import getLayerInformation from "../utils/getLayerInformation";
 
 let drawInteraction,
     drawLayer,
@@ -127,17 +128,7 @@ const actions = {
         commit("setActive", active);
 
         if (active) {
-            commit("setLayerInformation", getters.layerIds.map(id => {
-                const layer = Radio.request("ModelList", "getModelByAttributes", {id});
-
-                return ["featureNS", "featurePrefix", "featureType", "gfiAttributes", "style", "isSelected", "name", "url", "version"]
-                    .reduce((previous, key) => ({...previous, [key]: layer.get(key)}),
-                        {
-                            id,
-                            isSecured: layer.get("isSecured") !== undefined ? layer.get("isSecured") : false
-                        }
-                    );
-            }));
+            commit("setLayerInformation", getLayerInformation(getters.layerIds));
             commit("setCurrentLayerIndex", getters.layerInformation.findIndex(layer => layer.isSelected));
             dispatch("setFeatureProperties");
         }
