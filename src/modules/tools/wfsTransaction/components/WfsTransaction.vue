@@ -93,6 +93,7 @@
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import ToolTemplate from "../../ToolTemplate.vue";
 import SimpleButton from "../../../../share-components/SimpleButton.vue";
+import getLayerInformation from "../utils/getLayerInformation";
 
 export default {
     name: "WfsTransaction",
@@ -108,9 +109,12 @@ export default {
     },
     created () {
         this.$on("close", this.close);
+        Backbone.Events.listenTo(Radio.channel("ModelList"), {
+            "updatedSelectedLayerList": () => this.setLayerInformation(getLayerInformation(this.layerIds))
+        });
     },
     methods: {
-        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setSelectedInteraction"]),
+        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setSelectedInteraction", "setLayerInformation"]),
         ...mapActions("Tools/WfsTransaction", ["prepareInteraction", "reset", "save", "setActive", "setFeatureProperties"]),
         close () {
             this.setActive(false);
