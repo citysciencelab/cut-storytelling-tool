@@ -1,5 +1,6 @@
 import {getRecordById} from "../../../api/csw/getRecordById";
 import getProxyUrl from "../../../utils/getProxyUrl";
+import sortBy from "../../../utils/sortBy";
 
 const actions = {
 
@@ -151,7 +152,7 @@ const actions = {
             state.downloadLinks.forEach(link => {
                 downloadLinks.push(link);
             });
-            commit("setDownloadLinks", Radio.request("Util", "sortBy", downloadLinks, "linkName"));
+            commit("setDownloadLinks", sortBy(downloadLinks, "linkName"));
         }
     },
 

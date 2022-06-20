@@ -8,6 +8,7 @@ import {WMSCapabilities} from "ol/format.js";
 import {intersects} from "ol/extent";
 import {transform as transformCoord, getProjection} from "@masterportal/masterportalapi/src/crs";
 import axios from "axios";
+import LoaderOverlay from "../../../../utils/loaderOverlay";
 
 export default {
     name: "AddWMS",
@@ -132,14 +133,14 @@ export default {
                 this.$store.dispatch("Alerting/addSingleAlert", this.errorHttpUrl);
                 return;
             }
-            Radio.trigger("Util", "showLoader");
+            LoaderOverlay.show();
             axios({
                 timeout: 4000,
                 url: url + "?request=GetCapabilities&service=WMS"
             })
                 .then(response => response.data)
                 .then((data) => {
-                    Radio.trigger("Util", "hideLoader");
+                    LoaderOverlay.hide();
                     try {
                         const parser = new WMSCapabilities(),
                             uniqId = this.getAddWmsUniqueId(),
@@ -184,7 +185,7 @@ export default {
                         this.displayErrorMessage();
                     }
                 }, () => {
-                    Radio.trigger("Util", "hideLoader");
+                    LoaderOverlay.hide();
                     this.displayErrorMessage();
                 });
         },

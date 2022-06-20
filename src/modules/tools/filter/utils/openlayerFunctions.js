@@ -136,7 +136,7 @@ function getLayers () {
  * @returns {Boolean} true/false if current ui style of portal is table
  */
 function isUiStyleTable () {
-    return Radio.request("Util", "getUiStyle") === "TABLE";
+    return store.getters.uiStyle === "TABLE";
 }
 
 /**

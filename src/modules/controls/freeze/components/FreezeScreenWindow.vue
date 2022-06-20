@@ -1,4 +1,5 @@
 <script>
+import {mapGetters} from "vuex";
 
 /**
  * Freeze control that allows the user to freeze the current window
@@ -8,11 +9,13 @@ export default {
     name: "FreezeScreenWindow",
     data: function () {
         return {
-            isTable: Radio.request("Util", "getUiStyle") === "TABLE",
+            isTable: this.uiStyle === "TABLE",
             posValues: ""
         };
     },
     computed: {
+        ...mapGetters(["uiStyle"]),
+
         cssVars () {
             const rotationValue = document.getElementById("table-navigation").className.match(/\d+/g)[0];
             let xVal,

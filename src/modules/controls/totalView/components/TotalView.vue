@@ -22,13 +22,14 @@ export default {
         }
     },
     computed: {
+        ...mapGetters(["uiStyle"]),
         ...mapGetters("Maps", ["initialCenter", "initialZoomLevel"]),
 
         component () {
-            return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
+            return this.uiStyle === "TABLE" ? TableStyleControl : ControlIcon;
         },
         iconToUse () {
-            return Radio.request("Util", "getUiStyle") === "TABLE" ? this.tableIcon : this.icon;
+            return this.uiStyle === "TABLE" ? this.tableIcon : this.icon;
         },
 
         /**

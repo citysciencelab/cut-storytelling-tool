@@ -18,6 +18,7 @@ export default {
         ToolTemplate
     },
     computed: {
+        ...mapGetters(["ignoredKeys"]),
         ...mapGetters("Tools/SelectFeatures", Object.keys(getters))
     },
     watch: {
@@ -258,9 +259,7 @@ export default {
          * @returns {Boolean} key is valid (i.e. not a member of ignoredKeys)
          */
         isValidKey: function (key) {
-            const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
-
-            return ignoredKeys.indexOf(key.toUpperCase()) === -1;
+            return this.ignoredKeys.indexOf(key.toUpperCase()) === -1;
         },
 
         /**

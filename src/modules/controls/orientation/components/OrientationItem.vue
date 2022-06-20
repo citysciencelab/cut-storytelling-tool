@@ -10,6 +10,7 @@ import Overlay from "ol/Overlay.js";
 import proj4 from "proj4";
 import * as Proj from "ol/proj.js";
 import {Circle, LineString} from "ol/geom.js";
+import LoaderOverlay from "../../../../utils/loaderOverlay";
 
 export default {
     name: "OrientationItem",
@@ -334,7 +335,7 @@ export default {
          */
         showPoiWindow () {
             if (!this.position) {
-                Radio.trigger("Util", "showLoader");
+                LoaderOverlay.show();
                 const geolocation = this.geolocation,
                     position = geolocation.getPosition(),
                     centerPosition = proj4(proj4("EPSG:4326"), proj4(this.projection.getCode()), position);
@@ -357,7 +358,7 @@ export default {
             if (this.geolocation !== null) {
                 this.untrack();
             }
-            Radio.trigger("Util", "hideLoader");
+            LoaderOverlay.hide();
         },
 
         /**

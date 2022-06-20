@@ -4,6 +4,7 @@ import getters from "../../store/gettersOrientation";
 import mutations from "../../store/mutationsOrientation";
 import {extractEventCoordinates} from "../../../../../../src/utils/extractEventCoordinates";
 import Icon from "ol/style/Icon";
+import LoaderOverlay from "../../../../../utils/loaderOverlay";
 
 export default {
     name: "PoiOrientation",
@@ -37,7 +38,7 @@ export default {
         }
     },
     mounted () {
-        Radio.trigger("Util", "hideLoader");
+        LoaderOverlay.hide();
         this.show();
         this.getFeatures();
         this.initActiveCategory();
@@ -49,7 +50,7 @@ export default {
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),
-        ...mapActions("Maps", "zoomToExtent"),
+        ...mapActions("Maps", ["zoomToExtent"]),
 
         /**
          * Callback when close icon has been clicked.
