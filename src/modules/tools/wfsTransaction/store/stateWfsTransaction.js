@@ -3,7 +3,7 @@
  * @type {object}
  * @param {string} layerId Id of the layer this configuration belongs to.
  * @param {boolean} show Whether the button should be visible for the layer with this layerId.
- * @param {boolean} multi Whether the drawn geometries should be Multi-X. TODO(roehlipa): Document me
+ * @param {boolean} multi Whether the drawn geometries should be Multi-X. TODO(roehlipa): Document me in config.json
  */
 
 /**

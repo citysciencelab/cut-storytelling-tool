@@ -4,8 +4,7 @@ import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 const getters = {
     ...generateSimpleGetters(initialState),
     currentInteractionConfig (state, {currentLayerId}) {
-        // TODO(roehlipa): Adjust doc for edit and delete and functionality
-        // TODO(roehlipa): Add config and interactions to call on click
+        // TODO(roehlipa): Adjust doc for edit and delete as well as their functionality
         const configuration = {
             LineString: {
                 available: false,
@@ -60,7 +59,7 @@ const getters = {
             if (layerConfiguration === undefined) {
                 return;
             }
-            configuration[val].available = layerConfiguration.show; // TODO(roehlipa): Maybe deprecate parameter "show" in favour of "available"?
+            configuration[val].available = layerConfiguration.show; // TODO(roehlipa): Maybe deprecate parameter "show" in favour of "available"? Or "enabled"?
             configuration[val].caption = layerConfiguration.caption ? layerConfiguration.caption : configuration[val].caption;
             configuration[val].multi = layerConfiguration.multi ? layerConfiguration.multi : false;
         });
