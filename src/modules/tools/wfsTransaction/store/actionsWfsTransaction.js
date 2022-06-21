@@ -75,7 +75,7 @@ const actions = {
         drawInteraction = undefined;
         modifyInteraction = undefined;
         drawLayer = undefined;
-        Radio.request("ModelList", "getModelByAttributes", {id: getters.currentLayerId}).setIsVisibleInMap(true);
+        Radio.request("ModelList", "getModelByAttributes", {id: getters.currentLayerId})?.setIsVisibleInMap(true);
     },
     save ({dispatch, getters: {currentLayerIndex, layerInformation, featureProperties, selectedInteraction}, rootGetters}) {
         // TODO(roehlipa): Form validation
