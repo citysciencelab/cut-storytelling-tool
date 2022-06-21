@@ -8,7 +8,7 @@ import {
     deepMerge
 } from "../../fetchFirstModuleConfig.js";
 
-describe.only("src/utils/fetchFirstModuleConfig.js", () => {
+describe.skip("src/utils/fetchFirstModuleConfig.js", () => {
     afterEach(sinon.restore);
 
     describe("createKeyPathArray", () => {
