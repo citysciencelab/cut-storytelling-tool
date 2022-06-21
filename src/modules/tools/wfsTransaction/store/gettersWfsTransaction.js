@@ -43,7 +43,7 @@ const defaultInteractionConfig = {
                     layerConfiguration = null;
 
                 if (val === "Polygon" && state.areaButton !== undefined && state.areaButton.length > 0) {
-                // TODO: Shrink this to a single const when areaButton is removed
+                    // TODO: Shrink this to a single const when areaButton is removed
                     console.warn("WfsTransaction: The configuration parameter 'areaButton' has been deprecated. Please use 'polygonButton' instead.");
                     geometryConfiguration = state.areaButton;
                 }
@@ -74,7 +74,7 @@ const defaultInteractionConfig = {
             return state.featureProperties.every(property => property.required ? property.value !== null : true);
         },
         showInteractionsButtons (state) {
-        // TODO(roehlipa): The form should also be displayed when editing a feature to be able to update the properties
+            // TODO(roehlipa): The form should also be displayed when editing a feature to be able to update the properties
             return [null, "delete", "edit"].includes(state.selectedInteraction);
         }
     };
