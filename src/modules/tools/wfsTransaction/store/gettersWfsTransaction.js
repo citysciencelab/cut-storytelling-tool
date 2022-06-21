@@ -1,5 +1,6 @@
 import initialState from "./stateWfsTransaction";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
+import deepCopy from "../../../../utils/deepCopy";
 
 // TODO(roehlipa): Adjust doc for edit and delete as well as their functionality
 const defaultInteractionConfig = {
@@ -31,7 +32,7 @@ const defaultInteractionConfig = {
     getters = {
         ...generateSimpleGetters(initialState),
         currentInteractionConfig (state, {currentLayerId}) {
-            const configuration = {...defaultInteractionConfig};
+            const configuration = deepCopy(defaultInteractionConfig);
 
             ["delete", "edit"].forEach(val => {
                 configuration[val].available = typeof state[val] === "boolean" ? state[val] : true;
