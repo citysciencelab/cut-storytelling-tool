@@ -2,24 +2,28 @@ const Config = {
     addons: ["obliqueControl", "populationRequest", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "trafficCount", "verkehrsstaerken", "solaratlas", "dataTable"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
-    zoomToFeature: {
-        attribute: "flaechenid",
-        wfsId: "4560",
-        styleId: "location_eventlotse"
-    },
-    zoomToGeometry: {
-        layerId: "1692",
-        attribute: "bezirk_name",
-        geometries: [
-            "ALTONA",
-            "HARBURG",
-            "HAMBURG-NORD",
-            "BERGEDORF",
-            "EIMSBÜTTEL",
-            "HAMBURG-MITTE",
-            "WANDSBEK"
-        ]
-    },
+    zoomTo: [
+        {
+            id: "zoomToGeometry",
+            layerId: "1692",
+            property: "bezirk_name",
+            allowedValues: [
+                "ALTONA",
+                "HARBURG",
+                "HAMBURG-NORD",
+                "BERGEDORF",
+                "EIMSBÜTTEL",
+                "HAMBURG-MITTE",
+                "WANDSBEK"
+            ]
+        },
+        {
+            id: "zoomToFeatureId",
+            layerId: "4560",
+            property: "flaechenid",
+            styleId: "location_eventlotse"
+        }
+    ],
     namedProjections: [
         // GK DHDN
         ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -56,15 +60,17 @@ const Config = {
     startingMap3D: false,
     obliqueMap: true,
     cesiumParameter: {
-        tileCacheSize: 20,
-        enableLighting: true,
         fog: {
             enabled: true,
             density: 0.0002,
             screenSpaceErrorFactor: 2.0
         },
-        maximumScreenSpaceError: 2,
-        fxaa: true
+        fxaa: true,
+        globe: {
+            enableLighting: true,
+            maximumScreenSpaceError: 2,
+            tileCacheSize: 20
+        }
     },
     featureViaURL: {
         zoomTo: "42",

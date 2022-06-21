@@ -1,12 +1,11 @@
-$color_1: rgb(255, 255, 255);
-$font_family_1: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
+@import "~variables";
 $background_color_1: rgb(65, 65, 65);
 
 .breadcrumb-mobile {
     >.breadcrumb {
         margin-bottom: 0;
-        background-color: $background_color_1;
-        color: $color_1;
+        background-color: $dark_grey;
+        color: $white;
         font-size: 14px;
         padding: 14px 15px;
         >li {
@@ -18,13 +17,12 @@ $background_color_1: rgb(65, 65, 65);
             }
             &+li {
                 &:before {
-                    color: $color_1;
+                    color: $white;
                 }
             }
         }
     }
     span.title {
-        font-family: $font_family_1;
         padding-left: 6px;
         font-size: 14px;
     }

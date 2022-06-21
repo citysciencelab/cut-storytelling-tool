@@ -84,7 +84,7 @@ export default {
                         :download="download.file"
                     >
                         <button
-                            class="btn btn-sm btn-lgv-grey"
+                            class="btn btn-sm btn-primary"
                             :disabled="disableFileDownload"
                             type="button"
                             @click="fileDownloaded"
@@ -105,17 +105,14 @@ export default {
 @import "~variables";
 
 a {
-    color: #000;
+    color: $black;
 }
-.bold {
-    font-weight: bold;
-}
+
 .disabled {
     cursor: not-allowed;
 }
 
 #tool-draw-download-file {
-    background-color: buttonface;
     text-decoration: none;
     padding: 0;
 }

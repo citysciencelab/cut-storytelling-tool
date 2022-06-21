@@ -1,3 +1,5 @@
+import {getStyleModelById} from "../../../../../src/core/layers/RadioBridge.js";
+
 /**
  * check how to highlight
  * @param {Object} param store context
@@ -17,11 +19,14 @@ function highlightFeature ({commit, dispatch, getters}, highlightObject) {
     else if (highlightObject.type === "highlightPolygon") {
         highlightPolygon(commit, dispatch, highlightObject);
     }
+    else if (highlightObject.type === "highlightLine") {
+        highlightLine(commit, dispatch, highlightObject);
+    }
 }
 /**
  * highlights a polygon feature
- * @param {Object} commit the commit
- * @param {Object} dispatch the dispatch
+ * @param {Function} commit commit function
+ * @param {Function} dispatch dispatch function
  * @param {Object} highlightObject contains several parameters for feature highlighting
  * @fires VectorStyle#RadioRequestStyleListReturnModelById
  * @returns {void}
@@ -36,7 +41,7 @@ function highlightPolygon (commit, dispatch, highlightObject) {
             const clonedStyle = Array.isArray(originalStyle) ? originalStyle[0].clone() : originalStyle.clone();
 
             commit("Maps/setHighlightedFeatures", [feature], {root: true});
-            commit("Maps/setHighlightedFeatureStyles", feature.getStyle(), {root: true});
+            commit("Maps/setHighlightedFeatureStyles", [feature.getStyle()], {root: true});
 
             if (newStyle.fill?.color) {
                 clonedStyle.getFill().setColor(newStyle.fill.color);
@@ -48,7 +53,40 @@ function highlightPolygon (commit, dispatch, highlightObject) {
                 clonedStyle.getStroke().setColor(newStyle.stroke.color);
             }
             feature.setStyle(clonedStyle);
+        }
+    }
+    else {
+        dispatch("MapMarker/placingPolygonMarker", highlightObject.feature, {root: true});
+    }
 
+}
+/**
+ * highlights a line feature
+ * @param {Function} commit commit function
+ * @param {Function} dispatch dispatch function
+ * @param {Object} highlightObject contains several parameters for feature highlighting
+ * @fires VectorStyle#RadioRequestStyleListReturnModelById
+ * @returns {void}
+ */
+function highlightLine (commit, dispatch, highlightObject) {
+    if (highlightObject.highlightStyle) {
+        const newStyle = highlightObject.highlightStyle,
+            feature = highlightObject.feature,
+            originalStyle = styleObject(highlightObject, feature) ? styleObject(highlightObject, feature) : undefined;
+
+        if (originalStyle) {
+            const clonedStyle = Array.isArray(originalStyle) ? originalStyle[0].clone() : originalStyle.clone();
+
+            commit("addHighlightedFeature", feature);
+            commit("addHighlightedFeatureStyle", feature.getStyle());
+
+            if (newStyle.stroke?.width) {
+                clonedStyle.getStroke().setWidth(newStyle.stroke.width);
+            }
+            if (newStyle.stroke?.color) {
+                clonedStyle.getStroke().setColor(newStyle.stroke.color);
+            }
+            feature.setStyle(clonedStyle);
         }
     }
     else {
@@ -86,7 +124,7 @@ function highlightViaParametricUrl (dispatch, getters, layerIdAndFeatureId) {
  * @returns {ol/feature} feature to highlight
  */
 function getHighlightFeature (layerId, featureId, getters) {
-    const layer = getters.layerById(layerId)?.olLayer;
+    const layer = getters.getLayerById(layerId)?.olLayer;
 
     if (layer) {
         return layer.getSource().getFeatureById(featureId)
@@ -97,19 +135,17 @@ function getHighlightFeature (layerId, featureId, getters) {
 }
 /**
  * increases the icon of the feature
- * @param {Object} commit the commit
- * @param {Object} getters the getters
+ * @param {Function} commit commit function
+ * @param {Function} getters map getters
  * @param {Object} highlightObject contains several parameters for feature highlighting
  * @fires VectorStyle#RadioRequestStyleListReturnModelById
  * @returns {void}
  */
 function increaseFeature (commit, getters, highlightObject) {
     const scaleFactor = highlightObject.scale ? highlightObject.scale : 1.5,
-        features = highlightObject.layer ? highlightObject.layer.features : undefined, // use list of features provided if given
-        feature = features?.find(feat => feat.id.toString() === highlightObject.id)?.feature // retrieve from list of features provided by id, if both are given
-            || highlightObject.layer?.id && highlightObject.id // if layerId and featureId are given
-            ? getHighlightFeature(highlightObject.layer?.id, highlightObject.id, getters) // get feature from layersource, incl. check against clustered features
-            : highlightObject.feature, // else, use provided feature itself if given
+        feature = highlightObject.feature // given already
+            ? highlightObject.feature
+            : getHighlightFeature(highlightObject.layer?.id, highlightObject.id, getters), // get feature from layersource, incl. check against clustered features
         clonedStyle = styleObject(highlightObject, feature) ? styleObject(highlightObject, feature).clone() : feature.getStyle()?.clone(),
         clonedImage = clonedStyle ? clonedStyle.getImage() : undefined;
 
@@ -121,6 +157,9 @@ function increaseFeature (commit, getters, highlightObject) {
             clonedStyle.getText().setScale(scaleFactor);
         }
         clonedImage.setScale(clonedImage.getScale() * scaleFactor);
+        if (highlightObject.highlightStyle.fill && highlightObject.highlightStyle.fill.color) {
+            clonedImage.getFill().setColor(highlightObject.highlightStyle.fill.color);
+        }
         feature.setStyle(clonedStyle);
     }
 }
@@ -132,14 +171,11 @@ function increaseFeature (commit, getters, highlightObject) {
  * @returns {ol/style} ol style
  */
 function styleObject (highlightObject, feature) {
-    let styleModel = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
-        style;
+    const stylelistmodel = highlightObject.styleId ? getStyleModelById(highlightObject.styleId) : getStyleModelById(highlightObject.layer.id);
+    let style;
 
-    if (!styleModel) {
-        styleModel = Radio.request("StyleList", "returnModelById", highlightObject.layer.styleId);
-    }
-    if (styleModel) {
-        style = styleModel.createStyle(feature, false);
+    if (stylelistmodel !== undefined) {
+        style = stylelistmodel.createStyle(feature, false);
         if (Array.isArray(style) && style.length > 0) {
             style = style[0];
         }

@@ -251,14 +251,11 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
 
-    $font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
     .scrollable{
         overflow: auto;
         max-height: calc(100vh - 200px);
-    }
-    .tool-compareFeatures-modal-title {
-        font-family: $font_family_1;
     }
     #tool-compareFeatures-buttons-feedback-listFull {
         text-align: center;
@@ -276,11 +273,10 @@ export default {
         font-family: $font_family_default;
     }
     #tool-compareFeatures-select-label {
-        font-family: $font_family_1;
         font-size: 13px;
         font-weight: normal;
         line-height: 17px;
-        color: #646262;
+        color: $dark_grey;
         margin-right: 20px;
         white-space: nowrap;
     }
@@ -307,7 +303,6 @@ export default {
         p {
             line-height: 22px;
             &:first-child {
-                font-family: $font_family_1;
                 font-size: 14px;
             }
         }

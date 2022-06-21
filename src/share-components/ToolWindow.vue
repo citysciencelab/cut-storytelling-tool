@@ -110,13 +110,10 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
-
-    $color_1: rgb(85, 85, 85);
-    $font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-    $background_color_1: rgb(255, 255, 255);
+    @import "~variables";
 
     .tool-window-vue {
-        background-color: $background_color_1;
+        background-color: $white;
         display: block;
         position: absolute;
         padding:0;
@@ -139,14 +136,14 @@ export default {
 
     .tool-window-heading{
         padding: 5px 5px 5px 5px;
-        border-bottom: 1px solid rgb(229, 229, 229);
-        font-family: $font_family_1;
+        border-bottom: 1px solid $light_grey;
+        font-family: $font_family_accent;
         display:flex;
         flex-direction:row;
         width:100%;
         .heading-element {
             white-space: nowrap;
-            color: $color_1;
+            color: $dark_grey;
             font-size: 14px;
             padding: 6px;
 
@@ -188,7 +185,7 @@ export default {
         width: 100%;
         max-height:72vh;
         -webkit-overflow-scrolling: touch;
-        background-color: $background_color_1;
+        background-color: $white;
         overflow: auto;
     }
 </style>

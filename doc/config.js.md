@@ -46,7 +46,8 @@ In the following, all configuration options are described. For all configuration
 |uiStyle|no|String|`"default"`|Sets the control element layout. |`table`|
 |wfsImgPath|no|String||Path to the folder holding images for the WFS styles. The path is relative to *js/main.js*.|`https://geodienste.hamburg.de/lgv-config/img/"`|
 |wpsID|no|String|`""`|Reference to a WPS interface used in various modules. The ID is resolved to a service defined in the **[rest-services.json](rest-services.json.md)** file.|`""`|
-|zoomToFeature|no|**[zoomToFeature](#markdown-header-zoomtofeature)**||Optional configuration of the URL query parameter `featureid`. For details, see **[urlParameter](urlParameter.md)**.||
+|zoomToFeature|no|**[zoomToFeature](#markdown-header-zoomtofeature)**||_Deprecated in the next major release. Please use **[zoomTo](#markdown-header-zoomto)** instead._ Optional configuration of the URL query parameter `featureid`. For details, see **[urlParameter](urlParameter.md)**. ||
+|zoomTo|no|**[zoomTo](#markdown-header-zoomto)**[]|Configuration for the URL query parameters `zoomToFeatureId` and `zoomToGeometry`.||
 |layerInformation|no|**[layerInformation](#markdown-header-layerinformation)**||Configuration for the layerInformation window.||
 |vuetify|no|String|undefined|Path to the optional instance of the vuetify UI library. e.g. portal or addon specific.|`addons/cosi/vuetify/index.js`|
 
@@ -63,6 +64,9 @@ In the following, all configuration options are described. For all configuration
 
 ## cameraParameter
 
+Cesium Scene camera settings in 3D mode.
+_Deprecated in the next major release. Please use **[cesiumParameter](#markdown-header-cesiumParameter)** instead._
+
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |heading|no|Number||Camera's initial heading in radians|
@@ -72,14 +76,106 @@ In the following, all configuration options are described. For all configuration
 ***
 
 ## cesiumParameter
+
+Cesium Scene settings in 3D mode.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Scene.html?classFilter=scene)**
+
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
-|fog|no|Object||Fog options. See [fog documentation](https://cesiumjs.org/Cesium/Build/Documentation/Fog.html) for details.|
-|enableLighting|no|Boolean|`false`|Activates light effects on the map based on the sun's position.|
-|maximumScreenSpaceError|no|Number|`2.0`|Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.|
+|camera|no|**[camera](#markdown-header-cesiumParametercamera)**||Cesium Scene camera settings in 3D mode.|
+|fog|no|**[fog](#markdown-header-cesiumParameterfog)**||Cesium Scene fog settings in 3D mode.|
 |fxaa|no|Boolean|`true`|activates *fast approximate anti-aliasing*|
+|globe|no|**[globe](#markdown-header-cesiumParameterglobe)**||Cesium Scene globe settings in 3D mode.|
+|maximumScreenSpaceError|no|Number|`2.0`|Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.|
 |tileCacheSize|no|Number|`100`|terrain/raster tile cache size|
 
+**Example**
+
+```json
+{
+    "camera": {
+        "altitude": 127,
+        "heading": -1.2502079000000208,
+        "tilt": 45
+    },
+    "fog": {
+        "enabled": true
+    },
+    "fxaa": true,
+    "globe": {
+        "enableLighting": true
+    },
+    "maximumScreenSpaceError": 2,
+    "tileCacheSize": 20,
+}
+```
+***
+
+### cesiumParameter.camera
+
+Cesium Scene camera settings in 3D mode.
+The camera is defined by a position, orientation, and view frustum.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Camera.html)**
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|altitude|no|Number||Camera's initial height in meters|
+|heading|no|Number||Camera's initial heading in radians|
+|tilt|no|Number||Camera's initial tile in radians|
+
+**Example**
+
+```json
+{
+    "camera": {
+        "altitude": 127,
+        "heading": -1.2502079000000208,
+        "tilt": 45
+    }
+}
+```
+***
+
+### cesiumParameter.fog
+
+Cesium Scene fog settings in 3D mode.
+Blends the atmosphere to geometry far from the camera for horizon views.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Fog.html)**
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|enabled|no|Boolean|`false`|True if fog is enabled.|
+
+**Example**
+
+```json
+{
+    "fog": {
+        "enabled": true
+    }
+}
+```
+***
+
+### cesiumParameter.globe
+
+Cesium Scene globe settings in 3D mode.
+The globe rendered in the scene, including its terrain and imagery layers.
+For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Globe.html)**
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|enableLighting|no|Boolean|`false`|Activates light effects on the map based on the sun's position.|
+
+**Example**
+
+```json
+{
+    "globe": {
+        "enableLighting": true
+    }
+}
+```
 ***
 
 ## footer
@@ -155,6 +251,7 @@ In the following, all configuration options are described. For all configuration
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
+|minShift|no|Integer|`5`|Minimum mouse position movement required to render a new tooltip; in pixels.|
 |numFeaturesToShow|no|Integer|`2`|Maximum amount of element information per tooltip; when exceeded, an information text informs the user of cut content.|
 |infoText|no|String|`"(Further objects. Please zoom.)"`|Information text shown when `numFeaturesToShow` is exceeded.|
 
@@ -307,7 +404,52 @@ In the following, all configuration options are described. For all configuration
 
 ***
 
+## zoomTo
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+
+|id|yes|enum["zoomToFeatureId", "zoomToGeometry"]||Id of the URL query parameter the configuration refers to.|
+|layerId|yes|String||Id of the layer the feature should be fetched from.|
+|property|yes|String||Name of the property the features should be filtered by.|
+|addFeatures|no|Boolean|true|Specifies whether the desired features should be added to the map in a separate layer.|
+|allowedValues|no|Array||Only relevant when `id` equal `zoomToGeometry`. Further filters the values allowed in the URL query parameters.|
+|styleId|no|String||Only relevant when `id` equal `zoomToFeatureId`. Id of the `StyleModel` that should be used to style the features retrieved from the service.|
+
+**Example**:
+
+```js
+{
+    zoomTo: [
+        {
+            id: "zoomToGeometry",
+            layerId: "1692",
+            property: "bezirk_name",
+            allowedValues: [
+                "ALTONA",
+                "HARBURG",
+                "HAMBURG-NORD",
+                "BERGEDORF",
+                "EIMSBÜTTEL",
+                "HAMBURG-MITTE",
+                "WANDSBEK"
+            ]
+        },
+        {
+            id: "zoomToFeatureId",
+            layerId: "4560",
+            property: "flaechenid",
+            styleId: "location_eventlotse"
+        }
+    ]
+}
+```
+
+***
+
 ## zoomToFeature
+
+_Deprecated in the next major release. Please use **[zoomTo](#markdown-header-zoomto)** instead._
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
@@ -317,6 +459,7 @@ In the following, all configuration options are described. For all configuration
 |styleId|no|String||A styleId from the `styles.json` may be supplied to override the map marker's design|
 |setFeature|no|Boolean|yes||Specifies a feature with which to create the specified style.
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Whether the service URL is to be requested via proxy. The request will contain the requested URL as path, with dots replaced by underdashes.|
+|addFeatures|no|Boolean|true|Specifies whether the desired features should be added to the map in a separate layer.|
 
 **Example:**
 
@@ -333,6 +476,8 @@ In the following, all configuration options are described. For all configuration
 ***
 
 ## zoomToGeometry
+
+_Deprecated in the next major release. Please use **[zoomTo](#markdown-header-zoomto)** instead._
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|

@@ -46,17 +46,13 @@ export default {
     watch: {
         /**
          * When the feature changes, the popover is redrawn to keep the position of the click coordinate.
-         * Note: Starting from Bootstrap version 4 an update function for the popover is available.
-         *       Should be adapted when updating Bootstrap.
          * @returns {void}
          */
         feature () {
             this.$nextTick(() => {
-                this.overlay.setPosition(this.clickCoord);
-                // Upgrade to BT5
                 const popover = Popover.getInstance(this.overlay.getElement());
 
-                popover.show();
+                popover.update();
             });
         }
     },
@@ -151,7 +147,7 @@ export default {
             </h5>
             <button
                 ref="gfi-close-button"
-                class="close btn btn-sm col-1"
+                class="close btn btn-sm col-1 d-flex justify-content-center align-content-center"
                 aria-label="Close"
                 tabindex="0"
                 @click="close"
@@ -177,8 +173,10 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
 
     button.close {
+        height: fit-content;
         &:focus {
             @include primary_action_focus;
         }
@@ -187,16 +185,18 @@ export default {
         }
     }
     .gfi-attached {
-        background-color: #ffffff;
+        background-color: $white;
     }
     .gfi-header {
         padding: 0 15px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: 1px solid $light_grey;
         h5 {
             font-size: 13px;
-            font-weight: normal;
+            font-family: $font_family_accent;
             line-height: 17px;
-            color: #646262;
+            color: $dark_grey;
+            padding-top: 10px;
+            padding-left: 5px;
         }
         button {
             opacity: 0.6;
@@ -224,5 +224,8 @@ export default {
         max-width: 40vw !important;
         border: 0 !important;
         z-index: 1 !important;
+    }
+    .popover-body {
+        padding: 5px !important;
     }
 </style>

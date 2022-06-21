@@ -7,7 +7,6 @@ import IsochronesItemBatchProcessingComponent from "../../../../components/Isoch
 import RoutingBatchProcessingCheckboxComponent from "../../../../components/RoutingBatchProcessingCheckbox.vue";
 import RoutingSliderInputComponent from "../../../../components/RoutingSliderInput.vue";
 import RoutingDownloadComponent from "../../../../components/RoutingDownload.vue";
-import mapCollection from "../../../../../../../core/maps/mapCollection.js";
 import mutations from "../../../../store/mutationsRouting";
 import actions from "../../../../store/actionsRouting";
 import getters from "../../../../store/gettersRouting";
@@ -47,10 +46,7 @@ describe("src/modules/tools/routing/components/Isochrones/IsochronesItem.vue", (
         const map = {
             id: "ol",
             mode: "2D",
-            addLayer: sinon.spy(),
-            removeLayer: sinon.spy(),
-            addInteraction: sinon.spy(),
-            removeInteraction: sinon.spy()
+            removeLayer: sinon.spy()
         };
 
         mapCollection.addMap(map, "2D");
@@ -87,6 +83,11 @@ describe("src/modules/tools/routing/components/Isochrones/IsochronesItem.vue", (
                     namespaced: true,
                     state: {
                         mode: "2D"
+                    },
+                    actions: {
+                        addLayerOnTop: sinon.stub(),
+                        removeInteraction: sinon.stub(),
+                        addInteraction: sinon.stub()
                     }
                 }
             },
@@ -95,9 +96,11 @@ describe("src/modules/tools/routing/components/Isochrones/IsochronesItem.vue", (
             }
         });
         store.commit("Tools/Routing/setActive", true);
+
     });
 
     afterEach(() => {
+        sinon.restore();
         if (wrapper) {
             wrapper.destroy();
         }

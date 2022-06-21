@@ -128,13 +128,13 @@ If a parameter is also present in the service, the definition in this config is 
 
 WMTS layers can be added by
 
-* entering all the following WMTS parameters
+* entering all the following WMTS parameters (EPSG:4326 and EPSG:3857 only)
 * using OpenLayers' `optionsFromCapabilities` method (see second example below)
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
 |capabilitiesUrl|no|String||Service's capabilities URL|`"https://www.wmts.nrw.de/geobasis/wmts_nw_dtk/1.0.0/WMTSCapabilities.xml"`|
-|coordinateSystem|yes|String||Layer's coordinate reference system|`"EPSG:3857"`|
+|coordinateSystem|yes|enum["EPSG:4326", "EPSG:3857"]||Layer's coordinate reference system|`"EPSG:3857"`|
 |format|yes|String||Image format of layer tiles. Only required with parameter `requestEncoding` set to `"KVP"` ist.|`"image/png"`|
 |id|yes|String||Arbitrary id|`"320"`|
 |layers|yes|String||Layer name. Must match the name noted in the WMTS capabilities.|`"geolandbasemap"`|
@@ -258,6 +258,9 @@ WMTS layers can be added by
 |isSecured|no|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
 |authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser.|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
 |propertyNames|no|Array||The attributes as PROPERTYNAME parameter to receive response from wfs layer |`["properties"]`|
+|wildCard|no|String||The wildcard parameter for the highlightFeaturesByAttribute property query. Must be one character only.|
+|singleChar|no|String||The singlechar parameter for the highlightFeaturesByAttribute property query. Must be one character only.|
+|escapeChar|no|String||The escapechar parameter for the highlightFeaturesByAttribute property query. Must be one character only.|
 
 **WFS example:**
 

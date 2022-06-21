@@ -536,16 +536,6 @@
  */
 
 /**
- * @namespace ZoomToFeature
- * @description Zooms to a given feature.
- */
-
-/**
- * @namespace ZoomToGeometry
- * @description Zooms to a given geometry.
- */
-
-/**
  * @namespace Alerting
  * @description Alerting system that responds to given events.
  * Used to have same alert all over the portal.

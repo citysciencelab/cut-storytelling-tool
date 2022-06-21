@@ -1,9 +1,9 @@
 /* ******************* Layer ******************* */
 /**
  * Fires if property isVisibleInMap changes.
- * Can be done directly or is no longer needed, if all layers are handeled by store and modellList is refactored.
+ * Can be done directly or is no longer needed if all layers are handled by store and modelList is refactored.
  * @param {Object} layerModel the layer
- * @param {boolean} value value of isVisibleInMap
+ * @param {Boolean} value the value of isVisibleInMap
  * @returns {void}
  */
 export function layerVisibilityChanged (layerModel, value) {
@@ -11,12 +11,11 @@ export function layerVisibilityChanged (layerModel, value) {
     Radio.trigger("ModelList", "selectedChanged", layerModel, value);
     Radio.trigger("ModelList", "updatedSelectedLayerList", getLayerModelsByAttributes({isSelected: true, type: "layer"}));
 }
+
 /* ******************* Legend ******************* */
 /**
  * Set layer to rebuild legend
- * Can be done directly or is no longer needed, if all layers are handeled by store and modellList is refactored.
- * @param {Object} layerModel the layer
- * @param {boolean} value value of isVisibleInMap
+ * Can be done directly or is no longer needed if all layers are handled by store and modelList is refactored.
  * @returns {void}
  */
 export function setLegendLayerList () {
@@ -24,7 +23,7 @@ export function setLegendLayerList () {
 }
 /**
  * Listens to changes of attribute SLDBody.
- * Can be done directly or is no longer needed, if tool styleWMS  and treefilter are refactored.
+ * Can be done directly or is no longer needed if tool styleWMS and tree filter are refactored.
  * @param {Object} layerModel the layer
  * @returns {void}
  */
@@ -33,43 +32,44 @@ export function listenToChangeSLDBody (layerModel) {
         "change:SLDBody": layerModel.updateSourceSLDBody
     });
 }
+
 /* ******************* Map ******************* */
 /**
- * Returns the corresponding resolution for the scale.
- * @param  {String|number} scale - scale to compare
- * @param  {String} scaleType - min or max
- * @return {number} the resolution
- */
-export function getResolutionByScale (scale, scaleType) {
-    return Radio.request("MapView", "getResolutionByScale", scale, scaleType);
-}
-/**
  * Triggers adding layer at given index in modelList.
- * Can be done directly or is no longer needed, if modelList is refactored.
- * @param {ol.Layer} layer the layer of the layerModel
- * @param {number} selectionIDX index to insert into list
+ * Can be done directly or is no longer needed if modelList is refactored.
+ * @param {ol/Layer} layer the layer of the layerModel
+ * @param {Number} selectionIDX index to insert into list
  * @returns {void}
  */
 export function addLayerToIndex (layer, selectionIDX) {
     Radio.trigger("Map", "addLayerToIndex", [layer, selectionIDX]);
 }
+
 /* ******************* MapView ******************* */
 /**
+ * Returns the corresponding resolution for the scale.
+ * @param  {String|Number} scale scale to compare
+ * @param  {String} scaleType min or max
+ * @return {Number} the resolution
+ */
+export function getResolutionByScale (scale, scaleType) {
+    return Radio.request("MapView", "getResolutionByScale", scale, scaleType);
+}
+/**
  * Request options from Mapview
- * Can be done directly or is no longer needed, if modelList is refactored.
- * @param {ol.Layer} layer the layer of the layerModel
- * @param {number} selectionIDX index to insert into list
+ * Can be done directly or is no longer needed if modelList is refactored.
  * @returns {void}
  */
 export function getOptionsFromMapView () {
     Radio.request("MapView", "getOptions");
 }
+
 /* ******************* Menu ******************* */
 /**
  * Fires if property isOutOfRange changes.
- * Can be done directly or is no longer needed, if menu is refactored.
+ * Can be done directly or is no longer needed if menu is refactored.
  * @param {Object} layerModel the layer
- * @param {boolean} value value of outOfRange
+ * @param {Boolean} value the value of outOfRange
  * @returns {void}
  */
 export function outOfRangeChanged (layerModel, value) {
@@ -77,7 +77,7 @@ export function outOfRangeChanged (layerModel, value) {
 }
 /**
  * Fires if property isVisibleInTree changes.
- * Can be done directly or is no longer needed, if menu is refactored.
+ * Can be done directly or is no longer needed if menu is refactored.
  * @param {Object} layerModel the layer
  * @returns {void}
  */
@@ -86,7 +86,7 @@ export function isVisibleInTreeChanged (layerModel) {
 }
 /**
  * Fires if menu must be rendered.
- * Can be done directly or is no longer needed, if menu is refactored.
+ * Can be done directly or is no longer needed if menu is refactored.
  * @returns {void}
  */
 export function renderMenu () {
@@ -94,7 +94,7 @@ export function renderMenu () {
 }
 /**
  * Fires if menu selection must be rendered.
- * Can be done directly or is no longer needed, if menu is refactored.
+ * Can be done directly or is no longer needed if menu is refactored.
  * @returns {void}
  */
 export function renderMenuSelection () {
@@ -102,7 +102,7 @@ export function renderMenuSelection () {
 }
 /**
  * Fires if settings in menu must be rendered.
- * Can be done directly or is no longer needed, if menu is refactored.
+ * Can be done directly or is no longer needed if menu is refactored.
  * @param {String} layerId The layer id.
  * @returns {void}
  */
@@ -110,11 +110,11 @@ export function renderMenuSettings (layerId) {
     Radio.trigger("Menu", "renderSetting", layerId);
     Radio.trigger("MenuSelection", "renderSetting", layerId);
 }
-/* ******************* ModelList ******************* */
 
+/* ******************* ModelList ******************* */
 /**
  * Removes the layer with the given id from the modelList.
- * Can be done directly or is no longer needed, if modelList is refactored.
+ * Can be done directly or is no longer needed if modelList is refactored.
  * @param {String} id of the layer to remove
  * @returns {void}
  */
@@ -123,7 +123,7 @@ export function removeLayerByIdFromModelList (id) {
 }
 /**
  * Updates the layer view in tree and updates selection in tree.
- * Can be done directly or is no longer needed, if menu is refactored.
+ * Can be done directly or is no longer needed if menu is refactored.
  * @param {Object} layerModel the layer
  * @returns {void}
  */
@@ -133,7 +133,7 @@ export function updateLayerView (layerModel) {
 }
 /**
  * Returns all layers.
- * Can be done directly or is no longer needed, if modelList is refactored.
+ * Can be done directly or is no longer needed if modelList is refactored.
  * @returns {void}
  */
 export function getAllLayers () {
@@ -141,7 +141,7 @@ export function getAllLayers () {
 }
 /**
  * Returns the layerModel with the given attributes.
- * Can be done directly or is no longer needed, if modelList is refactored.
+ * Can be done directly or is no longer needed if modelList is refactored.
  * @param {Object} attributes of the model to search for
  * @returns {void}
  */
@@ -150,7 +150,7 @@ export function getLayerModelsByAttributes (attributes) {
 }
 /**
  * Moves the layer in tree.
- * Can be done directly or is no longer needed, if modelList is refactored.
+ * Can be done directly or is no longer needed if modelList is refactored.
  * @param {Object} layerModel the layer
  * @param {Number} value -1 moves down and 1 moves up
  * @returns {void}
@@ -161,7 +161,7 @@ export function moveModelInTree (layerModel, value) {
 }
 /**
  * Removes layer from project completely.
- * Can be done directly or is no longer needed, if modelList is refactored.
+ * Can be done directly or is no longer needed if modelList is refactored.
  * @param {String} id id of the layer
  * @returns {void}
  */
@@ -170,7 +170,7 @@ export function removeItem (id) {
 }
 /**
  * Refresh layer tree.
- * Can be done directly or is no longer needed, if modelList is refactored.
+ * Can be done directly or is no longer needed if modelList is refactored.
  * @returns {void}
  */
 export function refreshLayerTree () {
@@ -204,7 +204,7 @@ export function getStyleModelById (styleId) {
 }
 /**
  * Listens to channel i18next and changes the translations of the layer, if language changes.
- * @param {boolean} layer the layer to call the function 'changeLang' at.
+ * @param {Object} layer the layer to call the function 'changeLang' at.
  * @returns {void}
  */
 export function onLanguageChanged (layer) {
@@ -216,9 +216,18 @@ export function onLanguageChanged (layer) {
                 layer.changeLang();
             }
             else {
-                console.warn("Layer ", layer, "must impelement the function changeLang to translate its textes.");
+                console.warn("Layer ", layer, "must implement the function changeLang to translate its texts.");
             }
         }
     }, this);
 }
 
+/* ******************* GFI ******************* */
+/**
+ * Triggers the changeFeature event of GFI for the given feature
+ * @param {ol/Feature} feature the feature to call change feature event with
+ * @returns {void}
+ */
+export function changeFeatureGFI (feature) {
+    Radio.trigger("GFI", "changeFeature", feature);
+}

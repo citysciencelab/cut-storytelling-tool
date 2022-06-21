@@ -11,22 +11,19 @@ import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import MenuLoader from "../modules/menu/menuLoader";
-import ZoomToGeometry from "../modules/zoomToGeometry/model";
-import ZoomToFeature from "../modules/zoomToFeature/model";
 import featureViaURL from "../src/utils/featureViaURL";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
-import DropdownView from "../modules/snippets/dropdown/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
-import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
 import {handleUrlParamsBeforeVueMount, readUrlParamEarly} from "../src/utils/parametricUrl/ParametricUrlBridge";
 import {createMaps} from "../src/core/maps/maps.js";
+import mapCollection from "../src/core/maps/mapCollection.js";
 
 /**
  * Vuetify
@@ -64,6 +61,8 @@ let sbconfig,
 if (process.env.NODE_ENV === "development") {
     Vue.config.devtools = true;
 }
+
+global.mapCollection = mapCollection;
 
 Vue.config.productionTip = false;
 
@@ -140,19 +139,27 @@ async function loadApp () {
     new WFSTransactionModel();
     new MenuLoader();
 
-    if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry")) {
-        new ZoomToGeometry(Config.zoomToGeometry);
-    }
-    if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature")) {
-        new ZoomToFeature(Config.zoomToFeature);
-    }
     if (Object.prototype.hasOwnProperty.call(Config, "featureViaURL")) {
         featureViaURL(Config.featureViaURL);
     }
 
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomTo")) {
+        store.commit("ZoomTo/setConfig", Config.zoomTo);
+    }
+    // NOTE: When using these deprecated parameters, the two url parameters can't be used in conjunction
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomToFeature")) {
+        console.warn("The configuration parameter 'zoomToFeature' is deprecated in v3.0.0. Please use 'zoomTo' instead.");
+        store.commit("ZoomTo/setConfig", {zoomToFeature: Config.zoomToFeature});
+        store.commit("ZoomTo/setDeprecatedParameters", true);
+    }
+    if (Object.prototype.hasOwnProperty.call(Config, "zoomToGeometry")) {
+        console.warn("The configuration parameter 'zoomToGeometry' is deprecated in v3.0.0. Please use 'zoomTo' instead.");
+        store.commit("ZoomTo/setConfig", {zoomToGeometry: Config.zoomToGeometry});
+        store.commit("ZoomTo/setDeprecatedParameters", true);
+    }
+
     new SliderView();
     new SliderRangeView();
-    new DropdownView();
 
     // Module laden
     // Tools
@@ -160,10 +167,6 @@ async function loadApp () {
 
     Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
-            case "filter": {
-                new FilterView({model: tool});
-                break;
-            }
             case "shadow": {
                 new ShadowView({model: tool});
                 break;

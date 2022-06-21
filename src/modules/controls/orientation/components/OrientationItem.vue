@@ -42,13 +42,12 @@ export default {
             tracking: false,
             isGeolocationDenied: false,
             isGeoLocationPossible: false,
-            modelListChannel: Radio.channel("ModelList"),
             storePath: this.$store.state.controls.orientation
         };
     },
     computed: {
         ...mapGetters("controls/orientation", Object.keys(getters)),
-        ...mapGetters("Maps", ["get2DMap", "projection"]),
+        ...mapGetters("Maps", ["projection"]),
         poiDistancesLocal () {
             return this.poiDistances === true ? [500, 1000, 2000] : this.poiDistances;
         }
@@ -70,7 +69,7 @@ export default {
     },
     created () {
         this.setIsGeoLocationPossible();
-        this.modelListChannel.on("updateVisibleInMapList", this.checkWFS);
+        Radio.channel("ModelList").on("updateVisibleInMapList", this.checkWFS);
     },
     mounted () {
         this.addElement();
@@ -100,7 +99,7 @@ export default {
             let geolocation = null;
 
             if (this.isGeolocationDenied === false) {
-                this.get2DMap.addOverlay(this.marker);
+                mapCollection.getMap("2D").addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);
@@ -153,7 +152,7 @@ export default {
          * @returns {void}
          */
         removeOverlay () {
-            this.get2DMap.removeOverlay(this.marker);
+            mapCollection.getMap("2D").removeOverlay(this.marker);
         },
 
         /**
@@ -268,11 +267,13 @@ export default {
          * @returns {void}
          */
         toggleBackground () {
+            const geolocateIcon = document.getElementById("geolocate");
+
             if (this.isGeolocationDenied) {
-                this.$el.querySelector(".bi-geo-alt-fill").parent(".bootstrap-icon").style.background = "rgb(221, 221, 221)";
+                geolocateIcon.style.backgroundColor = "grey";
             }
             else {
-                this.$el.querySelector(".bi-geo-alt-fill").parent(".bootstrap-icon").style.background = "#E10019";
+                geolocateIcon.style.backgroundColor = "#E10019";
             }
         },
 
@@ -295,7 +296,7 @@ export default {
 
             if (this.poiModeCurrentPositionEnabled) {
                 this.$store.dispatch("MapMarker/removePointMarker");
-                this.get2DMap.addOverlay(this.marker);
+                mapCollection.getMap("2D").addOverlay(this.marker);
                 if (this.geolocation === null) {
                     geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
                     this.setGeolocation(geolocation);
@@ -501,7 +502,7 @@ export default {
         }
     }
     .geolocation_marker {
-        color: #F3F3F3;
+        color: $white;
         padding: 2px 3px 2px 2px;
         background: none repeat scroll #D42132;
         border-radius: 50px;

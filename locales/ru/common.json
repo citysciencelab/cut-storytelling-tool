@@ -205,7 +205,8 @@
                 "geometryNotSupported": "FeatureViaURL: Тип геометрии {{geometryType}}, объявленный в конфигурации для слоя {{layerId}}, не поддерживается.",
                 "layerNotFound": "FeatureViaURL: Не удалось найти слой с идентификатором {{layerId}}.",
                 "noLayers": "FeatureViaURL: В конфигурации не было определено никаких слоев для перенесенных объектов.",
-                "noNameDefined": "FeatureViaURL: Для слоя с идентификатором {{layerId}} в конфигурации не определено имя."
+                "noNameDefined": "FeatureViaURL: Для слоя с идентификатором {{layerId}} в конфигурации не определено имя.",
+                "defaultTreeNotSupported": "FeatureViaURL поддерживается только для Treetype, custom или light."
             }
         },
         "quickHelp": {
@@ -417,7 +418,7 @@
                 "serviceThree": "Сервис 3",
                 "serviceFour": "Сервис 4"
             },
-            "filterGeneral": {
+            "filter": {
                 "filterButton": "Фильтровать",
                 "searchInMapExtent": "Поиск в текущем разделе карты",
                 "snippetTags": {
@@ -460,15 +461,6 @@
                     "label": "Все попадания в фильтр",
                     "unit": "{{amountOfFilteredItems}} попаданиe"
                 }
-            },
-            "filter": {
-                "result": "Попаданиe",
-                "results": "Попаданиe",
-                "zoomOnResults": "Увеличение при попадании",
-                "filter": "-фильтр",
-                "yourSelection": "Ваш выбор: ",
-                "noFilterOptionSelected": "Пока не выбрана опция фильтрации",
-                "deleteAll":"Удалить всё"
             },
             "pendler": {
                 "animation": {
@@ -620,7 +612,6 @@
                 },
                 "hintSupply": "Нажмите на карту, чтобы запросить координаты",
                 "hintSearch": "Введите координаты для поиска",
-                "disabledTooltip": "Эта функция недоступна в режиме просмотра 3D",
                 "copyCoordsBtn": "Копировать координатную пару",
                 "copyCoordBtn": " {{value}} копировать"
             },

@@ -18,11 +18,13 @@ localVue.use(Vuex);
 config.mocks.$t = key => key;
 
 describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
-    const mockMapGetters = {
-            // map: () => sinon.stub(),
+    const mockState = {
+            mode: "2D"
+        },
+        mockMapGetters = {
             projection: () => sinon.stub(),
             mouseCoordinate: () => sinon.stub(),
-            mode: () => "2D"
+            mode: (state) => state.mode
         },
         mockMapMarkerActions = {
             removePointMarker: sinon.stub()
@@ -37,6 +39,9 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             addInteraction: sinon.stub()
         },
         mockMapMutations = {
+            setMode: (state, mapMode) => {
+                state.mode = mapMode;
+            }
         },
         mockConfigJson = {
             Portalconfig: {
@@ -85,6 +90,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
                 },
                 Maps: {
                     namespaced: true,
+                    state: mockState,
                     getters: mockMapGetters,
                     mutations: mockMapMutations,
                     actions: mockMapActions
@@ -211,6 +217,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             expect(store.state.Tools.CoordToolkit.coordinatesEasting.value).to.be.equals("0.00");
             expect(store.state.Tools.CoordToolkit.coordinatesNorthing.value).to.be.equals("0.00");
         });
+
         it("createInteraction sets projections and adds interaction", () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
             expect(store.state.Tools.CoordToolkit.selectPointerMove).to.be.null;
@@ -218,6 +225,46 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             expect(typeof store.state.Tools.CoordToolkit.selectPointerMove).to.be.equals("object");
             expect(typeof store.state.Tools.CoordToolkit.selectPointerMove.handleMoveEvent).to.be.equals("function");
         });
+
+        describe("createInteraction for 3D", () => {
+            before(() => {
+                Cesium = {
+                    ScreenSpaceEventHandler: () => {
+                        return {
+                            setInputAction: () => sinon.stub(),
+                            destroy: () => sinon.stub()
+                        };
+                    },
+                    ScreenSpaceEventType: {
+                        MOUSE_MOVE: sinon.stub(),
+                        LEFT_CLICK: sinon.stub()
+                    }
+                };
+            });
+
+            after(() => {
+                store.commit("Maps/setMode", "2D");
+            });
+
+            it("createInteraction for 3D and the eventHandler is not null", () => {
+                wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+                const canvas = {},
+                    map3D = {
+                        mode: "3D",
+                        getCesiumScene: () => canvas
+                    };
+
+                mapCollection.addMap(map3D, "3D");
+
+                expect(wrapper.vm.eventHandler).to.be.null;
+
+                store.commit("Maps/setMode", "3D");
+                wrapper.vm.createInteraction();
+
+                expect(wrapper.vm.eventHandler).to.be.not.null;
+            });
+        });
+
         it("setSupplyCoordInactive removes interaction", () => {
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
             expect(typeof store.state.Tools.CoordToolkit.selectPointerMove).to.be.equals("object");

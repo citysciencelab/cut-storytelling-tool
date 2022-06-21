@@ -19,9 +19,9 @@ export default {
     },
     data: function () {
         return {
-            defaultTabClass: "feature-lister-navtabs-li text-center",
-            activeTabClass: "feature-lister-navtabs-li text-center active",
-            disabledTabClass: "feature-lister-navtabs-li text-center disabled"
+            defaultTabClass: "",
+            activeTabClass: "active",
+            disabledTabClass: "disabled"
         };
     },
     computed: {
@@ -144,7 +144,7 @@ export default {
     <ToolTemplate
         :id="id"
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -155,34 +155,40 @@ export default {
                 v-if="active"
                 id="tool-feature-lister"
             >
-                <ul class="nav nav-tabs feature-lister-navtabs">
+                <ul class="nav nav-tabs">
                     <li
                         id="tool-feature-lister-themeChooser"
-                        :class="themeTabClasses"
                         role="presentation"
+                        class="nav-item"
                     >
                         <a
                             href="#"
+                            class="nav-link"
+                            :class="themeTabClasses"
                             @click.prevent="switchToThemes()"
                         >{{ $t("modules.tools.featureLister.chooseTheme") }}</a>
                     </li>
                     <li
                         id="tool-feature-lister-list"
-                        :class="listTabClasses"
                         role="presentation"
+                        class="nav-item"
                     >
                         <a
                             href="#"
+                            class="nav-link"
+                            :class="listTabClasses"
                             @click.prevent="switchToList(layer)"
                         >{{ $t("modules.tools.featureLister.list") }}</a>
                     </li>
                     <li
                         id="tool-feature-lister-details"
-                        :class="detailsTabClasses"
                         role="presentation"
+                        class="nav-item"
                     >
                         <a
                             href="#"
+                            class="nav-link"
+                            :class="detailsTabClasses"
                             @click.prevent="switchToDetails()"
                         >{{ $t("modules.tools.featureLister.details") }}</a>
                     </li>
@@ -202,15 +208,16 @@ export default {
                         v-for="layer in visibleVectorLayers"
                         id="feature-lister-themes-ul"
                         :key="'tool-feature-lister-' + layer.id"
-                        class="nav nav-pills nav-stacked"
+                        class="nav flex-column"
                     >
                         <li
                             :id="'feature-lister-layer-' + layer.id"
-                            class="feature-lister-themes-li"
+                            class="nav-item"
                             role="presentation"
                         >
                             <a
                                 href="#"
+                                class="nav-link"
                                 @click.prevent="switchToList(layer)"
                             >{{ layer.name }}</a>
                         </li>
@@ -241,7 +248,7 @@ export default {
                                             :key="'tool-feature-lister-' + index"
                                             class="feature-lister-list-table-th"
                                         >
-                                            <span class="glyphicon glyphicon-sort-by-alphabet" />
+                                            <span class="bi-sort-alpha-down" />
                                             {{ header.value }}
                                         </th>
                                     </tr>
@@ -278,7 +285,7 @@ export default {
                                 @click="showMore()"
                             >
                                 <span
-                                    class="glyphicon glyphicon-import"
+                                    class="bi-box-arrow-in-up"
                                     aria-hidden="true"
                                 /> {{ $t("modules.tools.featureLister.more") }}
                             </button>
@@ -354,8 +361,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
-    $color_1: gray;
-    $color_2: black;
+    @import "~variables";
 
 /***** Desktop *****/
 /***** Mobil *****/
@@ -367,15 +373,15 @@ export default {
     >span {
         float: left;
         width: 15px;
-        color: $color_1;
+        color: $dark_grey;
     }
     >.feature-lister-list-table-th-sorted {
-        color: $color_2;
+        color: $black;
     }
 }
 .feature-lister-list-table-container {
-    border-left: 1px solid #ddd !important;
-    border-right: 1px solid #ddd !important;
+    border-left: 1px solid $light_grey !important;
+    border-right: 1px solid $light_grey !important;
 }
 #feature-lister-list-table {
     overflow: auto;
@@ -388,28 +394,6 @@ export default {
     float: left;
     text-align: center;
     align-items: center;
-}
-.feature-lister-details-li {
-    cursor: text;
-    a:link {
-        color: royalblue;
-        text-decoration: underline;
-    }
-    a:visited {
-        color: royalblue;
-        text-decoration: underline;
-    }
-    a:hover {
-        color: blue;
-        text-decoration: underline;
-    }
-    a:active {
-        color: blue;
-        text-decoration: underline;
-    }
-    p {
-        color: $color_2;
-    }
 }
 .feature-lister-details-ul {
     max-height: 400px;
@@ -441,10 +425,18 @@ export default {
     width: 100%;
 }
 .panel-heading {
-    background: #f5f5f5;
-    color: #333333;
+    background: $light_grey;
+    color: $dark_grey;
     cursor: default;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+    border-left: 1px solid $dark_grey;
+    border-right: 1px solid $dark_grey;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
 }
+#feature-lister-themes-ul {
+    .nav-item:hover {
+        background-color: $light_grey;
+    }
+}
+
 </style>

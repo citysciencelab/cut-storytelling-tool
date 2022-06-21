@@ -137,7 +137,7 @@
           }
         }
       },
-      "filterGeneral": {
+      "filter": {
         "name": "translate#common:menu.filter",
         "icon": "bi-funnel-fill",
         "deactivateGFI": false,
@@ -260,6 +260,7 @@
         "children": {
           "wfsSearch": {
             "name": "translate#common:menu.tools.parcelSearch",
+            "icon": "bi-search",
             "zoomLevel": 7,
             "instances": [
               {
@@ -466,7 +467,7 @@
           "print": {
             "name": "translate#common:menu.tools.print",
             "icon": "bi-printer-fill",
-            "mapfishServiceId": "mapfish",
+            "printServiceId": "mapfish",
             "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",
@@ -476,14 +477,6 @@
           "scaleSwitcher": {
             "name": "translate#common:menu.tools.scaleSwitcher",
             "icon": "bi-arrows-angle-contract"
-          },
-          "vueAddon": {
-            "name": "AddonTool",
-            "icon": "bi-bullseye"
-          },
-          "tacticalMark": {
-            "name": "Taktische Zeichen",
-            "icon": "bi-signpost-split-fill"
           }
         }
       },
@@ -600,6 +593,32 @@
           "id": "13032",
           "name": "Oblique",
           "visibility": true
+        },
+        {
+          "id": "157",
+          "name": "3D-Entities Testlayer",
+          "visibility": true,
+          "typ": "Entities3D",
+          "entities": [
+            {
+              "url": "https://daten-hamburg.de/gdi3d/datasource-data/Simple_Building.glb",
+              "attributes": {
+                "name": "einfaches Haus in Planten und Blomen"
+              },
+              "latitude": 53.5631,
+              "longitude": 9.9800,
+              "height": 12,
+              "heading": 0,
+              "pitch": 0,
+              "roll": 0,
+              "scale": 5,
+              "allowPicking": true,
+              "show": true
+            }
+          ],
+          "gfiAttributes": {
+            "name": "Name"
+          }
         }
       ]
     },
@@ -872,6 +891,14 @@
         },
         {
           "id": "19173"
+        },
+        {
+          "id": "46",
+          "typ": "StaticImage",
+          "url": "https://geodienste.hamburg.de/lgv-config/img/Laerm-Test_300dpi.png",
+          "name": "Lärmberechnung",
+          "extent": [568426.27, 5931985.58, 569614.86, 5933174.11],
+          "legend": ["https://geodienste.hamburg.de/lgv-config/img/Legende_Laermberechnung_Tag.png", "https://geodienste.hamburg.de/lgv-config/img/Legende_Laermberechnung_Nacht.png"]
         }
       ]
     }

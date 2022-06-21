@@ -59,14 +59,14 @@ export default {
                 <div id="confirmation-button-container">
                     <button
                         id="modal-button-left"
-                        class="btn btn-lgv-grey"
+                        class="btn btn-secondary"
                         @click="actionConfirmedCallback"
                     >
                         {{ $t(currentConfirmAction.confirmCaption) }}
                     </button>
                     <button
                         id="modal-button-right"
-                        class="btn btn-lgv-grey"
+                        class="btn btn-secondary"
                         @click="actionDeniedCallback"
                     >
                         {{ $t(currentConfirmAction.denyCaption) }}

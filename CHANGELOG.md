@@ -4,8 +4,69 @@
 [Semantic versioning](https://semver.org/spec/v2.0.0.html) is used.
 
 ## Known Issues
-- 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
+
+---
+
 ## Unreleased - in development
+### __Breaking Changes__
+
+### Added
+- FilterModule:
+    - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
+- api/highlightFeaturesByAttribute URL mechanism to query WFS data by parameters and configuration
+
+### Changed
+- WMTS feature is now realized via masterportalAPI functions.
+
+### Deprecated
+
+### Removed
+- Deleted the following snippets: dropdown, exportButton, graphicalSelect, multiCheckbox.
+- Removed the dependency `bootstrap-select`.
+
+### Fixed
+- Lines imported as KML can now be edited and modified with the Draw tool.
+- Issue #663: Fixed tool Buffer Analysis where layer visibility updates would not be recognized in custom trees. Now, all visible layers at tool starting time are available within the tool.
+- Issue #778: Fixed layer information display selection in metadata window that now always has names options in its select input.
+- Issue #788: Legend not updating correctly
+- Download print Buttons will now be blue at first and grey once the button was clicked.
+- Attached Gfi is styled correctly.
+
+---
+
+## v2.22.2 - 2022-06-15
+
+### Fixed
+- Addons: Fixed tool Commuter flows.
+
+---
+
+## v2.22.1 - 2202-06-08
+### Fixed
+- The light grey color in Search and transparency are now dark
+- Issue #790: Resolve import of isObject util failed was fixed.
+- The Sensor Data GFI theme's layout is correct now.
+- A console warning on creating an entities-layer was removed.
+
+---
+
+## v2.22.0 - 2022-06-01
+### __Breaking Changes__
+#### *Bootstrap upgrade*
+The Bootstrap package was upgraded from 3.4.1 to 5.1.3. Masterportal developments with minor versions than Bootstrap 5.1.3 are no longer supported.
+
+Please check if your own developments e.g. addons are affected and you have to make adaptions to the new bootstrap version.
+Also the configuration of e.g. tools and controls in config.json has changed ("icon" instead of "glyphicon") and have to be updated. See [documentation](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/config.json.md)
+
+The upgrade included following necessary changes:
+
+- Code-Refactoring to the new Bootstrap structure. Here new Bootstrap classes replaced old ones. For examples see the [Masterportal Refactoring](https://bitbucket.org/geowerkstatt-hamburg/masterportal/pull-requests/3406) or [Bootstrap documentation](https://getbootstrap.com/docs/5.0/migration/)
+- Less is no longer supported, instead Sass has to be used for CSS. For examples see also [Masterportal Refactoring](https://bitbucket.org/geowerkstatt-hamburg/masterportal/pull-requests/3406)
+- As icon set [Bootstrap Icons](https://icons.getbootstrap.com/) replaced glyphicons. Also, the configuration in config.json considering elements like tools and controls have changed. The old attribute "glypicon" has changed to "icon" and as values the new bootstrap-icons have to be used.
+
+#### *Change in WFS filter parameter*
+Issue #764: Using parameters in WfsSearch as defined in [Filter Encoding Implementation Specification](https://portal.ogc.org/files/?artifact_id=8340); the default name for the like filter escape character is now `escapeChar` rather than `escape`. This requires a change of configuration for services deviating from the standard implementation, see docs.
+
 ### Added
 - The following NPM packages are added:
     - dependencies:
@@ -13,28 +74,69 @@
         - "bootstrap-icons"
 - Added a mixin for changing the colour and padding of an active pill inside the css class `nav-pills`.
 - HochwasserPrint: new print module for Hochwasserrisikomanagement
+- FilterModule:
+    - new option optionsLimit for dropdown snippet
+    - new option localeCompareParams for dropdown snippet
+    - Parent-child Filter Mode in Dropdown snippet
+- Added possibility to display a legend for a layer of type 'StaticImage'.
+- Util function: localeCompare for sorting with locales
+- Added latest Tag to release-Scripts.
 
 ### Changed
 - `default`-gfiTheme: If a `|`-character is part of the response, every element separated by the character will be displayed in a separate paragraph.
 - map moved with new structure from src/modules/map to src/core/maps.
+- renamed FilterGeneral to Filter and removed old Filter Files.
+- 3D Mode:
+    - The tool `coordTookit` can now be used in 3D mode again. A height and mapMarker is now also displayed in 3D mode.
+    - The Measure tool is no longer available in 3D mode.
+    - The 3D entities layer is refactored. It is no longer a Backbone-model. The entities layer uses the masterportalAPI's entities layer on creation.
+    - Decouple Cesium from window object.
+    - The Get Feature Info (GFI) for WFS features can now be displayed in 3D mode.
+    - Values from the attribute `cesiumParameter` from config.js are now set when instantiating map3D at the 3D scene.
+    - The maps are removed from vuex-state and getters. The mapCollection is a global object now. Use it to get the 2D-map, the 3D-map or the 2D-view.
+- The following NPM packages are updated:
+    - @masterportal/masterportalapi: 2.2.0 to 2.3.0 (This also raised ol to version 6.14.1)
 
 ### Deprecated
 - Switched Icon Library from Glyphicon to Bootstrap Icons. Edited Webpack Config. Updated icon usage in vue components to use scss. Updated icon usage in backbone modules. Edited docs & tests accordingly.
-
-### Removed
+- The attribute `cameraParameter` in config.js is deprecated in the next major release. Please use `cesiumParameter.camera` instead.
+- The attributes: `cesiumParameter.enableLighting`, `cesiumParameter.maximumScreenSpaceError` and `cesiumParameter.tileCacheSize` in config.js are deprecated in the next major release. Please use `cesiumParameter.globe.enableLighting`, `cesiumParameter.globe.maximumScreenSpaceError`, `cesiumParameter.globe.tileCacheSize` instead.
 
 ### Fixed
+- Issue #686: Add logging and documentation regarding manual WMTS configuration's limitations
 - The order of printed features from the draw and measure layer is now corrected.
 - Issue #737: Fix issue of some items in the layer tree overflowing
-- The attribute `startingMap3D` in config.js now ensures that the 3D mode is started by default.
+- Issue #736: Fix console error when users forbid their localization.
+- Fix issue with black lines that showed up when printing the measure_layer.
+- Saved results from the bufferAnalysis now get displayed correctly when opening a copied URL from the tool.
+- Issue #760: Fixed double display of folder in menu topic-tree when using FeatureViaUrl
+- Issue #760: Features added with FeatureViaUrl are now correctly displayed under Selected Topics
+- Fix Filter of GeoJSON after AutoRefresh by adding ID to each feature of the GeoJSON after AutoRefresh
+- Issue #712: Fix issue of multiple legend menu items in mobile view.
+- 3D Mode:
+    - The attribute `startingMap3D` in config.js now ensures that the 3D mode is started by default.
+    - Static display of markerPoint and markerPolygon from mapMarker is now visible during search, coordinateSearch and coordToolkit.
+    - Vector layers like WFS, GeoJSON or OAF (OGC API - Features) are now displayed in 3D mode.
+    - The Control Attributions now also works in 3D mode.
+    - Issue #787: Layers in the topic tree under subject data (Fachdaten) are now preserved when switching to 3D mode.
+    - Fixed a bug that occurred when using the share component `GraphicalSelect` after switching from 3D to 2D mode
+- Fix error in menu if GFI Tool is set to isVisibleInMenu = false and no other tool is configured
+- Issue #751: Fix issue when printing groups of WFS layers.
+- Fix withoutGUIDraw
+- Legend now works correctly again, for multiple layers with the same legend reference.
+- Fix map resized when a tool is as sidebar and defined with active:true in config.json
+- Issue #771: Fix issue of WMS-TimeLayer being displayed wrong and without TimeSlider, when set visivle through URLParameter
+- Fix measure tool throws error if used after changed to 3D and back to 2D.
+- Issue #668: Fix broken metadata url control with urlIsVisible.
 
+---
 
 ## v2.21.0 - 2022-05-04
 ### Added
 - A control has been added to create buttons for any tools. These can be used to open and close the configured tools.
 - Added style.json parameter "styleMultiGeomOnlyWithRule". If true, **no** fallback for styling of multiGeometries is used. Default is false, means the the previous behavior.
-- ZoomToFeature: A `setFeature` attribute has been added to zoom only to a feature per ID. A new feature with the specified style is not created in this case.
 - Russian, Ukrainian and Platt is now available as a new language selection.
+- Added new module `zoomTo` which combines the modules `zoomToFeature` and `zoomToGeometry`.
 
 ### Changed
 - Migrated the module featureViaURL from Backbone to Vue as a util. E2E tests were fixed and re-enabled.
@@ -48,8 +150,7 @@
 - WFSSearch, has been adjusted so that it zooms directly to the first feature found if no `resultList` is configured.
 
 ### Deprecated
-
-### Removed
+- Configuration (`config.js`) parameters `zoomToFeature` and `zoomToGeometry` have been marked as deprecated in an upcoming major release.
 
 ### Fixed
 - Issue #758: featureLister threw a JavaScript exception when building the list of layers.
@@ -62,6 +163,7 @@
 - The control `PoiOrientation` now also works with points that use the default style.
 
 ---
+
 ## v2.20.1 - 2022-04-21
 ### Changed
 - The following NPM packages are updated:
@@ -140,7 +242,7 @@
   - The Extent.default value `"current"` can now be interpreted.
   - The time field of WMS requests is now filled with ISO 8601 timestamps of same precision as Extent specification.
 - It is now possible to configure a loading strategy for a wfs layer (default is bbox).
-- A new filter module called `filterGeneral` to replace of the `filter` module with a more catchy configuration, new features and new UI.
+- A new filter module called `filter` to replace of the `filter` module with a more catchy configuration, new features and new UI.
 
 ### Changed
 -  Default for isFolderSelectable is true. Overwriteable in config.js (globally) oder config.json(folder specific). Applies only for treeType="custom". In treeType="default" the top folders als not selectable and the child folders are selectable.
@@ -250,8 +352,6 @@
 - Issue #655: A parameter "zoomLevel" was added to the WfsSearch tool. This feature was not implemented for WfsSearch, but available in the previously used tool parcelSearch. The field has been added to WfsSearch to work in the same fashion. For this, the ListItem.vue was changed to allow configuration of the zoom level via prop. It defaults to the previously fixed value.
 - Issue #486: WMS GFI can now show responses without tbody.
 - The Vue component `Tool` has been renamed to `ToolTemplate` due to a new linter rule.
-
-### Deprecated
 
 ### Removed
 - The following NPM packages are removed:
@@ -414,8 +514,6 @@
 ### Changed
 - Coding-Conventions: For unittests in Vue (/src/...) the vast majority of test-folders are called "tests", going back to a mutual understanding of folder naming. Please use "tests" for your unit or e2e tests in Vue in the future.
 - Migrated the print Tool from Backbone.js to Vue.js. It is now also possible to create multiple prints in parallel.
-
-### Deprecated
 
 ### Removed
 - src/utils function isArrayOfStrings is removed, use one liner .every(v => typeof v === "string") instead in the future.

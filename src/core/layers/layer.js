@@ -1,5 +1,4 @@
 import store from "../../app-store";
-import mapCollection from "../../core/maps/mapCollection.js";
 import * as bridge from "./RadioBridge.js";
 import deepCopy from "../../utils/deepCopy.js";
 
@@ -85,6 +84,7 @@ Layer.prototype.initialize = function (attrs) {
         this.setIsVisibleInMap(attrs.isSelected);
         if (attrs.isSelected) {
             this.setIsSelected(attrs.isSelected);
+            bridge.layerVisibilityChanged(this, attrs.isSelected);
         }
 
         this.set("isRemovable", store.state.configJson?.Portalconfig.layersRemovable);
@@ -132,7 +132,7 @@ Layer.prototype.onMapModeChanged = function () {
         else {
             this.get("layer").setVisible(false);
         }
-    }).bind(this);
+    });
 };
 /**
  * Setter for ol/layer.setMaxResolution
@@ -158,7 +158,7 @@ Layer.prototype.removeLayer = function () {
     let map = mapCollection.getMap(store.state.Maps.mode);
 
     if (!map) { // is the case, if starting by urlParam in mode 3D
-        map = store.getters["Maps/get2DMap"];
+        map = mapCollection.getMap("2D");
     }
 
     this.setIsVisibleInMap(false);
@@ -335,7 +335,7 @@ Layer.prototype.toggleIsSettingVisible = function () {
  * @returns {void}
  */
 Layer.prototype.setIsSelected = function (newValue) {
-    const map = store.getters["Maps/get2DMap"],
+    const map = mapCollection.getMap("2D"),
         treeType = store.getters.treeType,
         autoRefresh = this.get("autoRefresh");
 
@@ -373,6 +373,7 @@ Layer.prototype.setIsSelected = function (newValue) {
 Layer.prototype.toggleIsVisibleInMap = function () {
     if (this.get("isVisibleInMap") === true) {
         this.setIsVisibleInMap(false);
+        // this.setIsSelected(false);
     }
     else {
         this.setIsSelected(true);
@@ -435,7 +436,19 @@ Layer.prototype.setAutoRefreshEvent = function (layer) {
     layerSource.once("featuresloadend", () => {
         this.observersAutoRefresh.forEach(handler => {
             if (typeof handler === "function") {
-                handler(layerSource.getFeatures());
+                const features = layerSource.getFeatures();
+
+                if (layer.get("typ") === "GeoJSON") {
+                    if (Array.isArray(features)) {
+                        features.forEach((feature, idx) => {
+                            if (typeof feature?.getId === "function" && typeof feature.getId() === "undefined") {
+                                feature.setId("geojson-" + layer.get("id") + "-feature-id-" + idx);
+                            }
+                        });
+                    }
+                }
+
+                handler(features);
             }
         });
     });
@@ -487,7 +500,7 @@ function handleSingleBaseLayer (isSelected, layer) {
     if (isSelected) {
         // This only works for treeType 'custom', otherwise the parentId is not set on the layer
         if (singleBaselayer) {
-            const map2D = store.getters["Maps/get2DMap"];
+            const map2D = mapCollection.getMap("2D");
 
             layerGroup.forEach(aLayer => {
                 // folders parentId is baselayer too, but they have not a function checkForScale
@@ -508,19 +521,21 @@ function handleSingleBaseLayer (isSelected, layer) {
 }
 
 /**
- * Called from setSelected, handles single time layers.
+ * Called from setSelected or modelList, handles single time layers.
  * @param {Boolean} isSelected true, if layer is selected
  * @param {ol.Layer} layer the dedicated layer
+ * @param {Object} model the dedicated model from modelList
  * @returns {void}
  */
-function handleSingleTimeLayer (isSelected, layer) {
-    const id = layer.get("id"),
-        timeLayer = layer.get("typ") === "WMS" && layer.get("time");
+export function handleSingleTimeLayer (isSelected, layer, model) {
+    const selectedLayers = bridge.getLayerModelsByAttributes({isSelected: true, type: "layer", typ: "WMS"}),
+        id = layer?.get("id") || model.id,
+        timeLayer = layer || selectedLayers.find(it => it.id === id),
+        isTimeLayer = timeLayer?.get("typ") === "WMS" && timeLayer?.get("time");
 
-    if (timeLayer) {
+    if (isTimeLayer) {
         if (isSelected) {
-            const selectedLayers = bridge.getLayerModelsByAttributes({isSelected: true, type: "layer", typ: "WMS"}),
-                map2D = store.getters["Maps/get2DMap"];
+            const map2D = mapCollection.getMap("2D");
 
             selectedLayers.forEach(sLayer => {
                 if (sLayer.get("time") && sLayer.get("id") !== id) {
@@ -537,11 +552,11 @@ function handleSingleTimeLayer (isSelected, layer) {
             store.commit("WmsTime/setTimeSliderActive", {
                 active: true,
                 currentLayerId: id,
-                playbackDelay: layer.get("time")?.playbackDelay || 1
+                playbackDelay: timeLayer?.get("time")?.playbackDelay
             });
         }
         else {
-            layer.removeLayer(layer.get("id"));
+            timeLayer.removeLayer(timeLayer.get("id"));
         }
     }
 }

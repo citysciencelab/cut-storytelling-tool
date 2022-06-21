@@ -16,8 +16,12 @@ export default {
      * @param {Object} context The context Vue instance.
      * @returns {Boolean} false, if config does not contain the mapMarker.
      */
-    initialize: context => {
-        return fetchFirstModuleConfig(context, configPaths, "MapMarker", false);
+    initialize: ({context}) => {
+        if (context) {
+            return fetchFirstModuleConfig(context, configPaths, "MapMarker", false);
+        }
+        return null;
+
     },
 
     /**
@@ -37,6 +41,8 @@ export default {
                 value.forEach(val => {
                     coordValues.push(Math.round(val));
                 });
+                // tilt the camera to recognize the mapMarker
+                mapCollection.getMap("3D").getCamera().tilt_ = -200;
             }
             else {
                 coordValues = value;
@@ -61,8 +67,8 @@ export default {
      * This is necessary / triggered if the MapMarker should be removed.
      * @returns {void}
      */
-    removePointMarker ({state, rootGetters, commit}) {
-        rootGetters["Maps/get2DMap"].removeLayer(state.markerPoint);
+    removePointMarker ({state, commit}) {
+        mapCollection.getMap("2D").removeLayer(state.markerPoint);
         commit("clearMarker", "markerPoint");
         commit("setVisibilityMarker", {visbility: false, marker: "markerPoint"});
     },
@@ -143,8 +149,8 @@ export default {
      * Removes the polygon map marker from the map.
      * @returns {void}
      */
-    removePolygonMarker: function ({state, rootGetters, commit}) {
-        rootGetters["Maps/get2DMap"].removeLayer(state.markerPolygon);
+    removePolygonMarker: function ({state, commit}) {
+        mapCollection.getMap("2D").removeLayer(state.markerPolygon);
         commit("clearMarker", "markerPolygon");
         commit("setVisibilityMarker", {visbility: false, marker: "markerPolygon"});
     }

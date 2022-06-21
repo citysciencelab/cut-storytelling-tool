@@ -188,7 +188,8 @@
               "geometryNotSupported": "FeatureViaURL:{{layerId}} katmanı için yapılandırmada beyan edilen {{geometryType}} geometri türü desteklenmiyor.",
               "layerNotFound": "FeatureViaURL: {{layerId}} kimliğine sahip katman bulunamadı.",
               "noLayers": "FeatureViaURL: Aktarılan özellikler için yapılandırmada hiçbir katman tanımlanmadı.",
-              "noNameDefined": "FeatureViaURL: Yapılandırmada kimliği {{layerId}} olan katman için bir ad tanımlanmadı."
+              "noNameDefined": "FeatureViaURL: Yapılandırmada kimliği {{layerId}} olan katman için bir ad tanımlanmadı.",
+              "defaultTreeNotSupported": "FeatureViaURL: FeatureViaURL yalnızca Treetype custom veya light için desteklenir.."
           }
         },
         "quickHelp": {
@@ -335,15 +336,6 @@
                 "serviceThree": "hizmet 3",
                 "serviceFour": "hizmet 4"
             },
-            "filter": {
-                "result": "sonuç",
-                "results": "Sonuçlar",
-                "zoomOnResults": "Sonuçları Yakınlaştır",
-                "filter": "-filtre",
-                "yourSelection": "senin seçimin: ",
-                "noFilterOptionSelected": "Henüz filtre seçeneği seçilmedi",
-                "deleteAll":"Hepsini sil"
-            },
             "pendler": {
                 "animation": {
                     "domicile": "ikamet yeri",
@@ -489,8 +481,7 @@
                     "example": "Örnek: "
                 },
                 "hintSupply": "Koordinatları öğrenmek için haritaya tıklayın",
-                "hintSearch": "Bulmak istediğiniz koordinatları girin",
-                "disabledTooltip": "Bu işlev 3D görünümde mevcut değildir"
+                "hintSearch": "Bulmak istediğiniz koordinatları girin"
             },
             "gfi": {
                 "errorMessage": "Bilgi taraması (GetFeatureInfo) sırasında bir hata oluşmuştur. Lütfen sonra tekrar deneyiniz. Sorun devam ederse, lütfen servis operatörüyle iletişime geçin.",
@@ -852,11 +843,6 @@
             "noLegendForLayerInfo": "Katman bilgilerine mevcut değil",
             "toggleCollapseAll": "Tüm katman bilgilerini daralt/genişlet"
         },
-        "zoomToGeometry": {
-          "alertNoFoundFeature" : "Hiçbir nesne bulunamadı! Lütfen giriş parametrelerini kontrol edin.",
-          "alertParameterizedAccess": "Ne yazık ki, Portalda parametreli arama yanlış işledi!",
-          "alertRequiredService": "Ayrıntılar: Gerekli hizmet yanıt vermiyor."
-        },
         "util": {
             "copyToClipboard": {
               "contentSaved": "İçerik ara hafızaya kopyalandı.",
@@ -895,7 +881,6 @@
           "secondDayOfChristmas": "2. Noel"
         },
         "parametricURL": {
-          "alertZoomToGeometry": "Ne yazık ki, portala parametreli çağrı yanlış oldu! <br> Lütfen tüm parametrelerin doğru girildiğinden emin olun.",
           "alertWrongLayerIds": "<strong>Parametreleştirilmiş çağrı yanlış!</strong> </br>Bu <b>layerIds</b> konumlardaki: {{wrongIdsPositionsConcat}} mevcut değil ve yoksayılıyor!",
           "alertWrongAmountVisibility": "<strong>Parametreleştirilmiş çağrı yanlış!</strong></br> Bu bilgilerle <b>layerIds</b> eşleşmiyor <b>visibility</b> bzw. <b>transparency</b>. Her durumda aynı numara kullanılmalıdır.",
           "errorLoadConfig": "İstenen konfigürasyon dosyası aşağıda verilen konuma yüklenemedi: {{url}}<br> URL-Parameteresi <strong>configJson</strong> \".json\" uzantılı bir dosya gerektirir. <br>Standart dosya konumu altında config.json yüklenmeye çalışıldı."

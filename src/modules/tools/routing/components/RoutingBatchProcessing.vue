@@ -224,7 +224,7 @@ export default {
 }
 
 .drop-area-fake {
-    background-color: #FFFFFF;
+    background-color: $white;
     border-radius: 12px;
     border: 2px dashed $accent_disabled;
     padding:24px;
@@ -233,7 +233,7 @@ export default {
         background-color:$accent_hover;
         border-color:transparent;
         p.caption {
-            color:#FFFFFF;
+            color: $white;
         }
     }
     p.caption {

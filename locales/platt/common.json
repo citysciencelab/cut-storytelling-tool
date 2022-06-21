@@ -188,7 +188,8 @@
                 "geometryNotSupported": "FeatureViaURL: Der in der Konfiguration für den Layer {{layerId}} deklarierte Geometrietyp {{geometryType}} wird nicht unterstützt.",
                 "layerNotFound": "FeatureViaURL: Es konnte kein Layer mit der ID {{layerId}} gefunden werden.",
                 "noLayers": "FeatureViaURL: Für die übergebenen Feature wurden keine Layer in der Konfiguration definiert.",
-                "noNameDefined": "FeatureViaURL: Es wurde kein Name für den Layer mit der ID {{layerId}} in der Konfiguration definiert."
+                "noNameDefined": "FeatureViaURL: Es wurde kein Name für den Layer mit der ID {{layerId}} in der Konfiguration definiert.",
+                "defaultTreeNotSupported": "FeatureViaURL: FeatureViaURL ist nur für den Treetype custom oder light verfügbar."
             }
         },
         "quickHelp": {
@@ -336,15 +337,6 @@
                 "serviceThree": "Dienst 3",
                 "key": "Konfiguration vun Warktüüg <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
             },
-            "filter": {
-                "result": "Dreeper",
-                "results": "Dreeper",
-                "zoomOnResults": "Zoom op de Dreeper",
-                "filter": "-Filter",
-                "yourSelection": "Dien Utwahl: ",
-                "noFilterOptionSelected": "Noch keen Filteroption utwählt",
-                "deleteAll":"All utdoon"
-            },
             "pendler": {
                 "animation": {
                     "domicile": "Wohnort",
@@ -490,8 +482,7 @@
                     "example": "Beispiel: "
                 },
                 "hintSupply": "Klicken Sie in die Karte um Koordinaten abzufragen",
-                "hintSearch": "Geben Sie die zu suchenden Koordinaten ein",
-                "disabledTooltip": "Diese Funktion steht nicht in der 3D Ansicht zur Verfügung"
+                "hintSearch": "Geben Sie die zu suchenden Koordinaten ein"
             },
             "gfi": {
                 "errorMessage": "Bei der Informationsabfrage (GetFeatureInfo) ist ein Fehler aufgetreten.<br>Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",

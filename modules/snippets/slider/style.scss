@@ -1,4 +1,4 @@
-@import "../style.scss";
+@import "~variables";
 
 .slider-container {
     padding: 8px 15px;
@@ -19,7 +19,7 @@
     label {
         margin-bottom: 0;
         padding-top: 4px;
-        color: $darkgreyColor;
+        color: $dark_grey;
     }
     input.form-control {
         width: 80px;
@@ -37,25 +37,25 @@
         .slider-track {
             height: 12px;
             margin-top: -6px;
-            background: $lightgreyColor;
+            background: $light_grey;
         }
         .slider-track-high {
-            background: $lightgreyColor;
+            background: $light_grey;
         }
         .slider-track-low {
-            background: $lightgreyColor;
+            background: $light_grey;
         }
         .slider-selection {
-            background: $darkblueColor;
+            background: $primary;
         }
         .slider-handle {
-            background-color: $darkblueColor;
+            background-color: $primary;
             background-image: none;
             border-width: 1px;
-            border-color: $whiteColor;
+            border-color: $white;
             &:hover {
                 cursor: pointer;
-                opacity: $hoverOpacity;
+                opacity: 0.8;
             }
         }
     }
