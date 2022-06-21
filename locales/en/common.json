@@ -806,7 +806,7 @@
                 }
             },
             "wfsTransaction": {
-                "layerSelectLabel": "Current Layer:",
+                "layerSelectLabel": "Current layer:",
                 "interactionSelect": {
                     "edit": "Edit geometry",
                     "delete": "Delete geometry",
