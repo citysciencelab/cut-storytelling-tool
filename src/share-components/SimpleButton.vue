@@ -1,6 +1,7 @@
 <template>
     <button
         class="btn btn-primary"
+        type="button"
         @click="interaction"
     >
         <i
