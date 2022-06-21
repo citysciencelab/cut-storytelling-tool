@@ -44,7 +44,7 @@
                             :text="config.caption"
                             :icon="config.icon"
                             :interaction="() => prepareInteraction(key)"
-                        /> <!-- TODO(roehlipa): Align the icons within the buttons properly -->
+                        />
                     </template>
                 </div>
                 <template v-else>

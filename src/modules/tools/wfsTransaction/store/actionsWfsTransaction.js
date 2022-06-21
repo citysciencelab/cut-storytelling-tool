@@ -126,8 +126,7 @@ const actions = {
 
         /*
             TODO(roehlipa): On save
-             ==> Add drawn feature to original layer as it otherwise would only be displayed after a reload
-                -> Alternatively, force a reload so that the source gets fetched again and the feature is now included
+             ==> Alternatively, force a reload of layer so that the source gets fetched again and the feature is now included
         */
     },
     setActive ({commit, dispatch, getters}, active) {
