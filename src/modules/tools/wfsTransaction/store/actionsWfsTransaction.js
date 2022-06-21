@@ -15,18 +15,18 @@ const actions = {
      * @param {("LineString"|"Point"|"Polygon"|"delete"|"edit")} interaction Identifier of the selected interaction.
      * @returns {void}
      */
-    async prepareInteraction ({commit, dispatch, getters}, interaction) {
+    async prepareInteraction ({commit, dispatch, getters: {currentInteractionConfig, currentLayerId, currentLayerIndex, layerInformation, featureProperties, toggleLayer}}, interaction) {
         commit("setSelectedInteraction", interaction);
         if (interaction === "LineString" || interaction === "Point" || interaction === "Polygon") {
             drawLayer = await dispatch("Maps/addNewLayerIfNotExists", {layerName: "tool/wfsTransaction/vectorLayer"}, {root: true});
 
-            const style = getters.layerInformation[getters.currentLayerIndex].style,
+            const {style} = layerInformation[currentLayerIndex],
                 drawOptions = {
                     source: drawLayer.getSource(),
                     // TODO: It would generally be really cool to be able to actually draw Multi-X geometries
                     //  and not just have this as a fix for services only accepting Multi-X geometries
-                    type: (getters.currentInteractionConfig[interaction].multi ? "Multi" : "") + interaction,
-                    geometryName: getters.featureProperties.find(({type}) => type === "geometry").key
+                    type: (currentInteractionConfig[interaction].multi ? "Multi" : "") + interaction,
+                    geometryName: featureProperties.find(({type}) => type === "geometry").key
                 };
 
             if (interaction === "Point") {
@@ -36,12 +36,12 @@ const actions = {
             modifyInteraction = new Modify({source: drawLayer.getSource()});
             drawLayer.setStyle(style);
 
-            if (getters.toggleLayer) {
-                Radio.request("ModelList", "getModelByAttributes", {id: getters.currentLayerId}).setIsVisibleInMap(false);
+            if (toggleLayer) {
+                Radio.request("ModelList", "getModelByAttributes", {id: currentLayerId}).setIsVisibleInMap(false);
             }
 
             drawInteraction.on("drawend", () => {
-                if (Radio.request("ModelList", "getModelByAttributes", {id: getters.currentLayerId}).get("isOutOfRange")) {
+                if (Radio.request("ModelList", "getModelByAttributes", {id: currentLayerId}).get("isOutOfRange")) {
                     drawLayer.getSource().once("change", () => drawLayer.getSource().clear());
                     dispatch("Alerting/addSingleAlert", {
                         category: "Info",
@@ -60,8 +60,12 @@ const actions = {
         // TODO(roehlipa): key === edit
         //  ==> Update operation
 
-        // TODO(roehlipa): key === delete
-        //  ==> Delete operation
+        else if (interaction === "delete") {
+            // TODO(roehlipa): key === delete
+            //  ==> Delete operation
+
+
+        }
     },
     reset ({commit, dispatch, getters}) {
         commit("setSelectedInteraction", null);
@@ -73,18 +77,18 @@ const actions = {
         drawLayer = undefined;
         Radio.request("ModelList", "getModelByAttributes", {id: getters.currentLayerId}).setIsVisibleInMap(true);
     },
-    save ({dispatch, getters, rootGetters}) {
+    save ({dispatch, getters: {currentLayerIndex, layerInformation, featureProperties, selectedInteraction}, rootGetters}) {
         // TODO(roehlipa): Form validation
         console.warn("You clicked save!");
         const feature = drawLayer.getSource().getFeatures()[0],
-            {isSecured, url} = getters.layerInformation[getters.currentLayerIndex];
+            layer = layerInformation[currentLayerIndex];
 
         if (feature === undefined) {
             // TODO(roelipa): Information to user
             console.warn("No features");
             return;
         }
-        getters.featureProperties.forEach(property => {
+        featureProperties.forEach(property => {
             if (property.value === "" && property.required) { // TODO(roehlipa): Check other problematic values
                 // TODO(roehlipa): Somehow we got here, so show an error
                 return;
@@ -96,16 +100,16 @@ const actions = {
         });
         loader.show();
         axios({
-            url,
+            url: layer.url,
             data: writeTransaction(
                 feature,
-                getters.layerInformation[getters.currentLayerIndex],
-                ["LineString", "Point", "Polygon"].includes(getters.selectedInteraction)
+                layer,
+                ["LineString", "Point", "Polygon"].includes(selectedInteraction)
                     ? "insert"
-                    : getters.selectedInteraction,
+                    : selectedInteraction,
                 rootGetters["Maps/projectionCode"]),
             method: "POST",
-            withCredentials: isSecured,
+            withCredentials: layer.isSecured,
             headers: {"Content-Type": "text/xml"},
             responseType: "text/xml"
         })
@@ -122,6 +126,7 @@ const actions = {
             .finally(() => {
                 loader.hide();
                 dispatch("reset");
+
             });
 
         /*
@@ -129,32 +134,34 @@ const actions = {
              ==> Alternatively, force a reload of layer so that the source gets fetched again and the feature is now included
         */
     },
-    setActive ({commit, dispatch, getters}, active) {
+    setActive ({commit, dispatch, getters: {layerIds, layerInformation}}, active) {
         commit("setActive", active);
 
         if (active) {
-            commit("setLayerInformation", getLayerInformation(getters.layerIds));
-            commit("setCurrentLayerIndex", getters.layerInformation.findIndex(layer => layer.isSelected));
+            commit("setLayerInformation", getLayerInformation(layerIds));
+            commit("setCurrentLayerIndex", layerInformation.findIndex(layer => layer.isSelected));
             dispatch("setFeatureProperties");
         }
         else {
             dispatch("reset");
         }
     },
-    async setFeatureProperties ({commit, getters}) {
-        if (getters.currentLayerIndex === -1) {
+    async setFeatureProperties ({commit, getters: {currentLayerIndex, layerInformation}}) {
+        if (currentLayerIndex === -1) {
             commit("setFeatureProperties", "All layers not selected in tree");
             return;
         }
-        if (!Object.prototype.hasOwnProperty.call(getters.layerInformation[getters.currentLayerIndex], "featurePrefix")) {
+        const layer = layerInformation[currentLayerIndex];
+
+        if (!Object.prototype.hasOwnProperty.call(layer, "featurePrefix")) {
             commit("setFeatureProperties", "Layer not correctly configured; might be missing 'featurePrefix'");
             return;
         }
-        if (!getters.layerInformation[getters.currentLayerIndex].isSelected) {
+        if (!layer.isSelected) {
             commit("setFeatureProperties", "Layer not selected in tree");
             return;
         }
-        commit("setFeatureProperties", await prepareFeatureProperties(getters.layerInformation[getters.currentLayerIndex]));
+        commit("setFeatureProperties", await prepareFeatureProperties(layer));
     }
 };
 
