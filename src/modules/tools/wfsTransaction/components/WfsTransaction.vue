@@ -41,7 +41,7 @@
                         <SimpleButton
                             v-if="config.available"
                             :key="key"
-                            :caption="config.caption"
+                            :text="config.caption"
                             :icon="config.icon"
                             :interaction="() => prepareInteraction(key)"
                         /> <!-- TODO(roehlipa): Align the icons within the buttons properly -->
@@ -72,11 +72,11 @@
                         <div id="tool-wfsTransaction-form-buttons">
                             <SimpleButton
                                 :interaction="reset"
-                                caption="common:modules.tools.wfsTransaction.form.buttons.discard"
+                                text="common:modules.tools.wfsTransaction.form.buttons.discard"
                             />
                             <SimpleButton
                                 :interaction="save"
-                                caption="common:modules.tools.wfsTransaction.form.buttons.save"
+                                text="common:modules.tools.wfsTransaction.form.buttons.save"
                                 type="submit"
                                 :disabled="requiredFieldsFilled"
                                 :aria-disabled="requiredFieldsFilled"
@@ -154,7 +154,7 @@ $grid-gap: 15px;
 
 #tool-wfsTransaction-container {
     display: grid;
-    grid-template-columns: repeat(1, 40em);
+    grid-template-columns: repeat(1, 1);
     gap: $grid-gap;
     grid-auto-rows: auto;
 
