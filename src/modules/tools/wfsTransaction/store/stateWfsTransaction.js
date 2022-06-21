@@ -11,7 +11,7 @@
  * @type {object}
  * @property {string} label Label to be displayed for the property.
  * @property {string} key Name of the feature property to be described.
- * @property {("string"|"number"|"geometry"|"boolean")} type Input type.
+ * @property {("string"|"integer"|"int"|"decimal"|"geometry"|"boolean"|"date")} type Input type.
  * @property {boolean} required Whether the input of this value is required.
  */
 
