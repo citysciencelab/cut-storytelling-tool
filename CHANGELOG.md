@@ -4,7 +4,6 @@
 [Semantic versioning](https://semver.org/spec/v2.0.0.html) is used.
 
 ## Known Issues
-- 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
 
@@ -32,6 +31,14 @@
 - Issue #778: Fixed layer information display selection in metadata window that now always has names options in its select input.
 - Issue #788: Legend not updating correctly
 - Download print Buttons will now be blue at first and grey once the button was clicked.
+- Attached Gfi is styled correctly.
+
+---
+
+## v2.22.2 - 2022-06-15
+
+### Fixed
+- Addons: Fixed tool Commuter flows.
 
 ---
 
