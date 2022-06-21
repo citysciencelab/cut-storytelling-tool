@@ -97,7 +97,13 @@ const actions = {
         loader.show();
         axios({
             url,
-            data: writeTransaction(feature, getters.layerInformation[getters.currentLayerIndex], getters.selectedInteraction, rootGetters["Maps/projectionCode"]),
+            data: writeTransaction(
+                feature,
+                getters.layerInformation[getters.currentLayerIndex],
+                ["LineString", "Point", "Polygon"].includes(getters.selectedInteraction)
+                    ? "insert"
+                    : getters.selectedInteraction,
+                rootGetters["Maps/projectionCode"]),
             method: "POST",
             withCredentials: isSecured,
             headers: {"Content-Type": "text/xml"},
