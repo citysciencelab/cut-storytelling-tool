@@ -3,13 +3,12 @@
         class="btn btn-primary"
         @click="interaction"
     >
-        <span class="bootstrap-icon">
-            <i
-                v-if="icon !== null"
-                :class="icon"
-            />
-            {{ $t(caption) }}
-        </span>
+        <i
+            v-if="icon !== null"
+            :class="icon"
+            role="img"
+        />
+        {{ $t(text) }}
     </button>
 </template>
 
@@ -17,7 +16,7 @@
 export default {
     name: "SimpleButton",
     props: {
-        caption: {
+        text: {
             type: String,
             required: true
         },
@@ -35,4 +34,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.btn {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    i {
+        margin-right: 0.5rem;
+    }
+}
 </style>
