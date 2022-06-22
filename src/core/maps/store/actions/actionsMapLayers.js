@@ -4,35 +4,6 @@ import VectorSource from "ol/source/Vector.js";
 
 export default {
     /**
-     * Creates a new vector layer and adds it to the map.
-     * If it already exists, this layer is returned.
-     * @param {Object} param store context.
-     * @param {Object} param.state the state.
-     * @param {Object} param.dispatch the dispatch.
-     * @param {String} name The name and the id for the layer.
-     * @returns {module:ol/layer} The created or the already existing layer.
-     */
-    createLayer ({state, dispatch}, name) {
-        const layerList = state.layerList;
-
-        let resultLayer = layerList.find(layer => {
-            return layer.get("name") === name;
-        });
-
-        if (resultLayer !== undefined) {
-            return resultLayer;
-        }
-
-        resultLayer = new VectorLayer({
-            id: name,
-            name: name,
-            source: new VectorSource(),
-            zIndex: 999
-        });
-        dispatch("addLayer", resultLayer);
-        return resultLayer;
-    },
-    /**
      * Adds a layer to the map.
      * Layers with the attribute "alwaysOnTop": true are set on top of the map.
      * @param {Object} param store context.
