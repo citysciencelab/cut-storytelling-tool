@@ -126,13 +126,8 @@ const actions = {
             .finally(() => {
                 loader.hide();
                 dispatch("reset");
-
+                Radio.request("ModelList", "getModelByAttributes", {id: layer.id}).layer.getSource().refresh();
             });
-
-        /*
-            TODO(roehlipa): On save
-             ==> Alternatively, force a reload of layer so that the source gets fetched again and the feature is now included
-        */
     },
     setActive ({commit, dispatch, getters: {layerIds, layerInformation}}, active) {
         commit("setActive", active);
