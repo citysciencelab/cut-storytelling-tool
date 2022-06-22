@@ -49,7 +49,7 @@ export default {
     data: () => ({
         visiblePage: 0,
         selected: new Set(),
-        lastInteractedIndex: null
+        lastInteractedIndex: 0
     }),
     computed: {
         visibleTableData () {
@@ -109,12 +109,14 @@ export default {
          */
         onRowClick (data, event) {
             if (this.multiSelect) {
+                if (event.ctrlKey) {
+                    this.toggleSelection(data);
+                    return;
+                }
+
                 const index = this.tableData.findIndex(entry => entry === data);
 
-                if (event.ctrlKey) {
-                    this.toggleSelection(index);
-                }
-                else if (event.shiftKey) {
+                if (event.shiftKey) {
                     const selectionList = [],
                         min = Math.min(index, this.lastInteractedIndex),
                         max = Math.max(index, this.lastInteractedIndex);
@@ -124,7 +126,6 @@ export default {
                     }
 
                     this.selected = new Set(selectionList);
-                    this.lastInteractedIndex = index;
                 }
                 else {
                     this.selected = new Set([index]);
@@ -332,5 +333,14 @@ tbody.multiSelect > tr:hover {
 td {
     -moz-user-select: none;
     user-select: none;
+}
+
+.bg-primary.text-light .form-check-input {
+    border-color: $gray-100;
+    outline: 0;
+
+    &:focus {
+        box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.5);
+    }
 }
 </style>
