@@ -814,6 +814,9 @@
                     "point": "Add point",
                     "polygon": "Add area"
                 },
+                "error": {
+                    "geometryOutOfRange": "The drawn geometry is out of range of the allowed region of the layer."
+                },
                 "form": {
                     "buttons": {
                         "discard": "Discard",

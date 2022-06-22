@@ -814,6 +814,9 @@
                     "point": "Punkt erfassen",
                     "polygon": "Fläche erfassen"
                 },
+                "error": {
+                    "geometryOutOfRange": "Die gezeichnete Geometrie befindet sich außerhalb des erlaubten Bereiches des Layers."
+                },
                 "form": {
                     "buttons": {
                         "discard": "Verwerfen",

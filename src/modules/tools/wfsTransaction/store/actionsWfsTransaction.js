@@ -46,7 +46,7 @@ const actions = {
                     dispatch("Alerting/addSingleAlert", {
                         category: "Info",
                         displayClass: "info",
-                        content: "Drawn feature not in range of layers allowed region.", // TODO(roehlipa): Translation
+                        content: i18next.t("common:modules.tools.wfsTransaction.error.geometryOutOfRange"),
                         mustBeConfirmed: false
                     }, {root: true});
                     return;
