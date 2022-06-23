@@ -234,6 +234,8 @@ export default {
                 >
                     <td
                         v-if="multiSelect"
+                        class="multi-select"
+                        @click.stop.prevent=""
                     >
                         <div class="form-check">
                             <input
@@ -330,9 +332,17 @@ tbody.multiSelect > tr:hover {
     background-color: $gray-200;
 }
 
+tr {
+    vertical-align: middle;
+}
+
 td {
     -moz-user-select: none;
     user-select: none;
+}
+
+.multi-select {
+    cursor: initial;
 }
 
 .bg-primary.text-light .form-check-input {
