@@ -704,7 +704,7 @@ export default {
         color: $light_red;
     }
     .hint{
-        margin: 5px 0px 25px;
+        margin: 5px 0 25px;
         text-align:center;
         color: $secondary_focus;
         transition: color 0.35s;

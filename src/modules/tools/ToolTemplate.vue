@@ -208,9 +208,9 @@ export default {
                 v-if="!renderToWindow"
                 class="heading-element flex-grow"
             >
-                <p class="title">
-                    <span>{{ title }}</span>
-                </p>
+                <h2 class="title">
+                    {{ title }}
+                </h2>
             </div>
 
             <BasicDragHandle
@@ -219,9 +219,9 @@ export default {
                 :margin-bottom="resizableWindow ? 25 : 0"
                 class="heading-element flex-grow"
             >
-                <p class="title">
-                    <span>{{ title }}</span>
-                </p>
+                <h2 class="title">
+                    {{ title }}
+                </h2>
             </BasicDragHandle>
 
             <div
@@ -316,13 +316,13 @@ export default {
             &.flex-grow {
                 flex-grow:99;
                 overflow: hidden;
+                > .title {
+                    @include tool-headings-h2();
+                }
             }
 
             > .title {
-                color: $secondary_contrast;
-                white-space: nowrap;
-                font-size: 14px;
-                padding-top: 10px;
+                @include tool-headings-h2();
             }
 
             > .bootstrap-icon {

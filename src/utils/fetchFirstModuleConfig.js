@@ -95,6 +95,7 @@ function createKeyPathArray (path, separator = ".") {
 
     return result;
 }
+export {createKeyPathArray};
 
 /**
  * Deep merges module config objects into the module's state.

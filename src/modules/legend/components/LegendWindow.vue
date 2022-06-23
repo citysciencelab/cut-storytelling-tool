@@ -744,7 +744,9 @@ export default {
                 <span class="bootstrap-icon d-md-none d-lg-inline-block">
                     <i :class="icon" />
                 </span>
-                <span>{{ $t(name) }}</span>
+                <h2 class="title">
+                    {{ $t(name) }}
+                </h2>
                 <div class="float-right">
                     <span
                         v-if="showCollapseAllButton"
@@ -825,6 +827,10 @@ export default {
             padding: 10px;
             border-bottom: 2px solid #e7e7e7;
             cursor: move;
+            .title{
+                @include tool-headings-h2();
+                display: inline-block;
+            }
             .close-legend {
                 padding: 5px;
                 cursor: pointer;

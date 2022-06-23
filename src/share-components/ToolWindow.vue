@@ -72,9 +72,9 @@ export default {
                 target-sel=".tool-window-vue"
                 class="heading-element flex-grow"
             >
-                <p class="tool-window-heading-title">
+                <h2 class="tool-window-heading-title">
                     <slot name="title" />
-                </p>
+                </h2>
             </BasicDragHandle>
 
             <slot name="rightOfTitle" />
@@ -141,6 +141,7 @@ export default {
         display:flex;
         flex-direction:row;
         width:100%;
+
         .heading-element {
             white-space: nowrap;
             color: $dark_grey;
@@ -161,8 +162,11 @@ export default {
                 }
             }
 
-            > span {
-                > .bi-dash-lg { top: 3px; }
+            > h2 {
+                @include tool-headings-h2();
+
+                &.glyphicon-minus { top: 3px; }
+
                 &:hover {
                     &:not(.win-icon) {
                         @include primary_action_hover;

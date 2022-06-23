@@ -4,7 +4,6 @@
 [Semantic versioning](https://semver.org/spec/v2.0.0.html) is used.
 
 ## Known Issues
-- 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
 
@@ -18,6 +17,7 @@
 - WfsSearch: A `multiSelect` mode has been added where multiple search results can be selected and viewn on the map.
 
 ### Changed
+- Changed class for several title elements on page from span to h1 or h2 and standardized their styling
 - WMTS feature is now realized via masterportalAPI functions.
 
 ### Deprecated
@@ -32,6 +32,16 @@
 - Issue #778: Fixed layer information display selection in metadata window that now always has names options in its select input.
 - Issue #788: Legend not updating correctly
 - Download print Buttons will now be blue at first and grey once the button was clicked.
+- Attached Gfi is styled correctly.
+- Quickly clicking on a tab in the Elektro GFI will now not lead to a reload of the page.
+- Tools without icon attribute in config.json use default icon from state now.
+
+---
+
+## v2.22.2 - 2022-06-15
+
+### Fixed
+- Addons: Fixed tool Commuter flows.
 
 ---
 

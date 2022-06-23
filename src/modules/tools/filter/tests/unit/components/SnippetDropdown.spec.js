@@ -32,7 +32,7 @@ describe("src/modules/tools/filter/components/SnippetDropdown.vue", () => {
         it("should render correctly with default values", () => {
             const wrapper = shallowMount(SnippetDropdown, {localVue});
 
-            expect(wrapper.find(".select-box-container").exists()).to.be.true;
+            expect(wrapper.find(".filter-select-box-container").exists()).to.be.true;
             wrapper.destroy();
         });
         it("should render hidden if visible is false", () => {
@@ -54,7 +54,7 @@ describe("src/modules/tools/filter/components/SnippetDropdown.vue", () => {
                 localVue
             });
 
-            expect(wrapper.find(".select-box-container").exists()).to.be.true;
+            expect(wrapper.find(".filter-select-box-container").exists()).to.be.true;
             expect(wrapper.vm.disabled).to.be.true;
             wrapper.destroy();
         });
@@ -211,6 +211,7 @@ describe("src/modules/tools/filter/components/SnippetDropdown.vue", () => {
                 localVue
             });
 
+            await wrapper.vm.$nextTick();
             expect(wrapper.find(".snippetListContainer").exists()).to.be.true;
             expect(wrapper.find(".snippetListContainer .radio").exists()).to.be.true;
 
@@ -228,6 +229,7 @@ describe("src/modules/tools/filter/components/SnippetDropdown.vue", () => {
                 localVue
             });
 
+            await wrapper.vm.$nextTick();
             expect(wrapper.find(".snippetListContainer").exists()).to.be.true;
             expect(wrapper.find(".snippetListContainer .checkbox").exists()).to.be.true;
 

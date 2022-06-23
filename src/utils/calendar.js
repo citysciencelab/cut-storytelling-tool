@@ -206,11 +206,10 @@ function getPublicHoliday (date, holidayKeys = false, format = false) {
         adventMoment = getFirstAdventMoment(year),
         keys = Array.isArray(holidayKeys) ? holidayKeys : Object.keys(publicHolidayMatrix),
         len = keys.length;
-    let i = 0,
-        holidayKey = "",
+    let holidayKey = "",
         holidayMoment = null;
 
-    for (i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) {
         holidayKey = keys[i];
 
         if (!isCalendarMoment(publicHolidayMatrix[holidayKey])) {
