@@ -45,7 +45,7 @@
                             :text="config.caption"
                             :icon="config.icon"
                             :interaction="() => prepareInteraction(key)"
-                        />
+                        /> <!-- TODO(roehlipa): Properly highlight the selected button (only relevant for delete, as the others are hidden when clicked) -->
                     </template>
                 </div>
                 <template v-else>

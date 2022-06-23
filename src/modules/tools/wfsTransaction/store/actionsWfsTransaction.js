@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Draw, Modify} from "ol/interaction";
+import {Draw, Modify, Select} from "ol/interaction";
 import prepareFeatureProperties from "../utils/prepareFeatureProperties";
 import writeTransaction from "../utils/writeTransaction";
 import loader from "../../../../utils/loaderOverlay";
@@ -7,7 +7,8 @@ import getLayerInformation from "../utils/getLayerInformation";
 
 let drawInteraction,
     drawLayer,
-    modifyInteraction;
+    modifyInteraction,
+    selectInteraction;
 
 const actions = {
     /**
@@ -15,7 +16,12 @@ const actions = {
      * @param {("LineString"|"Point"|"Polygon"|"delete"|"edit")} interaction Identifier of the selected interaction.
      * @returns {void}
      */
-    async prepareInteraction ({commit, dispatch, getters: {currentInteractionConfig, currentLayerId, currentLayerIndex, layerInformation, featureProperties, toggleLayer}}, interaction) {
+    async prepareInteraction ({commit, dispatch, getters, rootGetters}, interaction) {
+        const {currentInteractionConfig, currentLayerId, currentLayerIndex, layerInformation, featureProperties, toggleLayer} = getters,
+            // NOTE: As this is a rootGetter, the naming scheme is used like this.
+            // eslint-disable-next-line new-cap
+            sourceLayer = rootGetters["Maps/getLayerById"]({layerId: currentLayerId});
+
         commit("setSelectedInteraction", interaction);
         if (interaction === "LineString" || interaction === "Point" || interaction === "Polygon") {
             drawLayer = await dispatch("Maps/addNewLayerIfNotExists", {layerName: "tool/wfsTransaction/vectorLayer"}, {root: true});
@@ -37,7 +43,7 @@ const actions = {
             drawLayer.setStyle(style);
 
             if (toggleLayer) {
-                Radio.request("ModelList", "getModelByAttributes", {id: currentLayerId}).setIsVisibleInMap(false);
+                sourceLayer.setVisible(false);
             }
 
             drawInteraction.on("drawend", () => {
@@ -56,39 +62,49 @@ const actions = {
             });
             dispatch("Maps/addInteraction", drawInteraction, {root: true});
         }
-
         // TODO(roehlipa): key === edit
         //  ==> Update operation
-
         else if (interaction === "delete") {
-            // TODO(roehlipa): key === delete
-            //  ==> Delete operation
-
-
+            selectInteraction = new Select({
+                layers: [sourceLayer]
+            });
+            selectInteraction.on("select", event => {
+                dispatch("ConfirmAction/addSingleAction", {
+                    actionConfirmedCallback: () => dispatch("sendTransaction", event.selected[0]),
+                    confirmCaption: i18next.t("common:modules.tools.wfsTransaction.deleteInteraction.confirm"),
+                    textContent: i18next.t("common:modules.tools.wfsTransaction.deleteInteraction.text"),
+                    headline: i18next.t("common:modules.tools.wfsTransaction.deleteInteraction.headline")
+                }, {root: true});
+                selectInteraction.getFeatures().clear();
+            });
+            dispatch("Maps/addInteraction", selectInteraction, {root: true});
+            // TODO(roehlipa): Add a trashcan next to the mouse (without bugs) -> see e.g. draw
         }
     },
-    reset ({commit, dispatch, getters}) {
+    reset ({commit, dispatch, getters, rootGetters}) {
         commit("setSelectedInteraction", null);
         dispatch("Maps/removeInteraction", drawInteraction, {root: true});
         dispatch("Maps/removeInteraction", modifyInteraction, {root: true});
+        dispatch("Maps/removeInteraction", selectInteraction, {root: true});
         commit("Maps/removeLayerFromMap", drawLayer, {root: true});
         drawInteraction = undefined;
         modifyInteraction = undefined;
+        selectInteraction = undefined;
         drawLayer = undefined;
-        Radio.request("ModelList", "getModelByAttributes", {id: getters.currentLayerId})?.setIsVisibleInMap(true);
+        // NOTE: As this is a rootGetter, the naming scheme is used like this.
+        // eslint-disable-next-line new-cap
+        rootGetters["Maps/getLayerById"]({layerId: getters.currentLayerId})?.setVisible(true);
     },
-    save ({dispatch, getters: {currentLayerIndex, layerInformation, featureProperties, selectedInteraction}, rootGetters}) {
+    save ({dispatch, getters}) {
         // TODO(roehlipa): Form validation
-        console.warn("You clicked save!");
-        const feature = drawLayer.getSource().getFeatures()[0],
-            layer = layerInformation[currentLayerIndex];
+        const feature = drawLayer.getSource().getFeatures()[0];
 
         if (feature === undefined) {
             // TODO(roelipa): Information to user
             console.warn("No features");
             return;
         }
-        featureProperties.forEach(property => {
+        getters.featureProperties.forEach(property => {
             if (property.value === "" && property.required) { // TODO(roehlipa): Check other problematic values
                 // TODO(roehlipa): Somehow we got here, so show an error
                 return;
@@ -98,6 +114,12 @@ const actions = {
                 // TODO(roehlipa): Do correct data type for value; even for not set ones => not set ones get null
             }
         });
+        dispatch("sendTransaction", feature);
+    },
+    sendTransaction ({dispatch, getters, rootGetters}, feature) {
+        const {currentLayerIndex, layerInformation, selectedInteraction} = getters,
+            layer = layerInformation[currentLayerIndex];
+
         loader.show();
         axios({
             url: layer.url,

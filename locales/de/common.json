@@ -817,6 +817,11 @@
                 "error": {
                     "geometryOutOfRange": "Die gezeichnete Geometrie befindet sich außerhalb des erlaubten Bereiches des Layers."
                 },
+                "deleteInteraction": {
+                  "confirm": "Löschen",
+                  "headline": "Achtung",
+                  "text": "Sind Sie sich sicher, dass Sie diese Geometrie löschen möchten?"
+                },
                 "form": {
                     "buttons": {
                         "discard": "Verwerfen",

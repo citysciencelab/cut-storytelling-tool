@@ -817,6 +817,11 @@
                 "error": {
                     "geometryOutOfRange": "The drawn geometry is out of range of the allowed region of the layer."
                 },
+                "deleteInteraction": {
+                    "confirm": "Delete",
+                    "headline": "Caution",
+                    "text": "Are you sure about deleting the selected feature?"
+                },
                 "form": {
                     "buttons": {
                         "discard": "Discard",
