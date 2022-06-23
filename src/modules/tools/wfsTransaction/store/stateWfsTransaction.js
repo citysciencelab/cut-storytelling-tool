@@ -55,6 +55,7 @@ const state = {
     id: "wfsTransaction",
     // General configuration
     active: false,
+    deactivateGFI: true, // TODO(roehlipa): document
     name: "WfsTransaction",
     icon: "bi-globe",
     // Module specific configuration

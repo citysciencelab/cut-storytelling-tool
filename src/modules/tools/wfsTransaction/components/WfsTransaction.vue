@@ -3,6 +3,7 @@
         :title="$t(name)"
         :icon="icon"
         :active="active"
+        :deactivate-gfi="deactivateGFI"
     >
         <template #toolBody>
             <div id="tool-wfsTransaction-container">
@@ -99,7 +100,7 @@ export default {
     name: "WfsTransaction",
     components: {SimpleButton, ToolTemplate},
     computed: {
-        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "requiredFieldsFilled", "selectedInteraction", "showInteractionsButtons", "active", "icon", "name"]),
+        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "requiredFieldsFilled", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"]),
         ...mapGetters("Maps", ["getLayerById"])
     },
     watch: {
