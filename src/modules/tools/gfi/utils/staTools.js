@@ -116,7 +116,7 @@ function convertObservationsToMultilinechart (listOfObservations, label, format,
  */
 function isObservation (observation) {
     return typeof observation === "object" && observation !== null
-        && typeof observation["@iot.id"] === "number"
+        && (typeof observation["@iot.id"] === "number" || typeof observation["@iot.id"] === "string")
         && typeof observation.phenomenonTime === "string"
         && Object.prototype.hasOwnProperty.call(observation, "result");
 }

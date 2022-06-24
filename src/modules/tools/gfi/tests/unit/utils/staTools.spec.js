@@ -45,9 +45,18 @@ describe("src/modules/tools/gfi/utils/staTools.js", () => {
             expect(isObservation([])).to.be.false;
             expect(isObservation({})).to.be.false;
         });
-        it("should return true if the given observation is a valid STA observation", () => {
+        it("should return true if the given observation is a valid STA observation with iot.id as number", () => {
             const observation = {
                 "@iot.id": 214030301,
+                "phenomenonTime": "2021-08-05T04:15:00.000Z/2021-08-05T04:29:59.000Z",
+                "result": 127.0
+            };
+
+            expect(isObservation(observation)).to.be.true;
+        });
+        it("should return true if the given observation is a valid STA observation with iot.id as string", () => {
+            const observation = {
+                "@iot.id": "214030301",
                 "phenomenonTime": "2021-08-05T04:15:00.000Z/2021-08-05T04:29:59.000Z",
                 "result": 127.0
             };

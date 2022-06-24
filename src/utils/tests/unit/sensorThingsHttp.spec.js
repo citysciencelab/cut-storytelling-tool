@@ -43,7 +43,7 @@ describe("src/utils/sensorThingsHttp", () => {
             expect(http.getPolygonQueryWithPoints([{}, {}], intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON (())')");
             expect(http.getPolygonQueryWithPoints([], intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON (())')");
         });
-        it("should return a url query with the given points in a correct format with a within range", () => {
+        it("should return an url query with the given points in a correct format with a within range", () => {
             const points = [
                     {x: "foo", y: "bar"},
                     {x: "baz", y: "qux"}
@@ -54,7 +54,7 @@ describe("src/utils/sensorThingsHttp", () => {
             expect(http.getPolygonQueryWithPoints([{}, {}], intersect)).to.equal("st_within(Locations/location,geography'POLYGON (())')");
             expect(http.getPolygonQueryWithPoints([], intersect)).to.equal("st_within(Locations/location,geography'POLYGON (())')");
         });
-        it("should return a url query with the given points in a correct format with a within range if root node is Datastreams", () => {
+        it("should return an url query with the given points in a correct format with a within range if root node is Datastreams", () => {
             const points = [
                     {x: "foo", y: "bar"},
                     {x: "baz", y: "qux"}
@@ -369,7 +369,7 @@ describe("src/utils/sensorThingsHttp", () => {
             expect(resultRef).to.deep.equal(expected);
         });
 
-        it("should push any key bound with a @iot.nextLink onto the fifo list", () => {
+        it("should push any key bound with an @iot.nextLink onto the fifo list", () => {
             const resultRef = {
                     test: {
                         key: "value"
