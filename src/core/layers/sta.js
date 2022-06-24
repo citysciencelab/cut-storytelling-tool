@@ -556,7 +556,9 @@ STALayer.prototype.initializeConnection = function (onsuccess) {
  */
 STALayer.prototype.callSensorThingsAPI = function (url, version, urlParams, currentExtent, intersect, onsuccess, onerror) {
     const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
-        http = new SensorThingsHttp(),
+        http = new SensorThingsHttp({
+            rootNode: urlParams?.root
+        }),
         /**
          * A function to receive the response of a http call.
          * @param {Object} result the response from the http request as array buffer
