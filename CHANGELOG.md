@@ -23,6 +23,7 @@
 - SensorThingsAPI: The sensor layer has been moved from Backbone to Vue.
 - The following NPM packages are updated:
     - @masterportal/mpconfigparser: 1.2.0 to 1.3.0
+  - Some `Radio.trigger` and `Radio.request` calls have been replaced by direct accesses to the `Vuex store`.
 
 ### Deprecated
 
@@ -48,7 +49,6 @@
 ---
 
 ## v2.22.2 - 2022-06-15
-
 ### Fixed
 - Addons: Fixed tool Commuter flows.
 
