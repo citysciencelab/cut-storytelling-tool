@@ -3,7 +3,7 @@ import actions from "../../../store/actionsPrint";
 import VectorLayer from "ol/layer/Vector.js";
 import sinon from "sinon";
 
-const {activatePrintStarted, startPrint, getMetaDataForPrint, createPrintJob, migratePayload, waitForPrintJob, waitForPrintJobSuccess, downloadFile} = actions;
+const {activatePrintStarted, getMetaDataForPrint, createPrintJob, migratePayload, waitForPrintJob, waitForPrintJobSuccess, downloadFile} = actions;
 
 describe("src/modules/tools/print/store/actionsPrint", function () {
     describe("activatePrintStarted", function () {
@@ -13,110 +13,6 @@ describe("src/modules/tools/print/store/actionsPrint", function () {
                 {type: "setPrintStarted", payload: true, commit: true}
             ], {}, done);
         });
-    });
-
-    describe("startPrint", function () {
-        after(function () {
-            sinon.restore();
-        });
-        it("should start the print", done => {
-            const TileLayer = {},
-                state = {
-                    visibleLayerList: [
-                        TileLayer,
-                        new VectorLayer(),
-                        new VectorLayer(),
-                        new VectorLayer(),
-                        new VectorLayer()
-                    ],
-                    currentLayoutName: "A4 Hochformat",
-                    filename: "Hamburger Menu",
-                    currentFormat: "pdf",
-                    title: "Cheeseburger Menu",
-                    currentScale: 60000,
-                    isMetaDataAvailable: false,
-                    isScaleAvailable: true,
-                    isGfiAvailable: false,
-                    isLegendAvailable: true,
-                    isLegendSelected: false
-                },
-                request = sinon.spy(() => ({
-                    getCode: () => "EPSG:25832"
-                }));
-
-            sinon.stub(Radio, "request").callsFake(request);
-
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(startPrint, {}, state, {}, [
-                {type: "setProgressWidth", payload: "width: 25%", commit: true}
-
-            ], {}, done);
-        });
-        it("should start the print but with no legend", done => {
-            const state = {
-                    visibleLayerList: [
-                        new VectorLayer(),
-                        new VectorLayer(),
-                        new VectorLayer(),
-                        new VectorLayer()
-                    ],
-                    currentLayoutName: "A4 Hochformat",
-                    filename: "Hamburger Menu",
-                    currentFormat: "pdf",
-                    title: "Cheeseburger Menu",
-                    currentScale: 60000,
-                    isMetaDataAvailable: false,
-                    isScaleAvailable: true,
-                    isGfiAvailable: false,
-                    isLegendAvailable: false,
-                    isLegendSelected: false,
-                    printAppId: "master"
-                },
-                defaults = {
-                    uniqueIdList: [],
-                    visibleLayerIds: [],
-                    layout: "A4 Hochformat",
-                    attributes: {
-                        title: "Cheeseburger Menu",
-                        map: {
-                            projection: "EPSG:25832",
-                            center: {},
-                            scale: 60000,
-                            layers: []
-                        },
-                        scale: "1:60000",
-                        legend: {},
-                        showLegend: false
-                    },
-                    outputFilename: "Hamburger Menu",
-                    outputFormat: "pdf"
-                },
-                data = {
-                    ownloadURL: "/mapfish_print_internet/print/report/2ca7f8ab-24f0-48e1-9fd7-a6fe3349ccd0@89c12004-d327-4fb1-88a3-2a3332fa36a0",
-                    ref: "2ca7f8ab-24f0-48e1-9fd7-a6fe3349ccd0@89c12004-d327-4fb1-88a3-2a3332fa36a0",
-                    statusURL: "/mapfish_print_internet/print/status/2ca7f8ab-24f0-48e1-9fd7-a6fe3349ccd0@89c12004-d327-4fb1-88a3-2a3332fa36a0.json"
-                },
-                payload = {
-                    index: 0,
-                    getResponse: () => {
-                        return {data};
-                    }
-                },
-                printJob = {
-                    payload: encodeURIComponent(JSON.stringify(defaults)),
-                    printAppId: "master",
-                    currentFormat: "pdf",
-                    getResponse: payload.getResponse,
-                    index: 0
-                };
-
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
-            testAction(startPrint, payload, state, {}, [
-                {type: "setProgressWidth", payload: "width: 25%", commit: true},
-                {type: "createPrintJob", payload: printJob, dispatch: true}
-            ], {}, done);
-        });
-
     });
 
     describe("getMetaDataForPrint", function () {
