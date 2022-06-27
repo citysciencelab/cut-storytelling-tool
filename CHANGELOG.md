@@ -45,6 +45,7 @@
   - It does not depend on the gfi attributes to show the mouseHover tooltip.
   - Instead of text, the mouseHover tooltip will be shown as html content.
 
+- The minimized ToolTemplate will now be blue and variables are used in css the template's css code.
 
 ---
 
