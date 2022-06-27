@@ -201,13 +201,15 @@ export default {
     /**
      * Getting und showing the layer which is visible in map scale
      * @param {Object} param.state the state
-     * @returns {void} -
+     * @returns {void}
      */
-    setOriginalPrintLayer: function ({state}) {
+    setOriginalPrintLayer: function ({state, rootGetters}) {
         const invisibleLayer = state.invisibleLayer,
             mapScale = state.currentMapScale,
-            resoByMaxScale = Radio.request("MapView", "getResosolutionByScale", mapScale, "max"),
-            resoByMinScale = Radio.request("MapView", "getResolutionByScale", mapScale, "min");
+            // eslint-disable-next-line new-cap
+            resoByMaxScale = rootGetters["Maps/getResolutionByScale"](mapScale, "max"),
+            // eslint-disable-next-line new-cap
+            resoByMinScale = rootGetters["Maps/getResolutionByScale"](mapScale, "min");
 
         invisibleLayer.forEach(layer => {
             const layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
@@ -229,12 +231,14 @@ export default {
      * @param {Object} param.commit the commit
      * @param {Object} param.dispatch the dispatch
      * @param {String} scale - the current print scale
-     * @returns {void} -
+     * @returns {void}
      */
-    setPrintLayers: function ({state, dispatch, commit}, scale) {
+    setPrintLayers: function ({state, dispatch, commit, rootGetters}, scale) {
         const visibleLayer = state.visibleLayerList,
-            resoByMaxScale = Radio.request("MapView", "getResolutionByScale", scale, "max"),
-            resoByMinScale = Radio.request("MapView", "getResolutionByScale", scale, "min"),
+            // eslint-disable-next-line new-cap
+            resoByMaxScale = rootGetters["Maps/getResolutionByScale"](scale, "max"),
+            // eslint-disable-next-line new-cap
+            resoByMinScale = rootGetters["Maps/getResolutionByScale"](scale, "min"),
             invisibleLayer = [];
 
         let invisibleLayerNames = "",

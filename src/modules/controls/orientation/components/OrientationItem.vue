@@ -1,5 +1,5 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 import getters from "../store/gettersOrientation";
 import mutations from "../store/mutationsOrientation";
 import ControlIcon from "../../ControlIcon.vue";
@@ -79,6 +79,7 @@ export default {
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),
+        ...mapActions("Maps", ["setCenter", "setZoomLevel"]),
 
         setIsGeoLocationPossible () {
             this.isGeoLocationPossible = window.location.protocol === "https:" || ["localhost", "127.0.0.1"].indexOf(window.location.hostname);
@@ -223,7 +224,8 @@ export default {
          * @returns {void}
          */
         zoomAndCenter (position) {
-            Radio.trigger("MapView", "setCenter", position, 6);
+            this.setCenter(position);
+            this.setZoomLevel(6);
         },
 
         /**

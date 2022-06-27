@@ -209,7 +209,7 @@ export default {
                 }),
                 extent = feature.getGeometry().getExtent(),
                 coordinate = extractEventCoordinates(extent),
-                resolutions = Radio.request("MapView", "getResolutions"),
+                resolutions = mapCollection.getMapView("2D").getResolutions(),
                 index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
 
             this.zoomToExtent({extent: coordinate, options: {maxZoom: index}});

@@ -237,20 +237,14 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                     eventListener: undefined,
                     layoutList: []
                 },
-                request = sinon.spy(() => ({
-                    setIsOutOfRange: () => false
-                }));
+                rootGetters = {
+                    "Maps/getResolutionByScale": () => 10
+                };
 
-            sinon.stub(Radio, "request").callsFake(request);
-
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(setPrintLayers, scale, state, {}, [
                 {type: "setHintInfo", payload: "", commit: true},
                 {type: "setInvisibleLayer", payload: [], commit: true}
-            ], {}, done);
-        });
-        after(function () {
-            sinon.restore();
+            ], {}, done, rootGetters);
         });
     });
 

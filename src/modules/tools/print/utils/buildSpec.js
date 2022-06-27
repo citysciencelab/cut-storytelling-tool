@@ -237,7 +237,7 @@ const BuildSpecModel = {
      * @returns {Object} - LayerObject for MapFish print.
      */
     buildLayerType: async function (layer, currentResolution) {
-        const extent = Radio.request("MapView", "getCurrentExtent"),
+        const extent = store.getters["Maps/getCurrentExtent"],
             layerMinRes = typeof layer?.get === "function" ? layer.get("minResolution") : false,
             layerMaxRes = typeof layer?.get === "function" ? layer.get("maxResolution") : false,
             isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);

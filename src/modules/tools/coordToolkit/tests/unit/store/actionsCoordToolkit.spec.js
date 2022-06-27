@@ -5,6 +5,24 @@ import {expect} from "chai";
 import * as proj4 from "proj4";
 
 describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
+    beforeEach(() => {
+        const map = {
+            id: "ol",
+            mode: "2D",
+            getView: () => {
+                return {
+                    getProjection: () => {
+                        return {
+                            getCode: () => "EPSG:25832"
+                        };
+                    }
+                };
+            }
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "2D");
+    });
     afterEach(sinon.restore);
 
     describe("supplyCoord actions", () => {
@@ -580,24 +598,26 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
         });
         describe("transformCoordinates", () => {
             it("Does not transform coordinates of the ETRS89 format and moves to coordinates", () => {
-                const state = {
-                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
-                    selectedCoordinates: ["564459.13", "5935103.67"]
-                };
-
-                sinon.stub(Radio, "request").callsFake((...args) => {
-                    let ret = null;
-
-                    args.forEach(arg => {
-                        if (arg === "getProjection") {
-                            ret = {
-                                getCode: () => "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                const map = {
+                        id: "ol",
+                        mode: "2D",
+                        getView: () => {
+                            return {
+                                getProjection: () => {
+                                    return {
+                                        getCode: () => "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                                    };
+                                }
                             };
                         }
-                    });
-                    return ret;
-                });
+                    },
+                    state = {
+                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
+                        selectedCoordinates: ["564459.13", "5935103.67"]
+                    };
 
+                mapCollection.clear();
+                mapCollection.addMap(map, "2D");
 
                 actions.transformCoordinates({state, dispatch});
 
@@ -739,22 +759,25 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Transforms coordinates of the http://www.opengis.net/gml/srs/epsg.xml#25832 format and moves to coordinates", () => {
                 const state = {
-                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
-                    selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
-                };
-
-                sinon.stub(Radio, "request").callsFake((...args) => {
-                    let ret = null;
-
-                    args.forEach(arg => {
-                        if (arg === "getProjection") {
-                            ret = {
-                                getCode: () => "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
+                        selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
+                    },
+                    map = {
+                        id: "ol",
+                        mode: "2D",
+                        getView: () => {
+                            return {
+                                getProjection: () => {
+                                    return {
+                                        getCode: () => "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                                    };
+                                }
                             };
                         }
-                    });
-                    return ret;
-                });
+                    };
+
+                mapCollection.clear();
+                mapCollection.addMap(map, "2D");
 
                 actions.transformCoordinates({state, dispatch});
 
@@ -769,20 +792,23 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                     proj4Result = Symbol(),
                     proj4Spy = sinon.spy(() => {
                         return proj4Result;
-                    });
-
-                sinon.stub(Radio, "request").callsFake((...args) => {
-                    let ret = null;
-
-                    args.forEach(arg => {
-                        if (arg === "getProjection") {
-                            ret = {
-                                getCode: () => "EPSG:25833"
+                    }),
+                    map = {
+                        id: "ol",
+                        mode: "2D",
+                        getView: () => {
+                            return {
+                                getProjection: () => {
+                                    return {
+                                        getCode: () => "EPSG:25833"
+                                    };
+                                }
                             };
                         }
-                    });
-                    return ret;
-                });
+                    };
+
+                mapCollection.clear();
+                mapCollection.addMap(map, "2D");
 
                 sinon.stub(proj4, "default").callsFake(proj4Spy);
                 actions.transformCoordinates({state, dispatch});

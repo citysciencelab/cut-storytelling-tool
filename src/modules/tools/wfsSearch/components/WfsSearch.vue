@@ -70,6 +70,7 @@ export default {
         ...mapMutations("Tools/WfsSearch", Object.keys(mutations)),
         ...mapActions("Tools/WfsSearch", Object.keys(actions)),
         ...mapActions("MapMarker", ["placingPointMarker"]),
+        ...mapActions("Maps", ["setCenter", "setZoomLevel"]),
         searchFeatures,
         /**
          * Function called when the window of the tool is closed.
@@ -118,7 +119,8 @@ export default {
             }
             else if (features.length > 0) {
                 this.placingPointMarker(features[0].getGeometry().getCoordinates());
-                Radio.trigger("MapView", "setCenter", features[0].getGeometry().getCoordinates(), this.zoomLevel);
+                this.setCenter(features[0].getGeometry().getCoordinates());
+                this.setZoomLevel(this.zoomLevel);
                 this.setShowResultList(false);
             }
             else {

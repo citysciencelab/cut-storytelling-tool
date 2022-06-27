@@ -47,7 +47,7 @@ function getFeaturesByLayerId (layerId) {
  * @returns {Boolean} true if the feature is in the current map extent of the browser
  */
 function isFeatureInMapExtent (feature) {
-    const mapExtent = Radio.request("MapView", "getCurrentExtent");
+    const mapExtent = store.getters["Maps/getCurrentExtent"];
 
     return intersects(mapExtent, feature.getGeometry().getExtent());
 }
@@ -89,7 +89,8 @@ function createLayerIfNotExists (layername) {
  * @returns {void}
  */
 function liveZoom (minScale, featureIds, layerId, callback) {
-    const minResolution = Radio.request("MapView", "getResolutionByScale", minScale);
+    // eslint-disable-next-line new-cap
+    const minResolution = store.getters["Maps/getResolutionByScale"](minScale);
 
     store.dispatch("Maps/zoomToFilteredFeatures", {ids: featureIds, layerId: layerId, zoomOptions: {
         minResolution,
