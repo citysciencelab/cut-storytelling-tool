@@ -46,8 +46,12 @@ export default {
                         <p
                             v-if="i === 0"
                             class="title"
-                        >{{ text }}</p>
-                        <p v-else>{{ text }}</p>
+                            v-html="text"
+                        />
+                        <p
+                            v-else
+                            v-html="text"
+                        />
                     </span>
                     <br v-if="x !== infoBox.length - 1 || pleaseZoom">
                 </div><span

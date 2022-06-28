@@ -39,6 +39,11 @@
 - Attached Gfi is styled correctly.
 - Quickly clicking on a tab in the Elektro GFI will now not lead to a reload of the page.
 - Tools without icon attribute in config.json use default icon from state now.
+- MouseHover Module
+  - Instead of getting all the layers from config.js, only the layers in portal will be loaded.
+  - It does not depend on the gfi attributes to show the mouseHover tooltip.
+  - Instead of text, the mouseHover tooltip will be shown as html content.
+
 
 ---
 
