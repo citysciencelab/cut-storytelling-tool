@@ -2128,7 +2128,7 @@ Druckmodul. Konfigurierbar für 2 Druckdienste: den High Resolution PlotService 
 }
 ```
 
-### Portalconfig.menu.tool.print.capabilitiesFilter
+##### Portalconfig.menu.tool.print.capabilitiesFilter
 Liste von Layouts und Formaten, welche die Antwort vom Druckdienst in der jeweiligen Kategorie filtert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|

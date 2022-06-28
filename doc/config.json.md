@@ -2196,7 +2196,7 @@ Print module, configurable for 2 print services: *High Resolution PlotService* a
 }
 ```
 
-### Portalconfig.menu.tool.print.capabilitiesFilter
+##### Portalconfig.menu.tool.print.capabilitiesFilter
 List of layouts and formats that filters the response from the print service in the respective category.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
