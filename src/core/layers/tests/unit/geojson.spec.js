@@ -90,7 +90,7 @@ describe("src/core/layers/geojson.js", () => {
             expect(layer).to.be.an.instanceof(VectorLayer);
             expect(layer.getSource()).to.be.an.instanceof(VectorSource);
             expect(geojsonLayer.get("isVisibleInMap")).to.be.true;
-            // expect(geojsonLayer.get("layer").getVisible()).to.be.true;
+            expect(geojsonLayer.get("layer").getVisible()).to.be.true;
         });
         it("createLayer with isSelected=true shall set layer visible", function () {
             attributes.isSelected = false;
