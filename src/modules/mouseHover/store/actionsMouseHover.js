@@ -25,7 +25,7 @@ export default {
             featuresAtPixel = [];
             commit("setHoverPosition", evt.coordinate);
             map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
-                if (layer?.getVisible() && layer?.get("gfiAttributes") && layer?.get("gfiAttributes") !== "ignore") {
+                if (layer?.getVisible()) {
                     if (feature.getProperties().features) {
                         feature.get("features").forEach(clusteredFeature => {
                             featuresAtPixel.push(createGfiFeature(
@@ -46,7 +46,11 @@ export default {
             });
             state.overlay.setPosition(evt.coordinate);
             state.overlay.setElement(document.querySelector("#mousehover-overlay"));
-            return featuresAtPixel.length > 0 ? dispatch("filterInfos", featuresAtPixel) : commit("setInfoBox", null);
+            commit("setInfoBox", null);
+
+            if (featuresAtPixel.length > 0) {
+                dispatch("filterInfos", featuresAtPixel);
+            }
         });
     },
 

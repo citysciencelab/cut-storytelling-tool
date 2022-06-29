@@ -1,6 +1,7 @@
 import {KML} from "ol/format.js";
 import getProjections from "./getProjections";
 import proj4 from "proj4";
+import uniqueId from "./uniqueId";
 
 const projections = getProjections("EPSG:25832", "EPSG:4326", "32"),
     colorOptions = [
@@ -23,7 +24,7 @@ const projections = getProjections("EPSG:25832", "EPSG:4326", "32"),
  */
 function addUniqueStyleId (convertedFeatures) {
     convertedFeatures.getElementsByTagName("ExtendedData").forEach(extendedData => {
-        extendedData.getElementsByTagName("value")[0].textContent = Radio.request("Util", "uniqueId", "");
+        extendedData.getElementsByTagName("value")[0].textContent = uniqueId("");
     });
 }
 

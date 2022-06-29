@@ -18,6 +18,7 @@ export default {
         ToolTemplate
     },
     computed: {
+        ...mapGetters(["ignoredKeys"]),
         ...mapGetters("Tools/SelectFeatures", Object.keys(getters))
     },
     watch: {
@@ -104,8 +105,7 @@ export default {
         setFeaturesFromDrag: function () {
             const extent = this.dragBoxInteraction.getGeometry().getExtent();
 
-            Radio
-                .request("Map", "getLayers")
+            mapCollection.getMap("2D").getLayers()
                 .getArray()
                 .filter(layer => layer.get("visible") && layer.get("source") instanceof VectorSource)
                 .forEach(
@@ -258,9 +258,7 @@ export default {
          * @returns {Boolean} key is valid (i.e. not a member of ignoredKeys)
          */
         isValidKey: function (key) {
-            const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
-
-            return ignoredKeys.indexOf(key.toUpperCase()) === -1;
+            return this.ignoredKeys.indexOf(key.toUpperCase()) === -1;
         },
 
         /**

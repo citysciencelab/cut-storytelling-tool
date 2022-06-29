@@ -21,6 +21,15 @@ describe("src/modules/tools/wfsSearch/components/WfsSearch.vue", () => {
         store;
 
     beforeEach(() => {
+        const map = {
+            id: "ol",
+            mode: "2D",
+            updateSize: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "2D");
+
         instances = [{
             title: "Test WfsSearch",
             resultList: {},

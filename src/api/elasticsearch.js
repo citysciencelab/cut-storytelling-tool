@@ -1,5 +1,6 @@
 import getProxyUrl from "../utils/getProxyUrl";
 import axios from "axios";
+import store from "../app-store";
 
 let currentController = null;
 
@@ -14,15 +15,16 @@ let currentController = null;
  * @returns {Object} - The result object of the request.
  */
 export async function initializeSearch (requestConfig) {
+
     const serviceId = Object.prototype.hasOwnProperty.call(requestConfig, "serviceId") ? requestConfig.serviceId : undefined,
         useProxy = Object.prototype.hasOwnProperty.call(requestConfig, "useProxy") ? requestConfig.useProxy : false,
-        restService = Radio.request("RestReader", "getServiceById", serviceId);
+        restService = store.getters.getRestServiceById(serviceId);
     let result = {
             status: "success",
             message: "",
             hits: []
         },
-        url = restService ? restService.get("url") : requestConfig.url;
+        url = restService ? restService.url : requestConfig.url;
 
     if (url) {
         /**

@@ -15,12 +15,17 @@
     - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
 - api/highlightFeaturesByAttribute URL mechanism to query WFS data by parameters and configuration
 - WfsSearch: A `multiSelect` mode has been added where multiple search results can be selected and viewn on the map.
+- A new type of addons can be loaded: pure javascript-files with locale-files. See https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/addOnsVue.md.
+- The elasticsearch now sends `layerIDsToIgnore` (as `id`) and `metaIDsToIgnore` (as `datasets.md_id`) to the service as well. These associated layers are filtered out of the response from Elastic.
 
 ### Changed
 - Changed class for several title elements on page from span to h1 or h2 and standardized their styling
 - WMTS feature is now realized via masterportalAPI functions.
 - SensorThingsAPI: The sensor layer has been moved from Backbone to Vue.
 - Fix config.json.md regarding chapter depth.
+- The following NPM packages are updated:
+    - @masterportal/mpconfigparser: 1.2.0 to 1.3.0
+  - Some `Radio.trigger` and `Radio.request` calls have been replaced by direct accesses to the `Vuex store`.
 
 ### Deprecated
 
@@ -37,11 +42,16 @@
 - Attached Gfi is styled correctly.
 - Quickly clicking on a tab in the Elektro GFI will now not lead to a reload of the page.
 - Tools without icon attribute in config.json use default icon from state now.
+- MouseHover Module
+  - Instead of getting all the layers from config.js, only the layers in portal will be loaded.
+  - It does not depend on the gfi attributes to show the mouseHover tooltip.
+  - Instead of text, the mouseHover tooltip will be shown as html content.
+- The minimized ToolTemplate will now be blue and variables are used in css the template's css code.
+- The transparency of a layer in the topic tree can now only be between 0 and 100 for increase or decrease.
 
 ---
 
 ## v2.22.2 - 2022-06-15
-
 ### Fixed
 - Addons: Fixed tool Commuter flows.
 

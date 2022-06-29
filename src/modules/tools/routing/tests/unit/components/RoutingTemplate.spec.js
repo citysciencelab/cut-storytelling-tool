@@ -42,7 +42,8 @@ describe("src/modules/tools/routing/components/RoutingTemplate.vue", () => {
             addLayer: sinon.spy(),
             removeLayer: sinon.spy(),
             addInteraction: sinon.spy(),
-            removeInteraction: sinon.spy()
+            removeInteraction: sinon.spy(),
+            updateSize: sinon.spy()
         };
 
         mapCollection.clear();

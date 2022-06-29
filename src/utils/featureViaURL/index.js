@@ -74,7 +74,7 @@ export function createGeoJSON (features, geometryType, epsg = 4326) {
  */
 export function getFeatureIds (layerId) {
     const featureArray = [],
-        layer = Radio.request("Map", "getLayers").getArray().find(l => l.get("id") === layerId);
+        layer = mapCollection.getMap("2D").getLayers().getArray().find(l => l.get("id") === layerId);
 
     if (typeof layer === "undefined") {
         console.warn(i18next.t("common:modules.featureViaURL.messages.layerNotFound"));
@@ -127,12 +127,12 @@ export default function ({layers, epsg, zoomTo}) {
                 return;
             }
             if (!features || !Array.isArray(features) || features.length === 0) {
-                Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.featureParsingAll"));
+                store.dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.featureViaURL.messages.featureParsingAll")});
                 return;
             }
             geoJSON = createGeoJSON(features, geometryType, epsg);
             if (geoJSON.features.length === 0) {
-                Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.featureParsingNoneAdded"));
+                store.dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.featureViaURL.messages.featureParsingNoneAdded")});
             }
             layerIds.push(layerId);
             if (parentId !== undefined) {
@@ -140,11 +140,11 @@ export default function ({layers, epsg, zoomTo}) {
                 Radio.trigger("Util", "refreshTree");
             }
             else {
-                Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.defaultTreeNotSupported"));
+                store.dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.featureViaURL.messages.defaultTreeNotSupported")});
                 return;
             }
             if (typeof zoomTo !== "undefined" && (zoomTo === layerId || zoomTo.indexOf(layerId) !== -1)) {
-                Radio.trigger("Map", "zoomToFilteredFeatures", getFeatureIds(layerId), layerId);
+                store.dispatch("Maps/zoomToFilteredFeatures", {ids: getFeatureIds(layerId), layerId: layerId});
             }
         });
     }, {deep: true, immediate: true});

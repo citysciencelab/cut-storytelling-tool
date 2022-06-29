@@ -47,7 +47,7 @@ function getFeaturesByLayerId (layerId) {
  * @returns {Boolean} true if the feature is in the current map extent of the browser
  */
 function isFeatureInMapExtent (feature) {
-    const mapExtent = Radio.request("MapView", "getCurrentExtent");
+    const mapExtent = store.getters["Maps/getCurrentExtent"];
 
     return intersects(mapExtent, feature.getGeometry().getExtent());
 }
@@ -89,7 +89,8 @@ function createLayerIfNotExists (layername) {
  * @returns {void}
  */
 function liveZoom (minScale, featureIds, layerId, callback) {
-    const minResolution = Radio.request("MapView", "getResolutionByScale", minScale);
+    // eslint-disable-next-line new-cap
+    const minResolution = store.getters["Maps/getResolutionByScale"](minScale);
 
     store.dispatch("Maps/zoomToFilteredFeatures", {ids: featureIds, layerId: layerId, zoomOptions: {
         minResolution,
@@ -128,7 +129,7 @@ function setParserAttributeByLayerId (layerId, key, value) {
  * @returns {ol/Layer[]} a list of layers
  */
 function getLayers () {
-    return Radio.request("Map", "getLayers");
+    return mapCollection.getMap("2D").getLayers();
 }
 
 /**
@@ -136,7 +137,7 @@ function getLayers () {
  * @returns {Boolean} true/false if current ui style of portal is table
  */
 function isUiStyleTable () {
-    return Radio.request("Util", "getUiStyle") === "TABLE";
+    return store.getters.uiStyle === "TABLE";
 }
 
 /**

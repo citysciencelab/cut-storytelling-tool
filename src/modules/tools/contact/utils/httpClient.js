@@ -1,5 +1,6 @@
 import axios from "axios";
 import convertJsonToPost from "../../../../utils/convertJsonToPost.js";
+import LoaderOverlay from "../../../../utils/loaderOverlay";
 
 /**
  * Show the loader after the dispatch of an e-mail has been started.
@@ -8,7 +9,7 @@ import convertJsonToPost from "../../../../utils/convertJsonToPost.js";
  * @return {void}
  */
 function onSendStart () {
-    Radio.trigger("Util", "showLoader");
+    LoaderOverlay.show();
 }
 
 /**
@@ -19,7 +20,7 @@ function onSendStart () {
  * @return {void}
  */
 function onSendComplete () {
-    Radio.trigger("Util", "hideLoader");
+    LoaderOverlay.hide();
 }
 
 /**

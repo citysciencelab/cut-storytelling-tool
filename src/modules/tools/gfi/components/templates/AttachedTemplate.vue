@@ -64,7 +64,7 @@ export default {
         this.createPopover();
     },
     beforeDestroy () {
-        Radio.trigger("Map", "removeOverlay", this.overlay);
+        mapCollection.getMap("2D").removeOverlay(this.overlay);
     },
     methods: {
         close (event) {
@@ -83,7 +83,7 @@ export default {
             gfipopup.id = "gfipopup";
             document.body.appendChild(gfipopup);
             this.overlay.setElement(document.getElementById("gfipopup"));
-            Radio.trigger("Map", "addOverlay", this.overlay);
+            mapCollection.getMap("2D").addOverlay(this.overlay);
             this.overlay.setPosition(this.clickCoordinate);
         },
 

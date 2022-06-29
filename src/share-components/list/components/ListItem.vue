@@ -71,6 +71,7 @@ export default {
     },
     methods: {
         ...mapActions("MapMarker", ["placingPointMarker"]),
+        ...mapActions("Maps", ["zoomToExtent"]),
         /**
          * @param {String[]} data to toggle in selection set
          * @returns {void}
@@ -174,13 +175,10 @@ export default {
                 extend(extent, geometries[i].getExtent());
             }
 
-            Radio.trigger("Map", "zoomToExtent", {
-                extent,
-                options: {
-                    maxZoom: this.maxZoom,
-                    padding: [5, 5, 5, 5]
-                }
-            });
+            this.zoomToExtent({extent: extent, options: {
+                maxZoom: this.maxZoom,
+                padding: [5, 5, 5, 5]
+            }});
         },
         isWebLink,
         isPhoneNumber,

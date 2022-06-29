@@ -1,9 +1,10 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 import getters from "../../store/gettersOrientation";
 import mutations from "../../store/mutationsOrientation";
 import {extractEventCoordinates} from "../../../../../../src/utils/extractEventCoordinates";
 import Icon from "ol/style/Icon";
+import LoaderOverlay from "../../../../../utils/loaderOverlay";
 
 export default {
     name: "PoiOrientation",
@@ -37,7 +38,7 @@ export default {
         }
     },
     mounted () {
-        Radio.trigger("Util", "hideLoader");
+        LoaderOverlay.hide();
         this.show();
         this.getFeatures();
         this.initActiveCategory();
@@ -49,6 +50,7 @@ export default {
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),
+        ...mapActions("Maps", ["zoomToExtent"]),
 
         /**
          * Callback when close icon has been clicked.
@@ -207,10 +209,10 @@ export default {
                 }),
                 extent = feature.getGeometry().getExtent(),
                 coordinate = extractEventCoordinates(extent),
-                resolutions = Radio.request("MapView", "getResolutions"),
+                resolutions = mapCollection.getMapView("2D").getResolutions(),
                 index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
 
-            Radio.trigger("Map", "zoomToExtent", {extent: coordinate, options: {maxZoom: index}});
+            this.zoomToExtent({extent: coordinate, options: {maxZoom: index}});
             this.$emit("hide");
         },
 

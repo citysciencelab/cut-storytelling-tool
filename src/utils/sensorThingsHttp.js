@@ -22,27 +22,31 @@ import {transform as transformProjectionToProjection} from "@masterportal/master
 export class SensorThingsHttp {
 
     /**
-     * constructor of SensorThingsHttp
+     * Constructor of SensorThingsHttp.
      * @param {Object} [optionsOpt] the options for the SensorThingsHttp
      * @param {Boolean} [optionsOpt.removeIotLinks=false] set to true if the overhead from IotLinks should be removed
      * @param {Boolean} [optionsOpt.httpClient=null] the httpClient to use as function(url, onsuccess, onerror) with onsuccess as function(response) and onerror as function(error)
+     * @param {Boolean} [optionsOpt.rootNode="Things"] the root element in the URL to which the query is applied - possible are "Things" or "Datastreams"
      * @constructor
      * @returns {SensorThingsHttp}  the instance of SensorThingsHttp
      */
     constructor (optionsOpt) {
         const options = Object.assign({
             removeIotLinks: false,
-            httpClient: null
+            httpClient: null,
+            rootNode: false
         }, optionsOpt);
 
         /** private **/
         this.removeIotLinks = options.removeIotLinks;
         /** private **/
         this.httpClient = options.httpClient;
+        /** private **/
+        this.rootNode = options.rootNode ? options.rootNode : "Things";
     }
 
     /**
-     * calls the given url, targets only data in expand, walks through all @iot.nextLink
+     * Calls the given url, targets only data in expand, walks through all @iot.nextLink.
      * @param {String} url the url to call
      * @param {Function} [onsuccess] as function(result) with result as Object[] (result is always an array)
      * @param {Function} [onstart] as function called on start
@@ -79,7 +83,7 @@ export class SensorThingsHttp {
     }
 
     /**
-     * calls the given url to a SensorThings server, uses a call in extent, follows skip urls, response is given as callback onsuccess
+     * Calls the given url to a SensorThings server, uses a call in extent, follows skip urls, response is given as callback onsuccess.
      * @param {String} url the url to call
      * @param {Object} extentObj data for the extent
      * @param  {Boolean} intersect - if it is intersect or not
@@ -130,7 +134,7 @@ export class SensorThingsHttp {
 
 
     /**
-     * creates a query to put into $filter of the SensorThingsAPI to select only Things within the given points
+     * Creates a query to put into $filter of the SensorThingsAPI to select only Things within the given points.
      * @param {Object[]} points the points as array with objects(x, y) to use as Polygon in SensorThingsAPI call
      * @param  {Boolean} intersect - if it is intersect or not
      * @param {SensorThingsErrorCallback} onerror a function (error) to call on error
@@ -158,11 +162,14 @@ export class SensorThingsHttp {
             query += coord.x + " " + coord.y;
         });
 
+        if (this.rootNode === "Things") {
+            return loadRange + "(Locations/location,geography'POLYGON ((" + query + "))')";
+        }
         return loadRange + "(Thing/Locations/location,geography'POLYGON ((" + query + "))')";
     }
 
     /**
-     * converts the given extent based on an OpenLayers extent into points used in the SensorThingsAPI
+     * Converts the given extent based on an OpenLayers extent into points used in the SensorThingsAPI.
      * @param {Number[]} extent the extent based on OpenLayers (e.g. [556925.7670922858, 5925584.829527992, 573934.2329077142, 5942355.170472008])
      * @param {String} sourceProjection the projection of the extent
      * @param {String} targetProjection the projection the result shall have
@@ -217,7 +224,7 @@ export class SensorThingsHttp {
     }
 
     /**
-     * adds the given points into the query of the url
+     * Adds the given points into the query of the url.
      * @param {String} url the url to extent - if POLYGON of SensorThingsAPI is already in use, nothing will change
      * @param {Object[]} points the points as array with objects(x, y) to use as Polygon in SensorThingsAPI call
      * @param  {Boolean} intersect - if it is intersect or not
@@ -259,7 +266,7 @@ export class SensorThingsHttp {
     }
 
     /**
-     * calls a nextLink for the recursion
+     * Calls a nextLink for the recursion.
      * @param {String} nextLink the url to call
      * @param {Object[]} nextLinkFiFo the fifo-List to walk through @iot.nextLink
      * @param {Function} onfinish as function to be called when finished
@@ -322,7 +329,7 @@ export class SensorThingsHttp {
     }
 
     /**
-     * searches for @iot.nextLink in the given resultRef, removes the @iot.nextLink and expands the nextLinkFiFo-List
+     * Searches for @iot.nextLink in the given resultRef, removes the @iot.nextLink and expands the nextLinkFiFo-List.
      * @param {*} resultRef something to walk through
      * @param {Object[]} nextLinkFiFo the fifo list to add found @iot.nextLink and their resultRef to
      * @param {Function} onfinish a function to call when finished
@@ -383,7 +390,7 @@ export class SensorThingsHttp {
     }
 
     /**
-     * returns the next object from nextLinkFiFo, returns false if no valid object was found (depth barrier)
+     * Returns the next object from nextLinkFiFo, returns false if no valid object was found (depth barrier).
      * @param {Object[]} nextLinkFiFo the fifo list to add found @iot.nextLink and their resultRef to
      * @returns {(Object|Boolean)}  the next fifo object to be followed or false if depth barrier has been triggert
      */
@@ -407,7 +414,7 @@ export class SensorThingsHttp {
     }
 
     /**
-     * extracts the X from $top=X of the given String
+     * Extracts the X from $top=X of the given String.
      * @param {String} url the url to extract $top from
      * @returns {Number}  the X in $top=X or 0 if no $top was found
      */
@@ -426,7 +433,7 @@ export class SensorThingsHttp {
     }
 
     /**
-     * extracts the X from $skip=X of the given String
+     * Extracts the X from $skip=X of the given String.
      * @param {String} url the url to extract $skip from
      * @returns {Number}  the X in $skip=X or 0 if no $skip was found
      */
@@ -445,7 +452,7 @@ export class SensorThingsHttp {
     }
 
     /**
-     * calls the httpClient as async function to call an url and to receive data from
+     * Calls the httpClient as async function to call an url and to receive data from.
      * @param {String} url the url to call
      * @param {Function} onsuccess a function (response) with the response of the call
      * @param {Function} onerror a function (error) with the error of the call if any
@@ -473,22 +480,31 @@ export class SensorThingsHttp {
     }
 
     /**
-     * sets the httpClient after construction (used for testing only)
+     * Changes the httpClient.
      * @param {Function} httpClient as function(url, onsuccess, onerror)
      * @post the internal httpClient is set to the given httpClient
-     * @return {void}
+     * @returns {void}
      */
     setHttpClient (httpClient) {
         this.httpClient = httpClient;
     }
 
     /**
-     * sets the removeIotLinks flag after construction (used for testing only)
+     * Changes the removeIotLinks.
      * @param {Boolean} removeIotLinks see options
      * @post the removeIotLinks flag is set to the given removeIotLinks flag
-     * @return {void}
+     * @returns {void}
      */
     setRemoveIotLinks (removeIotLinks) {
         this.removeIotLinks = removeIotLinks;
+    }
+
+    /**
+     * Changes the rootNode.
+     * @param {String} rootNode the root element in the URL to which the query is applied - possible are "Things" or "Datastreams"
+     * @returns {void}
+     */
+    setRootNode (rootNode) {
+        this.rootNode = rootNode;
     }
 }

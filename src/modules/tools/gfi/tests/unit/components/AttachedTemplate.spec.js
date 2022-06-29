@@ -1,6 +1,7 @@
 import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
+import sinon from "sinon";
 import AttachedTemplate from "../../../components/templates/AttachedTemplate.vue";
 
 const localVue = createLocalVue();
@@ -34,6 +35,18 @@ describe("src/modules/tools/gfi/components/templates/AttachedTemplate.vue", () =
     };
 
     let wrapper;
+
+    beforeEach(() => {
+        const map = {
+            id: "ol",
+            mode: "2D",
+            addOverlay: sinon.spy(),
+            removeOverlay: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "2D");
+    });
 
     afterEach(() => {
         if (wrapper) {

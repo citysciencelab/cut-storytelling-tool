@@ -49,9 +49,10 @@ export default {
      * @param {String} name Layer name
      * @param {Object} gfiAttributes GFI attributes configuration
      * @param {Array} features The loaded WFS features
+     * @param {Function} dispatch dispatch function
      * @returns {void}
     */
-    highlightPointFeature: function (modelId, styleId, name, gfiAttributes, features) {
+    highlightPointFeature: function (modelId, styleId, name, gfiAttributes, features, dispatch) {
         const styleListModel = Radio.request("StyleList", "returnModelById", modelId),
             highlightLayer = this.createVectorLayer(modelId, styleId, name, gfiAttributes);
         let hadPoint = false;
@@ -75,9 +76,8 @@ export default {
 
         if (hadPoint) {
             highlightLayer.setVisible(true);
-            Radio.trigger("Map", "addLayerOnTop", highlightLayer);
-
-            Radio.trigger("Map", "zoomToExtent", {extent: highlightLayer.getSource().getExtent()});
+            dispatch("Maps/addLayerOnTop", highlightLayer, {root: true});
+            dispatch("Maps/zoomToExtent", {extent: highlightLayer.getSource().getExtent()}, {root: true});
         }
     },
 
@@ -89,9 +89,10 @@ export default {
      * @param {String} geometryRequested Polygon or LineString
      * @param {Object} gfiAttributes GFI attributes configuration
      * @param {Array} features The loaded WFS features
+     * @param {Function} dispatch dispatch function
      * @returns {void}
     */
-    highlightLineOrPolygonFeature: function (modelId, styleId, name, geometryRequested, gfiAttributes, features) {
+    highlightLineOrPolygonFeature: function (modelId, styleId, name, geometryRequested, gfiAttributes, features, dispatch) {
         const styleListModel = Radio.request("StyleList", "returnModelById", modelId),
             highlightLayer = this.createVectorLayer(modelId, styleId, name, gfiAttributes);
         let hadGeometry = false;
@@ -114,9 +115,8 @@ export default {
 
         if (hadGeometry) {
             highlightLayer.setVisible(true);
-            Radio.trigger("Map", "addLayerOnTop", highlightLayer);
-
-            Radio.trigger("Map", "zoomToExtent", {extent: highlightLayer.getSource().getExtent()});
+            dispatch("Maps/addLayerOnTop", highlightLayer, {root: true});
+            dispatch("Maps/zoomToExtent", {extent: highlightLayer.getSource().getExtent()}, {root: true});
         }
     },
 
@@ -158,9 +158,9 @@ export default {
             }
         }
 
-        this.highlightPointFeature(this.settings.pointStyleId, "highlight_point_layer", "highlightPoint", highlightFeaturesLayer.gfiAttributes, features);
-        this.highlightLineOrPolygonFeature(this.settings.polygonStyleId, "highlight_polygon_layer", "highlightPolygon", "Polygon", highlightFeaturesLayer.gfiAttributes, features);
-        this.highlightLineOrPolygonFeature(this.settings.lineStyleId, "highlight_line_layer", "highlightLine", "LineString", highlightFeaturesLayer.gfiAttributes, features);
+        this.highlightPointFeature(this.settings.pointStyleId, "highlight_point_layer", "highlightPoint", highlightFeaturesLayer.gfiAttributes, features, dispatch);
+        this.highlightLineOrPolygonFeature(this.settings.polygonStyleId, "highlight_polygon_layer", "highlightPolygon", "Polygon", highlightFeaturesLayer.gfiAttributes, features, dispatch);
+        this.highlightLineOrPolygonFeature(this.settings.lineStyleId, "highlight_line_layer", "highlightLine", "LineString", highlightFeaturesLayer.gfiAttributes, features, dispatch);
     },
 
     /**

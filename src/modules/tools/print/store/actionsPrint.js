@@ -77,8 +77,8 @@ export default {
                     "title": state.title,
                     "map": {
                         "dpi": state.dpiForPdf,
-                        "projection": Radio.request("MapView", "getProjection").getCode(),
-                        "center": Radio.request("MapView", "getCenter"),
+                        "projection": mapCollection.getMapView("2D").getProjection().getCode(),
+                        "center": mapCollection.getMapView("2D").getCenter(),
                         "scale": state.currentScale
                     }
                 }

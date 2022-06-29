@@ -20,24 +20,48 @@ describe("src/utils/sensorThingsHttp", () => {
     });
 
     describe("getPolygonQueryWithPoints", () => {
-        it("should return a url query with the given points in a correct format with a intersect range", () => {
+        it("should return an url query with the given points in a correct format with an intersect range", () => {
             const points = [
                     {x: "foo", y: "bar"},
                     {x: "baz", y: "qux"}
                 ],
                 intersect = true;
 
+            expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_intersects(Locations/location,geography'POLYGON ((foo bar,baz qux))')");
+            expect(http.getPolygonQueryWithPoints([{}, {}], intersect)).to.equal("st_intersects(Locations/location,geography'POLYGON (())')");
+            expect(http.getPolygonQueryWithPoints([], intersect)).to.equal("st_intersects(Locations/location,geography'POLYGON (())')");
+        });
+        it("should return an url query with the given points in a correct format with an intersect range if root node is Datastreams", () => {
+            const points = [
+                    {x: "foo", y: "bar"},
+                    {x: "baz", y: "qux"}
+                ],
+                intersect = true;
+
+            http.setRootNode("Datastreams");
             expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON ((foo bar,baz qux))')");
             expect(http.getPolygonQueryWithPoints([{}, {}], intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON (())')");
             expect(http.getPolygonQueryWithPoints([], intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON (())')");
         });
-        it("should return a url query with the given points in a correct format with a within range", () => {
+        it("should return an url query with the given points in a correct format with a within range", () => {
             const points = [
                     {x: "foo", y: "bar"},
                     {x: "baz", y: "qux"}
                 ],
                 intersect = false;
 
+            expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_within(Locations/location,geography'POLYGON ((foo bar,baz qux))')");
+            expect(http.getPolygonQueryWithPoints([{}, {}], intersect)).to.equal("st_within(Locations/location,geography'POLYGON (())')");
+            expect(http.getPolygonQueryWithPoints([], intersect)).to.equal("st_within(Locations/location,geography'POLYGON (())')");
+        });
+        it("should return an url query with the given points in a correct format with a within range if root node is Datastreams", () => {
+            const points = [
+                    {x: "foo", y: "bar"},
+                    {x: "baz", y: "qux"}
+                ],
+                intersect = false;
+
+            http.setRootNode("Datastreams");
             expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_within(Thing/Locations/location,geography'POLYGON ((foo bar,baz qux))')");
             expect(http.getPolygonQueryWithPoints([{}, {}], intersect)).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
             expect(http.getPolygonQueryWithPoints([], intersect)).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
@@ -49,7 +73,7 @@ describe("src/utils/sensorThingsHttp", () => {
                 ],
                 intersect = true;
 
-            expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_intersects(Thing/Locations/location,geography'POLYGON ((foo bar))')");
+            expect(http.getPolygonQueryWithPoints(points, intersect)).to.equal("st_intersects(Locations/location,geography'POLYGON ((foo bar))')");
             expect(http.getPolygonQueryWithPoints(undefined, intersect)).to.be.false;
             expect(http.getPolygonQueryWithPoints(null, intersect)).to.be.false;
             expect(http.getPolygonQueryWithPoints(1, intersect)).to.be.false;
@@ -116,7 +140,7 @@ describe("src/utils/sensorThingsHttp", () => {
                 {x: 9.869432803790303, y: 53.47946522163486}
             ],
             intersect = false,
-            expectedOutcome = "https://iot.hamburg.de/v1.1/Things?%24filter=st_within(Thing%2FLocations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
+            expectedOutcome = "https://iot.hamburg.de/v1.1/Things?%24filter=st_within(Locations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
 
         it("should return the expected url with a well formed input", () => {
             expect(http.addPointsToUrl("https://iot.hamburg.de/v1.1/Things", polygon, intersect)).to.equal(expectedOutcome);
@@ -345,7 +369,7 @@ describe("src/utils/sensorThingsHttp", () => {
             expect(resultRef).to.deep.equal(expected);
         });
 
-        it("should push any key bound with a @iot.nextLink onto the fifo list", () => {
+        it("should push any key bound with an @iot.nextLink onto the fifo list", () => {
             const resultRef = {
                     test: {
                         key: "value"
@@ -636,7 +660,7 @@ describe("src/utils/sensorThingsHttp", () => {
                     targetProjection: "EPSG:4326"
                 },
                 url = "https://iot.hamburg.de/v1.0/Things",
-                lastUrlExpected = "https://iot.hamburg.de/v1.0/Things?%24filter=st_within(Thing%2FLocations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
+                lastUrlExpected = "https://iot.hamburg.de/v1.0/Things?%24filter=st_within(Locations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
             let lastUrl = null;
 
             http.getInExtent(url, extentObj, false, "onsuccess", "onstart", "oncomplete", "onerror", urlShadow => {
