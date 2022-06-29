@@ -75,7 +75,6 @@ const actions = {
                     textContent: i18next.t("common:modules.tools.wfsTransaction.deleteInteraction.text"),
                     headline: i18next.t("common:modules.tools.wfsTransaction.deleteInteraction.headline")
                 }, {root: true});
-                selectInteraction.getFeatures().clear();
             });
             dispatch("Maps/addInteraction", selectInteraction, {root: true});
             // TODO(roehlipa): Add a trashcan next to the mouse (without bugs) -> see e.g. draw
@@ -89,6 +88,7 @@ const actions = {
         commit("Maps/removeLayerFromMap", drawLayer, {root: true});
         drawInteraction = undefined;
         modifyInteraction = undefined;
+        selectInteraction?.getFeatures().clear();
         selectInteraction = undefined;
         drawLayer = undefined;
         // NOTE: As this is a rootGetter, the naming scheme is used like this.
