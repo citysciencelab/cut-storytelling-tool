@@ -445,7 +445,6 @@ export default {
         transition:background-color 0.25s;
         background-color: $light_grey;
 
-        &:hover { background-color: $light_grey; }
         &>div {
             position: absolute;
             top:50%;
