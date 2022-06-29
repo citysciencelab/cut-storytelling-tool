@@ -97,23 +97,44 @@ const actions = {
     },
     save ({dispatch, getters}) {
         // TODO(roehlipa): Form validation
-        const feature = drawLayer.getSource().getFeatures()[0];
+        const {featureProperties, selectedInteraction} = getters,
+            feature = drawLayer.getSource().getFeatures()[0],
+            geometry = {key: null, value: null};
 
         if (feature === undefined) {
             // TODO(roelipa): Information to user
             console.warn("No features");
             return;
         }
-        getters.featureProperties.forEach(property => {
-            if (property.value === "" && property.required) { // TODO(roehlipa): Check other problematic values
-                // TODO(roehlipa): Somehow we got here, so show an error
+        featureProperties.forEach(property => {
+            if (property.type === "geometry") {
+                // NOTE: The property of the geometry needs to be at the end of the feature inside the of the XML.
+                geometry.key = property.key;
+                geometry.value = feature.get(property.key);
+                feature.unset(property.key);
                 return;
             }
-            if (property.type !== "geometry") {
+            if (property.value === "" || property.value === null) {
+                if (property.required) {
+                    // TODO(roehlipa): Somehow we got here, so show an error
+                    return;
+                }
+                if (selectedInteraction === "insert") {
+                    feature.unset(property.key);
+                }
+                else if (selectInteraction === "selectedUpdate") {
+                    feature.set(property.key, null);
+                }
+            }
+            else if (["integer", "int", "decimal"].includes(property.type)) {
+                feature.set(property.key, Number(property.value));
+            }
+            // TODO(roehlipa): Is there a case needed for booleans?
+            else {
                 feature.set(property.key, property.value);
-                // TODO(roehlipa): Do correct data type for value; even for not set ones => not set ones get null
             }
         });
+        feature.set(geometry.key, geometry.value);
         dispatch("sendTransaction", feature);
     },
     sendTransaction ({dispatch, getters, rootGetters}, feature) {
@@ -139,7 +160,7 @@ const actions = {
                 /*
                     TODO(roehlipa):
                         a) Give feedback on success
-                        b) Throw error if transaction failed or something wonky (e.g. more than one inserted) happened
+                        b) Throw error if transaction failed or something wonky (e.g. more than one inserted) happened => Read response XML
                  */
             })
             .catch(() => {
