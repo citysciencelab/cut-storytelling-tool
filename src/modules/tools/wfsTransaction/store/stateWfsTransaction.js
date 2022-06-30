@@ -13,6 +13,7 @@
  * @property {string} key Name of the feature property to be described.
  * @property {("string"|"integer"|"int"|"decimal"|"geometry"|"boolean"|"date")} type Input type.
  * @property {boolean} required Whether the input of this value is required.
+ * @property {*} value Value of the property.
  */
 
 /**
