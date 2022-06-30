@@ -66,8 +66,9 @@
                                     class="form-control"
                                     :type="getInputType(property.type)"
                                     :required="property.required"
+                                    :value="property.value"
                                     @input="event => property.value = event.target.value"
-                                >
+                                > <!-- TODO(roehlipa): I feel like these inputs not only need to be validated but also security checked :D -->
                             </template>
                         </template>
                         <div id="tool-wfsTransaction-form-buttons">
