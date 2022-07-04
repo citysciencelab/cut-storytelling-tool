@@ -34,6 +34,9 @@ const defaultInteractionConfig = {
         currentInteractionConfig (state, {currentLayerId}) {
             const configuration = deepCopy(defaultInteractionConfig);
 
+            // TODO(roehlipa): The deprecation of "edit" comes into play as the values get directly transferred into the state by some other module
+            //  => If "edit" is present, add those values for "update" and skip the "update" iteration; if not present, check for "update"
+            //  ====> It might be necessary to split the iteration (might generally be needed as delete and update receive more possible values) so the check for "edit" vs. "update" is easier
             ["delete", "edit"].forEach(val => {
                 configuration[val].available = typeof state[val] === "boolean" ? state[val] : true;
                 configuration[val].caption = typeof state[val] === "string" ? state[val] : `common:modules.tools.wfsTransaction.interactionSelect.${val}`;
@@ -75,6 +78,7 @@ const defaultInteractionConfig = {
         },
         showInteractionsButtons (state) {
             // TODO(roehlipa): The form should also be displayed when editing a feature to be able to update the properties
+            // TODO(roehlipa): Interchange "edit" with "selectedUpdate" and "update" -> "selectedUpdate" is the situation where a feature is selected to update
             return [null, "delete", "edit"].includes(state.selectedInteraction);
         }
     };

@@ -3,13 +3,16 @@ import {Draw, Modify, Select} from "ol/interaction";
 import prepareFeatureProperties from "../utils/prepareFeatureProperties";
 import writeTransaction from "../utils/writeTransaction";
 import loader from "../../../../utils/loaderOverlay";
+import addFeaturePropertiesToFeature from "../utils/addFeaturePropertiesToFeature";
 import getLayerInformation from "../utils/getLayerInformation";
 
 let drawInteraction,
     drawLayer,
     modifyInteraction,
+    modifyFeature,
     selectInteraction;
 
+// TODO(roehlipa): Check documentation if information about gfiAttributes regarding properties has been added
 const actions = {
     /**
      * @param {object} context actions context object.
@@ -62,9 +65,29 @@ const actions = {
             });
             dispatch("Maps/addInteraction", drawInteraction, {root: true});
         }
-        // TODO(roehlipa): key === edit
-        //  ==> Update operation
+        // TODO(roehlipa): "edit" will be changed to "update"
+        else if (interaction === "edit") {
+            selectInteraction = new Select({
+                layers: [sourceLayer]
+            });
+            selectInteraction.getFeatures().on("add", (event) => {
+                commit("setSelectedInteraction", "selectedUpdate");
+                modifyFeature = event.target.getArray()[0];
+                modifyInteraction = new Modify({
+                    features: event.target
+                });
+                dispatch("Maps/removeInteraction", selectInteraction, {root: true});
+                dispatch("Maps/addInteraction", modifyInteraction, {root: true});
+                commit(
+                    "setFeatureProperties",
+                    featureProperties
+                        .map(property => ({...property, value: modifyFeature.get(property.key)}))
+                );
+            });
+            dispatch("Maps/addInteraction", selectInteraction, {root: true});
+        }
         else if (interaction === "delete") {
+            // TODO(roehlipa): There currently is a problem of no way of ending deletion mode without deleting a feature or closing the tool => extra button?
             selectInteraction = new Select({
                 layers: [sourceLayer]
             });
@@ -81,6 +104,11 @@ const actions = {
         }
     },
     reset ({commit, dispatch, getters, rootGetters}) {
+        // NOTE: As this is a rootGetter, the naming scheme is used like this.
+        // eslint-disable-next-line new-cap
+        const sourceLayer = rootGetters["Maps/getLayerById"]({layerId: getters.currentLayerId});
+
+        commit("setFeatureProperties", getters.featureProperties.map(property => ({...property, value: null})));
         commit("setSelectedInteraction", null);
         dispatch("Maps/removeInteraction", drawInteraction, {root: true});
         dispatch("Maps/removeInteraction", modifyInteraction, {root: true});
@@ -91,51 +119,35 @@ const actions = {
         selectInteraction?.getFeatures().clear();
         selectInteraction = undefined;
         drawLayer = undefined;
-        // NOTE: As this is a rootGetter, the naming scheme is used like this.
-        // eslint-disable-next-line new-cap
-        rootGetters["Maps/getLayerById"]({layerId: getters.currentLayerId})?.setVisible(true);
+        sourceLayer?.setVisible(true);
+        if (modifyFeature) {
+            sourceLayer
+                ?.getSource().getFeatures()
+                .find(feature => feature.getId() === modifyFeature.getId())
+                ?.setGeometry(modifyFeature.getGeometry());
+            sourceLayer?.getSource().refresh();
+            modifyFeature = undefined;
+        }
     },
     save ({dispatch, getters}) {
         // TODO(roehlipa): Form validation
-        const {featureProperties, selectedInteraction} = getters,
-            feature = drawLayer.getSource().getFeatures()[0],
-            geometry = {key: null, value: null};
+        const feature = modifyFeature ? modifyFeature : drawLayer.getSource().getFeatures()[0],
+            {currentLayerIndex, featureProperties, layerInformation, selectedInteraction} = getters;
 
         if (feature === undefined) {
             // TODO(roelipa): Information to user
             console.warn("No features");
             return;
         }
-        featureProperties.forEach(property => {
-            if (property.type === "geometry") {
-                // NOTE: The property of the geometry needs to be at the end of the feature inside the of the XML.
-                geometry.key = property.key;
-                geometry.value = feature.get(property.key);
-                feature.unset(property.key);
-                return;
-            }
-            if (property.value === "" || property.value === null) {
-                if (property.required) {
-                    // TODO(roehlipa): Somehow we got here, so show an error
-                    return;
-                }
-                if (selectedInteraction === "insert") {
-                    feature.unset(property.key);
-                }
-                else if (selectInteraction === "selectedUpdate") {
-                    feature.set(property.key, null);
-                }
-            }
-            else if (["integer", "int", "decimal"].includes(property.type)) {
-                feature.set(property.key, Number(property.value));
-            }
-            // TODO(roehlipa): Is there a case needed for booleans?
-            else {
-                feature.set(property.key, property.value);
-            }
-        });
-        feature.set(geometry.key, geometry.value);
-        dispatch("sendTransaction", feature);
+        dispatch(
+            "sendTransaction",
+            addFeaturePropertiesToFeature(
+                {id: feature.getId(), geometryName: feature.getGeometryName(), geometry: feature.getGeometry()},
+                featureProperties,
+                layerInformation[currentLayerIndex].featurePrefix,
+                selectedInteraction === "selectedUpdate"
+            )
+        );
     },
     sendTransaction ({dispatch, getters, rootGetters}, feature) {
         const {currentLayerIndex, layerInformation, selectedInteraction} = getters,
@@ -186,17 +198,17 @@ const actions = {
     },
     async setFeatureProperties ({commit, getters: {currentLayerIndex, layerInformation}}) {
         if (currentLayerIndex === -1) {
-            commit("setFeatureProperties", "All layers not selected in tree");
+            commit("setFeatureProperties", "All layers not selected in tree"); // TODO(roehlipa): Translation
             return;
         }
         const layer = layerInformation[currentLayerIndex];
 
         if (!Object.prototype.hasOwnProperty.call(layer, "featurePrefix")) {
-            commit("setFeatureProperties", "Layer not correctly configured; might be missing 'featurePrefix'");
+            commit("setFeatureProperties", "Layer not correctly configured; might be missing 'featurePrefix'"); // TODO(roehlipa): Translation
             return;
         }
         if (!layer.isSelected) {
-            commit("setFeatureProperties", "Layer not selected in tree");
+            commit("setFeatureProperties", "Layer not selected in tree"); // TODO(roehlipa): Translation
             return;
         }
         commit("setFeatureProperties", await prepareFeatureProperties(layer));
