@@ -198,17 +198,17 @@ const actions = {
     },
     async setFeatureProperties ({commit, getters: {currentLayerIndex, layerInformation}}) {
         if (currentLayerIndex === -1) {
-            commit("setFeatureProperties", "All layers not selected in tree"); // TODO(roehlipa): Translation
+            commit("setFeatureProperties", i18next.t("common:modules.tools.wfsTransaction.error.allLayersNotSelected"));
             return;
         }
         const layer = layerInformation[currentLayerIndex];
 
         if (!Object.prototype.hasOwnProperty.call(layer, "featurePrefix")) {
-            commit("setFeatureProperties", "Layer not correctly configured; might be missing 'featurePrefix'"); // TODO(roehlipa): Translation
+            commit("setFeatureProperties", i18next.t("common:modules.tools.wfsTransaction.error.layerNotConfiguredCorrectly"));
             return;
         }
         if (!layer.isSelected) {
-            commit("setFeatureProperties", "Layer not selected in tree"); // TODO(roehlipa): Translation
+            commit("setFeatureProperties", i18next.t("common:modules.tools.wfsTransaction.error.layerNotSelected"));
             return;
         }
         commit("setFeatureProperties", await prepareFeatureProperties(layer));
