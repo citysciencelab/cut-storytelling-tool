@@ -21,7 +21,6 @@ export default function (feature, layerInformation, transactionMethod, srsName) 
         transaction = [[], [], []];
 
     transaction[transactionPosition[transactionMethod]].push(feature);
-    // TODO(roehlipa): See lines 1351 - 1363 in model.js for (possibly needed) extra steps for delete and update
     return new XMLSerializer()
         .serializeToString(
             new WFS({version})

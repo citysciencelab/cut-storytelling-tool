@@ -16,7 +16,7 @@ let drawInteraction,
 const actions = {
     /**
      * @param {object} context actions context object.
-     * @param {("LineString"|"Point"|"Polygon"|"delete"|"edit")} interaction Identifier of the selected interaction.
+     * @param {("LineString"|"Point"|"Polygon"|"delete"|"update")} interaction Identifier of the selected interaction.
      * @returns {void}
      */
     async prepareInteraction ({commit, dispatch, getters, rootGetters}, interaction) {
@@ -65,8 +65,7 @@ const actions = {
             });
             dispatch("Maps/addInteraction", drawInteraction, {root: true});
         }
-        // TODO(roehlipa): "edit" will be changed to "update"
-        else if (interaction === "edit") {
+        else if (interaction === "update") {
             selectInteraction = new Select({
                 layers: [sourceLayer]
             });

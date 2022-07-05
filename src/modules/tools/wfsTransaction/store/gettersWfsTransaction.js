@@ -2,7 +2,7 @@ import initialState from "./stateWfsTransaction";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import deepCopy from "../../../../utils/deepCopy";
 
-// TODO(roehlipa): Adjust doc for edit and delete as well as their functionality
+// TODO(roehlipa): Adjust doc for update and delete as well as their functionality
 const defaultInteractionConfig = {
         LineString: {
             available: false,
@@ -22,7 +22,7 @@ const defaultInteractionConfig = {
             icon: "bi-hexagon-fill",
             multi: false
         },
-        edit: {
+        update: {
             icon: "bi-pencil-square"
         },
         delete: {
@@ -34,13 +34,18 @@ const defaultInteractionConfig = {
         currentInteractionConfig (state, {currentLayerId}) {
             const configuration = deepCopy(defaultInteractionConfig);
 
-            // TODO(roehlipa): The deprecation of "edit" comes into play as the values get directly transferred into the state by some other module
-            //  => If "edit" is present, add those values for "update" and skip the "update" iteration; if not present, check for "update"
-            //  ====> It might be necessary to split the iteration (might generally be needed as delete and update receive more possible values) so the check for "edit" vs. "update" is easier
-            ["delete", "edit"].forEach(val => {
-                configuration[val].available = typeof state[val] === "boolean" ? state[val] : true;
-                configuration[val].caption = typeof state[val] === "string" ? state[val] : `common:modules.tools.wfsTransaction.interactionSelect.${val}`;
-            });
+            // TODO: The parts for update and delete can be simplified once v3.0.0 happens
+            if ((typeof state.edit === "boolean" && state.edit) || typeof state.edit === "string") {
+                console.warn("WfsTransaction: The parameter 'edit' has been deprecated in version 3.0.0. Please use 'update' instead.");
+                configuration.update.available = typeof state.edit === "boolean" ? state.edit : true;
+                configuration.update.caption = typeof state.edit === "string" ? state.edit : "common:modules.tools.wfsTransaction.interactionSelect.update";
+            }
+            else {
+                configuration.update.available = typeof state.update === "boolean" ? state.update : true;
+                configuration.update.caption = typeof state.update === "string" ? state.update : "common:modules.tools.wfsTransaction.interactionSelect.update";
+            }
+            configuration.delete.available = typeof state.delete === "boolean" ? state.delete : true;
+            configuration.delete.caption = typeof state.delete === "string" ? state.delete : "common:modules.tools.wfsTransaction.interactionSelect.delete";
             ["LineString", "Point", "Polygon"].forEach(val => {
                 let geometryConfiguration,
                     layerConfiguration = null;
@@ -77,9 +82,7 @@ const defaultInteractionConfig = {
             return state.featureProperties.every(property => property.required ? property.value !== null : true);
         },
         showInteractionsButtons (state) {
-            // TODO(roehlipa): The form should also be displayed when editing a feature to be able to update the properties
-            // TODO(roehlipa): Interchange "edit" with "selectedUpdate" and "update" -> "selectedUpdate" is the situation where a feature is selected to update
-            return [null, "delete", "edit"].includes(state.selectedInteraction);
+            return [null, "delete", "update"].includes(state.selectedInteraction);
         }
     };
 

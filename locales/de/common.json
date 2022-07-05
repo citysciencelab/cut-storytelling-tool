@@ -808,7 +808,7 @@
             "wfsTransaction": {
                 "layerSelectLabel" : "Aktueller Layer:",
                 "interactionSelect": {
-                    "edit": "Geometrie bearbeiten",
+                    "update": "Geometrie bearbeiten",
                     "delete": "Geometrie löschen",
                     "line": "Linie erfassen",
                     "point": "Punkt erfassen",
