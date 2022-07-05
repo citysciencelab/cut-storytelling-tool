@@ -152,18 +152,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$grid-gap: 15px;
+$margin: 1rem;
 
 #tool-wfsTransaction-container {
-    display: grid;
-    grid-template-columns: repeat(1, 1);
-    gap: $grid-gap;
-    grid-auto-rows: auto;
-
-    hr {
-        margin: 0;
-    }
-
     #tool-wfsTransaction-layerSelect-container {
         display: flex;
         justify-content: space-between;
@@ -183,6 +174,7 @@ $grid-gap: 15px;
     #tool-wfsTransaction-interactionSelect-container {
         display: flex;
         justify-content: space-between;
+        margin-top: $margin;
 
         button {
             margin: 5px;
@@ -198,7 +190,7 @@ $grid-gap: 15px;
     #tool-wfsTransaction-form {
         display: grid;
         grid-template-columns: 10em 30em;
-        grid-row-gap: calc(#{$grid-gap} / 2);
+        grid-row-gap: calc(#{$margin} / 2);
 
         label {
             align-self: center;
@@ -209,13 +201,13 @@ $grid-gap: 15px;
     #tool-wfsTransaction-form-buttons {
         display: grid;
         grid-template-columns: repeat(2, 20em);
-        margin-top: calc(#{$grid-gap} / 2);
+        margin-top: calc(#{$margin} / 2);
 
         button:first-child {
-            margin-right: calc(#{$grid-gap} / 2);
+            margin-right: calc(#{$margin} / 2);
         }
         button:last-child {
-            margin-left: calc(#{$grid-gap} / 2);
+            margin-left: calc(#{$margin} / 2);
         }
     }
 }
