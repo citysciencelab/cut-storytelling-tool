@@ -1,4 +1,4 @@
-import isObject from "isObject";
+import isObject from "./isObject";
 
 /**
  * Looks through the given list and returns the first value that matches all of the key value pairs of properties.

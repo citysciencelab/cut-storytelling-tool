@@ -19,6 +19,7 @@
 ### Removed
 
 ### Fixed
+- fix unix-related path issue in findWhereJs.js
 
 ---
 
