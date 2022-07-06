@@ -50,6 +50,7 @@
 - The transparency of a layer in the topic tree can now only be between 0 and 100 for increase or decrease.
 - 3D-UrlParameters heading, tilt and altitude are now set.
 - UrlParameter zoomtogeometry={number} is fixed.
+- Fix error when defining a `styleID` for an OAF layer type.
 
 ---
 
