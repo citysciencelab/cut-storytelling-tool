@@ -7,19 +7,17 @@
 
 ---
 
-## Unreleased - in development
-### __Breaking Changes__
-
+## v2.23.0 - 2022-07-06
 ### Added
 - FilterModule:
     - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
-- api/highlightFeaturesByAttribute URL mechanism to query WFS data by parameters and configuration
+- Api/highlightFeaturesByAttribute URL mechanism to query WFS data by parameters and configuration
 - WfsSearch: A `multiSelect` mode has been added where multiple search results can be selected and viewn on the map.
 - A new type of addons can be loaded: pure javascript-files with locale-files. See https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/addOnsVue.md.
 - The elasticsearch now sends `layerIDsToIgnore` (as `id`) and `metaIDsToIgnore` (as `datasets.md_id`) to the service as well. These associated layers are filtered out of the response from Elastic.
 
 ### Changed
-- Changed class for several title elements on page from span to h1 or h2 and standardized their styling
+- Changed class for several title elements on page from span to h1 or h2 and standardized their styling.
 - WMTS feature is now realized via masterportalAPI functions.
 - SensorThingsAPI: The sensor layer has been moved from Backbone to Vue.
 - Fix config.json.md regarding chapter depth.
@@ -27,8 +25,6 @@
     - @masterportal/mpconfigparser: 1.2.0 to 1.3.0
     - @masterportal/masterportalapi: 2.3.0 to 2.4.0
   - Some `Radio.trigger` and `Radio.request` calls have been replaced by direct accesses to the `Vuex store`.
-
-### Deprecated
 
 ### Removed
 - Deleted the following snippets: dropdown, exportButton, graphicalSelect, multiCheckbox.
@@ -38,7 +34,7 @@
 - Lines imported as KML can now be edited and modified with the Draw tool.
 - Issue #663: Fixed tool Buffer Analysis where layer visibility updates would not be recognized in custom trees. Now, all visible layers at tool starting time are available within the tool.
 - Issue #778: Fixed layer information display selection in metadata window that now always has names options in its select input.
-- Issue #788: Legend not updating correctly
+- Issue #788: Legend not updating correctly.
 - Download print Buttons will now be blue at first and grey once the button was clicked.
 - Attached Gfi is styled correctly.
 - Quickly clicking on a tab in the Elektro GFI will now not lead to a reload of the page.
