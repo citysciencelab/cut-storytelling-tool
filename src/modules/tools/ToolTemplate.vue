@@ -295,8 +295,8 @@ export default {
         }
     }
 
-    .win-heading{
-        border-bottom: 1px solid $white;
+    .win-heading {
+        border-bottom: 1px solid $light_grey;
         font-family: $font_family_accent;
         display:flex;
         flex-direction:row;
