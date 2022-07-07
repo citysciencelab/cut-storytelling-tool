@@ -2,7 +2,8 @@ import initialState from "./stateWfsTransaction";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import deepCopy from "../../../../utils/deepCopy";
 
-// TODO(roehlipa): Adjust doc for update and delete as well as their functionality
+// TODO(roehlipa): Adjust doc for update and delete to new functionality => default is false (is this a breaking change?) and possibility to add 'em service specific
+// TODO(roehlipa): Add icon to the possible config.json parameters and add functionality here
 const defaultInteractionConfig = {
         LineString: {
             available: false,
@@ -23,9 +24,13 @@ const defaultInteractionConfig = {
             multi: false
         },
         update: {
+            available: false,
+            caption: "common:modules.tools.wfsTransaction.interactionSelect.update",
             icon: "bi-pencil-square"
         },
         delete: {
+            available: false,
+            caption: "common:modules.tools.wfsTransaction.interactionSelect.delete",
             icon: "bi-trash"
         }
     },
@@ -33,45 +38,58 @@ const defaultInteractionConfig = {
         ...generateSimpleGetters(initialState),
         currentInteractionConfig (state, {currentLayerId}) {
             const configuration = deepCopy(defaultInteractionConfig);
+            let editUsed = false;
 
-            // TODO: The parts for update and delete can be simplified once v3.0.0 happens
-            if ((typeof state.edit === "boolean" && state.edit) || typeof state.edit === "string") {
-                console.warn("WfsTransaction: The parameter 'edit' has been deprecated in version 3.0.0. Please use 'update' instead.");
-                configuration.update.available = typeof state.edit === "boolean" ? state.edit : true;
-                configuration.update.caption = typeof state.edit === "string" ? state.edit : "common:modules.tools.wfsTransaction.interactionSelect.update";
-            }
-            else {
-                configuration.update.available = typeof state.update === "boolean" ? state.update : true;
-                configuration.update.caption = typeof state.update === "string" ? state.update : "common:modules.tools.wfsTransaction.interactionSelect.update";
-            }
-            configuration.delete.available = typeof state.delete === "boolean" ? state.delete : true;
-            configuration.delete.caption = typeof state.delete === "string" ? state.delete : "common:modules.tools.wfsTransaction.interactionSelect.delete";
-            ["LineString", "Point", "Polygon"].forEach(val => {
-                let geometryConfiguration,
+            // TODO: These iterations can be simplified as soon v3.0.0 is on the horizon
+            ["LineString", "Point", "Polygon", "edit", "update", "delete"].forEach(val => {
+                const isGeometryConfiguration = ["LineString", "Point", "Polygon"].includes(val);
+                let interactionConfiguration,
                     layerConfiguration = null;
 
                 if (val === "Polygon" && state.areaButton !== undefined && state.areaButton.length > 0) {
                     // TODO: Shrink this to a single const when areaButton is removed
                     console.warn("WfsTransaction: The configuration parameter 'areaButton' has been deprecated. Please use 'polygonButton' instead.");
-                    geometryConfiguration = state.areaButton;
+                    interactionConfiguration = state.areaButton;
+                }
+                else if (isGeometryConfiguration) {
+                    interactionConfiguration = state[(val.endsWith("String") ? val.replace("String", "") : val).toLowerCase() + "Button"];
                 }
                 else {
-                    geometryConfiguration = state[(val.endsWith("String") ? val.replace("String", "") : val).toLowerCase() + "Button"];
+                    interactionConfiguration = state[val];
                 }
-                if (!geometryConfiguration) {
+                if (!interactionConfiguration) {
                     return;
                 }
-                if (typeof geometryConfiguration === "boolean") {
+                if (val === "edit") {
+                    console.warn("WfsTransaction: The parameter 'edit' has been deprecated in version 3.0.0. Please use 'update' instead.");
+                    configuration.update.available = typeof interactionConfiguration === "boolean" ? interactionConfiguration : false;
+                    configuration.update.caption = typeof interactionConfiguration === "string" ? interactionConfiguration : configuration.update.caption;
+                    editUsed = true;
+                    return;
+                }
+                if (editUsed && val === "update") {
+                    console.warn("WfsTransaction: Configuration for 'edit' has already been provided. Skipping configuration of 'update'.");
+                    return;
+                }
+                if (typeof interactionConfiguration === "string") {
+                    console.warn("WfsTransaction: Please add the caption in an object as the parameter 'caption'; adding it directly will be deprecated in version 3.0.0.");
+                    configuration[val].caption = interactionConfiguration;
+                    return;
+                }
+                if (typeof interactionConfiguration === "boolean") {
                     configuration[val].available = true;
                     return;
                 }
-                layerConfiguration = geometryConfiguration.find(config => config.layerId === currentLayerId);
+
+                layerConfiguration = interactionConfiguration.find(({layerId}) => layerId === currentLayerId);
                 if (layerConfiguration === undefined) {
                     return;
                 }
-                configuration[val].available = layerConfiguration.show; // TODO(roehlipa): Maybe deprecate parameter "show" in favour of "visible"?
+                configuration[val].available = layerConfiguration.show; // TODO(roehlipa): Maybe deprecate parameter "show" in favour of "visible" or something more in line with what is used in components?
                 configuration[val].caption = layerConfiguration.caption ? layerConfiguration.caption : configuration[val].caption;
-                configuration[val].multi = layerConfiguration.multi ? layerConfiguration.multi : false;
+                if (isGeometryConfiguration) {
+                    configuration[val].multi = layerConfiguration.multi ? layerConfiguration.multi : false;
+                }
             });
             return configuration;
         },

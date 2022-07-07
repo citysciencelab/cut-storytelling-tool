@@ -3,7 +3,8 @@
  * @type {object}
  * @param {string} layerId Id of the layer this configuration belongs to.
  * @param {boolean} show Whether the button should be visible for the layer with this layerId.
- * @param {boolean} multi Whether the drawn geometries should be Multi-X. TODO(roehlipa): Document me in config.json
+ * @param {string} [caption] Caption to be shown for the button.
+ * @param {boolean} [multi] Whether the drawn geometries should be Multi-X. TODO(roehlipa): Document me in config.json.md
  */
 
 /**
@@ -40,8 +41,8 @@
  * @property {string} name Title of the tool.
  * @property {string} icon Icon used together with `name`.
  * @property {ButtonConfig[]} areaButton Deprecated configuration of the different layers whether they should display the button to add polygons.
- * @property {boolean} edit Whether the features of the WFS-T layers should be editable.
- * @property {boolean} delete Whether it should be possible to delete features of the WFS-T layers.
+ * @property {ButtonConfig[]} edit Whether the features of the WFS-T layers should be editable.
+ * @property {ButtonConfig[]} delete Whether it should be possible to delete features of the WFS-T layers.
  * @property {string[]} layerIds Ids of the configured WFS-T layers.
  * @property {ButtonConfig[]} lineButton Configuration of the different layers whether they should display the button to add lines.
  * @property {ButtonConfig[]} pointButton Configuration of the different layers whether they should display the button to add points.
@@ -61,7 +62,7 @@ const state = {
     icon: "bi-globe",
     // Module specific configuration
     areaButton: [],
-    edit: false, // TODO(roehlipa): update and delete should receive the same configuration possibilities as the buttons
+    edit: false,
     update: false, // TODO(roehlipa): Document
     delete: false,
     layerIds: [],

@@ -107,6 +107,7 @@ const actions = {
         // eslint-disable-next-line new-cap
         const sourceLayer = rootGetters["Maps/getLayerById"]({layerId: getters.currentLayerId});
 
+        // TODO(roehlipa): getters.featureProperties is undefined when switching to a layer which has not been selected or closing the tool when no layer is selected beforehand
         commit("setFeatureProperties", getters.featureProperties.map(property => ({...property, value: null})));
         commit("setSelectedInteraction", null);
         dispatch("Maps/removeInteraction", drawInteraction, {root: true});
