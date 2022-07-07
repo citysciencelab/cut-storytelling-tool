@@ -169,6 +169,7 @@ $margin: 1rem;
         display: flex;
         justify-content: center;
         align-content: center;
+        margin-top: $margin;
     }
 
     #tool-wfsTransaction-interactionSelect-container {
