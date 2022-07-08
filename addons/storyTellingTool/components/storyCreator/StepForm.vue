@@ -49,7 +49,9 @@ export default {
                 centerCoordinate: null,
                 zoomLevel: null,
                 layers: [],
-                interactionAddons: []
+                interactionAddons: [],
+                is3D: false,
+                navigation3D: {}
             },
             newChapter: {
                 chapterNumber:

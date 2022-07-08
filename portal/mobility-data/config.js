@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["storyTellingTool", "storyCreationTool"],
+    addons: ["storyTellingTool"],
     ignoredKeys: [
         "BOUNDEDBY",
         "SHAPE",
@@ -122,10 +122,21 @@ const Config = {
         "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
     uiStyle: "default",
     styleConf: "https://raw.githubusercontent.com/herzogrh/faircare-verkehr/main/assets/data/style.json",
-    storyConf: "./assets/story.json",
+    storyConf: "./assets/story-3d.json",
     isMenubarVisible: true,
     gemarkungen: "https://geodienste.hamburg.de/lgv-config/gemarkung.json",
     obliqueMap: true,
+    cesiumParameter: {
+        tileCacheSize: 20,
+        enableLighting: true,
+        fog: {
+            enabled: true,
+            density: 0.0002,
+            screenSpaceErrorFactor: 2.0
+        },
+        maximumScreenSpaceError: 2,
+        fxaa: true
+    },
     startingMap3D: false,
     portalLanguage: {
         enabled: true,

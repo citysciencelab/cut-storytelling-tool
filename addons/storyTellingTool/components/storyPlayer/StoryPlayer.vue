@@ -176,63 +176,83 @@ export default {
                 this.setInitialWidth(this.currentStep.stepWidth);
             }
 
+            // Toggles 3D map mode
+            if (this.currentStep.is3D && Radio.request("Map", "getMapMode") !== "3D") {
+                Radio.trigger("Map", "activateMap3d");
+            }
+            else if (!this.currentStep.is3D && Radio.request("Map", "getMapMode") === "3D") {
+                Radio.trigger("Map", "deactivateMap3d");
+            }
+
             // Updates the map center
             if (this.currentStep.centerCoordinate) {
-                const mapView = this.map().getView();
+                if (this.currentStep.is3D) {
+                    console.log("Dont use centerCoordinate for 3D navigation.");
+                }
+                else {
+                    const mapView = this.map().getView();
 
-                mapView.animate({
-                    center: this.currentStep.centerCoordinate,
-                    duration: 2000,
-                    zoom: this.currentStep.zoomLevel
-                });
-            }
-
-            // Updates the map layers
-            const layerList = Radio.request(
-                "ModelList",
-                "getModelsByAttributes",
-                { isVisibleInTree: true }
-            );
-
-            for (const layer of layerList) {
-                const isStepLayer = (this.currentStep.layers || []).includes(
-                    layer.id
-                );
-
-                if (isStepLayer && !layer.attributes.isVisibleInMap) {
-                    this.enableLayer(layer);
-                } else if (!isStepLayer && layer.attributes.isVisibleInMap) {
-                    this.disableLayer(layer);
+                    mapView.animate({
+                        center: this.currentStep.centerCoordinate,
+                        duration: 2000,
+                        zoom: this.currentStep.zoomLevel
+                    });
                 }
             }
-            Radio.trigger("TableMenu", "rerenderLayers");
+            // Updates the map center for 3D
+            if (this.currentStep.navigation3D) {
+                this.currentStep.navigation3D["flyTo"] = true;
+                Radio.trigger("Map", "setCameraParameter", this.currentStep.navigation3D);
+            }
 
-            // Updates the step html content
-            const htmlReference = getHTMLContentReference(
-                this.currentStep.associatedChapter,
-                this.currentStep.stepNumber
-            );
+            if (!this.currentStep.is3D) {
+                // Updates the map layers
+                const layerList = Radio.request(
+                    "ModelList",
+                    "getModelsByAttributes",
+                    { isVisibleInTree: true }
+                );
 
-            if (this.storyConf.htmlFolder && this.currentStep.htmlFile) {
-                // Load HTML file for the story step
-                fetchDataFromUrl(
-                    "./assets/" +
+                for (const layer of layerList) {
+                    const isStepLayer = (this.currentStep.layers || []).includes(
+                        layer.id
+                    );
+
+                    if (isStepLayer && !layer.attributes.isVisibleInMap) {
+                        this.enableLayer(layer);
+                    } else if (!isStepLayer && layer.attributes.isVisibleInMap) {
+                        this.disableLayer(layer);
+                    }
+                }
+                Radio.trigger("TableMenu", "rerenderLayers");
+
+                // Updates the step html content
+                const htmlReference = getHTMLContentReference(
+                    this.currentStep.associatedChapter,
+                    this.currentStep.stepNumber
+                );
+
+                if (this.storyConf.htmlFolder && this.currentStep.htmlFile) {
+                    // Load HTML file for the story step
+                    fetchDataFromUrl(
+                        "./assets/" +
                         this.storyConf.htmlFolder +
                         "/" +
                         this.currentStep.htmlFile
-                ).then(data => (this.loadedContent = data));
-            } else if (this.isPreview && this.htmlContents[htmlReference]) {
-                // Get temporary HTML for the story step preview
-                this.loadedContent = this.htmlContents[htmlReference];
-            } else {
-                this.loadedContent = null;
-            }
+                    ).then(data => (this.loadedContent = data));
+                } else if (this.isPreview && this.htmlContents[htmlReference]) {
+                    // Get temporary HTML for the story step preview
+                    this.loadedContent = this.htmlContents[htmlReference];
+                } else {
+                    this.loadedContent = null;
+                }
 
-            // Activates or deactivates tools
-            const interactionAddons = this.currentStep.interactionAddons || [];
-            const configuredTools = this.$store.state.Tools.configuredTools;
-            // Activate all tools of the current step
-            interactionAddons.forEach(this.activateTool);
+                // Activates or deactivates tools
+                const interactionAddons = this.currentStep.interactionAddons || [];
+                const configuredTools = this.$store.state.Tools.configuredTools;
+                // Activate all tools of the current step
+                interactionAddons.forEach(this.activateTool);
+            }
         }
     }
 };

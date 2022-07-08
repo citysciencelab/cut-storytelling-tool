@@ -1,0 +1,63 @@
+{
+    "chapters": [
+        {
+            "chapterNumber": 1,
+            "chapterTitle": "3d showcase"
+        }
+    ],
+    "steps": [
+        {
+            "stepNumber": 1,
+            "stepWidth": 800,
+            "visible": true,
+            "associatedChapter": 1,
+            "title": "3D first view",
+            "htmlFile": "",
+            "is3D": true,
+            "centerCoordinate": [],
+            "zoomLevel": 4,
+            "layers": [],
+            "interactionAddons": []
+        },
+        {
+          "stepNumber": 2,
+          "stepWidth": 800,
+          "visible": true,
+          "associatedChapter": 1,
+          "title": "3D fly to first position",
+          "htmlFile": "",
+          "centerCoordinate": [],
+          "is3D": true,
+          "navigation3D": {
+            "cameraPosition": [9.944997, 53.553876, 170.0],
+            "heading": 0.90,
+            "pitch": -0.3725214263618002
+          },
+          "zoomLevel": 0,
+          "layers": [],
+          "interactionAddons": []
+        },
+        {
+          "stepNumber": 3,
+          "stepWidth": 800,
+          "visible": true,
+          "associatedChapter": 1,
+          "title": "3D fly to second position",
+          "htmlFile": "",
+          "centerCoordinate": [],
+          "is3D": true,
+          "navigation3D": {
+            "cameraPosition": [9.946620, 53.554060, 150.0],
+            "heading": 0.37138509963163635,
+            "pitch": -0.3725214263618002
+          },
+          "zoomLevel": 0,
+          "layers": [],
+          "interactionAddons": []
+        }
+    ],
+    "name": "3D Story",
+    "author": "CityScienceLab",
+    "description": "Just to show off",
+    "htmlFolder": "story"
+}

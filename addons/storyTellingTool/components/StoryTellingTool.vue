@@ -206,7 +206,7 @@ export default {
                                             Eigene {{ option.title }}
                                         </v-btn>
                                     </v-col>
-                                    
+
                                 </v-card-actions>
                             </v-card>
                         </v-item>

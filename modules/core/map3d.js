@@ -274,7 +274,20 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
             orientation;
 
         // if the cameraPosition is given, directly set the cesium camera position, otherwise use olcesium Camera
-        if (map3d && params.cameraPosition) {
+        if (map3d && params.flyTo) {
+            camera = map3d.getCesiumScene().camera;
+            destination = Cesium.Cartesian3.fromDegrees(params.cameraPosition[0], params.cameraPosition[1], params.cameraPosition[2]);
+            camera.flyTo({
+                destination: destination,
+                orientation: {
+                    heading: params.heading,
+                    pitch: params.pitch,
+                    roll: params.roll
+                },
+                easingFunction: Cesium.EasingFunction.QUADRATIC_OUT
+            });
+        }
+        else if (map3d && params.cameraPosition) {
             camera = map3d.getCesiumScene().camera;
             destination = Cesium.Cartesian3.fromDegrees(params.cameraPosition[0], params.cameraPosition[1], params.cameraPosition[2]);
             orientation = {
