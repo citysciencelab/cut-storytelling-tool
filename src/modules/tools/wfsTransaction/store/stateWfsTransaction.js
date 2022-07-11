@@ -4,6 +4,7 @@
  * @param {string} layerId Id of the layer this configuration belongs to.
  * @param {boolean} show Whether the button should be visible for the layer with this layerId.
  * @param {string} [caption] Caption to be shown for the button.
+ * @param {string} [icon] Bootstrap icon displayed inside of the button. TODO(roehlipa): Document me in config.json.md
  * @param {boolean} [multi] Whether the drawn geometries should be Multi-X. TODO(roehlipa): Document me in config.json.md
  */
 

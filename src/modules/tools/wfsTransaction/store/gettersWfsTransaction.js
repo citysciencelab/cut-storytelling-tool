@@ -3,7 +3,6 @@ import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import deepCopy from "../../../../utils/deepCopy";
 
 // TODO(roehlipa): Adjust doc for update and delete to new functionality => default is false (is this a breaking change?) and possibility to add 'em service specific
-// TODO(roehlipa): Add icon to the possible config.json parameters and add functionality here
 const defaultInteractionConfig = {
         LineString: {
             available: false,
@@ -47,7 +46,6 @@ const defaultInteractionConfig = {
                     layerConfiguration = null;
 
                 if (val === "Polygon" && state.areaButton !== undefined && state.areaButton.length > 0) {
-                    // TODO: Shrink this to a single const when areaButton is removed
                     console.warn("WfsTransaction: The configuration parameter 'areaButton' has been deprecated. Please use 'polygonButton' instead.");
                     interactionConfiguration = state.areaButton;
                 }
@@ -87,6 +85,7 @@ const defaultInteractionConfig = {
                 }
                 configuration[val].available = layerConfiguration.show; // TODO(roehlipa): Maybe deprecate parameter "show" in favour of "visible" or something more in line with what is used in components?
                 configuration[val].caption = layerConfiguration.caption ? layerConfiguration.caption : configuration[val].caption;
+                configuration[val].icon = layerConfiguration.icon ? layerConfiguration.icon : configuration[val].icon;
                 if (isGeometryConfiguration) {
                     configuration[val].multi = layerConfiguration.multi ? layerConfiguration.multi : false;
                 }
