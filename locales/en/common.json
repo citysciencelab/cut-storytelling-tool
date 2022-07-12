@@ -820,6 +820,25 @@
                     "layerNotConfiguredCorrectly": "The selected layer has not been configured correctly to be used with this tool; it might be missing the parameter 'featurePrefix'.",
                     "layerNotSelected": "The selected layer has not been set to visible in the layer tree."
                 },
+                "transaction": {
+                    "success": {
+                        "baseSuccess": "{{transaction}} the geometry and its parameters was successful.",
+                        "delete": "$t(common:modules.tools.wfsTransaction.transaction.success.baseSuccess, {\"transaction\": 'Deletion of'})",
+                        "insert": "$t(common:modules.tools.wfsTransaction.transaction.success.baseSuccess, {\"transaction\": 'Insertion of'})",
+                        "selectedUpdate" : "$t(common:modules.tools.wfsTransaction.transaction.success.baseSuccess, {\"transaction\": 'Updating'})"
+                    },
+                    "error": {
+                        "genericFailedTransaction": "An error occurred while saving / deleting the geometry and its parameters. Please contact the administrator.",
+                        "axios": "$t(common:modules.tools.wfsTransaction.transaction.error.genericFailedTransaction)",
+                        "baseError": "An error occurred while saving the geometry and its parameters",
+                        "InvalidValue": "$t(common:modules.tools.wfsTransaction.transaction.error.baseError) One of the entries is not valid or in the correct format.",
+                        "InvalidParameterValue": "$t(common:modules.tools.wfsTransaction.transaction.error.InvalidValue)",
+                        "MissingParameterValue": "$t(common:modules.tools.wfsTransaction.transaction.error.baseError) One or more parameter didn't receive an input and the service does not provide default values.",
+                        "OperationNotSupported": "$t(common:modules.tools.wfsTransaction.transaction.error.baseError) The requested operation is not supported by the service.",
+                        "OperationParsingFailed": "$t(common:modules.tools.wfsTransaction.transaction.error.baseError) The service could not process the transaction. Please contact the administrator.",
+                        "OperationProcessingFailed": "$t(common:modules.tools.wfsTransaction.transaction.error.baseError) An error occurred during the transaction."
+                    }
+                },
                 "deleteInteraction": {
                     "confirm": "Delete",
                     "headline": "Caution",

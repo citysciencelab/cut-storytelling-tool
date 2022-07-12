@@ -1,10 +1,11 @@
 import axios from "axios";
 import {Draw, Modify, Select} from "ol/interaction";
+import {exceptionCodes} from "../constantsWfsTransaction";
+import addFeaturePropertiesToFeature from "../utils/addFeaturePropertiesToFeature";
+import getLayerInformation from "../utils/getLayerInformation";
 import prepareFeatureProperties from "../utils/prepareFeatureProperties";
 import writeTransaction from "../utils/writeTransaction";
 import loader from "../../../../utils/loaderOverlay";
-import addFeaturePropertiesToFeature from "../utils/addFeaturePropertiesToFeature";
-import getLayerInformation from "../utils/getLayerInformation";
 
 let drawInteraction,
     drawLayer,
@@ -151,7 +152,11 @@ const actions = {
     },
     sendTransaction ({dispatch, getters, rootGetters}, feature) {
         const {currentLayerIndex, layerInformation, selectedInteraction} = getters,
-            layer = layerInformation[currentLayerIndex];
+            layer = layerInformation[currentLayerIndex],
+            transactionMethod = ["LineString", "Point", "Polygon"].includes(selectedInteraction)
+                ? "insert"
+                : selectedInteraction;
+        let messageKey = `success.${transactionMethod}`;
 
         loader.show();
         axios({
@@ -159,29 +164,51 @@ const actions = {
             data: writeTransaction(
                 feature,
                 layer,
-                ["LineString", "Point", "Polygon"].includes(selectedInteraction)
-                    ? "insert"
-                    : selectedInteraction,
-                rootGetters["Maps/projectionCode"]),
+                transactionMethod,
+                rootGetters["Maps/projectionCode"]
+            ),
             method: "POST",
             withCredentials: layer.isSecured,
             headers: {"Content-Type": "text/xml"},
             responseType: "text/xml"
         })
-            .then(() => {
-                /*
-                    TODO(roehlipa):
-                        a) Give feedback on success
-                        b) Throw error if transaction failed or something wonky (e.g. more than one inserted) happened => Read response XML
-                 */
+            .then(response => {
+                const xmlDocument = new DOMParser().parseFromString(response.data, "text/xml"),
+                    transactionSummary = xmlDocument.getElementsByTagName("wfs:TransactionSummary");
+                let exception = null,
+                    exceptionText = null;
+
+                // NOTE: WFS-T services respond errors with the transaction as an XML response, even though it's the http code indicates different...
+                if (transactionSummary.length === 0) {
+                    messageKey = "genericFailedTransaction";
+                    exception = xmlDocument.getElementsByTagName(`${xmlDocument.getElementsByTagName("Exception").length === 0 ? "ows:" : ""}Exception`)[0];
+                    exceptionText = exception.getElementsByTagName(`${xmlDocument.getElementsByTagName("ExceptionText").length === 0 ? "ows:" : ""}ExceptionText`)[0];
+                    if (exceptionText !== undefined) {
+                        console.error("WfsTransaction: An error occurred when sending the transaction to the service.", exceptionText.textContent);
+                    }
+                    if (exception?.attributes.getNamedItem("code") || exception?.attributes.getNamedItem("exceptionCode")) {
+                        const code = exception.attributes.getNamedItem(`${exception?.attributes.getNamedItem("code") ? "c" : "exceptionC"}ode`).textContent;
+
+                        messageKey = exceptionCodes.includes(code) ? code : messageKey;
+                    }
+                    messageKey = `error.${messageKey}`;
+                }
+                // TODO(roehlipa): Might need to verify amount of transacted features vs intended amount of transacted features
             })
-            .catch(() => {
-                // TODO(roehlipa): Show error or give feedback
+            .catch(error => {
+                messageKey = "error.axios";
+                console.error("WfsTransaction: An error occurred when sending the transaction to the service.", error);
             })
             .finally(() => {
                 loader.hide();
                 dispatch("reset");
                 Radio.request("ModelList", "getModelByAttributes", {id: layer.id}).layer.getSource().refresh();
+                dispatch("Alerting/addSingleAlert", {
+                    category: "Info",
+                    displayClass: "info",
+                    content: i18next.t(`common:modules.tools.wfsTransaction.transaction.${messageKey}`),
+                    mustBeConfirmed: false
+                }, {root: true});
             });
     },
     setActive ({commit, dispatch, getters: {layerIds, layerInformation}}, active) {
