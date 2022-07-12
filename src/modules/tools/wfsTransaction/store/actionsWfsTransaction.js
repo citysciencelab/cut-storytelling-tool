@@ -87,7 +87,6 @@ const actions = {
             dispatch("Maps/addInteraction", selectInteraction, {root: true});
         }
         else if (interaction === "delete") {
-            // TODO(roehlipa): There currently is a problem of no way of ending deletion mode without deleting a feature or closing the tool => extra button?
             selectInteraction = new Select({
                 layers: [sourceLayer]
             });
@@ -98,6 +97,7 @@ const actions = {
                     textContent: i18next.t("common:modules.tools.wfsTransaction.deleteInteraction.text"),
                     headline: i18next.t("common:modules.tools.wfsTransaction.deleteInteraction.headline")
                 }, {root: true});
+                dispatch("Maps/removeInteraction", selectInteraction, {root: true});
             });
             dispatch("Maps/addInteraction", selectInteraction, {root: true});
             // TODO(roehlipa): Add a trashcan next to the mouse (without bugs) -> see e.g. draw
