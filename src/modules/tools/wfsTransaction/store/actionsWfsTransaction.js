@@ -106,10 +106,14 @@ const actions = {
     reset ({commit, dispatch, getters, rootGetters}) {
         // NOTE: As this is a rootGetter, the naming scheme is used like this.
         // eslint-disable-next-line new-cap
-        const sourceLayer = rootGetters["Maps/getLayerById"]({layerId: getters.currentLayerId});
+        const sourceLayer = rootGetters["Maps/getLayerById"]({layerId: getters.currentLayerId}),
+            layerSelected = Array.isArray(getters.featureProperties);
 
-        // TODO(roehlipa): getters.featureProperties is undefined when switching to a layer which has not been selected or closing the tool when no layer is selected beforehand
-        commit("setFeatureProperties", getters.featureProperties.map(property => ({...property, value: null})));
+        commit("setFeatureProperties",
+            layerSelected
+                ? getters.featureProperties.map(property => ({...property, value: null}))
+                : getters.featureProperties
+        );
         commit("setSelectedInteraction", null);
         dispatch("Maps/removeInteraction", drawInteraction, {root: true});
         dispatch("Maps/removeInteraction", modifyInteraction, {root: true});
@@ -120,7 +124,9 @@ const actions = {
         selectInteraction?.getFeatures().clear();
         selectInteraction = undefined;
         drawLayer = undefined;
-        sourceLayer?.setVisible(true);
+        if (layerSelected) {
+            sourceLayer?.setVisible(true);
+        }
         if (modifyFeature) {
             sourceLayer
                 ?.getSource().getFeatures()
