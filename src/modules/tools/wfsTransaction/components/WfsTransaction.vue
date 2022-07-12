@@ -74,11 +74,11 @@
                         <div id="tool-wfsTransaction-form-buttons">
                             <SimpleButton
                                 :interaction="reset"
-                                text="common:modules.tools.wfsTransaction.form.buttons.discard"
+                                text="common:modules.tools.wfsTransaction.form.discard"
                             />
                             <SimpleButton
                                 :interaction="save"
-                                text="common:modules.tools.wfsTransaction.form.buttons.save"
+                                text="common:modules.tools.wfsTransaction.form.save"
                                 type="submit"
                                 :disabled="requiredFieldsFilled"
                                 :aria-disabled="requiredFieldsFilled"

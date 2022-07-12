@@ -845,16 +845,8 @@
                   "text": "Sind Sie sich sicher, dass Sie diese Geometrie löschen möchten?"
                 },
                 "form": {
-                    "buttons": {
-                        "discard": "Verwerfen",
-                        "save": "Speichern"
-                    },
-                    "featureProperties": {
-                        "annotation": "Bemerkung",
-                        "date": "Datum",
-                        "name": "Name",
-                        "number": "Nummer"
-                    }
+                    "discard": "Verwerfen",
+                    "save": "Speichern"
                 }
             },
             "routing": {

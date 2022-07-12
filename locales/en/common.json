@@ -845,16 +845,8 @@
                     "text": "Are you sure about deleting the selected feature?"
                 },
                 "form": {
-                    "buttons": {
-                        "discard": "Discard",
-                        "save": "Save"
-                    },
-                    "featureProperties": {
-                        "annotation": "Annotation",
-                        "date": "Date",
-                        "name": "Name",
-                        "number": "Number"
-                    }
+                    "discard": "Discard",
+                    "save": "Save"
                 }
             },
             "routing": {
