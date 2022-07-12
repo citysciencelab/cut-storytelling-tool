@@ -100,7 +100,6 @@ const actions = {
                 dispatch("Maps/removeInteraction", selectInteraction, {root: true});
             });
             dispatch("Maps/addInteraction", selectInteraction, {root: true});
-            // TODO(roehlipa): Add a trashcan next to the mouse (without bugs) -> see e.g. draw
         }
     },
     reset ({commit, dispatch, getters, rootGetters}) {
@@ -142,8 +141,12 @@ const actions = {
             {currentLayerIndex, featureProperties, layerInformation, selectedInteraction} = getters;
 
         if (feature === undefined) {
-            // TODO(roelipa): Information to user
-            console.warn("No features");
+            dispatch("Alerting/addSingleAlert", {
+                category: "Info",
+                displayClass: "info",
+                content: i18next.t("common:modules.tools.wfsTransaction.error.noFeature"),
+                mustBeConfirmed: false
+            }, {root: true});
             return;
         }
         dispatch(

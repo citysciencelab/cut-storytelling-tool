@@ -818,7 +818,8 @@
                     "allLayersNotSelected": "Es wurde kein für dieses Werkzeug konfigurierter WFS-T Layer im Themenbaum aktiviert.",
                     "geometryOutOfRange": "Die gezeichnete Geometrie befindet sich außerhalb des erlaubten Bereiches des Layers.",
                     "layerNotConfiguredCorrectly": "Es liegen Probleme bei der Konfiguration des ausgewählten Layers für die Nutzung mit diesem Werkzeug vor; möglicherweise fehlt der Parameter 'featurePrefix'.",
-                    "layerNotSelected": "Der ausgewählte Layer wurde noch nicht im Themenbaum aktiviert."
+                    "layerNotSelected": "Der ausgewählte Layer wurde noch nicht im Themenbaum aktiviert.",
+                    "noFeature": "Bitte zeichnen Sie eine zu Ihren Einträgen assoziierte Geometrie."
                 },
                 "transaction": {
                     "success": {
