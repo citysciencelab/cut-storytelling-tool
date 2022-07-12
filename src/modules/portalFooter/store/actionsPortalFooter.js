@@ -15,6 +15,25 @@ const configPaths = [
          */
         initialize: context => {
             return fetchFirstModuleConfig(context, configPaths, "Footer");
+        },
+
+        /**
+         * renders the footer info from the configuration
+         * @param {object} state state
+         * @param {object} commit commit
+         * @returns {void}
+         */
+        renderFooterInfo: function ({state, commit}) {
+            const titles = [],
+                subtexts = [];
+
+            state.footerInfo.forEach(function (info) {
+                titles.push(info.title);
+                subtexts.push(info.subtexts);
+            });
+
+            commit("setInfoTitles", titles);
+            commit("setInfoSubtexts", subtexts);
         }
     };
 

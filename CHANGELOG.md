@@ -11,6 +11,8 @@
 ### __Breaking Changes__
 
 ### Added
+- PortalFooter:
+    - Possibility to display additional information in the footer
 
 ### Changed
 
