@@ -20,7 +20,11 @@
 
 ### Fixed
 - fix unix-related path issue in findWhereJs.js
+<<<<<<< HEAD
 - Issue #804: Legend window will not be cut off when width changes to a maximum. 
+=======
+- link in footer will now have white text for better readability.
+>>>>>>> c87ab47d5 (BG-3051 changelog)
 
 ---
 
