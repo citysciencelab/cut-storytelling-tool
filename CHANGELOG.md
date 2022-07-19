@@ -13,6 +13,7 @@
 ### Added
 - PortalFooter:
     - Possibility to display additional information in the footer
+- Added DPI selection to print dialog (as advertised by mapfish print via "dpiSuggestions")
 
 ### Changed
 - CompareFeatures: The values true and false are now translated.
