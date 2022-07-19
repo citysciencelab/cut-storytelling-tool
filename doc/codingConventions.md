@@ -33,7 +33,7 @@ All the following rules must hold.
 * A.2.2 No methods of *Underscore.js* are in use, except for calls to `_.template()`.
 * A.2.3 No redundant packages are installed.
 * A.2.4 JQuery is only to be used in combination with Backbone.js.
-* A.2.5 The addition of packages/libraries has to be agreed on by the *LGV* team. At least 3 libs need to be evaluated before decisions can be made. Use a form from **[library evalutaion](./library evaluation/)** and add to PR. 
+* A.2.5 The addition of packages/libraries has to be agreed on by the *LGV* team. At least 3 libs need to be evaluated before decisions can be made. Use a form from **[library evalutaion](./library evaluation/)** and add to PR.
 
 ---
 
@@ -223,7 +223,7 @@ The code is written as readable and understandable as possible. The goal is not 
 * B.5.1 Use `scoped` within the style tag whenever possible.
 * B.5.2 Avoid usage of the `!important` keyword.
 * B.5.3 Avoid setting `width` and `height` to absolute values, as this hinders designing responsively.
-* B.5.4 The global scss file `variables.scss` contains all variables required by *BootstrapV3* and the Masterportal. All theming variables (fonts, colors, ...) are maintained here. The file `variables.scss` must only contain variables, mixins, and functions. Adding CSS rules would result in a repetition per import, bloating the CSS size. The `variables.scss` is imported to a component's style tag by using the `import` command.
+* B.5.4 The global scss file `variables.scss` contains all variables required by *BootstrapV5* and the Masterportal. All theming variables (fonts, colors, ...) are maintained here. The file `variables.scss` must only contain variables, mixins, and functions. Adding CSS rules would result in a repetition per import, bloating the CSS size. The `variables.scss` is imported to a component's style tag by using the `import` command.
 
 ---
 
