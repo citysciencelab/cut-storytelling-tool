@@ -266,7 +266,7 @@ Gazetteer search service configuration.
 |searchParcels|no|Boolean|false|Defines whether parcels search is active.|false|
 |searchStreetKey|no|Boolean|false|Defines whether streets should be searched for by key.|false|
 |searchStreet|no|Boolean|false|Defines whether street search is active. Precondition to set `searchHouseNumbers` to `true`.|false|
-|serviceID|yes|String||Search service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|serviceId|yes|String||Search service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
 |showGeographicIdentifier|no|Boolean|false|Specifies whether the attribute `geographicIdentifier` should be used to display the search result.|false|
 
 **Example**
@@ -297,7 +297,7 @@ GFI search service configuration.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |minChars|no|Integer|3|Minimum amount of characters required to start a search.|false|
-|serviceID|yes|String||Search service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|serviceId|yes|String||Search service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
 |sortByName|no|Boolean|false|Defines whether search results are to be sorted alphanumerically.|false|
 |queryObject|yes|**[queryObject](#markdown-header-portalconfigsearchbargdiqueryobject)**||Query object read by the Elasticsearch model.|false|
 
