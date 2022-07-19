@@ -20,7 +20,8 @@
 
 ### Fixed
 - fix unix-related path issue in findWhereJs.js
-- Issue #804: Legend window will not be cut off when width changes to a maximum. 
+- Issue #804: Legend window will not be cut off when width changes to a maximum.
+- correct documentation regarding field names (serviceID -> serviceId)
 
 ---
 
