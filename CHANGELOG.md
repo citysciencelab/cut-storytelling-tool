@@ -15,6 +15,7 @@
     - Possibility to display additional information in the footer
 
 ### Changed
+- CompareFeatures: The values true and false are now translated.
 
 ### Deprecated
 
