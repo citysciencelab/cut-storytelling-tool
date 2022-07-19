@@ -34,6 +34,8 @@
  * @property {Array} layoutMapInfo width and height of the map
  * @property {Array} optimalScale the optimal scale for the print
  * @property {Event} eventListener the event listener for postrender
+ * @property {Integer} dpiList optional list of available dpi values as propagated by mapfish
+ * @property {Integer} dpiForPdf dpi value to be used when generating the printout
  * @property {Array} layoutNameList the layouts
  * @property {Integer} currentMapScale the current map Scale
  * @property {Sring} progressWidth the style String for the progress bar
@@ -89,6 +91,7 @@ const state = {
     INCHES_PER_METER: 39.37,
     icon: "bi-printer-fill",
     eventListener: undefined,
+    dpiList: [],
     dpiForPdf: 200,
     layoutNameList: [],
     currentMapScale: "",

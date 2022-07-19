@@ -19,7 +19,8 @@ const {
     drawMask,
     drawPrintPage,
     getPrintMapSize,
-    getPrintMapScales
+    getPrintMapScales,
+    setDpiList
 } = actions;
 
 describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", () => {
@@ -585,6 +586,28 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
             testAction(getPrintMapScales, undefined, state, {}, [
                 {type: "getAttributeInLayoutByName", payload: "map", dispatch: true},
                 {type: "setScaleList", payload: state.mapAttribute.clientInfo.scales, commit: true}
+            ], {}, done);
+        });
+    });
+    describe("getPrintDpis", function () {
+        it("should commit the dpis", done => {
+            const dpis = [72, 150, 300]
+            const state = {
+                currentLayout: {
+                    attributes: [
+                        {
+                            name: "map",
+                                clientInfo: {
+                                    dpiSuggestions: dpis
+                                }
+                            }
+                        ]
+                    }
+                };
+
+            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
+            testAction(setDpiList, undefined, state, {}, [
+                {type: "setDpiList", payload: dpis, commit: true}
             ], {}, done);
         });
     });

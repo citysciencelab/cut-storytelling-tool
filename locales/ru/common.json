@@ -352,6 +352,7 @@
                 "titlePlaceholder": "Мой заголовок",
                 "layoutLabel": "Макет",
                 "formatLabel": "Формат",
+                "dpiLabel": "DPI",
                 "scaleLabel": "Масштаб печати",
                 "withLegendLabel": "С легендой",
                 "autoAdjustScale": "Автоматическая настройка масштаба печати",

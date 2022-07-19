@@ -351,6 +351,7 @@
                 "titlePlaceholder": "Моя назва",
                 "layoutLabel": "Розташування",
                 "formatLabel": "Формат",
+                "dpiLabel": "DPI",
                 "scaleLabel": "Масштаб друку",
                 "withLegendLabel": "З легендою",
                 "autoAdjustScale": "Автоматичне налаштування масштабу друку",

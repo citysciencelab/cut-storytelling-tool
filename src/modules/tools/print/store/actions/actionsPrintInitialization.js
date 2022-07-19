@@ -79,6 +79,7 @@ export default {
         dispatch("getAttributeInLayoutByName", "gfi");
         dispatch("getAttributeInLayoutByName", "legend");
         dispatch("getAttributeInLayoutByName", "scale");
+        dispatch("setDpiList");
         commit("setFormatList", state.formatList);
         commit("setCurrentScale", Radio.request("MapView", "getOptions").scale);
         dispatch("togglePostrenderListener");
@@ -157,6 +158,20 @@ export default {
         });
     },
 
+    /**
+     * sets the dpi values if given in mapfish print capabilities
+     * @param {Object} param.state the state
+     * @param {Object} param.commit the commit
+     * @returns {void}
+     */
+    setDpiList: function ({state, commit}) {
+        state.currentLayout.attributes.forEach((attribute, idx) => {
+            if (attribute.name === 'map') {
+                commit("setDpiList", state.currentLayout.attributes[idx]
+                  .clientInfo?.dpiSuggestions || []);
+            }
+        });
+    },
 
     /**
      * if the tool is activated and there is a layout,

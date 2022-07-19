@@ -358,6 +358,7 @@
                 "titlePlaceholder": "My title",
                 "layoutLabel": "Layout",
                 "formatLabel": "Format",
+                "dpiLabel": "DPI",
                 "scaleLabel": "Printing scale",
                 "withLegendLabel": "With legend",
                 "autoAdjustScale": "Adjust printing scale automatically",

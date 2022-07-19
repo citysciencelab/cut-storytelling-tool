@@ -275,6 +275,7 @@
                 "titlePlaceholder": "Benim başlığım",
                 "layoutLabel": "sayfa düzeni",
                 "formatLabel": "Format",
+                "dpiLabel": "DPI",
                 "scaleLabel": "Baskı ölçeği",
                 "withLegendLabel": "Efsaneyle",
                 "printLabel": "Basmak",
