@@ -166,9 +166,9 @@ export default {
      */
     setDpiList: function ({state, commit}) {
         state.currentLayout.attributes.forEach((attribute, idx) => {
-            if (attribute.name === 'map') {
+            if (attribute.name === "map") {
                 commit("setDpiList", state.currentLayout.attributes[idx]
-                  .clientInfo?.dpiSuggestions || []);
+                    .clientInfo?.dpiSuggestions || []);
             }
         });
     },

@@ -591,12 +591,12 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
     });
     describe("getPrintDpis", function () {
         it("should commit the dpis", done => {
-            const dpis = [72, 150, 300]
-            const state = {
-                currentLayout: {
-                    attributes: [
-                        {
-                            name: "map",
+            const dpis = [72, 150, 300],
+                state = {
+                    currentLayout: {
+                        attributes: [
+                            {
+                                name: "map",
                                 clientInfo: {
                                     dpiSuggestions: dpis
                                 }

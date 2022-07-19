@@ -422,7 +422,10 @@ export default {
                         </select>
                     </div>
                 </div>
-                <div v-if="dpiList.length > 0" class="form-group form-group-sm row">
+                <div
+                    v-if="dpiList.length > 0"
+                    class="form-group form-group-sm row"
+                >
                     <label
                         class="col-md-5 col-form-label"
                         for="printDpi"
