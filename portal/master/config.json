@@ -794,7 +794,8 @@
             "kapitelbezeichnung"
           ],
           "gfiTheme": "schulinfo",
-          "additionalInfoField": "adresse_strasse_hausnr"
+          "additionalInfoField": "adresse_strasse_hausnr",
+          "loadingStrategy": "all"
         },
         {
           "id": "753",
