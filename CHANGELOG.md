@@ -32,7 +32,7 @@
     - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
 - Api/highlightFeaturesByAttribute URL mechanism to query WFS data by parameters and configuration
 - WfsSearch: A `multiSelect` mode has been added where multiple search results can be selected and viewn on the map.
-- A new type of addons can be loaded: pure javascript-files with locale-files. See https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/addOnsVue.md.
+- A new type of addons can be loaded: pure javascript-files with locale-files. See https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/addOnsVue.md
 - The elasticsearch now sends `layerIDsToIgnore` (as `id`) and `metaIDsToIgnore` (as `datasets.md_id`) to the service as well. These associated layers are filtered out of the response from Elastic.
 - LayerSelector module:
     - Module to configure interactions with the layertree and the map, executed on a defined event.
