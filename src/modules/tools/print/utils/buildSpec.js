@@ -1283,18 +1283,14 @@ const BuildSpecModel = {
                 });
                 legendObj.legendType = "svgAndPng";
             }
-            else if (graphic.indexOf("data:image/svg+xml;charset=utf-8,<svg") !== -1) {
-                legendObj.svg = decodeURIComponent(graphic).split("data:image/svg+xml;charset=utf-8,")[1];
-                legendObj.legendType = "svg";
-            }
-            else if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
-                legendObj.legendType = "wmsGetLegendGraphic";
-                legendObj.imageUrl = graphic;
-            }
             else if (graphic.indexOf("<svg") !== -1) {
                 legendObj.color = this.getFillColorFromSVG(graphic);
                 legendObj.legendType = "geometry";
                 legendObj.geometryType = "polygon";
+            }
+            else if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
+                legendObj.legendType = "wmsGetLegendGraphic";
+                legendObj.imageUrl = graphic;
             }
             else {
                 legendObj.legendType = "wfsImage";
@@ -1304,6 +1300,7 @@ const BuildSpecModel = {
                 valuesArray.push(legendObj);
             }
         });
+
         return [].concat(...valuesArray);
     },
 

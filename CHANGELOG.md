@@ -23,11 +23,12 @@
 ### Removed
 
 ### Fixed
-- fix unix-related path issue in findWhereJs.js
+- Fix unix-related path issue in findWhereJs.js
 - Issue #804: Legend window will not be cut off when width changes to a maximum.
-- correct documentation regarding field names (serviceID -> serviceId)
-- link in footer will now have white text for better readability.
+- Correct documentation regarding field names (serviceID -> serviceId)
+- Link in footer will now have white text for better readability.
 - Issue #807: transparency setting for child layers is getting set/initialized now for grouped layers.
+- Print: The legend for polygon features is now displayed correctly in the printout.
 
 ---
 

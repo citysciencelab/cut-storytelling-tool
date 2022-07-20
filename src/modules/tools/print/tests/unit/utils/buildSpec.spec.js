@@ -322,6 +322,23 @@ describe("src/modules/tools/print/utils/buildSpec", function () {
                 }
             ]);
         });
+        it("should return prepared legend for a svg polygon style", function () {
+            const legend = [
+                {
+                    graphic: "data:image/svg+xml;charset=utf-8,<svg height='35' width='35' version='1.1' xmlns='http://www.w3.org/2000/svg'><polygon points='5,5 30,5 30,30 5,30' style='fill:rgb(10, 200, 0);fill-opacity:0.2;stroke:rgb(0, 0, 0);stroke-opacity:1;stroke-width:1;'/></svg>",
+                    name: "name_WFS_polygon"
+                }];
+
+            expect(buildSpec.prepareLegendAttributes(legend)).to.deep.equal([
+                {
+                    legendType: "geometry",
+                    geometryType: "polygon",
+                    imageUrl: "",
+                    color: "rgb(10, 200, 0)",
+                    label: "name_WFS_polygon"
+                }
+            ]);
+        });
     });
     describe("getFillColorFromSVG", function () {
         it("should return fillcolor from svg string in rgb", function () {

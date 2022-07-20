@@ -278,7 +278,7 @@ export default {
         hintInfo = hintInfo + "<br>" + invisibleLayerNames;
 
         if (invisibleLayer.length && hintInfo !== state.hintInfo) {
-            dispatch("Alerting/addSingleAlert", hintInfo);
+            dispatch("Alerting/addSingleAlert", hintInfo, {root: true});
             commit("setHintInfo", hintInfo);
         }
 
