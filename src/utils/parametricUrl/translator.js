@@ -118,6 +118,7 @@ export async function translate (urlParamsKey, urlParamsValue) {
         case "map/highlightfeature": {
             const key = "Maps/highlightFeature",
                 value = urlParamsValue;
+                console.log("aaa ",value);
 
             return {key: key, value: value};
         }

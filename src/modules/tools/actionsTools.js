@@ -1,5 +1,6 @@
 import {fetchFirstModuleConfig} from "../../utils/fetchFirstModuleConfig";
 import getComponent from "../../utils/getComponent";
+import upperFirst from "../../utils/upperFirst";
 
 
 const actions = {
@@ -15,7 +16,7 @@ const actions = {
         const toolId = Object.keys(state).find(tool => state[tool]?.id?.toLowerCase() === id?.toLowerCase());
 
         if (toolId !== undefined) {
-            dispatch("controlActivationOfTools", state[toolId].name);
+            dispatch("controlActivationOfTools", state[toolId]);
             commit(toolId + "/setActive", active);
             if (toolId !== "Gfi") {
                 commit("Gfi/setActive", !state[toolId].deactivateGFI);
@@ -63,13 +64,20 @@ const actions = {
     /**
      * Control the activation of the tools.
      * Deactivate all activated tools except the gfi tool and then activate the given tool if it is available.
-     * @param {String} activeToolName - Name of the tool to be activated.
+     * @param {String} activeTool - The tool to be activated.
      * @returns {void}
      */
-    controlActivationOfTools: ({getters, commit, dispatch}, activeToolName) => {
-        getters.getActiveToolNames.forEach(tool => commit(tool + "/setActive", false));
+    controlActivationOfTools: ({getters, commit, dispatch}, activeTool) => {
+        let activeToolName;
 
-        if (getters.getConfiguredToolNames.includes(activeToolName)) {
+        getters.getActiveToolNames.forEach(tool => commit(tool + "/setActive", false));
+        if (getters.getConfiguredToolKeys.includes(activeTool.name)) {
+            activeToolName = activeTool.name;
+        }
+        else if (getters.getConfiguredToolKeys.includes(activeTool.id)) {
+            activeToolName = upperFirst(activeTool.id);
+        }
+        if (activeToolName) {
             commit(activeToolName + "/setActive", true);
             dispatch("activateToolInModelList", {tool: activeToolName, active: true});
         }

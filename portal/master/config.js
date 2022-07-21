@@ -74,7 +74,7 @@ const Config = {
     },
     featureViaURL: {
         zoomTo: "42",
-        epsg: 25832,
+        epsg: 4326,
         layers: [
             {
                 id: "42",
@@ -85,12 +85,14 @@ const Config = {
             {
                 id: "4200",
                 geometryType: "LineString",
-                name: "Übergebene Linien Feature"
+                name: "Übergebene Linien Feature",
+                styleId: "mapMarkerPolygon_flaecheninfo"
             },
             {
                 id: "4020",
                 geometryType: "Polygon",
-                name: "Übergebene Polygon Feature"
+                name: "Übergebene Polygon Feature",
+                styleId: "mapMarkerPolygon_flaecheninfo"
             }
         ]
     },

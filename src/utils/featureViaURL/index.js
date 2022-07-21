@@ -105,6 +105,13 @@ export default function ({layers, epsg, zoomTo}) {
             layerId,
             pos;
 
+        if (urlLayers.length === 0) {
+            if (params.featureViaURL) {
+                console.warn(i18next.t("common:modules.featureViaURL.messages.featureParsing"));
+            }
+            return;
+        }
+
         if (treeType === "custom" || treeType === "light") {
             Radio.trigger("Parser", "addFolder", gfiAttributes.folderName, "featureViaURLFolder", "Overlayer", 0, true, "modules.featureViaURL.folderName");
         }

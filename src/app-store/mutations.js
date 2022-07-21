@@ -89,5 +89,19 @@ export default {
      */
     setUrlParams (state, params) {
         setValuesToState(state, params);
+    },
+    /**
+     * Adds the entry's key and value to the state parameter urlParams.
+     * @param {Object} state vuex state
+     * @param {URLSearchParams} entry key and value of the entry to add
+     * @returns {void}
+     */
+    addUrlParams (state, entry) {
+        console.log("addUrlParams:", entry);
+        const paramsCopy = {...state.urlParams};
+
+        paramsCopy[entry.key] = entry.value;
+        state.urlParams = paramsCopy;
+        console.log(state.urlParams);
     }
 };
