@@ -19,6 +19,7 @@
 
 ### Changed
 - CompareFeatures: The values true and false are now translated.
+- The interactions between the `GFI` and the `Map` have been moved from the Map module to the GFI module/tool.
 
 ### Deprecated
 
@@ -33,6 +34,7 @@
 - Print: Polygon representations are now correctly shown in the map and in the legend.
 - layerSequence: fix possibility to move layers in tree despite defined layerSequence
 - Print: fix handling for highresolution plotService
+- Fixed a bug where the wrong GFi was displayed after turning on and off different layers.
 
 ---
 

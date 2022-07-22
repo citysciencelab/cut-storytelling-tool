@@ -6,12 +6,14 @@ import GfiComponent from "../../../components/GetFeatureInfo.vue";
 
 const localVue = createLocalVue(),
     mockMutations = {
-        setCurrentFeature: () => sinon.stub()
+        setCurrentFeature: () => sinon.stub(),
+        setGfiFeatures: () => sinon.stub()
     },
     mockGetters = {
         desktopType: () => "",
         centerMapToClickPoint: () => sinon.stub(),
-        active: () => true
+        active: () => true,
+        gfiFeaturesReverse: () => sinon.stub()
     };
 
 localVue.use(Vuex);
@@ -51,8 +53,13 @@ function getGfiStore () {
                         getlayerId: () => null,
                         getFeatures: () => []
                     }, {}],
+                    mode: () => "2D",
                     size: sinon.stub(),
                     visibleLayerListWithChildrenFromGroupLayers: sinon.stub()
+                },
+                actions: {
+                    registerListener: sinon.stub(),
+                    unregisterListener: sinon.stub()
                 }
             }
         },
@@ -67,7 +74,6 @@ function getGfiStore () {
 
 
 describe("src/modules/tools/gfi/components/GetFeatureInfo.vue", () => {
-
     it("should find the child component Mobile", () => {
         const wrapper = shallowMount(GfiComponent, {store: getGfiStore, localVue});
 

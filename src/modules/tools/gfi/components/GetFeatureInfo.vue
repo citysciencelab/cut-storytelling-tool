@@ -1,5 +1,5 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 import getters from "../store/gettersGfi";
 import MobileTemplate from "./templates/MobileTemplate.vue";
 import DetachedTemplate from "./templates/DetachedTemplate.vue";
@@ -7,6 +7,7 @@ import TableTemplate from "./templates/TableTemplate.vue";
 import AttachedTemplate from "./templates/AttachedTemplate.vue";
 import omit from "../../../../utils/omit";
 import {mapAttributes} from "../../../../utils/attributeMapper.js";
+import api from "@masterportal/masterportalapi/src/maps/api";
 
 export default {
     name: "GetFeatureInfo",
@@ -33,9 +34,12 @@ export default {
             ignoredKeys: "ignoredKeys"
         }),
         ...mapGetters("Tools/Gfi", Object.keys(getters)),
+        ...mapGetters("Tools/Gfi", {
+            gfiFeatures: "gfiFeaturesReverse"
+        }),
         ...mapGetters("Maps", {
-            gfiFeatures: "gfiFeaturesReverse",
-            mapSize: "size"
+            mapSize: "size",
+            mapMode: "mode"
         }),
         /**
          * Returns the current view type.
@@ -80,14 +84,20 @@ export default {
     },
     watch: {
         /**
-         * Whenever active changes and it's false, reset function will call
-         * @param {Boolean} newValue - is gfi active
+         * Whenever active changes and it's false, reset function will call.
+         * @param {Boolean} value Is gfi active.
          * @returns {void}
          */
-        active: function (newValue) {
-            if (!newValue) {
-                this.reset();
-            }
+        active: function (value) {
+            this.handleMapListener(this.mapMode, value);
+        },
+        /**
+         * Whenever the map mode changes  reset function will call.
+         * @param {String} mode The map mode.
+         * @returns {void}
+         */
+        mapMode: function (mode) {
+            this.handleMapListener(mode, this.active);
         },
         /**
          * Whenever feature changes, put it into the store
@@ -115,12 +125,16 @@ export default {
             this.pagerIndex = 0;
         }
     },
+    mounted () {
+        this.handleMapListener(this.mapMode, this.active);
+    },
     beforeUpdate () {
         this.createMappedProperties(this.feature);
     },
     methods: {
-        ...mapMutations("Maps", ["setGfiFeatures"]),
-        ...mapMutations("Tools/Gfi", ["setCurrentFeature"]),
+        ...mapActions("Maps", ["registerListener", "unregisterListener"]),
+        ...mapActions("Tools/Gfi", ["updateClick"]),
+        ...mapMutations("Tools/Gfi", ["setGfiFeatures", "setCurrentFeature"]),
         /**
          * Reset means to set the gfiFeatures to null.
          * This closes the gfi window/modal/popover.
@@ -172,6 +186,30 @@ export default {
                 return omit(properties, ignoredKeys, true);
             }
             return mapAttributes(properties, mappingObject);
+        },
+
+        /**
+         * hHandles the maps listener in 2D and 3D mode, when in relation to active.
+         * @param {String} mapMode The map mode.
+         * @param {Boolean} active Is gfi active.
+         * @returns {void}
+         */
+        handleMapListener: function (mapMode, active) {
+            if (active) {
+                if (mapMode === "2D") {
+                    this.registerListener({type: "click", listener: this.updateClick});
+                }
+                else if (mapMode === "3D") {
+                    const map3D = mapCollection.getMap("3D");
+
+                    this.unregisterListener({type: "click", listener: this.updateClick});
+                    api.map.olcsMap.handle3DEvents({scene: map3D.getCesiumScene(), map3D: map3D, callback: (clickObject) => this.updateClick(Object.freeze(clickObject))});
+                }
+            }
+            else {
+                this.reset();
+                this.unregisterListener({type: "click", listener: this.updateClick});
+            }
         }
     }
 };

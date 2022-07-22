@@ -1,11 +1,7 @@
 import {expect} from "chai";
 import Map from "ol/Map.js";
-import sinon from "sinon";
 import getters from "../../../store/gettersMap";
 import mutations from "../../../store/mutationsMap";
-import Feature from "ol/Feature";
-import Layer from "ol/layer/Layer";
-import LayerGroup from "ol/layer/Group";
 import View from "ol/View";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
@@ -15,31 +11,6 @@ const {addLayerToMap} = mutations;
 describe("src/core/maps/store/gettersMap.js", () => {
 
     describe("Map simple getters", async () => {
-
-        it("returns the layerList from state", () => {
-            const layers = [],
-                map = {
-                    id: "ol",
-                    mode: "2D",
-                    addLayer: (layer1) => {
-                        layers.push(layer1);
-                    },
-                    getLayers: () => {
-                        return layer1;
-                    },
-                    getArray: () => [layer1]
-                },
-                layer1 = {
-                    get: () => true,
-                    visible: true,
-                    getArray: () => [layer1],
-                    getVisible: () => true
-                };
-
-            mapCollection.clear();
-            mapCollection.addMap(map, "2D");
-            expect(getters.getLayerList()).to.be.a("array");
-        });
         it("returns the 2D map", () => {
             const map = {
                 id: "ol",
@@ -90,22 +61,6 @@ describe("src/core/maps/store/gettersMap.js", () => {
     });
 
     describe("Map custom getters", () => {
-
-        it(" gfiFeaturesAtPixel returns an array", () => {
-            const map = {
-                    id: "ol",
-                    mode: "2D",
-                    view: new View(),
-                    forEachFeatureAtPixel: sinon.spy()
-                },
-                state = {
-                    mode: "2D"
-                };
-
-            mapCollection.clear();
-            mapCollection.addMap(map, "2D");
-            expect(getters.gfiFeaturesAtPixel(state, [40, 50])).be.a("array");
-        });
         it("returns the visibleLayerList", () => {
             const map = new Map({
                 id: "ol",
@@ -116,102 +71,8 @@ describe("src/core/maps/store/gettersMap.js", () => {
             mapCollection.addMap(map, "2D");
             expect(getters.getVisibleLayerList()).to.be.a("array");
         });
-        it("returns the visibleLayerListWithChildrenFromGroupLayers with Group layers", () => {
-            const layers = [],
-                map = {
-                    id: "ol",
-                    mode: "2D",
-                    addLayer: (grouplayer) => {
-                        layers.push(grouplayer);
-                    },
-                    getLayers: () => {
-                        return grouplayer.getLayers();
-                    }
-                },
-                layer1 = new Layer({visible: true}),
-                layer2 = new Layer({visible: true}),
-                grouplayer = new LayerGroup({
-                    layers: [layer1, layer2]
-                }),
-                state = {
-                    mode: "2D"
-                };
 
-            mapCollection.clear();
-            mapCollection.addMap(map, "2D");
-            addLayerToMap(state, grouplayer);
 
-            expect(getters.visibleLayerListWithChildrenFromGroupLayers()).to.be.a("array").that.contains(layer1, layer2);
-        });
-        it("returns the visibleLayerListWithChildrenFromGroupLayers without Group layers", () => {
-            const layers = [],
-                map = {
-                    id: "ol",
-                    mode: "2D",
-                    addLayer: (layer1) => {
-                        layers.push(layer1);
-                    },
-                    getLayers: () => {
-                        return layer1;
-                    },
-                    getArray: () => [layer1]
-                },
-                layer1 = {
-                    get: () => true,
-                    visible: true,
-                    getArray: () => [layer1],
-                    getVisible: () => true
-                },
-                state = {
-                    mode: "2D"
-                };
-
-            mapCollection.clear();
-            mapCollection.addMap(map, "2D");
-            addLayerToMap(state, layer1);
-
-            expect(getters.visibleLayerListWithChildrenFromGroupLayers()).to.be.a("array").that.contains(layer1);
-        });
-        it("returns the visibleWmsLayerList from grouplayer", () => {
-            const layers = [],
-                map = {
-                    id: "ol",
-                    mode: "2D",
-                    addLayer: (grouplayer) => {
-                        layers.push(grouplayer);
-                    },
-                    getLayers: () => {
-                        return grouplayer.getLayers();
-                    },
-                    getArray: () => [grouplayer]
-                },
-                layer1 = new Layer({visible: true, typ: "WMS"}),
-                layer2 = new Layer({visible: true, typ: "WFS"}),
-                layer3 = new Layer({visible: true, typ: "WMS"}),
-                grouplayer = new LayerGroup({
-                    layers: [layer1, layer2, layer3]
-                }),
-                state = {
-                    mode: "2D"
-                };
-
-            mapCollection.clear();
-            mapCollection.addMap(map, "2D");
-            addLayerToMap(state, grouplayer);
-
-            expect(getters.visibleWmsLayerList()).to.be.a("array").that.contains(layer1, layer3);
-        });
-
-        it("returns the Features in reverse order", () => {
-            const feature1 = new Feature({visible: true, typ: "WMS"}),
-                feature2 = new Feature({visible: true, typ: "WFS"}),
-                feature3 = new Feature({visible: true, typ: "WCS"}),
-                state = {
-                    gfiFeatures: [feature1, feature2, feature3]
-                };
-
-            expect(getters.gfiFeaturesReverse(state)).to.eql([feature3, feature2, feature1]);
-        });
     });
 
     describe("scaleToOne", () => {

@@ -141,12 +141,6 @@ export default {
             commit("setClickCartesianCoordinate", [evt.position.x, evt.position.y]);
         }
 
-        if (rootGetters["Tools/Gfi/active"]) {
-            commit("setGfiFeatures", null);
-            dispatch("MapMarker/removePolygonMarker", null, {root: true});
-            dispatch("collectGfiFeatures");
-        }
-
         if (!rootGetters["controls/orientation/poiModeCurrentPositionEnabled"]) {
             dispatch("MapMarker/placingPointMarker", evt.coordinate, {root: true});
             commit("controls/orientation/setPosition", evt.coordinate, {root: true});

@@ -6,97 +6,11 @@ import actionsMapMode from "./actionsMapMode.js";
 import * as highlightFeature from "./highlightFeature.js";
 import * as removeHighlightFeature from "./removeHighlighting.js";
 import findWhereJs from "../../../../utils/findWhereJs";
-
 import api from "@masterportal/masterportalapi/src/maps/api";
-import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
-import getProxyUrl from "../../../../utils/getProxyUrl";
 import parseCesiumParameters from "../../../../utils/parseCesiumParameters";
 
-/**
- * Gets all visible layers with children from group layers.
- * @param {Object[]} visibleLayers The visible layers.
- * @returns {Object[]} All visible layers.
- */
-function getVisibleLayersWithGroupLayersChildren (visibleLayers) {
-    const visibleLayersWithGroupLayersChildren = [];
-
-    visibleLayers.forEach(layer => {
-        if (layer.get("layers") && typeof layer.get("layers").getArray === "function") {
-            layer.get("layers").getArray().forEach(childLayer => visibleLayersWithGroupLayersChildren.push(childLayer));
-        }
-        else {
-            visibleLayersWithGroupLayersChildren.push(layer);
-        }
-    });
-
-    return visibleLayersWithGroupLayersChildren;
-}
-
-/**
- * Gets the visible wms layer at the current resolution.
- * @param {Number} resolution The current resolution.
- * @returns {Object[]} The visible wms layers.
- */
-function getVisibleWmsLayersAtResolution (resolution) {
-    const visibleLayers = mapCollection.getMap("2D").getLayers().getArray().filter(layer => layer.getVisible()),
-        visibleLayersWithGroupLayersChildren = getVisibleLayersWithGroupLayersChildren(visibleLayers),
-        visibleLayersWms = visibleLayersWithGroupLayersChildren.filter(layer => {
-            return (layer.get("typ") === "WMS") && (resolution <= layer.get("maxResolution") && resolution >= layer.get("minResolution"));
-        });
-
-    return visibleLayersWms;
-}
 
 export default {
-
-    /**
-     * collects features for the gfi.
-     * @param {Object} param store context
-     * @param {Object} param.getters the getter
-     * @param {Object} param.commit the commit
-     * @param {Object} param.dispatch the dispatch
-     * @returns {void}
-     */
-    collectGfiFeatures ({getters, commit, dispatch}) {
-        const {clickCoordinate, resolution, projection, gfiFeaturesAtPixel} = getters,
-            gfiWmsLayerList = getVisibleWmsLayersAtResolution(resolution).filter(layer => {
-                return layer.get("gfiAttributes") !== "ignore";
-            });
-
-        Promise.all(gfiWmsLayerList.map(layer => {
-            const gfiParams = {
-                INFO_FORMAT: layer.get("infoFormat"),
-                FEATURE_COUNT: layer.get("featureCount")
-            };
-            let url = layer.getSource().getFeatureInfoUrl(clickCoordinate, resolution, projection, gfiParams);
-
-            // this part is needed if a Url contains a style which seems to mess up the getFeatureInfo call
-            if (url.indexOf("STYLES") && url.indexOf("STYLES=&") === -1) {
-                const newUrl = url.replace(/STYLES=.*?&/g, "STYLES=&");
-
-                url = newUrl;
-            }
-
-            /**
-             * @deprecated in the next major-release!
-             * useProxy
-             * getProxyUrl()
-             */
-            url = layer.get("useProxy") ? getProxyUrl(url) : url;
-
-            return getWmsFeaturesByMimeType(layer, url);
-        }))
-            .then(gfiFeatures => {
-                // only commit if features found
-                if (gfiFeaturesAtPixel.concat(...gfiFeatures).length > 0) {
-                    commit("setGfiFeatures", gfiFeaturesAtPixel.concat(...gfiFeatures));
-                }
-            })
-            .catch(error => {
-                console.warn(error);
-                dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.gfi.errorMessage"), {root: true});
-            });
-    },
     /**
      * @description initializes view listeners and sets store values
      * @param {Object} param store context
@@ -118,7 +32,6 @@ export default {
             Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": mapView.getCenter()});
         });
 
-
         if (document.getElementById("map") !== null) {
             dispatch("setBackground", document.getElementById("map").style.backgroundImage);
         }
@@ -127,6 +40,7 @@ export default {
         Radio.trigger("MapView", "changedOptions", params);
         commit("setScale", params.scale);
     },
+
     /**
      * @description is called when the view resolution is changed triggers the map view options
      * @param {Object} param store context
@@ -145,6 +59,7 @@ export default {
         commit("setScale", params.scale);
         Radio.trigger("RemoteInterface", "postMessage", {"zoomLevel": mapView.getZoom()});
     },
+
     /**
      * Creates the olcesium  3D map.
      * @param {Object} param.rootState the rootState.
@@ -160,6 +75,7 @@ export default {
             }
         }, "3D");
     },
+
     ...actionsMapAttributesMapper,
     ...actionsMapInteractions,
     ...actionsMapInteractionsZoomTo,
