@@ -40,22 +40,8 @@ function getGfiStore () {
             Maps: {
                 namespaced: true,
                 getters: {
-                    gfiFeaturesReverse: () => [{
-                        getTheme: () => "default",
-                        getTitle: () => "Feature 1",
-                        getMimeType: () => "text/html",
-                        getGfiUrl: () => null,
-                        getMappedProperties: () => null,
-                        getAttributesToShow: () => sinon.stub(),
-                        getProperties: () => {
-                            return {};
-                        },
-                        getlayerId: () => null,
-                        getFeatures: () => []
-                    }, {}],
                     mode: () => "2D",
-                    size: sinon.stub(),
-                    visibleLayerListWithChildrenFromGroupLayers: sinon.stub()
+                    size: sinon.stub()
                 },
                 actions: {
                     registerListener: sinon.stub(),
@@ -75,7 +61,19 @@ function getGfiStore () {
 
 describe("src/modules/tools/gfi/components/GetFeatureInfo.vue", () => {
     it("should find the child component Mobile", () => {
-        const wrapper = shallowMount(GfiComponent, {store: getGfiStore, localVue});
+        const wrapper = shallowMount(GfiComponent, {
+            computed: {
+                gfiFeatures: () => [{
+                    getProperties: () => {
+                        return {};
+                    },
+                    getFeatures: () => sinon.stub()
+                }],
+                gfiFeaturesReverse: () => sinon.stub()
+            },
+            store: getGfiStore,
+            localVue
+        });
 
         expect(wrapper.findComponent({name: "MobileTemplate"}).exists()).to.be.true;
     });
