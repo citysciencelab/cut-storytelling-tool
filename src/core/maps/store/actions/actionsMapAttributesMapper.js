@@ -46,6 +46,7 @@ export default {
     setShadowTime (state, time) {
         mapCollection.getMap("3D").time = time;
     },
+
     /**
      * Sets mapView values to the store.
      * @param {Object} param store context
@@ -61,6 +62,9 @@ export default {
         commit("setInitialZoomLevel", mapView.getZoom());
         commit("setInitialCenter", mapView.getCenter());
         commit("setInitialResolution", mapView.getResolution());
+        commit("setZoom", mapView.getZoom());
+        commit("setMinZoom", mapView.getMinZoom());
+        commit("setMaxZoom", mapView.getMaxZoom());
     },
 
     /**
@@ -87,8 +91,10 @@ export default {
         commit("setResolution", mapView.getResolution());
         commit("setBoundingBox", mapView.calculateExtent(map.getSize()));
         commit("setRotation", mapView.getRotation());
+        commit("setZoom", mapView.getZoom());
         dispatch("setCenter", mapView.getCenter());
     },
+
     /**
      *  Updates the mouse coordinates
      * @param {Object} param store context

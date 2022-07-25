@@ -72,17 +72,19 @@ const getters = {
 
     /**
      * @param {Object} state the state
-     * @param {Object} getter the getters
      * @returns {Boolean} whether current zoom level is the maximum zoom level
      */
-    maximumZoomLevelActive: (state, getter) => getter.getView.getZoom() >= getter.getView.getMaxZoom(),
+    maximumZoomLevelActive: (state) => {
+        return state.zoom >= state.maxZoom;
+    },
 
     /**
      * @param {Object} state the state
-     * @param {Object} getter the getters
      * @returns {Boolean} whether current zoom level is the minimal zoom level
      */
-    minimumZoomLevelActive: (state, getter) => getter.getView.getZoom() <= getter.getView.getMinZoom(),
+    minimumZoomLevelActive: (state) => {
+        return state.zoom <= state.minZoom;
+    },
 
     /**
      * @param {Object} state the state

@@ -39,8 +39,8 @@
 - Fixed a bug where the wrong GFi was displayed after turning on and off different layers.
 - Url parameter 'featureViaURL' with test point is fixed.
 - Issue #798: If a tool is opened by url parameter and 'deactivateGFI' is true at tool-config, no gfi is available if tool is open.
-
 - Issue #810: Filter overwrites the "attributions" status
+- Issue #800: The Zoom control can now be used again with `startZoomlevel: 0` after zooming.
 
 ---
 
