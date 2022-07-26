@@ -97,11 +97,9 @@ export default {
      * @returns {void}
      */
     addUrlParams (state, entry) {
-        console.log("addUrlParams:", entry);
         const paramsCopy = {...state.urlParams};
 
         paramsCopy[entry.key] = entry.value;
         state.urlParams = paramsCopy;
-        console.log(state.urlParams);
     }
 };

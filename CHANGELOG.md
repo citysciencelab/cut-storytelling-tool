@@ -35,6 +35,9 @@
 - layerSequence: fix possibility to move layers in tree despite defined layerSequence
 - Print: fix handling for highresolution plotService
 - Fixed a bug where the wrong GFi was displayed after turning on and off different layers.
+- Url parameter 'featureViaURL' with test point is fixed.
+- Issue #798: If a tool is opened by url parameter and 'deactivateGFI' is true at tool-config, no gfi is available if tool is open.
+
 
 ---
 

@@ -161,7 +161,6 @@ export async function setValuesToState (state, params) {
 export async function setValueToState (state, key, value) {
     if (typeof key === "string") {
         translate(key.trim(), value).then(entry => {
-            console.log("translated:", entry.value);
             const found = searchAndSetValue(state, entry.key.split("/"), entry.value);
 
             if (!found) {
@@ -190,7 +189,6 @@ export async function setValueToState (state, key, value) {
                 state.ZoomTo[entry.key.substring(5)] = entry.value;
             }
             else {
-                console.log("entry.value:",entry.value);
                 store.commit("addUrlParams", {key: entry.key, value: entry.value});
             }
             return entry;
