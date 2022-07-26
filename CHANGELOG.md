@@ -12,6 +12,7 @@
 
 ### Added
 - #657: Polygon hatch patterns to allow for further design options in the style.json file have been implemented.
+- Possibility for development with self-signed SSL-certificates. See [wiki-doc](https://bitbucket.org/geowerkstatt-hamburg/masterportal/wiki/Entwicklungsumgebung%20mit%20selbstsignierten%20SSL-Zertifikat%20einrichten)
 
 ### Changed
 - Filter:
