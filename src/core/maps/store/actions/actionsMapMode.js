@@ -109,7 +109,6 @@ export default {
     clickEventCallback ({dispatch}, clickObject) {
         if (clickObject) {
             dispatch("updateClick", clickObject);
-            // dispatch("Tools/Gfi/updateClick", clickObject, {root: true});
             Radio.trigger("Map", "clickedWindowPosition", clickObject);
         }
     },
