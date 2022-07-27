@@ -251,8 +251,8 @@ const actions = {
     validate ({getters}, feature) {
         const requiredPropertiesWithNoValue = getters.featureProperties
             .filter(property => property.type !== "geometry"
-                    && property.required
-                    && (property.value === null || property.value === "")
+                && property.required
+                && (property.value === null || property.value === "")
             );
 
         if (feature === undefined) {

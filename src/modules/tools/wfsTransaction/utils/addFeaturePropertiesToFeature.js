@@ -21,7 +21,7 @@ export default function ({id, geometry, geometryName}, featureProperties, featur
         if (property.type === "geometry") {
             return;
         }
-        if ((property.value === "" || property.value === null) && updateFeature) {
+        if (["", null, undefined].includes(property.value) && updateFeature) {
             transactionFeature.set(key, null);
         }
         else if (["integer", "int", "decimal"].includes(property.type)) {
