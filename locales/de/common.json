@@ -819,7 +819,8 @@
                     "geometryOutOfRange": "Die gezeichnete Geometrie befindet sich außerhalb des erlaubten Bereiches des Layers.",
                     "layerNotConfiguredCorrectly": "Es liegen Probleme bei der Konfiguration des ausgewählten Layers für die Nutzung mit diesem Werkzeug vor; möglicherweise fehlt der Parameter 'featurePrefix'.",
                     "layerNotSelected": "Der ausgewählte Layer wurde noch nicht im Themenbaum aktiviert.",
-                    "noFeature": "Bitte zeichnen Sie eine zu Ihren Einträgen assoziierte Geometrie."
+                    "noFeature": "Bitte zeichnen Sie eine zu Ihren Einträgen assoziierte Geometrie.",
+                    "requiredPropertiesNotSet": "Bitte geben Sie einen validen Wert für die verpflichtenden Felder {{properties}} ein."
                 },
                 "transaction": {
                     "success": {

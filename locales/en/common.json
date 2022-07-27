@@ -819,7 +819,8 @@
                     "geometryOutOfRange": "The drawn geometry is out of range of the allowed region of the layer.",
                     "layerNotConfiguredCorrectly": "The selected layer has not been configured correctly to be used with this tool; it might be missing the parameter 'featurePrefix'.",
                     "layerNotSelected": "The selected layer has not been set to visible in the layer tree.",
-                    "noFeature": "Please draw a geometry for your added properties."
+                    "noFeature": "Please draw a geometry for your added properties.",
+                    "requiredPropertiesNotSet": "Please enter a valid value for the required properties {{properties}}."
                 },
                 "transaction": {
                     "success": {

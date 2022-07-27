@@ -68,7 +68,7 @@
                                     :required="property.required"
                                     :value="property.value"
                                     @input="event => property.value = event.target.value"
-                                > <!-- TODO(roehlipa): I feel like these inputs not only need to be validated but also security checked :D -->
+                                >
                             </template>
                         </template>
                         <div id="tool-wfsTransaction-form-buttons">
@@ -80,9 +80,7 @@
                                 :interaction="save"
                                 text="common:modules.tools.wfsTransaction.form.save"
                                 type="submit"
-                                :disabled="requiredFieldsFilled"
-                                :aria-disabled="requiredFieldsFilled"
-                            /> <!-- TODO(roehlipa): Where should information be displayed about the status of the button if it is disabled? -->
+                            />
                         </div>
                     </form>
                 </template>
@@ -135,7 +133,7 @@ export default {
             if (type === "string") {
                 return "text";
             }
-            if (type === "integer" || type === "int" || type === "decimal") {
+            if (["integer", "int", "decimal"].includes(type)) {
                 // TODO(roehlipa): (Possibly) If input type is a float, the input should automatically change to a consistent input variant for floats (1,2 => 1.2; 1 => 1.0)
                 return "number";
             }

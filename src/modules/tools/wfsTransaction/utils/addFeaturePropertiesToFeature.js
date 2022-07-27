@@ -21,15 +21,8 @@ export default function ({id, geometry, geometryName}, featureProperties, featur
         if (property.type === "geometry") {
             return;
         }
-        // TODO(roehlipa): This if looks like it can be done cleaner
-        if (property.value === "" || property.value === null) {
-            if (property.required) {
-                // TODO(roehlipa): Somehow we got here, so show an error
-                return;
-            }
-            if (updateFeature) {
-                transactionFeature.set(key, null);
-            }
+        if ((property.value === "" || property.value === null) && updateFeature) {
+            transactionFeature.set(key, null);
         }
         else if (["integer", "int", "decimal"].includes(property.type)) {
             if (Number.isNaN(Number(property.value))) {
