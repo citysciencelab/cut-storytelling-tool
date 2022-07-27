@@ -45,6 +45,7 @@
 - Issue #798: If a tool is opened by url parameter and 'deactivateGFI' is true at tool-config, no gfi is available if tool is open.
 - Issue #810: Filter overwrites the "attributions" status
 - Issue #800: The Zoom-Out control works again with `startZoomlevel: 0`.
+- Fixed language switching bug in the addWMS tool
 
 ---
 
