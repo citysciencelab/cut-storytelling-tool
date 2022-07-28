@@ -75,7 +75,7 @@ const getters = {
      * @returns {Boolean} whether current zoom level is the maximum zoom level
      */
     maximumZoomLevelActive: (state) => {
-        return state.zoom >= state.maxZoom;
+        return state.zoom >= state.maxZoomLevel;
     },
 
     /**
@@ -83,7 +83,7 @@ const getters = {
      * @returns {Boolean} whether current zoom level is the minimal zoom level
      */
     minimumZoomLevelActive: (state) => {
-        return state.zoom <= state.minZoom;
+        return state.zoom <= state.minZoomLevel;
     },
 
     /**

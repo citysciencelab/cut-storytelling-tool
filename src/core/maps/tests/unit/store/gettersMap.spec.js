@@ -16,7 +16,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
         it("returns false for maximumZoomLevelActive from state", () => {
             const state = {
                 zoom: 0,
-                maxZoom: 10
+                maxZoomLevel: 10
             };
 
             expect(gettersMap.maximumZoomLevelActive(stateMap)).to.be.true;
@@ -26,7 +26,7 @@ describe("src/core/maps/store/gettersMap.js", () => {
         it("returns false for minimumZoomLevelActive from state", () => {
             const state = {
                 zoom: 5,
-                minZoom: 0
+                minZoomLevel: 0
             };
 
             expect(gettersMap.minimumZoomLevelActive(stateMap)).to.be.true;
