@@ -58,7 +58,7 @@ export default {
         animate () {
             const index = this.nextIndex();
 
-            if (index === this.timeRange.length) {
+            if (index === this.timeRange.length - 1) {
                 this.playing = false;
                 this.clearPlayback();
                 return;
@@ -77,6 +77,10 @@ export default {
         },
         play () {
             this.playing = !this.playing;
+
+            if (this.sliderValue === this.timeRange.length - 1) {
+                this.sliderValue = 0;
+            }
 
             // This is true whenever any of the two players is being used.
             this.setTimeSliderPlaying(this.playing);
@@ -115,7 +119,7 @@ export default {
                     :disabled="nextIndex(false) === -1"
                     @click="moveOne(false)"
                 >
-                    <i class="bi-skip-end-fill" />
+                    <i class="bi-skip-start-fill" />
                 </button>
                 <button
                     :id="'timeSlider-button-play-' + layerId"
@@ -134,7 +138,7 @@ export default {
                     :disabled="nextIndex() === timeRange.length"
                     @click="moveOne(true)"
                 >
-                    <i class="bi-skip-start-fill" />
+                    <i class="bi-skip-end-fill" />
                 </button>
             </div>
         </div>
@@ -153,6 +157,7 @@ export default {
                 :aria-label="$t('common:modules.wmsTime.timeSlider.inputRangeLabel')"
                 @input="setSliderValue($event.target.value)"
             >
+            <br>
             {{ selectedTime }}
         </label>
     </div>
