@@ -16,7 +16,7 @@ const actions = {
         const toolId = Object.keys(state).find(tool => state[tool]?.id?.toLowerCase() === id?.toLowerCase());
 
         if (toolId !== undefined) {
-            dispatch("controlActivationOfTools", {id: state[toolId].id, name: state[toolId].name});
+            dispatch("controlActivationOfTools", {id: state[toolId].id, name: state[toolId].name, active});
             commit(toolId + "/setActive", active);
             if (toolId !== "Gfi") {
                 commit("Gfi/setActive", !state[toolId].deactivateGFI);
@@ -69,11 +69,11 @@ const actions = {
      * @param {String} payload.name The translated name of the Tool
      * @returns {void}
      */
-    controlActivationOfTools: ({getters, commit, dispatch}, {id, name}) => {
+    controlActivationOfTools: ({getters, commit, dispatch}, {id, name, active}) => {
         let activeToolName;
 
         getters.getActiveToolNames.forEach(tool => commit(tool + "/setActive", false));
-        if (getters.getConfiguredToolKeys.includes(name)) {
+        if (getters.getConfiguredToolNames.includes(name)) {
             activeToolName = name;
         }
         else if (getters.getConfiguredToolKeys.includes(id)) {
@@ -81,7 +81,7 @@ const actions = {
         }
         if (activeToolName) {
             commit(activeToolName + "/setActive", true);
-            dispatch("activateToolInModelList", {tool: activeToolName, active: true});
+            dispatch("activateToolInModelList", {tool: activeToolName, active: active});
         }
     },
 
