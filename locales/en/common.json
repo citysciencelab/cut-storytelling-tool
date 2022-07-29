@@ -472,6 +472,19 @@
                 "filterResult": {
                     "label": "All filtered Counts",
                     "unit": "{{amountOfFilteredItems}} Results"
+                },
+                "geometryFilter": {
+                    "activate": "Activate area filter",
+                    "help": "Select an area on the map to filter only within that area.",
+                    "selectGeometry": "Choose an area.",
+                    "buffer": "Buffer [m]",
+                    "removeGeometry": "Remove that area",
+                    "geometries": {
+                        "polygon": "Polygon",
+                        "rectangle": "Rectangle",
+                        "circle": "Circle",
+                        "lineString": "Line + Buffer"
+                    }
                 }
             },
             "pendler": {

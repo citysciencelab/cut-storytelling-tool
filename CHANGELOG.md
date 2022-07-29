@@ -16,6 +16,7 @@
 - Added DPI selection to print dialog (as advertised by mapfish print via "dpiSuggestions")
 - Filter:
     - New option added called "resetLayer". If true it will change the reset button in the filter to a button which resets the whole layer and ignores the prechecked values
+    - New component GeometryFilter added. If "geometrySelectorVisible" is true, selecting an area on the map, to filter only within that area, is activated.
 - GFI: Show `GFI` (Tool: `Retrieve information`) for vectorTiles layers is now possible.
 
 ### Changed
