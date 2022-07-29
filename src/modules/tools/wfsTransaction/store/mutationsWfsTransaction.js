@@ -2,7 +2,10 @@ import {generateSimpleMutations} from "../../../../app-store/utils/generators";
 import initialState from "./stateWfsTransaction";
 
 const mutations = {
-    ...generateSimpleMutations(initialState)
+    ...generateSimpleMutations(initialState),
+    setFeatureProperty ({featureProperties}, {key, value}) {
+        featureProperties.find(property => property.key === key).value = value;
+    }
 };
 
 export default mutations;

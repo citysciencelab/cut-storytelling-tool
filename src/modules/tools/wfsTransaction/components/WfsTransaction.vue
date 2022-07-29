@@ -67,7 +67,7 @@
                                     :type="getInputType(property.type)"
                                     :required="property.required"
                                     :value="property.value"
-                                    @input="event => property.value = event.target.value"
+                                    @input="event => setFeatureProperty({key: property.key, value: event.target.value})"
                                 >
                             </template>
                         </template>
@@ -114,7 +114,7 @@ export default {
         });
     },
     methods: {
-        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setSelectedInteraction", "setLayerInformation"]),
+        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setFeatureProperty", "setLayerInformation", "setSelectedInteraction"]),
         ...mapActions("Tools/WfsTransaction", ["prepareInteraction", "reset", "save", "setActive", "setFeatureProperties"]),
         close () {
             this.setActive(false);
