@@ -138,7 +138,7 @@ const actions = {
     async save ({dispatch, getters}) {
         const feature = modifyFeature ? modifyFeature : drawLayer.getSource().getFeatures()[0],
             {currentLayerIndex, featureProperties, layerInformation, selectedInteraction} = getters,
-            error = await dispatch("validate", feature);
+            error = getters.savingErrorMessage(feature);
 
         if (error.length > 0) {
             dispatch("Alerting/addSingleAlert", {
@@ -247,21 +247,6 @@ const actions = {
             return;
         }
         commit("setFeatureProperties", await prepareFeatureProperties(layer));
-    },
-    validate ({getters}, feature) {
-        const requiredPropertiesWithNoValue = getters.featureProperties
-            .filter(property => property.type !== "geometry"
-                && property.required
-                && (property.value === null || property.value === "")
-            );
-
-        if (feature === undefined) {
-            return i18next.t("common:modules.tools.wfsTransaction.error.noFeature");
-        }
-        if (requiredPropertiesWithNoValue.length > 0) {
-            return i18next.t("common:modules.tools.wfsTransaction.error.requiredPropertiesNotSet", {properties: requiredPropertiesWithNoValue.map(({label}) => label).join(", ")});
-        }
-        return "";
     }
 };
 

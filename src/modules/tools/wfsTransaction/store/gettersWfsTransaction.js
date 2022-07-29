@@ -83,7 +83,7 @@ const defaultInteractionConfig = {
                 if (layerConfiguration === undefined) {
                     return;
                 }
-                configuration[val].available = layerConfiguration.show; // TODO(roehlipa): Maybe deprecate parameter "show" in favour of "visible" or something more in line with what is used in components?
+                configuration[val].available = layerConfiguration.show;
                 configuration[val].caption = layerConfiguration.caption ? layerConfiguration.caption : configuration[val].caption;
                 configuration[val].icon = layerConfiguration.icon ? layerConfiguration.icon : configuration[val].icon;
                 if (isGeometryConfiguration) {
@@ -94,6 +94,21 @@ const defaultInteractionConfig = {
         },
         currentLayerId (state) {
             return state.layerIds[state.currentLayerIndex];
+        },
+        savingErrorMessage: state => feature => {
+            const requiredPropertiesWithNoValue = state.featureProperties
+                .filter(property => property.type !== "geometry"
+                    && true
+                    && [null, undefined, ""].includes(property.value)
+                );
+
+            if (feature === undefined) {
+                return i18next.t("common:modules.tools.wfsTransaction.error.noFeature");
+            }
+            if (requiredPropertiesWithNoValue.length > 0) {
+                return i18next.t("common:modules.tools.wfsTransaction.error.requiredPropertiesNotSet", {properties: requiredPropertiesWithNoValue.map(({label}) => label).join(", ")});
+            }
+            return "";
         },
         showInteractionsButtons (state) {
             return [null, "delete", "update"].includes(state.selectedInteraction);
