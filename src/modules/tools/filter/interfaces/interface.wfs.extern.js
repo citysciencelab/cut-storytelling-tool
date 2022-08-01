@@ -610,7 +610,7 @@ export default class InterfaceWfsExtern {
         }
         const result = {};
 
-        responseXML.firstElementChild.children.forEach(element => {
+        for (const element of responseXML.firstElementChild.children) {
             let node = this.getNodeByTagname(element, typename);
 
             if (!node) {
@@ -621,7 +621,8 @@ export default class InterfaceWfsExtern {
             if (node) {
                 result[node.textContent] = true;
             }
-        });
+        }
+
         if (typeof onsuccess === "function") {
             onsuccess(Object.keys(result));
         }
