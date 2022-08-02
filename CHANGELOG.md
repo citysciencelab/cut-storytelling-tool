@@ -47,7 +47,7 @@
 - Issue #807: transparency setting for child layers is getting set/initialized now for grouped layers.
 - Issue #810: Filter overwrites the "attributions" status.
 - Fixed language switching bug in the addWMS tool.
-
+- Issue #689: In the layerSlider in the handle mode, the correct layers are now displayed at the steps.
 
 ---
 
