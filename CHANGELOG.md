@@ -47,7 +47,19 @@ The following NPM package is removed:
 - Rename the layer names `measure_layer` to `measureLayer` and draw `import_draw_layer` to `importDrawLayer`.
 - The following NPM packages have been updated:
     - dependencies:
-        - core-js: 3.15.2 to 3.24.0
+        - @popperjs/core: 2.10.2 to 2.11.5
+        - axios: 0.25.0 to 0.27.2
+        - bootstrap-icons: 1.7.1 to 1.9.1
+        - bootstrap-sass: 3.4.1 to 3.4.3
+        - core-js: 3.15.2 to 3.24.1
+        - i18next: 21.6.7 to 21.8.16
+        - i18next-browser-languagedetector: 6.1.3 to 6.1.4
+        - i18next-http-backend: 1.3.2 to 1.4.1
+        - jquery-ui: 1.13.0 to 1.13.2
+        - jsts: 2.8.1 to 2.9.0
+        - moment: 2.29.1 to 2.29.4
+        - mqtt: 4.3.4 to 4.3.7
+        - object-hash: 2.2.0 to 3.0.0
         - vue: 2.6.14 to 2.7.8
         - vue-template-compiler: 2.6.14 to 2.7.8
 
