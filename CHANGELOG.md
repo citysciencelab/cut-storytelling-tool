@@ -48,6 +48,8 @@ The following NPM package is removed:
 - The following NPM packages have been updated:
     - dependencies:
         - core-js: 3.15.2 to 3.24.0
+        - vue: 2.6.14 to 2.7.8
+        - vue-template-compiler: 2.6.14 to 2.7.8
 
 ### Deprecated
 
