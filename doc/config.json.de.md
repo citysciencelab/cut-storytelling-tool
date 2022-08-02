@@ -1,5 +1,7 @@
 >**[Zurück zur Dokumentation Masterportal](doc.md)**.
 
+>Wenn diese Seite nicht korrekt dargestellt wird, nutzen Sie bitte diesen Link: **[Alternative Config.json Dokumentation (englisch)](https://www.masterportal.org/files/masterportal/html-doku/doc/latest/config.json.html)**
+
 [TOC]
 
 ***

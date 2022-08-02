@@ -1,5 +1,7 @@
 >**[Back to the Masterportal documentation](doc.md)**.
 
+>If this site isn´t displayed correctly please use this link: **[alternative config.json documentation](https://www.masterportal.org/files/masterportal/html-doku/doc/latest/config.json.html)**
+
 [TOC]
 
 ***
