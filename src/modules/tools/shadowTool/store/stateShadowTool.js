@@ -30,7 +30,7 @@
  */
 const state = {
     active: false,
-    id: "shadow",
+    id: "shadowTool",
     // defaults for config.json tool parameters
     name: "common:menu.shadow",
     icon: "bi-lamp-fill",
