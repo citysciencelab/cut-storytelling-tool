@@ -1,6 +1,11 @@
 import getProxyUrl from "../../../../utils/getProxyUrl";
 import {GeoJSON, GPX, KML} from "ol/format.js";
 import Circle from "ol/geom/Circle";
+import Style from "ol/style/Style";
+import Fill from "ol/style/Fill";
+import Stroke from "ol/style/Stroke";
+import Icon from "ol/style/Icon";
+import createDrawStyle from "../../draw/utils/style/createDrawStyle";
 
 const supportedFormats = {
     kml: new KML({extractStyles: true, iconUrlFunction: (url) => proxyGstaticUrl(url)}),
@@ -281,6 +286,151 @@ export default {
                 content: i18next.t("common:modules.tools.fileImport.alertingMessages.success", {filename: datasrc.filename})
             };
         }
+
+        dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
+        dispatch("addImportedFilename", datasrc.filename);
+    },
+
+    importGeoJSON: ({state, dispatch}, datasrc) => {
+        const
+            vectorLayer = datasrc.layer,
+            format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
+
+        let
+            alertingMessage,
+            features;
+
+        if (format === false) {
+            const fileNameSplit = datasrc.filename.split("."),
+                fileFormat = fileNameSplit.length > 0 ? "*." + fileNameSplit[fileNameSplit.length - 1] : "unknown";
+
+            alertingMessage = {
+                category: i18next.t("common:modules.alerting.categories.error"),
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.missingFormat", {format: fileFormat})
+            };
+
+            dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
+            return;
+        }
+
+        try {
+            features = format.readFeatures(datasrc.raw);
+        }
+        catch (ex) {
+            console.warn(ex);
+            alertingMessage = {
+                category: i18next.t("common:modules.alerting.categories.error"),
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.formatError", {filename: datasrc.filename})
+            };
+
+            dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
+            return;
+        }
+
+        if (!Array.isArray(features) || features.length === 0) {
+            alertingMessage = {
+                category: i18next.t("common:modules.alerting.categories.error"),
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.missingFileContent", {filename: datasrc.filename})
+            };
+
+            dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
+            return;
+        }
+
+        vectorLayer.importStyleFunction = (feature, resolution) => {
+            let drawState = feature.get("drawState");
+            console.log(drawState.drawType.geometry);
+            console.log(drawState);
+            let style = undefined;
+
+            if (drawState.drawType.geometry === "Point") {
+                if (drawState.symbol.value !== "simple_point") {
+                    style = new Style({
+                        image: new Icon({
+                            color: drawState.color,
+                            crossOrigin: "anonymous",
+                            src: drawState.symbol.value.indexOf("/") > 0 ? drawState.symbol.value : drawState.imgPath + drawState.symbol.value,
+                            scale: drawState.symbol.scale
+                        })
+                    });
+                }
+                else {
+                    style = new Style({
+                        image: new Circle({
+                            radius: drawState.pointSite / 2,
+                            fill: new Fill({color: drawState.color})
+                        }),
+                        fill: new Fill({
+                            color: drawState.color
+                        }),
+                        stroke: new Stroke({
+                            color: drawState.color,
+                            width: 1
+                        }),
+                        zIndex: drawState.zIndex
+                    });
+                    //style = createDrawStyle(drawState.color, drawState.color, drawState.drawType.geometry, drawState.pointSize, 1, drawState.zIndex);
+                }
+            }
+            else if (drawState.drawType.geometry === "LineString") {
+                style = new Style({
+                    stroke: new Stroke({
+                        color: drawState.colorContour,
+                        width: drawState.strokeWidth
+                    })
+                });
+            }
+            else if (drawState.drawType.geometry === "Polygon") {
+                style = new Style({
+                    stroke: new Stroke({
+                        color: drawState.colorContour,
+                        width: drawState.strokeWidth
+                    }),
+                    fill: new Fill({
+                        color: drawState.color
+                    })
+                });
+            }
+            else if (drawState.drawType.geometry === "Circle") {
+                console.log("Circle");
+                style = new Style({
+                    stroke: new Stroke({
+                        color: drawState.colorContour,
+                        width: drawState.strokeWidth
+                    }),
+                    fill: new Fill({
+                        color: drawState.color
+                    }),
+                    circleRadius: drawState.circleRadius,
+                    circleOuterRadius: drawState.circleOuterRadius,
+                    colorContour: drawState.colorContour,
+                    outerColorContour: drawState.outerColorContour
+                });
+            }
+
+            return style;
+        };
+        vectorLayer.setStyle(vectorLayer.importStyleFunction);
+
+        console.log(vectorLayer);
+        features.forEach(feature => {
+            let drawState = feature.get("drawState");
+
+            if (!drawState) {
+                return;
+            }
+
+            feature.setStyle(vectorLayer.getStyleFunction()(feature));
+
+            vectorLayer.getSource().addFeature(feature);
+        });
+
+        //vectorLayer.getSource().addFeatures(features);
+
+        alertingMessage = {
+            category: i18next.t("common:modules.alerting.categories.info"),
+            content: i18next.t("common:modules.tools.fileImport.alertingMessages.success", {filename: datasrc.filename})
+        };
 
         dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
         dispatch("addImportedFilename", datasrc.filename);

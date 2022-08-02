@@ -51,6 +51,7 @@ export default {
     methods: {
         ...mapActions("Tools/FileImport", [
             "importKML",
+            "importGeoJSON",
             "setSelectedFiletype"
         ]),
         ...mapActions("Maps", ["addNewLayerIfNotExists"]),
@@ -98,6 +99,7 @@ export default {
                     const vectorLayer = await this.addNewLayerIfNotExists("importDrawLayer");
 
                     this.importKML({raw: f.target.result, layer: vectorLayer, filename: file.name});
+                    this.importGeoJSON({raw: f.target.result, layer: vectorLayer, filename: file.name});
                 };
 
                 reader.readAsText(file);
