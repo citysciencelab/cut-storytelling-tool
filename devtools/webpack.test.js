@@ -4,7 +4,6 @@ const webpack = require("webpack"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 require("regenerator-runtime/runtime");
-require("chai/register-expect");
 require("jsdom-global")();
 global.DOMParser = window.DOMParser;
 

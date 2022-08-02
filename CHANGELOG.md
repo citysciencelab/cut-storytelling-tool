@@ -62,6 +62,27 @@ The following NPM package is removed:
         - object-hash: 2.2.0 to 3.0.0
         - vue: 2.6.14 to 2.7.8
         - vue-template-compiler: 2.6.14 to 2.7.8
+    - devDependencies
+        - @geoblocks/print: 0.7.1 to 0.7.2
+        - @sinonjs/fake-timers: 8.1.0 to 9.1.2
+        - babel-loader: 8.2.3 to 8.2.5
+        - canvas: 2.8.0 to 2.9.3
+        - chai: 4.3.4 to 4.3.6
+        - fs-extra: 10.0.0 to 10.1.0
+        - git-rev-sync: 3.0.1 to 3.0.2
+        - https-proxy-agent: 5.0.0 to 5.0.1
+        - husky: 7.0.4 to 8.0.1
+        - inquirer: 8.2.0 to 8.2.4
+        - jsdoc: 3.6.10 to 3.6.11
+        - markdown-it: 13.0.0 to 13.0.1
+        - mocha: 9.2.0 to 9.2.2
+        - mock-local-storage: 1.1.19 to 1.1.23
+        - node-fetch: 3.1.0 to 3.2.10
+        - replace-in-file: 6.3.2 to 6.3.5
+        - sass: 1.45.2 to 1.54.0
+        - selenium-webdriver: 4.1.1 to 4.3.1
+        - sinon: 12.0.1 to 14.0.0
+        - zip-a-folder: 1.1.3 to 1.1.5
 
 ### Deprecated
 
