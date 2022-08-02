@@ -120,14 +120,14 @@ function parseSchemaChildren (schemaChildren, typename, onsuccess, onerror) {
     const result = {};
     let typenameFound = false;
 
-    schemaChildren.forEach(element => {
+    Array.prototype.slice.call(schemaChildren).forEach(element => {
         if (element.getAttribute("name") === typename) {
             const attributes = element.getElementsByTagName("element");
 
             if (typeof attributes !== "object" || attributes === null) {
                 return;
             }
-            attributes.forEach(attribute => {
+            Array.prototype.slice.call(attributes).forEach(attribute => {
                 if (typeof attribute !== "object" || attribute === null) {
                     return;
                 }
