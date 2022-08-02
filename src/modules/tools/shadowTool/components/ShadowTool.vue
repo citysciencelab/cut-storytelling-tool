@@ -7,6 +7,7 @@ import mutations from "../store/mutationsShadowTool";
 import actions from "../store/actionsShadowTool";
 import SliderInput from "./SliderInput.vue";
 import ToggleCheckbox from "../../../../share-components/toggleCheckbox/components/ToggleCheckbox.vue";
+import moment from "moment";
 
 export default {
     name: "ShadowTool",
@@ -18,8 +19,25 @@ export default {
     computed: {
         ...mapGetters("Tools/ShadowTool", Object.keys(getters))
     },
+    mounted () {
+       this.createDate();
+    },
+    watch: {
+        /**
+         * watches the status of the tool
+         * starts initial processes if the tool has been activated for the first time
+         * @param {Boolean} value true if the tool has been activated
+         * @returns {void}
+         */
+        active (value) {
+            if (value) {
+                this.setActive(value);
+                this.createDate();
+                console.log('--------------------------------------------------');
+            }
+        }
+    },
     created () {
-        console.log('llllllllllllllllllll');
         this.$on("close", this.close);
     },
     methods: {
@@ -33,6 +51,12 @@ export default {
 
             if (model) {
                 model.set("isActive", false);
+            }
+        },
+        createDate () {
+            console.log(document.getElementById("tool-shadow-checkbox"));
+            if (document.getElementById("datePicker")){
+            document.getElementById("datePicker").value = moment().format('MM-DD-YYYY');
             }
         }
     }
@@ -49,49 +73,54 @@ export default {
         :deactivate-gfi="deactivateGFI"
     >
         <template #toolBody>
-             <template >
-             <div class="checkbox">
-                    <div class="checkbox-container">
-                        <div class="form-inline">
-                            <div class="title-checkbox pull-left">
-                                <label
-                                    <!-- for="rasterCheckBoxPopRE" -->
-                                 <!-- @click="triggerRaster(!rasterActive)" -->
-                                    <!-- @keydown.enter="triggerRaster(!rasterActive)" -->
-                                >{{ $t("additional:modules.tools.populationRequest.select.showRasterLayer") }}</label>
-                                <ToggleCheckbox
-                                    id="rasterCheckBoxPopRE"
-                                  <!--   ref="rasterCheckBox" -->
-                                    :defaultState="true"
-                                    :title="$t('additional:modules.tools.populationRequest.switchOffFilter')"
-                                    :text-on="$t('common:snippets.checkbox.on')"
-                                    :text-off="$t('common:snippets.checkbox.off')"
-                                  <!--   @change="triggerRaster" -->
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-            <SliderInput
-                :label="$t('common:modules.tools.routing.isochrones.maxTraveltime')"
-                :value="1"
-                :min="0"
-                :disabled="false"
-                :max="24"
-                unit="hours"
-            />
-        </template>
-             <template >
-            <SliderInput
-                :label="$t('common:modules.tools.routing.isochrones.maxTraveltime')"
-                :value="1"
-                :min="0"
-                :disabled="false"
-                :max="24"
-                unit="hours"
-            />
-        </template>
+               <div class="d-flex justify-content-between mb-3">
+                    <label
+                        class="form-label"
+                        for="tool-shadow-checkbox"
+                    >
+                        {{ $t('common:modules.tools.shadow.shadowDisplay') }}
+                    </label>
+                    <ToggleCheckbox
+                        id="tool-shadow-checkbox"
+                        ref="shadowCheckBox"
+                        :text-on="$t('common:snippets.checkbox.on')"
+                        :text-off="$t('common:snippets.checkbox.off')"
+                        @change="toggleLayer"
+                    />
+                </div>
+             <div class="d-flex justify-content-between mb-3">
+                    <label
+                        class="form-label"
+                        for="datePicker"
+                    >
+                        {{ $t('common:modules.tools.shadow.pickDate') }}
+                    </label>
+            <input
+                id="datePicker"
+                type="date"
+            >
+             </div>
 
+             <template >
+            <SliderInput
+                :label="$t('common:modules.tools.shadow.slideHour')"
+                :value="1"
+                min=""
+                :disabled="false"
+                max=""
+                unit=""
+            />
+        </template>
+             <template >
+            <SliderInput
+                :label="$t('common:modules.tools.shadow.slideDate')"
+                :value="1"
+                min=""
+                :disabled="false"
+                max=""
+                unit=""
+            />
+        </template>
         </template>
     </ToolTemplate>
 </template>
@@ -99,22 +128,16 @@ export default {
 <style lang="scss" scoped>
     @import "~variables";
 
-   .checkbox-container {
-        .form-inline {
-            font-size: 15px;
+label {
+text-align: left;
+width: 300px;
+line-height: 26px;
+margin-bottom: 10px;
+}
 
-            @media (max-width: 767px) {
-                font-size: 12px;
-            }
-
-            .title-checkbox {
-                width: 100%;
-
-                label {
-                    white-space: normal;
-                    padding-left:5px;
-                }
-            }
-        }
-    }
+input {
+  height: 20px;
+  flex: 0 0 200px;
+  margin-left: 10px;
+}
 </style>

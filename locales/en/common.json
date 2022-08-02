@@ -379,7 +379,10 @@
                 "invisibleLayer": "The following topics cannot be printed in the selected print scale {{scale}}:"
             },
             "shadow": {
-                "shadowDisplay": "Shadow display"
+                "shadowDisplay": "Shadow display:",
+                "pickDate": "Select a date:",
+                "slideHour": "Select time:",
+                "slideDate": "Select a date:"
               },
             "styleVT": {
               "introText": "Various predefined styles can be applied to VectorTile layers to optimize the view to match your requirements.",

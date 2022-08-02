@@ -379,7 +379,10 @@
                 "invisibleLayer": "Folgende Themen können im ausgewählten Druckmaßstab {{scale}} nicht gedruckt werden:"
             },
             "shadow": {
-                "shadowDisplay": "Schattendarstellung"
+                "shadowDisplay": "Schattendarstellung:",
+                "pickDate": "Wählen Sie ein Datum:",
+                "slideHour": "Wählen Sie eine Uhrzeit:",
+                "slideDate": "Wählen Sie ein Datum:"
               },
             "styleVT": {
               "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
