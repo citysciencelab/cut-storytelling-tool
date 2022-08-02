@@ -1640,6 +1640,7 @@ Die Konfiguration eines Layers.
 |searchInMapExtentProactive|nein|Boolean|true|Die Checkbox zum Filtern im Browser-Extent löst unter `strategy`: `active` eine direkte Filterung im aktuellen Browser-Extent aus. Dies kann durch Einstellen von `searchInMapExtentProactive`: `false` abgeschaltet werden.|false|
 |showHits|nein|Boolean|true|Die Treffer nach einer Filterung werden als Text angezeigt. Auf `false` stellen, um die Treffer nicht anzuzeigen.|false|
 |clearAll|nein|Boolean|false|Beim Klick auf den Zurücksetzen-Button werden alle Features angezeigt. Wird das clearAll-Flag auf `true` gestellt, werden beim Zurücksetzen keine Features angezeigt.|false|
+|wmsRefId|nein|String|""|Wenn der Layer gefiltert wird, wird der WMS-Layer mit der wmsRefId unsichtbar und im Themenbaum deaktiviert. Stattdessen wird der WFS aus der Filter-Konfiguration angezeigt. Nach dem Zurücksetzen des Filters wird die WMS-Ebene wieder aktiviert und wieder sichtbar.|false|
 |snippetTags|nein|Boolean|true|Wenn gefiltert wurde, wird die Einstellung des Filters als Tags über dem Filter angezeigt. Auf `false` stellen, wenn dies vermieden werden soll.|false|
 |labelFilterButton|nein|String|"common:modules.tools.filter.filterButton"|Bei passiver Strategie (`passive`): Der verwendetet Text vom Filter-Button. Kann auch ein Übersetzungs-Key sein.|false|
 |paging|nein|Number|1000|Der Filter lädt Features Stück für Stück in die Map. Dies ermöglicht einen Ladebalken der die Usability bei großen Datenmengen verbessert. Das Paging ist die Stück-Größe. Bei zu gering eingestellter Größe wird das Filtern ausgebremst. Bei zu groß eingestellter Größe steigt die Verzögerung der Anzeige in der Karte. Der beste Wert kann nur von Fall zu Fall durch Ausprobieren ermittelt werden.|false|
@@ -1659,6 +1660,7 @@ Dieses Beispiel konfiguriert ein Layer mit nur einem einzigen Snippet. Die Art d
     "searchInMapExtent": true,
     "showHits": true,
     "clearAll": false,
+    "wmsRefId": "21066",
     "shortDescription": "School master data and pupil numbers of Hamburg schools",
     "description": "School master data and pupil numbers of Hamburg schools",
     "snippetTags": true,

@@ -16,6 +16,7 @@
 - Filter:
     - Making intern wfs layer loadingStrategy with 'all' by filtering
     - The checkbox for filtering in the browsers extent now triggers direct filtering with `strategy`: `active`. This can be disabled by setting `searchInMapExtentProactive` to `false`.
+    - New parameter wmsRefId is added. If the layer is filtered, the WMS layer with "wmsRefId" will be invisible and deactivated from Tree. After resetting the layer, the WMS layer will be activated and visible again.
 - The version of node was updated, must be >= 16.13.2 <= 16.16.0 and the version of npm was updated, must be >= 8.1.2 <=8.11.0.
 - Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
 

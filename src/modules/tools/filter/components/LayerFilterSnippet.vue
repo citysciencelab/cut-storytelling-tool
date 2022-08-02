@@ -310,13 +310,14 @@ export default {
         },
         /**
          * Checks if there are rules with fixed=false in the set of rules.
+         * @param {Object[]} rules an array of rules
          * @returns {Boolean} true if there are unfixed rules, false if no rules or only fixed rules are left
          */
-        hasUnfixedRules () {
-            const len = this.filterRules.length;
+        hasUnfixedRules (rules) {
+            const len = rules.length;
 
             for (let i = 0; i < len; i++) {
-                if (!this.filterRules[i] || this.isRule(this.filterRules[i]) && this.filterRules[i].fixed) {
+                if (!rules[i] || this.isRule(rules[i]) && rules[i].fixed) {
                     continue;
                 }
                 return true;
@@ -403,7 +404,7 @@ export default {
             this.deleteRulesOfChildren(this.getSnippetById(snippetId));
             if (this.isStrategyActive() || this.isParentSnippet(snippetId)) {
                 this.$nextTick(() => {
-                    this.handleActiveStrategy(snippetId, !this.hasUnfixedRules() && this.layerConfig.resetLayer ? true : undefined);
+                    this.handleActiveStrategy(snippetId, !this.hasUnfixedRules(this.filterRules) && this.layerConfig.resetLayer ? true : undefined);
                 });
             }
         },
@@ -552,6 +553,10 @@ export default {
 
             if (this.api instanceof FilterApi && this.mapHandler instanceof MapHandler) {
                 this.mapHandler.activateLayer(filterId, () => {
+                    if (Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")) {
+                        this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, !this.hasUnfixedRules(filterQuestion.rules));
+                        this.mapHandler.toggleWFSLayerInTree(filterId, this.hasUnfixedRules(filterQuestion.rules));
+                    }
                     this.api.filter(filterQuestion, filterAnswer => {
                         if (typeof onsuccess === "function" && !alterLayer) {
                             this.amountOfFilteredItems = false;
@@ -568,7 +573,10 @@ export default {
                         }
 
                         if (!this.isParentSnippet(snippetId) && !this.hasOnlyParentRules()) {
-                            if (this.layerConfig.clearAll && (!Array.isArray(filterQuestion.rules) || !filterQuestion.rules.length)) {
+                            if (!this.hasUnfixedRules(filterQuestion.rules) && (this.layerConfig.clearAll || Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId"))) {
+                                if (this.layerConfig.clearAll && Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")) {
+                                    this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, false, false);
+                                }
                                 this.amountOfFilteredItems = false;
                                 if (typeof onsuccess === "function") {
                                     onsuccess(filterAnswer);
@@ -696,7 +704,7 @@ export default {
             class="snippetTags"
         >
             <div
-                v-show="hasUnfixedRules()"
+                v-show="hasUnfixedRules(filterRules)"
                 class="snippetTagsWrapper"
             >
                 <div

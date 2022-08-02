@@ -1706,6 +1706,7 @@ An object to define a layer to filter with.
 |searchInMapExtentProactive|no|Boolean|true|The checkbox for filtering in the browser extent triggers direct filtering in the current browser extent under `strategy`: `active`. This can be disabled by setting `searchInMapExtentProactive`: `false`.|false|
 |showHits|no|Boolean|true|After filtering, the hits are displayed. Set to `false` to not show the hits.|false|
 |clearAll|no|Boolean|false|After clicking button Reset all, all the features will be shown. Set to `true` to clear all the features after clicking Reselt all button.|false|
+|wmsRefId|no|String|""|If the layer is filtered, the WMS layer with `wmsRefId` will be invisible and deactivated from Tree. After resetting the layer, the WMS layer will be activated and visible again.|false|
 |snippetTags|no|Boolean|true|After filtering the current setting is displayed as tags. Set to `false` to turn of this feature.|false|
 |labelFilterButton|no|String|"common:modules.tools.filter.filterButton"|If strategy is set to `passive` only: The text of the filter button. Can be a translation key.|false|
 |paging|no|Number|1000|The filter will load features into the map in chunks. Paging is the chunk size. If the chunk size is set too low, the filtering will be slowed down. Set the chunk size too high, the loading of the chunk will slow the filtering down. Try it out to find your fastes setup.|false|
@@ -1726,6 +1727,7 @@ In this example one snippet is set with only an attrName. The snippet type is de
     "searchInMapExtentInfo": true,
     "showHits": true,
     "clearAll": false,
+    "wmsRefId": "21066",
     "shortDescription": "School master data and pupil numbers of Hamburg schools",
     "description": "School master data and pupil numbers of Hamburg schools",
     "snippetTags": true,
