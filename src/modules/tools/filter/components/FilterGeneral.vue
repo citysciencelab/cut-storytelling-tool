@@ -173,6 +173,13 @@ export default {
          */
         updateFilterGeometry (geometry) {
             this.filterGeometry = geometry;
+        },
+        /**
+         * Checks if the geometry selector should be visible.
+         * @returns {Boolean} true if the geometry selector should be visible.
+         */
+        isGeometrySelectorVisible () {
+            return isObject(this.geometrySelectorOptions) && this.geometrySelectorOptions.visible !== false;
         }
     }
 };
@@ -194,7 +201,14 @@ export default {
                 id="tool-general-filter"
             >
                 <GeometryFilter
-                    v-if="geometrySelectorVisible"
+                    v-if="isGeometrySelectorVisible()"
+                    :circle-sides="geometrySelectorOptions.circleSides"
+                    :default-buffer="geometrySelectorOptions.defaultBuffer"
+                    :geometries="geometrySelectorOptions.geometries"
+                    :invert-geometry="geometrySelectorOptions.invertGeometry"
+                    :fill-color="geometrySelectorOptions.fillColor"
+                    :stroke-color="geometrySelectorOptions.strokeColor"
+                    :stroke-width="geometrySelectorOptions.strokeWidth"
                     @updateFilterGeometry="updateFilterGeometry"
                 />
                 <LayerCategory

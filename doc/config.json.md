@@ -1593,7 +1593,7 @@ The filter tool offers a range of options to filter vector data.
 |layerSelectorVisible|no|Boolean|true|To display a selector for the layers. Put to `false` to show without selector.|false|
 |multiLayerSelector|no|Boolean|true|If layerSelectorVisible true, wether one can open multiple sections of the selector at the same time.|false|
 |liveZoomToFeatures|no|Boolean|true|Defines whether the filter immediately zooms to filter results.|false|
-|geometrySelectorVisible|no|Boolean|false|Activates the functionality to filter in a custom geometry.|false|
+|geometrySelectorOptions|no|[filterGeometrySelector](#markdown-header-portalconfigmenutoolfilterfiltergeometryselector)[]|false|Options for an additional tool for filtering within a self-drawn area.|false|
 |minScale|no|Integer|5000|Minimum zoom level the filter zooms in when displaying filter results.|false|
 |layers|no|[filterLayer](#markdown-header-portalconfigmenutoolfilterfilterlayer)[]|[]|Configuration of layers to be filtered. Can be an array of plain layer ids also - if so the layer and all snippets are identified automatically.|false|
 
@@ -1610,13 +1610,76 @@ The following example uses only a layer id to generate the filter automatically.
         "renderToWindow": false,
         "deactivateGFI": false,
         "layerSelectorVisible": false,
-        "geometrySelectorVisible": true,
+        "geometrySelectorOptions": {
+            "visible": true
+        },
         "layers": [
             {
                 "layerId": "8712"
             }
         ]
     }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.filter.filterGeometrySelector
+
+An additional selection appears above the filter where a geometry can be selected and drawn on the map. The filter filters only in the selected area.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|visible|yes|Boolean|true|Activates the geometry selector.|false|
+|geometries|no|String[]|["Polygon", "Rectangle", "Circle", "LineString"]|The selectable geometries and their order.|false|
+|invertGeometry|no|Boolean|true|true: The geometry is transparent, the outer area is displayed as a shadow. false: The fill specifications apply to the geometry itself.|false|
+|fillColor|no|String|"rgba(0, 0, 0, 0.33)"|The fill color of the outer area (or geometry if invertGeometry = `false`).|false|
+|strokeColor|no|String|"rgba(0, 0, 0, 1)"|The color of the border of the geometry.|false|
+|strokeWidth|no|Number|1|The thickness of the border of the geometry.|false|
+|defaultBuffer|no|Number|20|The geometry "LineString" is given a buffer (in meters) to make the LineString a "tube". This is the default distance from the center to the edge in meters.|false|
+|circleSides|no|Number|256|The geometry "Circle" is converted to a polygon for technical reasons. This is the number of polygon points of the resulting geometry.|false|
+
+**Example**
+
+Example of the minimal configuration of the filterGeometrySelector.
+
+```json
+{
+    "visible": true
+}
+```
+
+**Example**
+
+Example of a complete configuration with the default settings of the filterGeometrySelector.
+
+```json
+{
+    "visible": true,
+    "circleSides": 256,
+    "defaultBuffer": 20,
+    "geometries": ["Polygon", "Rectangle", "Circle", "LineString"],
+    "invertGeometry": true,
+    "fillColor": "rgba(0, 0, 0, 0.33)",
+    "strokeColor": "rgba(0, 0, 0, 1)",
+    "strokeWidth": 1
+}
+```
+
+**Example**
+
+Example of a completely changed configuration of the filterGeometrySelector.
+
+```json
+{
+    "visible": true,
+    "circleSides": 32,
+    "defaultBuffer": 60,
+    "geometries": ["LineString", "Rectangle", "Circle", "Polygon"],
+    "invertGeometry": false,
+    "fillColor": "rgba(0, 0, 200, 0.1)",
+    "strokeColor": "rgba(255, 0, 0, 1)",
+    "strokeWidth": 2
 }
 ```
 

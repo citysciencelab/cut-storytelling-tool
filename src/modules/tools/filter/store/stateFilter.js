@@ -23,7 +23,7 @@ export default {
     layerSelectorVisible: true,
     multiLayerSelector: true,
     liveZoomToFeatures: true,
-    geometrySelectorVisible: false,
+    geometrySelectorOptions: false,
     minScale: 5000,
     saveTo: "void",
     layers: [],
