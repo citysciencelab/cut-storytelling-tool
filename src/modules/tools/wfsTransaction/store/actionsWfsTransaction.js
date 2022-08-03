@@ -13,7 +13,6 @@ let drawInteraction,
     modifyFeature,
     selectInteraction;
 
-// TODO(roehlipa): Check documentation if information about gfiAttributes regarding properties has been added
 const actions = {
     /**
      * @param {object} context actions context object.

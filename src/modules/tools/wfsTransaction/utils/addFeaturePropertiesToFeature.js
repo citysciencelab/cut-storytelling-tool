@@ -30,7 +30,6 @@ export default function ({id, geometry, geometryName}, featureProperties, featur
             }
             transactionFeature.set(key, Number(property.value));
         }
-        // TODO(roehlipa): Is there a case needed for booleans?
         else {
             transactionFeature.set(key, property.value);
         }
