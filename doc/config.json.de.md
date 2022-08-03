@@ -1529,7 +1529,7 @@ Das Filterwerkzeug bietet eine Reihe von Optionen zum Filtern von Vektordaten.
 |layerSelectorVisible|nein|Boolean|true|Verwenden des Auswahl-Selektors für die Layer. Auf `false` setzen um keine Selektion zu verwenden.|false|
 |multiLayerSelector|nein|Boolean|true|Wenn layerSelectorVisible auf `true` gesetzt ist, kann hiermit das Verhalten zum Öffnen mehrerer Selektoren gleichzeitig eingestellt werden.|false|
 |liveZoomToFeatures|nein|Boolean|true|Zoomen bei Filterung auf den Browser-Extent der die gefilterten Features umfasst.|false|
-|geometrySelectorVisible|nein|Boolean|false|Aktiviert ein zusätzliches Werkzeug zur Filterung innerhalb eines selbst gezeichneten Gebietes.|false|
+|geometrySelectorOptions|nein|[filterGeometrySelector](#markdown-header-portalconfigmenutoolfilterfiltergeometryselector)[]|false|Optionen für ein zusätzliches Werkzeug zur Filterung innerhalb eines selbst gezeichneten Gebietes.|false|
 |minScale|nein|Integer|5000|Der minimale Zoom-Level an dem das Zoomen nach Filterung immer stoppt.|false|
 |layers|nein|[filterLayer](#markdown-header-portalconfigmenutoolfilterfilterlayer)[]|[]|Konfiguration der zu filternden Layer. Wenn hier ein Array von Layer-Ids angegeben wird, versucht das System eine automatische Ermittlung der Layer- und seine Snippet-Einstellungen.|false|
 
@@ -1546,13 +1546,76 @@ Beispiel für die Konfiguration eines Filters mit einem einzigen Layer. Das Laye
         "renderToWindow": false,
         "deactivateGFI": false,
         "layerSelectorVisible": false,
-        "geometrySelectorVisible": true,
+        "geometrySelectorOptions": {
+            "visible": true
+        },
         "layers": [
             {
                 "layerId": "8712"
             }
         ]
     }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.filter.filterGeometrySelector
+
+Eine zusätzliche Auswahl erscheint über dem Filter, in der eine Geometrie gewählt und auf der Map gezeichnet werden kann. Der Filter filtert nur in dem ausgewählten Gebiet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|visible|ja|Boolean|true|Aktiviert den "Geometry-Selector".|false|
+|geometries|nein|String[]|["Polygon", "Rectangle", "Circle", "LineString"]|Die auswählbaren Geometrien und ihre Reihenfolge.|false|
+|invertGeometry|nein|Boolean|true|true: Die Geometry ist transparent, der Außenbereich wird als Schatten dargestellt. false: Die Füll-Angaben gelten für die Geometrie selbst.|false|
+|fillColor|nein|String|"rgba(0, 0, 0, 0.33)"|Die Füll-Farbe des Außenbereiches (bzw. der Geometry bei invertGeometry = `false`).|false|
+|strokeColor|nein|String|"rgba(0, 0, 0, 1)"|Die Farbe der Umrandung der Geometrie.|false|
+|strokeWidth|nein|Number|1|Die Dicke der Umrandung der Geometrie.|false|
+|defaultBuffer|nein|Number|20|Der Geometrie "LineString" wird ein Buffer (in Metern) gegeben, um aus dem LineString einen "Schlauch" zu machen. Dies ist der Standard-Abstand von der Mitte zum Rand in Metern.|false|
+|circleSides|nein|Number|256|Die Geometrie "Circle" wird aus technischen Gründen in ein Polygon konvertiert. Dies ist die Anzahl der Polygon-Punkte der resultierenden Geometrie.|false|
+
+**Beispiel**
+
+Beispiel für die minimale Konfiguration des filterGeometrySelector.
+
+```json
+{
+    "visible": true
+}
+```
+
+**Beispiel**
+
+Beispiel für eine vollständige Konfiguration mit den Standard-Einstellungen des filterGeometrySelector.
+
+```json
+{
+    "visible": true,
+    "circleSides": 256,
+    "defaultBuffer": 20,
+    "geometries": ["Polygon", "Rectangle", "Circle", "LineString"],
+    "invertGeometry": true,
+    "fillColor": "rgba(0, 0, 0, 0.33)",
+    "strokeColor": "rgba(0, 0, 0, 1)",
+    "strokeWidth": 1
+}
+```
+
+**Beispiel**
+
+Beispiel für eine vollständig veränderte Konfiguration des filterGeometrySelector.
+
+```json
+{
+    "visible": true,
+    "circleSides": 32,
+    "defaultBuffer": 60,
+    "geometries": ["LineString", "Rectangle", "Circle", "Polygon"],
+    "invertGeometry": false,
+    "fillColor": "rgba(0, 0, 200, 0.1)",
+    "strokeColor": "rgba(255, 0, 0, 1)",
+    "strokeWidth": 2
 }
 ```
 

@@ -33,19 +33,21 @@
 
 ### Fixed
 - Fix unix-related path issue in findWhereJs.js
-- Issue #804: Legend window will not be cut off when width changes to a maximum.
-- Correct documentation regarding field names (serviceID -> serviceId)
+- Correct documentation regarding field names (serviceID -> serviceId).
 - Link in footer will now have white text for better readability.
-- Issue #807: transparency setting for child layers is getting set/initialized now for grouped layers.
 - Print: Polygon representations are now correctly shown in the map and in the legend.
-- layerSequence: fix possibility to move layers in tree despite defined layerSequence
-- Print: fix handling for highresolution plotService
+- layerSequence: fix possibility to move layers in tree despite defined layerSequence.
+- Print: fix handling for highresolution plotService.
 - Fixed a bug where the wrong GFi was displayed after turning on and off different layers.
 - Url parameter 'featureViaURL' with test point is fixed.
+- Issue #689: The layerSlider handle mode displays the layers correctly at the steps.
 - Issue #798: If a tool is opened by url parameter and 'deactivateGFI' is true at tool-config, no gfi is available if tool is open.
-- Issue #810: Filter overwrites the "attributions" status
 - Issue #800: The Zoom-Out control works again with `startZoomlevel: 0`.
-- Fixed language switching bug in the addWMS tool
+- Issue #802: Custom mapMarker configurations is respected again.
+- Issue #804: Legend window will not be cut off when width changes to a maximum.
+- Issue #807: transparency setting for child layers is getting set/initialized now for grouped layers.
+- Issue #810: Filter overwrites the "attributions" status.
+- Fixed language switching bug in the addWMS tool.
 
 ---
 

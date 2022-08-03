@@ -162,13 +162,22 @@ describe("src/modules/tools/layerSlider/components/LayerSliderHandle.vue", () =>
 
             const spySendModification = sinon.spy(wrapper.vm, "sendModification");
 
-            await wrapper.vm.showLayer("100", 100, ["100", "200", "300"]);
+            await wrapper.vm.showLayer("100", 100, [{
+                layerId: "100"
+            },
+            {
+                layerId: "200"
+            },
+            {
+                layerId: "300"
+
+            }]);
 
             expect(spySendModification.calledOnce).to.be.true;
             expect(spySendModification.args[0]).to.deep.includes({
                 layerId: "100",
                 status: true,
-                transparency: 0
+                transparency: 100
             });
         });
         it("show layer with status true, if transparency is 0", async () => {
@@ -176,7 +185,16 @@ describe("src/modules/tools/layerSlider/components/LayerSliderHandle.vue", () =>
 
             const spySendModification = sinon.spy(wrapper.vm, "sendModification");
 
-            await wrapper.vm.showLayer("100", 0, ["100", "200", "300"]);
+            await wrapper.vm.showLayer("100", 0, [{
+                layerId: "100"
+            },
+            {
+                layerId: "200"
+            },
+            {
+                layerId: "300"
+
+            }]);
 
             expect(spySendModification.calledOnce).to.be.true;
             expect(spySendModification.args[0]).to.deep.includes({
@@ -190,7 +208,16 @@ describe("src/modules/tools/layerSlider/components/LayerSliderHandle.vue", () =>
 
             const spySendModification = sinon.spy(wrapper.vm, "sendModification");
 
-            await wrapper.vm.showLayer("100", 37, ["100", "200", "300"]);
+            await wrapper.vm.showLayer("100", 37, [{
+                layerId: "100"
+            },
+            {
+                layerId: "200"
+            },
+            {
+                layerId: "300"
+
+            }]);
 
             expect(spySendModification.calledOnce).to.be.true;
             expect(spySendModification.args[0]).to.deep.includes({
@@ -204,7 +231,16 @@ describe("src/modules/tools/layerSlider/components/LayerSliderHandle.vue", () =>
 
             const spySendModification = sinon.spy(wrapper.vm, "sendModification");
 
-            await wrapper.vm.showLayer("100", 110, ["100", "200", "300"]);
+            await wrapper.vm.showLayer("100", 110, [{
+                layerId: "100"
+            },
+            {
+                layerId: "200"
+            },
+            {
+                layerId: "300"
+
+            }]);
 
             expect(spySendModification.calledOnce).to.be.true;
             expect(spySendModification.args[0]).to.deep.includes({
@@ -212,6 +248,15 @@ describe("src/modules/tools/layerSlider/components/LayerSliderHandle.vue", () =>
                 status: false,
                 transparency: 110
             });
+        });
+        it("show layer with layerId is an empty object", async () => {
+            wrapper = shallowMount(LayerSliderHandleComponent, {store, localVue});
+
+            const spySendModification = sinon.spy(wrapper.vm, "sendModification");
+
+            await wrapper.vm.showLayer({}, 110, ["100", "200", "300"]);
+
+            expect(spySendModification.notCalled).to.be.true;
         });
     });
 });
