@@ -777,6 +777,7 @@
                     "saveDrawing": "Zeichnung speichern"
                 },
                 "symbol": "Symbol",
+                "geometry": "Geometrie",
                 "iconList": {
                     "iconPoint": "Punkt",
                     "iconLeaf": "Blatt",
@@ -906,6 +907,7 @@
                             "profile": "Profil"
                         }
                     },
+                    "preferenceLabel": "Präferenz",
                     "preference": {
                         "RECOMMENDED": "Empfohlene Route",
                         "SHORTEST": "Kürzeste Route"

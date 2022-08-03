@@ -41,6 +41,11 @@ export default {
             type: Boolean,
             default: false,
             required: false
+        },
+        // The label of the select
+        label: {
+            type: String,
+            required: true
         }
     },
     data () {
@@ -270,6 +275,7 @@ export default {
             v-model="selectedOptionData"
             :options="optionsValue"
             :focus-on-creation="focusOnCreation"
+            :label="label"
         />
     </form>
 </template>

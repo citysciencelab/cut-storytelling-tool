@@ -356,6 +356,12 @@ export default {
 
         <hr>
 
+        <label
+            for="routing-directions-preference"
+            class="routing-directions-preference-label"
+        >
+            {{ $t("common:modules.tools.routing.directions.preferenceLabel") }}
+        </label>
         <select
             id="routing-directions-preference"
             class="form-select form-select-sm"
@@ -549,5 +555,8 @@ export default {
 }
 .opacity-05 {
     opacity: 0.5;
+}
+.routing-directions-preference-label {
+    padding: 0 0 5px 0;
 }
 </style>

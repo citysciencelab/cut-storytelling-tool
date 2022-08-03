@@ -20,38 +20,13 @@
     - Added an option to activate a csv download button for filtered data.
 - The version of node was updated, must be >= 16.13.2 <= 16.16.0 and the version of npm was updated, must be >= 8.1.2 <=8.11.0.
 - Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
-
-### Deprecated
-
-### Removed
-The following NPM package is removed:
-    - @intlify/vue-i18n-loader
-
-### Fixed
-
-## v2.24.0 - 2022-08-03
-### __Breaking Changes__
-
-### Added
-- PortalFooter:
-    - Possibility to display additional information in the footer
-- Added DPI selection to print dialog (as advertised by mapfish print via "dpiSuggestions")
-- Filter:
-    - New option added called "resetLayer". If true it will change the reset button in the filter to a button which resets the whole layer and ignores the prechecked values
-    - New component GeometryFilter added. If "geometrySelectorVisible" is true, selecting an area on the map, to filter only within that area, is activated.
-- GFI: Show `GFI` (Tool: `Retrieve information`) for vectorTiles layers is now possible.
-
-### Changed
-- CompareFeatures: The values true and false are now translated.
-- The interactions between the `GFI` and the `Map` have been moved from the Map module to the GFI module/tool.
-- Rename the layer names `measure_layer` to `measureLayer` and draw `import_draw_layer` to `importDrawLayer`.
 - The following NPM packages have been updated:
     - dependencies:
         - @popperjs/core: 2.10.2 to 2.11.5
         - axios: 0.25.0 to 0.27.2
         - bootstrap-icons: 1.7.1 to 1.9.1
         - bootstrap-sass: 3.4.1 to 3.4.3
-        - core-js: 3.15.2 to 3.24.1
+        - core-js: 3.24.0 to 3.24.1
         - i18next: 21.6.7 to 21.8.16
         - i18next-browser-languagedetector: 6.1.3 to 6.1.4
         - i18next-http-backend: 1.3.2 to 1.4.1
@@ -68,6 +43,10 @@ The following NPM package is removed:
         - babel-loader: 8.2.3 to 8.2.5
         - canvas: 2.8.0 to 2.9.3
         - chai: 4.3.4 to 4.3.6
+        - dotenv: 11.0.0 to 16.0.1
+        - eslint: 8.7.0 to 8.21.0
+        - eslint-plugin-vue: 8.3.0 to 9.3.0
+        - eslint-plugin-vuejs-accessibility: 1.1.1 to 1.2.0
         - fs-extra: 10.0.0 to 10.1.0
         - git-rev-sync: 3.0.1 to 3.0.2
         - https-proxy-agent: 5.0.0 to 5.0.1
@@ -87,6 +66,30 @@ The following NPM package is removed:
 ### Deprecated
 
 ### Removed
+The following NPM package is removed:
+    - @intlify/vue-i18n-loader
+
+### Fixed
+
+---
+
+## v2.24.0 - 2022-08-03
+### Added
+- PortalFooter:
+    - Possibility to display additional information in the footer
+- Added DPI selection to print dialog (as advertised by mapfish print via "dpiSuggestions")
+- Filter:
+    - New option added called "resetLayer". If true it will change the reset button in the filter to a button which resets the whole layer and ignores the prechecked values
+    - New component GeometryFilter added. If "geometrySelectorVisible" is true, selecting an area on the map, to filter only within that area, is activated.
+- GFI: Show `GFI` (Tool: `Retrieve information`) for vectorTiles layers is now possible.
+
+### Changed
+- CompareFeatures: The values true and false are now translated.
+- The interactions between the `GFI` and the `Map` have been moved from the Map module to the GFI module/tool.
+- Rename the layer names `measure_layer` to `measureLayer` and draw `import_draw_layer` to `importDrawLayer`.
+- The following NPM packages have been updated:
+    - dependencies:
+        - core-js: 3.15.2 to 3.24.0
 
 ### Fixed
 - Fix unix-related path issue in findWhereJs.js

@@ -777,6 +777,7 @@
                     "saveDrawing": "Save drawing"
                 },
                 "symbol": "Symbol",
+                "geometry": "Geometry",
                 "iconList": {
                     "iconPoint": "Point",
                     "iconLeaf": "Leaf",
@@ -906,6 +907,7 @@
                             "profile": "Profile"
                         }
                     },
+                    "preferenceLabel": "Preference",
                     "preference": {
                         "RECOMMENDED": "Recommended",
                         "SHORTEST": "Shortest"
