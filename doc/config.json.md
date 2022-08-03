@@ -3801,7 +3801,7 @@ Specific configuration for transaction methods of given layers.
 |available|yes|Boolean|true|Availability of the transaction method for the layer with the given id.|false|
 |layerId|yes|String||Layer the transaction method is being configured for.|false|
 |caption|no|String|"common:modules.tools.wfsTransaction.interactionSelect.*"|_Deprecated in 3.0.0. Please use `text` instead. If both are present, `cpation` is used for now._ Button text. If no value is given, `*` will be replaced with a standard value depending on the configured button. May be a locale key.|false|
-|icon|no|String|enum["bi-slash-lg","bi-record-circle","bi-hexagon-fill","bi-pencil-square","bi-trash"]|Bootstrap icon displayed inside the button. If no value is specified, it defaults to the default value configured for the transaction method.|false|
+|icon|no|String||Bootstrap icon displayed inside the button. If no value is specified, it defaults to the default value configured for the transaction method.|false|
 |multi|no|Boolean|false|Whether the drawn geometries of this layer should be Multi-X.  This parameter does not have any use for `update` / `edit` and `delete`.|false|
 |show|no|Boolean|true|_Deprecated in 3.0.0. Please use `available` instead. If both are present, `show` is used for now._ Availability of the button for the layer with the given id.|false|
 |text|no|String|"common:modules.tools.wfsTransaction.interactionSelect.*"|Button text. If no value is given, `*` will be replaced with a standard value depending on the configured button. May be a locale key.|false|
