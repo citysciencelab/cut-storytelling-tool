@@ -105,6 +105,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      */
     initialize: function () {
         this.superInitialize();
+        console.warn("wfst: This module has been deprecated and will be removed in v3.0.0. Please use 'wfsTransaction' instead.")
         this.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": this.updateAvailableLayers
         });
