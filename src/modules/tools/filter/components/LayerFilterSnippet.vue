@@ -638,7 +638,7 @@ export default {
                 return snippet.title;
             }
             const model = getLayerByLayerId(layerId),
-                title = isObject(model) ? model.get("gfiAttributes")[
+                title = typeof model?.get === "function" && isObject(model.get("gfiAttributes")) ? model.get("gfiAttributes")[
                     Array.isArray(snippet.attrName) ? snippet.attrName[0] : snippet.attrName
                 ] : undefined;
 
