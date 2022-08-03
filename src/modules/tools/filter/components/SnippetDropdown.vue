@@ -281,7 +281,7 @@ export default {
     },
     mounted () {
         if (this.renderIcons === "fromLegend") {
-            this.styleModel = Object.freeze(getStyleModel(this.layerId));
+            this.styleModel = getStyleModel(this.layerId);
 
             if (!this.styleModel || !this.styleModel.getLegendInfos() || !Array.isArray(this.styleModel.getLegendInfos())) {
                 this.legendsInfo = [];

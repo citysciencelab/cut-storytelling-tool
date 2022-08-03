@@ -47,7 +47,7 @@ function getStyleModel (layerId) {
         }
     }
 
-    return styleModel;
+    return Object.freeze(styleModel);
 }
 
 /**
