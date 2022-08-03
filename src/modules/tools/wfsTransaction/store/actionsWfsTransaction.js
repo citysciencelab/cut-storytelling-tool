@@ -230,6 +230,18 @@ const actions = {
             dispatch("reset");
         }
     },
+    setFeatureProperty ({commit, dispatch}, {key, type, value}) {
+        if (type === "number" && Number.isFinite(parseFloat(value))) {
+            dispatch("Alerting/addSingleAlert", {
+                category: "Info",
+                displayClass: "info",
+                content: i18next.t("common:modules.tools.wfsTransaction.error.onlyNumbersAllowed"),
+                mustBeConfirmed: false
+            }, {root: true});
+            return;
+        }
+        commit("setFeatureProperty", {key, value});
+    },
     async setFeatureProperties ({commit, getters: {currentLayerIndex, layerInformation}}) {
         if (currentLayerIndex === -1) {
             commit("setFeatureProperties", i18next.t("common:modules.tools.wfsTransaction.error.allLayersNotSelected"));
