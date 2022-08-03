@@ -44,7 +44,7 @@ export default {
     i {
         margin-right: 0.5rem;
     }
-    &:focus {
+    &:focus, &:active, &:hover {
         color: $primary;
         background-color: $white;
         border-color: $primary;
