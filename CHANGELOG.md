@@ -7,7 +7,7 @@
 
 ---
 
-## Unreleased - in development
+## v2.24.0 - 2022-08-03
 ### __Breaking Changes__
 
 ### Added
