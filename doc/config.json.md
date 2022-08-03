@@ -1390,6 +1390,7 @@ A folder object defined by a name, icon, and its children.
 [type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
 [type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
+[type:wfsTransaction]: # (Portalconfig.menu.tool.wfsTransaction)
 
 List of all configurable tools. Each tool inherits the properties of **[tool](#markdown-header-portalconfigmenutool)** and can (or must, respectively) provide the defined attributes as mentioned in that definition.
 Alternatively, also the paths **Portalconfig.menu.info**, **Portalconfig.menu.simulation** or **Portalconfig.menu.utilities** can be used to hold tool configs.
@@ -1427,7 +1428,8 @@ Alternatively, also the paths **Portalconfig.menu.info**, **Portalconfig.menu.si
 |virtualcity|no|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||*virtualcityPLANNER* planning viewer|false|
 |wfsFeatureFilter|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `filter` instead._ Filters WFS features. This required configuring `"filterOptions"` on the WFS layer object.|false|
 |wfsSearch|no|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Makes it possible to create a form to query WFS layers using filters. It is possible to either use a stored query (WFS@2.0.0) or define the query using the defined parameters (WFS@1.1.0).|false|
-|wfst|no|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T module to visualize, create, update, and delete features.|false|
+|wfst|no|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||_Deprecated in 3.0.0. Please use **[wfsTransaction](#markdown-header-portalconfigmenutoolwfstransaction)** instead._ WFS-T module to visualize, create, update, and delete features.|false|
+|wfsTransaction|no|**[wfsTransaction](#markdown-header-portalconfigmenutoolwfstransaction)**||WFS-T module to visualize, create, update and delete features.|false|
 
 ***
 
@@ -3467,10 +3469,10 @@ Then the order of the config should look like this:
 
 A selectable option for a queryable parameter.
 
-|Name|Required|Type|Default|Description|Expert|
-|----|--------|----|-------|-----------|------|
-|displayName|no|String||Value to be displayed for the value. May be a locale key. If not set, the `id` will be shown.|false|
-|fieldValue|yes|String||Value that is supposed to be sent to the service.|false|
+|Name|Required|Type| Default                                                                    |Description|Expert|
+|----|--------|----|----------------------------------------------------------------------------|-----------|------|
+|displayName|no|String|| Value to be displayed for the value. c If not set, the `id` will be shown. |false|
+|fieldValue|yes|String|| Value that is supposed to be sent to the service.                          |false|
 
 **Example**
 
@@ -3619,7 +3621,6 @@ WFS-T module to visualize (*GetFeature*), create (*insert*), update (*update*), 
 |areaButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating areas and what label the button should have.|
 |edit|no|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Whether the edit button should be shown, and if, with which label.|
 |delete|no|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Whether the delete button should be shown, and if, with which label.|
-|useProxy|no|Boolean|false|_Deprecated in the next major release. [GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Defines whether a service URL should be requested via proxy. For this, dots in the URL are replaced with underscores.|false|
 
 **Example**
 
@@ -3722,6 +3723,110 @@ The attributes `edit` and `delete` may be of type boolean or string. If of type 
 ```json
 {
     "edit": "Editieren"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsTransaction
+
+[inherits]: # (Portalconfig.menu.tool)
+
+WFS-T module to visualize (*GetFeature*), create (*insert*), update (*update*) and delete (*delete*) features of a Web Feature Service (*WFS*) which is able to receive transactions.
+To use this tool, a WFS-T layer must be provided. For more configuration information see **[services.json](services.json.md)**.
+
+When editing properties of a feature / adding properties to a new features, the available values including its label is based on the layers configured `gfiAttributes`. For more information see **[services.json](services.json.md)**.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|layerIds|yes|String[]||Array of ids of layer defined in **[services.json](services.json.md)**.|false|
+|icon|no|String|"bi-globe"|Icon displayed for the tool.|false|
+|name|no|String|"WfsTransaction"|Tool name shown in the portal.|false|
+|toggleLayer|no|Boolean|false|Whether the features of the currently selected layer should stay visible when adding a new feature.|false|
+|areaButton|no|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)[]/Boolean|[]|_Deprecated in 3.0.0. Please use `polygonButton` instead. If both are present, `areaButton` is used for now._ Defines which layers of `layerIds` allow insert transactions of polygon geometries.|false|
+|delete|no|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)/Boolean|false|Defines which layers of `layerIds` allow delete transactions.|false|
+|edit|no|String/Boolean|false|_Deprecated in 3.0.0. Please use `update` instead. If both are present, `edit` is used for now._ If present as a Boolean, it is decided whether features can generally be updated and if it is present as a string, features can be updated and the String defined the value presented inside the button.|false|
+|lineButton|no|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)[]/Boolean|[]|Defines which layers of `layerIds` allow insert transactions of line geometries.|false|
+|pointButton|no|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)[]/Boolean|[]|Defines which layers of `layerIds` allow insert transactions of point geometries.|false|
+|polygonButton|no|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)[]/Boolean|[]|Defines which layers of `layerIds` allow insert transactions of polygon geometries.|false|
+|update|no|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)/Boolean|false|Defines which layers of `layerIds` allow update transactions.|false|
+
+**Example**
+
+```json
+{
+    "wfsTransaction": {
+        "name": "WFS-T Tool",
+        "icon": "bi-globe",
+        "layerIds": ["1234", "5678", "4389"],
+        "toggleLayer": true,
+        "pointButton": [
+            {
+                "layerId":"1234",
+                "caption": "Point test",
+                "show": true
+            },
+            {
+                "layerId": "5678",
+                "show": true,
+                "multi": true
+            }
+        ],
+        "lineButton": false,
+        "polygonButton": [
+            {
+                "layerId": "4389",
+                "show": false
+            }
+        ],
+        "update": [
+            {
+                "layerId": "4389",
+                "show": true
+            }
+        ]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsTransaction.TransactionConfig
+
+Specific configuration for transaction methods of given layers.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+
+|available|yes|Boolean|true|Availability of the transaction method for the layer with the given id.|false|
+|layerId|yes|String||Layer the transaction method is being configured for.|false|
+|caption|no|String|"common:modules.tools.wfsTransaction.interactionSelect.*"|_Deprecated in 3.0.0. Please use `text` instead. If both are present, `cpation` is used for now._ Button text. If no value is given, `*` will be replaced with a standard value depending on the configured button. May be a locale key.|false|
+|icon|no|String|enum["bi-slash-lg","bi-record-circle","bi-hexagon-fill","bi-pencil-square","bi-trash"]|Bootstrap icon displayed inside the button. If no value is specified, it defaults to the default value configured for the transaction method.|false|
+|multi|no|Boolean|false|Whether the drawn geometries of this layer should be Multi-X.  This parameter does not have any use for `update` / `edit` and `delete`.|false|
+|show|no|Boolean|true|_Deprecated in 3.0.0. Please use `available` instead. If both are present, `show` is used for now._ Availability of the button for the layer with the given id.|false|
+|text|no|String|"common:modules.tools.wfsTransaction.interactionSelect.*"|Button text. If no value is given, `*` will be replaced with a standard value depending on the configured button. May be a locale key.|false|
+
+**Examples**
+
+```json
+{
+    "layerId": "1234",
+    "show": true,
+    "caption": "Point test"
+}
+```
+
+```json
+{
+    "layerId": "5678",
+    "show": true
+}
+```
+
+```json
+{
+    "layerId": "5489",
+    "multi": true
 }
 ```
 

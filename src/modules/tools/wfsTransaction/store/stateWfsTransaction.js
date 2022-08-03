@@ -3,9 +3,10 @@
  * @type {object}
  * @param {string} layerId Id of the layer this configuration belongs to.
  * @param {boolean} show Whether the button should be visible for the layer with this layerId.
- * @param {string} [caption] Caption to be shown for the button.
- * @param {string} [icon] Bootstrap icon displayed inside of the button. TODO(roehlipa): Document me in config.json.md
- * @param {boolean} [multi] Whether the drawn geometries should be Multi-X. TODO(roehlipa): Document me in config.json.md
+ * @param {string} [caption] Caption to be shown for the button. Deprecated in v3.0.0 in favour of text.
+ * @param {string} [text] Text to be displayed for the button
+ * @param {string} [icon] Bootstrap icon displayed inside the button.
+ * @param {boolean} [multi] Whether the drawn geometries should be Multi-X.
  */
 
 /**
@@ -39,15 +40,17 @@
  * @type {object}
  * @property {string} id Unique identifier of the store.
  * @property {boolean} active Whether the tool is currently active.
+ * @property {boolean} deactivateGFI Whether the gfi tool should be deactivated when this tool is started.
  * @property {string} name Title of the tool.
  * @property {string} icon Icon used together with `name`.
  * @property {ButtonConfig[]} areaButton Deprecated configuration of the different layers whether they should display the button to add polygons.
- * @property {ButtonConfig[]} edit Whether the features of the WFS-T layers should be editable.
- * @property {ButtonConfig[]} delete Whether it should be possible to delete features of the WFS-T layers.
+ * @property {(ButtonConfig[]|boolean)} edit Whether the features of the WFS-T layers should be editable. Deprecated in v3.0.0.
+ * @property {(ButtonConfig[]|boolean)} delete Whether it should be possible to delete features of the WFS-T layers.
  * @property {string[]} layerIds Ids of the configured WFS-T layers.
- * @property {ButtonConfig[]} lineButton Configuration of the different layers whether they should display the button to add lines.
- * @property {ButtonConfig[]} pointButton Configuration of the different layers whether they should display the button to add points.
- * @property {ButtonConfig[]} polygonButton Configuration of the different layers whether they should display the button to add polygons.
+ * @property {(ButtonConfig[]|boolean)} lineButton Configuration of the different layers whether they should display the button to add lines.
+ * @property {(ButtonConfig[]|boolean)} pointButton Configuration of the different layers whether they should display the button to add points.
+ * @property {(ButtonConfig[]|boolean)} polygonButton Configuration of the different layers whether they should display the button to add polygons.
+ * @property {(ButtonConfig[]|boolean)} update Whether the features of the WFS-T layers should be to be updated.
  * @property {boolean} toggleLayer Whether the already added features should be displayed while inserting new features.
  * @property {number} currentLayerIndex Index of the currently selected layer.
  * @property {FeatureProperty[]} featureProperties Possible properties to be set on a feature for the current layer.
@@ -58,13 +61,13 @@ const state = {
     id: "wfsTransaction",
     // General configuration
     active: false,
-    deactivateGFI: true, // TODO(roehlipa): document
+    deactivateGFI: true,
     name: "WfsTransaction",
     icon: "bi-globe",
     // Module specific configuration
     areaButton: [],
     edit: false,
-    update: false, // TODO(roehlipa): Document
+    update: false,
     delete: false,
     layerIds: [],
     lineButton: [],

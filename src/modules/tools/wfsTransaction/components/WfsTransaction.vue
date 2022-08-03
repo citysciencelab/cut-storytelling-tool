@@ -42,7 +42,7 @@
                         <SimpleButton
                             v-if="config.available"
                             :key="key"
-                            :text="config.caption"
+                            :text="config.text"
                             :icon="config.icon"
                             :interaction="() => prepareInteraction(key)"
                         />

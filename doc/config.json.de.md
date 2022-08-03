@@ -1333,6 +1333,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "icon" noch d
 [type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
 [type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
+[type:wfsTransaction]: # (Portalconfig.menu.tool.wfsTransaction)
 
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 Neben **Portalconfig.menu.tools** können auch die Pfade **Portalconfig.menu.info**, **Portalconfig.menu.simulation** oder **Portalconfig.menu.utilities** verwendet werden.
@@ -1369,7 +1370,8 @@ Neben **Portalconfig.menu.tools** können auch die Pfade **Portalconfig.menu.inf
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt voraus.|false|
 |wfsSearch|nein|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Ermöglicht es ein Formular zu erstellen, um einen WFS Layer abgekoppelt von der Suchleiste mittels Filter anzufragen. Es ist möglich entweder eine gespeicherte Anfrage (Stored Query, WFS@2.0.0) zu nutzen oder eine Anfrage mithilfe der konfigurierten Parameter zu definieren (WFS@1.1.0).|false|
-|wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T Modul mit dem Features visualisiert, erstellt, aktualisiert und gelöscht werden können.|false|
+|wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||_Deprecated in 3.0.0. Bitte Nutzen Sie stattdessen **[wfsTransaction](#markdown-header-portalconfigmenutoolwfstransaction)**._ WFS-T Modul mit dem Features visualisiert, erstellt, aktualisiert und gelöscht werden können.|false|
+|wfsTransaction|no|**[wfsTransaction](#markdown-header-portalconfigmenutoolwfstransaction)**||WFS-T Modul zur Visualisierung, Erstellung, Veränderung und Löschen von Features eines bestehenden WFS-T Dienstes.|false|
 |bufferAnalysis|nein|**[tool](#markdown-header-portalconfigmenutool)**||In der Buffer-Analyse muss ein Quell-Layer, ein Buffer-Radius und ein Ziel-Layer ausgewählt werden. Buffer-Radien werden um die Features des Quell-Layers dargestellt. Sobald ein Ziel-Layer gewählt wurde, werden nur die Features dieses Layers hervorgehoben, welche sich außerhalb der Buffer-Radien befinden. Auch eine invertierte Anzeige ist möglich. Bei dieser werden nur die Features des Ziel-Layers innerhalb der Radien hervorgehoben werden. Wenn für das Portal der treeType "custom" gewählt worden ist, werden vom Tool nur die Layer angezeigt, die zur Aktivierungszeit eingeschaltet waren.|false|
 
 ***
@@ -3599,6 +3601,7 @@ Zur Vorbereitung muss ein WFS-T Service bereitgestellt werden (siehe services.js
 }
 ```
 #### Portalconfig.menu.tool.wfst.Button
+
 Das Attribut pointButton/lineButton/areaButton kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob die Funktion zum Erfassen einer Geometrie für alle Layer zur Verfügung stehen soll. Ist es vom Typ Object so gelten folgende Attribute:
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -3643,6 +3646,7 @@ Das Attribut pointButton/lineButton/areaButton kann vom Typ Boolean oder Object 
 ***
 
 #### Portalconfig.menu.tool.wfst.EditDelete
+
 Das Attribut edit / delete kann vom Typ Boolean oder String sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob der Editier-/ Lösch-Button zur Verfügung stehen soll. Ist es vom Typ String so wird der Button mit der dort angegebenen Beschriftung angezeigt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -3664,6 +3668,108 @@ Das Attribut edit / delete kann vom Typ Boolean oder String sein. Wenn es vom Ty
 "edit": "Editieren"
 ```
 
+***
+
+#### Portalconfig.menu.tool.wfsTransaction
+
+[inherits]: # (Portalconfig.menu.tool)
+
+WFS-T Modul zur Visualisierung (*GetFeature*), Erstellung (*insert*), Veränderung (*update*) und Löschen (*delete*) von Features eines bestehenden Web Feature Service (*WFS*), welcher Transaktionen entgegennehmen kann.
+Zur Nutzung dieses Moduls muss ein WFS-T Layer bereitgestellt werden. Bitte beachten Sie **[services.json](services.json.md)** für weitere Konfigurationsinformationen.
+
+Beim Bearbeiten eines Features / Hinzufügen von Attributen zu einem neuen Features werden bestimmte Werte in der Nutzeroberfläche angezeigt. Die Werte als auch dessen Label stehen im direkten Zusammenhang mit den `gfiAttributes` des Dienstes. Bitte beachten Sie **[services.json](services.json.md)** für weitere Informationen.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|layerIds|ja|String[]||Array an Ids von in **[services.json](services.json.md)** definierten Layern.|false|
+|icon|nein|String|"bi-globe"|Symbol des Werkzeugs zur Anzeige im Portal.|false|
+|name|nein|String|"WfsTransaction"|Name des Werkzeugs zur Anzeige im Portal.|false|
+|toggleLayer|nein|Boolean|false|Legt fest, ob die Feature des ausgewählten Layers weiterhin angezeigt werden sollen, wenn neue Feature hinzugefügt werden.|false|
+|areaButton|nein|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)[]/Boolean|[]|_Deprecated in 3.0.0. Bitte nutzen Sie stattdessen `polygonButton`. Falls beide Konfigurationsparameter vorliegen, wird `areaButton` verwendet._ Legt fest, welche der zu `layerIds` zugehörigen Layer das Hinzufügen von Polygonen erlauben.|false|
+|delete|nein|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)/Boolean|false|Legt fest, welche der zu `layerIds` zugehörigen Layer das Löschen von Geometrien erlauben.|false|
+|edit|nein|String/Boolean|false|_Deprecated in 3.0.0. Bitte nutzen Sie stattdessen `update`. Falls beide Konfigurationsparameter vorliegen, wird `edit` verwendet._ Falls der Parameter als ein Boolean vorliegt, wird durch den Parameter festgelegt, ob generell das Bearbeiten von Feature möglich ist. Falls der Parameter als String vorliegt, dann wird für alle konfigurierten Layer das Bearbeiten von Feature erlaubt und der Parameter legt den Text des Buttons fest.|false|
+|lineButton|nein|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)[]/Boolean|[]|Legt fest, welche der zu `layerIds` zugehörigen Layer das Hinzufügen von Linien erlauben.|false|
+|pointButton|nein|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)[]/Boolean|[]|Legt fest, welche der zu `layerIds` zugehörigen Layer das Hinzufügen von Punkten erlauben.|false|
+|polygonButton|nein|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)[]/Boolean|[]|Legt fest, welche der zu `layerIds` zugehörigen Layer das Hinzufügen von Polygonen erlauben.|false|
+|update|nein|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)/Boolean|false|Legt fest, welche der zu `layerIds` zugehörigen Layer das Bearbeiten von Geometrien erlauben.|false|
+
+**Example**
+
+```json
+{
+    "wfsTransaction": {
+        "name": "WFS-T Tool",
+        "icon": "bi-globe",
+        "layerIds": ["1234", "5678", "4389"],
+        "toggleLayer": true,
+        "pointButton": [
+            {
+                "layerId":"1234",
+                "caption": "Point test",
+                "show": true
+            },
+            {
+                "layerId": "5678",
+                "show": true,
+                "multi": true
+            }
+        ],
+        "lineButton": false,
+        "polygonButton": [
+            {
+                "layerId": "4389",
+                "show": false
+            }
+        ],
+        "update": [
+            {
+                "layerId": "4389",
+                "show": true
+            }
+        ]
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.wfsTransaction.TransactionConfig
+
+Konfiguration der verschiedenen Transaktionsmethoden für den entsprechenden Layer.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|available|ja|Boolean|true|Legt fest, ob der entsprechende Button der Transaktionsmethode für den Layer mit der gegebenen Id nutzbar sein soll.|false|
+|layerId|ja|String||Id des Layers, für den die Transaktionsmethode konfiguriert wird.|false|
+|caption|nein|String|"common:modules.tools.wfsTransaction.interactionSelect.*"|_Deprecated in 3.0.0. Bitte nutzen Sie stattdessen `text`. Falls beide Konfigurationsparameter vorhanden sind, wird `cpation` verwendet._ Text des Knopfes der Transaktionsmethode. Falls kein Wert vorhanden ist, wird für `*` ein Standardwert der Transaktionsmethode verwendet. Kann ein Übersetzungsschlüssel sein.|false|
+|icon|nein|String|enum["bi-slash-lg","bi-record-circle","bi-hexagon-fill","bi-pencil-square","bi-trash"]|Bootstrap Symbol zur Anzeige innerhalb des Knopfes der Transaktionsmethode. Falls kein Wert angegeben wird, wird der Standardwert der Transaktionsmethode verwendet.|false|
+|multi|nein|Boolean|false|Legt fest, ob es sich bei den gezeichneten Geometrien um Multi-X-Geometrien handeln sollte. Bei Konfiguration für die Methoden `update` / `edit` und `delete` hat der Parameter keine Auswirkung.|false|
+|show|nein|Boolean|true|_Deprecated in 3.0.0. Bitte nutzen Sie stattdessen `available`. Falls beide Konfigurationsparameter vorhanden sind, wird `show` verwendet._ Legt fest, ob der entsprechende Button der Transaktionsmethode für den Layer mit der gegebenen Id nutzbar sein soll.|false|
+|text|nein|String|"common:modules.tools.wfsTransaction.interactionSelect.*"|Text des Knopfes der Transaktionsmethode. Falls kein Wert vorhanden ist, wird für `*` ein Standardwert der Transaktionsmethode verwendet. Kann ein Übersetzungsschlüssel sein.|false|
+
+**Examples**
+
+```json
+{
+    "layerId": "1234",
+    "show": true,
+    "caption": "Point test"
+}
+```
+
+```json
+{
+    "layerId": "5678",
+    "show": true
+}
+```
+
+```json
+{
+    "layerId": "5489",
+    "multi": true
+}
+```
 
 ***
 

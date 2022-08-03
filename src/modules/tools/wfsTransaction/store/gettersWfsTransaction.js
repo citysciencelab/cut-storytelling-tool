@@ -2,35 +2,34 @@ import initialState from "./stateWfsTransaction";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import deepCopy from "../../../../utils/deepCopy";
 
-// TODO(roehlipa): Adjust doc for update and delete to new functionality => default is false (is this a breaking change?) and possibility to add 'em service specific
 const defaultInteractionConfig = {
         LineString: {
             available: false,
-            caption: "common:modules.tools.wfsTransaction.interactionSelect.line",
             icon: "bi-slash-lg",
-            multi: false
+            multi: false,
+            text: "common:modules.tools.wfsTransaction.interactionSelect.line"
         },
         Point: {
             available: false,
-            caption: "common:modules.tools.wfsTransaction.interactionSelect.point",
             icon: "bi-record-circle",
-            multi: false
+            multi: false,
+            text: "common:modules.tools.wfsTransaction.interactionSelect.point"
         },
         Polygon: {
             available: false,
-            caption: "common:modules.tools.wfsTransaction.interactionSelect.polygon",
             icon: "bi-hexagon-fill",
-            multi: false
+            multi: false,
+            text: "common:modules.tools.wfsTransaction.interactionSelect.polygon"
         },
         update: {
             available: false,
-            caption: "common:modules.tools.wfsTransaction.interactionSelect.update",
-            icon: "bi-pencil-square"
+            icon: "bi-pencil-square",
+            text: "common:modules.tools.wfsTransaction.interactionSelect.update"
         },
         delete: {
             available: false,
-            caption: "common:modules.tools.wfsTransaction.interactionSelect.delete",
-            icon: "bi-trash"
+            icon: "bi-trash",
+            text: "common:modules.tools.wfsTransaction.interactionSelect.delete"
         }
     },
     getters = {
@@ -70,8 +69,9 @@ const defaultInteractionConfig = {
                     return;
                 }
                 if (typeof interactionConfiguration === "string") {
-                    console.warn("WfsTransaction: Please add the caption in an object as the parameter 'caption'; adding it directly will be deprecated in version 3.0.0.");
+                    console.warn("WfsTransaction: Please add the caption in an object as the parameter 'text'; adding it directly will be deprecated in version 3.0.0.");
                     configuration[val].caption = interactionConfiguration;
+                    configuration[val].available = true;
                     return;
                 }
                 if (typeof interactionConfiguration === "boolean") {
@@ -83,8 +83,20 @@ const defaultInteractionConfig = {
                 if (layerConfiguration === undefined) {
                     return;
                 }
-                configuration[val].available = layerConfiguration.show;
-                configuration[val].caption = layerConfiguration.caption ? layerConfiguration.caption : configuration[val].caption;
+                if (layerConfiguration.show !== undefined) {
+                    console.warn("WfsTransaction: The parameter 'show' has been deprecated in version 3.0.0. Please use 'available' instead.");
+                    configuration[val].available = layerConfiguration.show;
+                }
+                else {
+                    configuration[val].available = layerConfiguration.available;
+                }
+                if (layerConfiguration.caption !== undefined) {
+                    console.warn("WfsTransaction: The parameter 'caption' has been deprecated in version 3.0.0. Please use 'text' instead.");
+                    configuration[val].caption = layerConfiguration.caption ? layerConfiguration.caption : configuration[val].caption;
+                }
+                else {
+                    configuration[val].text = layerConfiguration.text ? layerConfiguration.text : configuration[val].text;
+                }
                 configuration[val].icon = layerConfiguration.icon ? layerConfiguration.icon : configuration[val].icon;
                 if (isGeometryConfiguration) {
                     configuration[val].multi = layerConfiguration.multi ? layerConfiguration.multi : false;
