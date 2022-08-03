@@ -13,6 +13,8 @@
 ### Added
 
 ### Changed
+- Filter:
+    - Making intern wfs layer loadingStrategy with 'all' by filtering
 
 ### Deprecated
 

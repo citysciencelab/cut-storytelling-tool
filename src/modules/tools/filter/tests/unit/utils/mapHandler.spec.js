@@ -128,7 +128,10 @@ describe("src/module/tools/filter/utils/mapHandler.js", () => {
             expect(called_addLayerByLayerId).to.equal("layerId");
         });
         it("should set the internal layers and filteredIds for the given filter id and layer id", () => {
-            let called_addLayerByLayerId = false;
+            let called_addLayerByLayerId = false,
+                called_layerId = false,
+                called_key = false,
+                called_value = false;
             const map = new MapHandler({
                 getLayerByLayerId: () => "layerModel",
                 showFeaturesByIds: () => false,
@@ -145,7 +148,11 @@ describe("src/module/tools/filter/utils/mapHandler.js", () => {
                         }]
                     };
                 },
-                setParserAttributeByLayerId: () => false
+                setParserAttributeByLayerId: (layerId, key, value) => {
+                    called_layerId = layerId;
+                    called_key = key;
+                    called_value = value;
+                }
             }, onerror.call);
 
             map.initializeLayer("filterId", "layerId", false, onerror.call);
@@ -154,6 +161,9 @@ describe("src/module/tools/filter/utils/mapHandler.js", () => {
             expect(called_addLayerByLayerId).to.be.false;
             expect(map.layers.filterId).to.equal("layerModel");
             expect(map.filteredIds.filterId).to.be.an("array").and.to.be.empty;
+            expect(called_layerId).to.equal("layerId");
+            expect(called_key).to.equal("loadingStrategy");
+            expect(called_value).to.equal("all");
         });
         it("should set doNotLoadInitially to true if extern is set", () => {
             let called_layerId = false,

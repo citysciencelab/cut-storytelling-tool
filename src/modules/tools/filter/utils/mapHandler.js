@@ -74,6 +74,10 @@ export default class MapHandler {
         if (extern) {
             this.handlers.setParserAttributeByLayerId(layerId, "doNotLoadInitially", true);
         }
+        else {
+            this.handlers.setParserAttributeByLayerId(layerId, "loadingStrategy", "all");
+        }
+
         if (Array.isArray(visibleLayer) && !visibleLayer.length) {
             this.handlers.addLayerByLayerId(layerId);
         }
