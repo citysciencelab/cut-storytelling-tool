@@ -17,6 +17,7 @@
     - Making intern wfs layer loadingStrategy with 'all' by filtering
     - The checkbox for filtering in the browsers extent now triggers direct filtering with `strategy`: `active`. This can be disabled by setting `searchInMapExtentProactive` to `false`.
 - The version of node was updated, must be >= 16.13.2 <= 16.16.0 and the version of npm was updated, must be >= 8.1.2 <=8.11.0.
+- Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
 
 ### Deprecated
 

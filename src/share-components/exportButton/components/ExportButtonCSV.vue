@@ -74,6 +74,14 @@ export default {
             type: String,
             required: false,
             default: "_YYYY-MM-DD_HH-mm-ss"
+        },
+        /**
+         * Decides if semicolon is used as delimiter for the data in csv
+         */
+        useSemicolon: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data () {
@@ -158,7 +166,7 @@ export default {
         downloadWithData (data, filename) {
             const csvText = convertJsonToCsv(data, error => {
                 this.handleDownloadError(error);
-            });
+            }, this.useSemicolon);
 
             this.fakeDownloadCsvText(csvText, filename ? filename : "download", error => {
                 this.handleDownloadError(error);
@@ -172,7 +180,7 @@ export default {
          * @returns {void}
          */
         downloadWithHandler (handler, filename) {
-            this.handler(data => {
+            handler(data => {
                 this.downloadWithData(data, filename);
             });
         },
