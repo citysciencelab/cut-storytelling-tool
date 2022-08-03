@@ -15,11 +15,12 @@
 ### Changed
 - Filter:
     - Making intern wfs layer loadingStrategy with 'all' by filtering
-- The version of node was updated, must be >= 16.16.0 < 17.
-
+- The version of node was updated, must be >= 16.13.2 <= 16.16.0 and the version of npm was updated, must be >= 8.1.2 <=8.11.0.
 ### Deprecated
 
 ### Removed
+The following NPM package is removed:
+    - @intlify/vue-i18n-loader
 
 ### Fixed
 
