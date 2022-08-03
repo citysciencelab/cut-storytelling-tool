@@ -13,6 +13,8 @@
     - dependencies:
 
         - "vue2-datepicker"
+### Changed
+- Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
 
 ### Fixed
 - Fix sensor layer extent-display issues caused by url parameter usage.
