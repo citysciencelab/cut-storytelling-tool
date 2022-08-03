@@ -15,6 +15,7 @@
 ### Changed
 - Filter:
     - Making intern wfs layer loadingStrategy with 'all' by filtering
+- The version of node was updated, must be >= 16.16.0 < 17.
 
 ### Deprecated
 
