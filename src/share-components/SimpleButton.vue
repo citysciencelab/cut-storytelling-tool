@@ -35,12 +35,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~variables";
+
 .btn {
     display: flex;
     align-items: center;
     white-space: nowrap;
     i {
         margin-right: 0.5rem;
+    }
+    &:focus {
+        color: $primary;
+        background-color: $white;
+        border-color: $primary;
     }
 }
 </style>

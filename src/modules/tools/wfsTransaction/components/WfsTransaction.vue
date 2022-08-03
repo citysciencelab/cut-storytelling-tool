@@ -45,7 +45,7 @@
                             :text="config.caption"
                             :icon="config.icon"
                             :interaction="() => prepareInteraction(key)"
-                        /> <!-- TODO(roehlipa): Properly highlight the selected button (only relevant for update and delete) -->
+                        />
                     </template>
                 </div>
                 <template v-else>
@@ -134,7 +134,6 @@ export default {
                 return "text";
             }
             if (["integer", "int", "decimal"].includes(type)) {
-                // TODO(roehlipa): (Possibly) If input type is a float, the input should automatically change to a consistent input variant for floats (1,2 => 1.2; 1 => 1.0)
                 return "number";
             }
             if (type === "boolean") {
