@@ -270,6 +270,10 @@ export default {
          */
         setSearchInMapExtent (value) {
             this.searchInMapExtent = value;
+
+            if (this.layerConfig?.searchInMapExtentProactive !== false && this.isStrategyActive()) {
+                this.handleActiveStrategy();
+            }
         },
         /**
          * Resets a snippet by its snippetId.
