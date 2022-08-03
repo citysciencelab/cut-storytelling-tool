@@ -40,6 +40,7 @@
 - Print: fix handling for highresolution plotService.
 - Fixed a bug where the wrong GFi was displayed after turning on and off different layers.
 - Url parameter 'featureViaURL' with test point is fixed.
+- Issue #689: The layerSlider handle mode displays the layers correctly at the steps.
 - Issue #798: If a tool is opened by url parameter and 'deactivateGFI' is true at tool-config, no gfi is available if tool is open.
 - Issue #800: The Zoom-Out control works again with `startZoomlevel: 0`.
 - Issue #802: Custom mapMarker configurations is respected again.
@@ -47,7 +48,6 @@
 - Issue #807: transparency setting for child layers is getting set/initialized now for grouped layers.
 - Issue #810: Filter overwrites the "attributions" status.
 - Fixed language switching bug in the addWMS tool.
-- Issue #689: In the layerSlider in the handle mode, the correct layers are now displayed at the steps.
 
 ---
 
