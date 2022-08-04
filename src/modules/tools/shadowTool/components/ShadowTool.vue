@@ -7,8 +7,15 @@ import mutations from "../store/mutationsShadowTool";
 import actions from "../store/actionsShadowTool";
 import SliderInput from "./SliderInput.vue";
 import ToggleCheckbox from "../../../../share-components/toggleCheckbox/components/ToggleCheckbox.vue";
+// import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
 import moment from "moment";
-
+/* const configPaths = [
+        "configJson.Portalconfig.tools.shadow",
+        "configJson.Portalconfig.menu.shadow",
+    ],
+ getLegendConfig: context => {
+            return fetchFirstModuleConfig(context, configPaths, "Legend");
+        }, */
 export default {
     name: "ShadowTool",
     components: {
@@ -16,11 +23,27 @@ export default {
         SliderInput,
         ToggleCheckbox
     },
+    data () {
+        return {
+            currentDate: moment().format("YYYY-MM-DD"),
+            currentTime: moment().format("HH:mm"),
+            currentYear: moment().format("YYYY"),
+            currentMonth: moment().format("MM"),
+            currentDay: moment().format("DD"),
+            currentHour: moment().hour(),
+            currentMinute: moment().minute(),
+            showDate: this.currentDate,
+            showTime: moment().format("HH:mm"),
+            timeSliderValue: null,
+            dateSliderValue: null
+
+        };
+    },
     computed: {
         ...mapGetters("Tools/ShadowTool", Object.keys(getters))
     },
-    mounted () {
-       this.createDate();
+    created () {
+          //  this.createDate();
     },
     watch: {
         /**
@@ -30,11 +53,14 @@ export default {
          * @returns {void}
          */
         active (value) {
-            if (value) {
-                this.setActive(value);
-                this.createDate();
-                console.log('--------------------------------------------------');
-            }
+            console.log(this.hour);
+            this.$nextTick(() => {
+                if (value) {
+                    this.setActive(value);
+                    this.createDate();
+                    console.log('--------------------------------------------------');
+                }
+            })
         }
     },
     created () {
@@ -54,10 +80,57 @@ export default {
             }
         },
         createDate () {
-            console.log(document.getElementById("tool-shadow-checkbox"));
+            // check :value=
+            // add validate date
+            console.log(this.currentHour);
+            const year = this.shadowTime.year ? this.shadowTime.year : this.currentYear,
+                month = this.shadowTime.month.toString() ? (this.shadowTime.month.length ===1 ? ("0"+this.shadowTime.month) : this.shadowTime.month) : this.currentMonth,
+                day = this.shadowTime.day ? (this.shadowTime.day.length ===1 ? ("0"+this.shadowTime.day) : this.shadowTime.day) : this.currentDay,
+                hour = this.shadowTime.hour ? (this.shadowTime.hour.length ===1 ? ("0"+this.shadowTime.hour) : this.shadowTime.hour) : this.currentHour,
+                minute = this.shadowTime.minute ? (this.shadowTime.minute.length ===1 ? ("0"+this.shadowTime.minute) : this.shadowTime.minute) : this.currentMinute,
+                showDate = year+"-"+month+"-"+day,
+                showTime = hour+":"+minute;
+            console.log(this.shadowTime);
+            console.log(document.getElementById("datePicker"));
             if (document.getElementById("datePicker")){
-            document.getElementById("datePicker").value = moment().format('MM-DD-YYYY');
+            console.log((year+"-"+month+"-"+day));
+            document.getElementById("datePicker").value = showDate;
+            console.log((hour*60+minute/100));
+            // document.getElementById("timeSlider").children[2].value = (hour*60+minute)/100
+            this.timeSliderValue = (hour*60+minute)/100
+            console.log(moment().year(year).month(month).date(day).dayOfYear());
+            this.dateSliderValue = moment().year(year).month(month).date(day).dayOfYear();
+            this.showDate = showDate;
+            this.showTime = showTime;
             }
+        },
+        syncDateSlider () {
+
+            this.showDate = document.getElementById("datePicker").value;
+            var date = new Date(document.getElementById("datePicker").value);
+            console.log(moment(date).dayOfYear());
+            this.dateSliderValue = moment(date).dayOfYear();
+        },
+        syncTimeSlider (evt) {
+            //evt ??
+            if (evt){
+            const timeSliderValue = document.getElementById("timeSlider").children[2].value,
+                  hours = Math.floor(timeSliderValue / 60),
+                  minutes = timeSliderValue % 60;
+
+            this.showTime = hours+":"+minutes;
+            }
+        },
+        syncDatePicker (totalDaysInYear) {
+            var startDate = new Date(Number(this.currentYear), 0),
+                calculateDate = new Date(startDate.setDate(Number(totalDaysInYear))),  // initialize a date in `year-01-01`
+                formatCalculateDate = moment(calculateDate).format('YYYY-MM-DD');
+  console.log(new Date(startDate.setDate(Number(totalDaysInYear)))); // add the number of days
+  console.log(moment(calculateDate).format('YYYY-MM-DD'));
+
+
+            this.showDate = formatCalculateDate;
+            document.getElementById("datePicker").value = this.showDate;
         }
     }
 };
@@ -85,7 +158,7 @@ export default {
                         ref="shadowCheckBox"
                         :text-on="$t('common:snippets.checkbox.on')"
                         :text-off="$t('common:snippets.checkbox.off')"
-                        @change="toggleLayer"
+                        @change="toggleShadow"
                     />
                 </div>
              <div class="d-flex justify-content-between mb-3">
@@ -98,27 +171,36 @@ export default {
             <input
                 id="datePicker"
                 type="date"
+                @change="syncDateSlider"
             >
              </div>
 
              <template >
             <SliderInput
+                 id="timeSlider"
                 :label="$t('common:modules.tools.shadow.slideHour')"
-                :value="1"
-                min=""
+                :value="timeSliderValue"
+                :valueLabel="showTime"
+                :min="1"
                 :disabled="false"
-                max=""
-                unit=""
+                :step="1"
+                :max="1440"
+                unit="Uhrzeit"
+                @input="syncTimeSlider($event)"
             />
         </template>
              <template >
             <SliderInput
+                id="dateSlider"
                 :label="$t('common:modules.tools.shadow.slideDate')"
-                :value="1"
-                min=""
+                :valueLabel="showDate"
+                :value="dateSliderValue"
+                :min="0"
+                :step="1"
                 :disabled="false"
-                max=""
+                :max="366"
                 unit=""
+                @input="syncDatePicker($event)"
             />
         </template>
         </template>

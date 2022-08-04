@@ -44,6 +44,7 @@ const state = {
     datepicker: null,
     isShadowEnabled: false,
     snippetsReady: false,
+    shadowTime: {},
     // translations
     shadowDisplay: "",
     time: "",

@@ -1,8 +1,12 @@
 <script>
 export default {
-    name: "RoutingSliderInput",
+    name: "ShadowSliderInput",
     props: {
         label: {
+            type: String,
+            required: true
+        },
+        valueLabel: {
             type: String,
             required: true
         },
@@ -37,18 +41,18 @@ export default {
 
 <template>
     <div class="d-flex flex-column mt-2">
-        <label :for="'routing-slider-input-' + label">
+        <label :for="'shadow-slider-input-' + label">
             <h6>{{ label }}</h6>
         </label>
         <div class="d-flex justify-content-between">
-            <span>{{ min }} {{ unit }}</span>
+            <!-- <span>{{ unit }}</span> -->
             <span>
-                <b>{{ value }}</b> <span>{{ unit }}</span>
+               <!--  <b>{{ value }}</b> <span>{{ unit }}</span> -->
             </span>
-            <span>{{ max }} {{ unit }}</span>
+            <span>{{ valueLabel }}</span>
         </div>
         <input
-            :id="'routing-slider-input-' + label"
+            :id="'shadow-slider-input-' + label"
             :value="value"
             type="range"
             :min="min"
