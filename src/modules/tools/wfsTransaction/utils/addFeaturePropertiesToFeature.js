@@ -25,7 +25,7 @@ export default function ({id, geometry, geometryName}, featureProperties, featur
             transactionFeature.set(key, null);
         }
         else if (["integer", "int", "decimal"].includes(property.type)) {
-            if (Number.isNaN(Number(property.value))) {
+            if (Number.isFinite(parseFloat(property.value))) {
                 return;
             }
             transactionFeature.set(key, Number(property.value));
