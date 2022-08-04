@@ -110,7 +110,16 @@ export default {
     created () {
         this.$on("close", this.close);
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
-            "updatedSelectedLayerList": () => this.setLayerInformation(getLayerInformation(this.layerIds))
+            "updatedSelectedLayerList": async () => {
+                const newLayerInformation = await getLayerInformation(this.layerIds),
+                    firstActiveLayer = newLayerInformation.findIndex(layer => layer.isSelected);
+
+                this.setLayerInformation(newLayerInformation);
+                if ((this.currentLayerIndex === -1 && firstActiveLayer > -1) || (this.currentLayerIndex > -1 && firstActiveLayer === -1)) {
+                    this.setCurrentLayerIndex(firstActiveLayer);
+                    this.setFeatureProperties();
+                }
+            }
         });
     },
     methods: {
