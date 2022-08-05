@@ -26,7 +26,7 @@ export default function (layer) {
  * @param {string} featureType Name of the feature type of the service.
  * @returns {FeatureProperty[]} If an <element> with a name of the featureType is present, an array of prepared feature properties; else an empty Array.
  */
-function parseDescribeFeatureTypeResponse (responseData, featureType) {
+export function parseDescribeFeatureTypeResponse (responseData, featureType) {
     const rootElement = Object.values(new DOMParser().parseFromString(responseData, "application/xml").getElementsByTagName("element"))
         .find(({attributes}) => Object.values(attributes).find(({localName}) => localName === "name").value === featureType);
 
