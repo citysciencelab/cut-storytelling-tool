@@ -6,7 +6,7 @@ import axios from "axios";
 
 import {crs} from "@masterportal/masterportalapi";
 
-import * as stylefunction from "ol-mapbox-style/dist/stylefunction";
+import {stylefunction} from "ol-mapbox-style";
 
 import store from "../../../../app-store";
 
@@ -113,7 +113,7 @@ describe("core/modelList/layer/vectorTile", function () {
                         1.3229159522920524,
                         0.6614579761460262,
                         0.2645831904584105,
-                        0.13229159522920522
+                        0.1322915952292052
                     ],
                     tileSize: 512,
                     layerAttribution: "nicht vorhanden",
@@ -296,8 +296,8 @@ describe("core/modelList/layer/vectorTile", function () {
                 isStyleValid: VectorTile.prototype.isStyleValid,
                 get: key => ({layer: Symbol.for("layer")})[key],
                 set: sinon.spy((key, value) => {
-                    expect(stylefunction.default.calledOnce).to.be.true;
-                    expect(stylefunction.default.calledWith(
+                    expect(stylefunction.calledOnce).to.be.true;
+                    expect(stylefunction.calledWith(
                         Symbol.for("layer"), validStyle, undefined
                     )).to.be.true;
 
@@ -310,7 +310,6 @@ describe("core/modelList/layer/vectorTile", function () {
         }
 
         it("retrieves json from url, checks it, and sets id to layer and model", function (done) {
-            sinon.stub(stylefunction, "default");
             global.fetch = sinon.spy(() => new Promise(r => r({
                 json: () => new Promise(ir => ir(validStyle))
             })));
@@ -323,7 +322,6 @@ describe("core/modelList/layer/vectorTile", function () {
         });
 
         it("rejects invalid json", function (done) {
-            sinon.stub(stylefunction, "default");
             global.fetch = sinon.spy(() => new Promise(r => r({
                 json: () => new Promise(ir => ir(invalidStyle))
             })));
