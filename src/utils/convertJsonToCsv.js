@@ -1,3 +1,5 @@
+import isObject from "./isObject";
+
 /**
  * implementation of json to csv based on rfc4180
  * @see https://datatracker.ietf.org/doc/html/rfc4180
@@ -16,22 +18,59 @@ function convertJsonToCsv (jsonData, onerror = false, useSemicolon = false, useL
     }
     const delimitor = useSemicolon ? ";" : ",",
         eol = useLineFeedOnly ? "\n" : "\r\n",
-        headerRecord = findRecordWithMaxNumberOfFields(jsonData),
+        organizedJsonData = organizeKeys(jsonData),
+        headerRecord = findRecordWithMaxNumberOfFields(organizedJsonData),
         maxNumberOfFields = headerRecord ? Object.keys(headerRecord).length : 0,
         header = !Array.isArray(headerRecord) && typeof headerRecord === "object" && headerRecord !== null ? Object.keys(headerRecord) : false;
     let result = header ? joinRecord(escapeFields(header, delimitor), delimitor, maxNumberOfFields) : "";
 
-    jsonData.forEach(fields => {
+    organizedJsonData.forEach(fields => {
         if (typeof fields !== "object" || fields === null) {
             if (typeof onerror === "function") {
                 onerror("convertJsonToCsv: a line with an unknown type was found: " + typeof fields);
             }
             return;
         }
-        if (result) {
+        else if (result) {
             result += eol;
         }
         result += joinRecord(escapeFields(Object.values(fields), delimitor), delimitor, maxNumberOfFields);
+    });
+
+    return result;
+}
+
+/**
+ * Runs through the objects of the given array and collects all available keys.
+ * Adds missing keys to object clones.
+ * @param {Object[]} jsonData an array of objects where keys may miss here and there
+ * @returns {Object[]} An array of objects with complete key set in the right order - or the input if anything but an array of objects is given.
+ */
+function organizeKeys (jsonData) {
+    if (!Array.isArray(jsonData) || !isObject(jsonData[0])) {
+        return jsonData;
+    }
+    const result = [],
+        keySet = new Set();
+
+    jsonData.forEach(item => {
+        if (!isObject(item)) {
+            return;
+        }
+        Object.keys(item).forEach(key => {
+            keySet.add(key);
+        });
+    });
+    jsonData.forEach(item => {
+        if (!isObject(item)) {
+            return;
+        }
+        const newItem = {};
+
+        keySet.forEach(key => {
+            newItem[key] = Object.prototype.hasOwnProperty.call(item, key) ? item[key] : "";
+        });
+        result.push(newItem);
     });
 
     return result;
@@ -130,7 +169,7 @@ function joinRecord (record, delimitor, maxNumberOfFields) {
     let result = "";
 
     for (let i = 0; i < maxNumberOfFields; i++) {
-        if (result) {
+        if (i > 0) {
             result += delimitor;
         }
         result += record[i] ? String(record[i]) : "";
@@ -141,6 +180,7 @@ function joinRecord (record, delimitor, maxNumberOfFields) {
 
 export {
     convertJsonToCsv,
+    organizeKeys,
     escapeFields,
     escapeField,
     findRecordWithMaxNumberOfFields,

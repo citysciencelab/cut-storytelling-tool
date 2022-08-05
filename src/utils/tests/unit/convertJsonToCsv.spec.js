@@ -1,6 +1,7 @@
 import {expect} from "chai";
 import {
     convertJsonToCsv,
+    organizeKeys,
     escapeFields,
     escapeField,
     findRecordWithMaxNumberOfFields,
@@ -101,6 +102,40 @@ describe("src/utils/convertJsonToCsv.js", () => {
             expect(escapeFields(record, ",")).to.deep.equal(expected);
         });
     });
+    describe("organizeKeys", () => {
+        it("should return the input if anything but an array is given", () => {
+            expect(organizeKeys(undefined)).to.be.undefined;
+            expect(organizeKeys(null)).to.be.null;
+            expect(organizeKeys("string")).to.equal("string");
+            expect(organizeKeys(1234)).to.equal(1234);
+            expect(organizeKeys(true)).to.be.true;
+            expect(organizeKeys(false)).to.be.false;
+            expect(organizeKeys({})).to.be.an("object").that.is.empty;
+        });
+        it("should return the input if anything but an array with an object at index 0 is given", () => {
+            expect(organizeKeys([undefined])).to.deep.equal([undefined]);
+            expect(organizeKeys([null])).to.deep.equal([null]);
+            expect(organizeKeys(["string"])).to.deep.equal(["string"]);
+            expect(organizeKeys([1234])).to.deep.equal([1234]);
+            expect(organizeKeys([true])).to.deep.equal([true]);
+            expect(organizeKeys([false])).to.deep.equal([false]);
+            expect(organizeKeys([[]])).to.deep.equal([[]]);
+        });
+        it("should organize the input with missing keys", () => {
+            const data = [
+                    {d: 3, a: 1, b: 2},
+                    {c: 4, d: 5},
+                    {a: 6, b: 7}
+                ],
+                expected = [
+                    {d: 3, a: 1, b: 2, c: ""},
+                    {d: 5, a: "", b: "", c: 4},
+                    {d: "", a: 6, b: 7, c: ""}
+                ];
+
+            expect(organizeKeys(data)).to.deep.equal(expected);
+        });
+    });
     describe("convertJsonToCsv", () => {
         it("should return false and handle the error if anything but an array is given", () => {
             let lastError = false;
@@ -127,13 +162,13 @@ describe("src/utils/convertJsonToCsv.js", () => {
             })).to.equal(expected);
             expect(errorCount).to.equal(2);
         });
-        it("should use the keys of the record with the most fields as first record of the csv data", () => {
+        it("should use the keys of the record as headers, organizing csv data", () => {
             const jsonData = [
                     {a: 1, b: 2, c: 3},
                     {d: 4, e: 5, f: 6, g: 7},
                     {h: 8, i: 9}
                 ],
-                expected = "d,e,f,g\r\n1,2,3,\r\n4,5,6,7\r\n8,9,,";
+                expected = "a,b,c,d,e,f,g,h,i\r\n1,2,3,,,,,,\r\n,,,4,5,6,7,,\r\n,,,,,,,8,9";
 
             expect(convertJsonToCsv(jsonData)).to.equal(expected);
         });

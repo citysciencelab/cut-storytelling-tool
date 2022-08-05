@@ -487,6 +487,9 @@
                         "circle": "Kreis",
                         "lineString": "Linie + Puffer"
                     }
+                },
+                "downloadAsCSV": {
+                    "label": "Gefilterte Daten herunterladen"
                 }
             },
             "pendler": {

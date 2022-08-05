@@ -487,6 +487,9 @@
                         "circle": "Circle",
                         "lineString": "Line + Buffer"
                     }
+                },
+                "downloadAsCSV": {
+                    "label": "Download filtered data"
                 }
             },
             "pendler": {
