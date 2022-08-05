@@ -186,14 +186,15 @@ export default class MapHandler {
      * @returns {void}
      */
     activateLayer (filterId, onActivated) {
-        const layerModel = this.getLayerModelByFilterId(filterId);
+        const layerModel = this.getLayerModelByFilterId(filterId),
+            layerSource = typeof layerModel?.layer?.getSource()?.getSource === "function" && layerModel.get("clusterDistance") > 0 ? layerModel.layer.getSource().getSource() : layerModel?.layer?.getSource();
 
         if (!isObject(layerModel)) {
             return;
         }
 
         if (!this.isLayerActivated(filterId) && !this.isSourceUpdated(filterId)) {
-            layerModel.layer.getSource().once("featuresloadend", () => {
+            layerSource.once("featuresloadend", () => {
                 if (typeof onActivated === "function") {
                     onActivated();
                 }
