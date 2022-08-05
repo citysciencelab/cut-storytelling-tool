@@ -81,7 +81,7 @@ const getters = {
     savingErrorMessage: state => feature => {
         const requiredPropertiesWithNoValue = state.featureProperties
             .filter(property => property.type !== "geometry"
-                    && true
+                    && property.required
                     && [null, undefined, ""].includes(property.value)
             );
 
