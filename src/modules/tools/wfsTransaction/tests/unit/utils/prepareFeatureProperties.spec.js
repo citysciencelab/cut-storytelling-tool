@@ -90,6 +90,5 @@ describe("src/modules/tools/wfsTransaction/tests/unit/utils/prepareFeatureProper
         expect(properties.find(({key}) => key === "name").label).to.equal("Name");
         expect(properties.find(({key}) => key === "datum").label).to.equal("Datum");
         expect(properties.find(({type}) => type === "geometry")).to.exist;
-        // TODO(roehlipa): Check for labels on name and date and that geom is there
     });
 });
