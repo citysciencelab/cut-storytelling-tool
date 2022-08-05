@@ -1,7 +1,8 @@
+import Feature from "ol/Feature";
 import initialState from "./stateWfsTransaction";
+import {defaultInteractionConfig} from "../constantsWfsTransaction";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import deepCopy from "../../../../utils/deepCopy";
-import {defaultInteractionConfig} from "../constantsWfsTransaction";
 
 const getters = {
     ...generateSimpleGetters(initialState),
@@ -85,7 +86,7 @@ const getters = {
                     && [null, undefined, ""].includes(property.value)
             );
 
-        if (feature === undefined) {
+        if (!(feature instanceof Feature)) {
             return i18next.t("common:modules.tools.wfsTransaction.error.noFeature");
         }
         if (requiredPropertiesWithNoValue.length > 0) {
