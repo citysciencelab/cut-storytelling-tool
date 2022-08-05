@@ -232,6 +232,13 @@ export default {
             </select>
         </div>
         <label
+            v-else-if="inputLabel.includes('common')"
+            class="col-md-5 col-form-label common"
+            :for="`tool-wfsSearch-${selectableParameters.fieldName}-${selectableParameters.fieldId}-input`"
+        >
+            {{ $t(inputLabel.split("*")[0]) }}
+        </label>
+        <label
             v-else
             class="col-md-5 col-form-label"
             :for="`tool-wfsSearch-${selectableParameters.fieldName}-${selectableParameters.fieldId}-input`"

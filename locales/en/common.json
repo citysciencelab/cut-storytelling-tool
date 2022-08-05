@@ -832,7 +832,9 @@
                     "or": "or",
                     "label": "Information regarding the results of the search",
                     "text": "The results of the search will fulfill the conditions / clauses {{userHelp}}. <br /> *Mandatory field"
-                }
+                },
+                "district": "District",
+                "parcelNumber": "Parcel number"
             },
             "routing": {
                 "coordinateInputHelp": "Finde a place or add a point by clicking on the map",

@@ -832,7 +832,9 @@
                     "or": "oder",
                     "label": "Informationen bezüglich der Suchergebnisse",
                     "text": "Die Ergebnisse der Suche werden die Bedingungen / Klauseln {{userHelp}} erfüllen. <br /> *Pflichtfeld"
-                }
+                },
+                "district": "Gemarkung",
+                "parcelNumber": "Flurstücksnummer"
             },
             "routing": {
                 "coordinateInputHelp": "Suchen Sie einen Ort oder fügen Sie einen Punkt durch Klick in die Karte hinzu",

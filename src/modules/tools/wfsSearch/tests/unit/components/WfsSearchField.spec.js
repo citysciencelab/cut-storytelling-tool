@@ -64,21 +64,18 @@ describe("src/modules/tools/wfsSearch/components/WfsSearchField.vue", () => {
         expect(options.at(2).text()).to.equal("Option B");
     });
 
-    it("renders a select element instead of the label when given label options", () => {
+    it("renders a label with string that conatins 'common'", () => {
         const wrapper = mount(WfsSearchField, {
-                localVue,
-                store,
-                propsData: {
-                    fieldId: "fieldId",
-                    fieldName: "fieldName",
-                    inputLabel: ["inputLabel A", "inputLabel B"]
-                }
-            }),
-            options = wrapper.findAll("option");
+            localVue,
+            store,
+            propsData: {
+                fieldId: "fieldId",
+                fieldName: "fieldName",
+                inputLabel: "common:modules.tools.wfsSearch.parcelNumber"
+            }
+        });
 
-        expect(wrapper.find("label").exists()).to.be.false;
-        expect(wrapper.find("select").exists()).to.be.true;
-        expect(options.at(0).text()).to.equal("inputLabel A");
-        expect(options.at(1).text()).to.equal("inputLabel B");
+        expect(wrapper.find("label").exists()).to.be.true;
+        expect(wrapper.find("label").classes("common")).to.be.true;
     });
 });
