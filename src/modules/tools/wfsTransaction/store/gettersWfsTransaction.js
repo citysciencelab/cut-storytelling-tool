@@ -64,7 +64,7 @@ const getters = {
             }
             if (layerConfiguration.caption !== undefined) {
                 console.warn("WfsTransaction: The parameter 'caption' has been deprecated in version 3.0.0. Please use 'text' instead.");
-                configuration[val].caption = layerConfiguration.caption ? layerConfiguration.caption : configuration[val].caption;
+                configuration[val].caption = layerConfiguration.caption;
             }
             else {
                 configuration[val].text = layerConfiguration.text ? layerConfiguration.text : configuration[val].text;
