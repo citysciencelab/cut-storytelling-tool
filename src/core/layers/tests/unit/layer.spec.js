@@ -5,7 +5,7 @@ import {Point, MultiPoint} from "ol/geom.js";
 import Feature from "ol/Feature.js";
 import Layer from "../../layer";
 import Group from "../../group";
-
+import Collection from "ol/Collection";
 
 describe("src/core/layers/layer.js", () => {
     let attributes,
@@ -51,7 +51,8 @@ describe("src/core/layers/layer.js", () => {
         },
         getMinResolution: () => {
             return layerResoMin;
-        }
+        },
+        setZIndex: () => sinon.spy()
     };
 
     before(() => {
@@ -69,6 +70,9 @@ describe("src/core/layers/layer.js", () => {
                 return {
                     getResolutions: () => [2000, 1000]
                 };
+            },
+            getLayers: () => {
+                return new Collection();
             }
         };
 
@@ -484,11 +488,13 @@ describe("src/core/layers/layer.js", () => {
         });
         attributes.singleBaselayer = true;
         attributes.parentId = "Baselayer";
+        attributes.isBaseLayer = true;
         layerWrapper = new Layer(attributes, olLayer);
 
         attCopy.isSelected = true;
         attCopy.isVisibleInMap = true;
         attCopy.id = "anotherId";
+        attCopy.isBaseLayer = true;
         layerWrapper2 = new Layer(attCopy, olLayer);
         layerWrapper3 = new Layer(attCopy, olLayer);
 

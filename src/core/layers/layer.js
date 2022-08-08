@@ -503,7 +503,7 @@ Layer.prototype.moveUp = function () {
 function handleSingleBaseLayer (isSelected, layer) {
     const id = layer.get("id"),
         layerGroup = bridge.getLayerModelsByAttributes({parentId: layer.get("parentId")}),
-        singleBaselayer = layer.get("singleBaselayer") && layer.get("parentId") === "Baselayer";
+        singleBaselayer = layer.get("singleBaselayer") && layer.get("isBaseLayer") === true;
 
     if (isSelected) {
         // This only works for treeType 'custom', otherwise the parentId is not set on the layer

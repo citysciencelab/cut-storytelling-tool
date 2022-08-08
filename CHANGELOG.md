@@ -64,6 +64,7 @@
         - sinon: 12.0.1 to 14.0.0
         - zip-a-folder: 1.1.3 to 1.1.5
 - WfsSearch: `inputLabel` are now translated.
+- In the `light` topic tree, the `singleBaselayer` attribute can now also be used.
 
 ### Deprecated
 

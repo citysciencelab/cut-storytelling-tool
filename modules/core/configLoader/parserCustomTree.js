@@ -22,13 +22,14 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @param  {Object} [object={}] - Baselayer | Overlayer | Folder
      * @param  {String} [parentId=""] Id of parent item.
      * @param  {Number} [level=0] Level of recursion. Equals to level in layertree.
+     * @param  {Boolean} [isAbaseLayer=false] Objects are of type BaseLayer (only relevant for treeType= "light")
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesWhere
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesList
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
      * @returns {void}
      */
-    parseTree: function (object = {}, parentId = "", level = 0) {
-        const isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree" || this.isAncestorBaseLayer(parentId)),
+    parseTree: function (object = {}, parentId = "", level = 0, isAbaseLayer = false) {
+        const isBaseLayer = isAbaseLayer || Boolean(parentId === "Baselayer" || this.isAncestorBaseLayer(parentId)),
             treeType = Radio.request("Parser", "getTreeType");
 
         if (object?.Layer) {
