@@ -1,5 +1,6 @@
 import StyleModel from "./style.js";
 import {Style, Fill, Stroke} from "ol/style.js";
+import {drawHatch} from "./polygonStyleHatch";
 
 const PolygonStyleModel = StyleModel.extend(/** @lends PolygonStyleModel.prototype */{
     /**
@@ -22,7 +23,8 @@ const PolygonStyleModel = StyleModel.extend(/** @lends PolygonStyleModel.prototy
         "polygonStrokeDashOffset": 0,
         "polygonStrokeMiterLimit": 10,
         // for fill
-        "polygonFillColor": [10, 200, 100, 0.5]
+        "polygonFillColor": [10, 200, 100, 0.5],
+        "polygonFillHatch": undefined
     },
 
     initialize: function (feature, styles, isClustered) {
@@ -36,8 +38,7 @@ const PolygonStyleModel = StyleModel.extend(/** @lends PolygonStyleModel.prototy
      * @returns {ol/style} - The created style.
      */
     getStyle: function () {
-        return new Style({
-            stroke: new Stroke({
+        const stroke = new Stroke({
                 lineCap: this.get("polygonStrokeCap"),
                 lineJoin: this.get("polygonStrokeJoin"),
                 lineDash: this.get("polygonStrokeDash"),
@@ -46,10 +47,89 @@ const PolygonStyleModel = StyleModel.extend(/** @lends PolygonStyleModel.prototy
                 color: this.get("polygonStrokeColor"),
                 width: this.get("polygonStrokeWidth")
             }),
-            fill: new Fill({
-                color: this.get("polygonFillColor")
-            })
-        });
+            polygonFillColor = this.get("polygonFillColor"),
+            polygonFillHatch = this.get("polygonFillHatch"),
+            fill = new Fill({color:
+                polygonFillHatch
+                    ? this.getPolygonFillHatch(polygonFillHatch)
+                        .getContext("2d")
+                        .fillStyle
+                    : polygonFillColor
+            });
+
+        return new Style({stroke, fill});
+    },
+
+    /**
+     * Generates a polygon fill pattern.
+     * @param {object} params parameters as defined in style.json.md#Polygon.polygonFillHatch
+     * @returns {HTMLCanvasElement} contains polygon fill pattern
+     */
+    getPolygonFillHatch: function ({
+        pattern = "diagonal",
+        size = 30,
+        lineWidth = 10,
+        backgroundColor = [0, 0, 0, 1],
+        patternColor = [255, 255, 255, 1]
+    }) {
+        const canvas = document.createElement("canvas"),
+            context = canvas.getContext("2d");
+
+        canvas.width = size;
+        canvas.height = size;
+
+        context.fillStyle = `rgba(${backgroundColor.join(",")})`;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        context.lineWidth = lineWidth;
+        context.strokeStyle = `rgba(${patternColor.join(",")})`;
+
+        drawHatch(context, size, pattern);
+
+        context.fillStyle = context.createPattern(canvas, "repeat");
+
+        return canvas;
+    },
+
+    rotateContextCenter: function (context, size, degrees = 90) {
+        context.translate(0.5 * size, 0.5 * size);
+        context.rotate(degrees * (Math.PI / 180));
+        context.translate(-0.5 * size, -0.5 * size);
+    },
+
+    getPolygonFillHatchLegendDataUrl: function () {
+        const originalCanvas = this.getPolygonFillHatch(this.get("polygonFillHatch")),
+            strokeColor = this.returnColor(this.get("polygonStrokeColor"), "hex"),
+            strokeWidth = parseInt(this.get("polygonStrokeWidth"), 10),
+            strokeOpacity = this.get("polygonStrokeColor")[3].toString() || 0,
+            legendCanvas = document.createElement("canvas"),
+            legendContext = legendCanvas.getContext("2d"),
+            halfStroke = strokeWidth / 2,
+            doubleStroke = strokeWidth * 2;
+
+        legendCanvas.width = originalCanvas.width + doubleStroke;
+        legendCanvas.height = originalCanvas.height + doubleStroke;
+
+        legendContext.drawImage(
+            originalCanvas,
+            strokeWidth,
+            strokeWidth
+        );
+
+        legendContext.lineCap = "round";
+        legendContext.lineJoin = "round";
+        legendContext.strokeStyle = strokeColor;
+        legendContext.lineWidth = strokeWidth;
+        legendContext.globalAlpha = strokeOpacity;
+
+        legendContext.strokeRect(
+            halfStroke,
+            halfStroke,
+            legendCanvas.width - strokeWidth,
+            legendCanvas.height - strokeWidth
+        );
+
+        return legendCanvas.toDataURL();
     },
 
     /**

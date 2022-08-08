@@ -11,6 +11,7 @@
 ### __Breaking Changes__
 
 ### Added
+- #657: Polygon hatch patterns to allow for further design options in the style.json file have been implemented.
 - PortalFooter:
     - Possibility to display additional information in the footer
 - Added DPI selection to print dialog (as advertised by mapfish print via "dpiSuggestions")

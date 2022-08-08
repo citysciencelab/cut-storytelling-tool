@@ -518,25 +518,33 @@ export default {
             const fillColor = style.get("polygonFillColor") ? convertColor(style.get("polygonFillColor"), "rgbString") : "black",
                 strokeColor = style.get("polygonStrokeColor") ? convertColor(style.get("polygonStrokeColor"), "rgbString") : "black",
                 strokeWidth = style.get("polygonStrokeWidth"),
-                fillOpacity = style.get("polygonFillColor")[3] || 0,
+                fillOpacity = style.get("polygonFillColor")?.[3] || 0,
+                fillHatch = style.get("polygonFillHatch"),
                 strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
-            let svg = "data:image/svg+xml;charset=utf-8,";
 
-            svg += "<svg height='35' width='35' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
-            svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
-            svg += fillColor;
-            svg += ";fill-opacity:";
-            svg += fillOpacity;
-            svg += ";stroke:";
-            svg += strokeColor;
-            svg += ";stroke-opacity:";
-            svg += strokeOpacity;
-            svg += ";stroke-width:";
-            svg += strokeWidth;
-            svg += ";'/>";
-            svg += "</svg>";
+            if (fillHatch) {
+                legendObj.graphic = style.getPolygonFillHatchLegendDataUrl();
+            }
+            else {
+                let svg = "data:image/svg+xml;charset=utf-8,";
 
-            legendObj.graphic = svg;
+                svg += "<svg height='35' width='35' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
+                svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
+                svg += fillColor;
+                svg += ";fill-opacity:";
+                svg += fillOpacity;
+                svg += ";stroke:";
+                svg += strokeColor;
+                svg += ";stroke-opacity:";
+                svg += strokeOpacity;
+                svg += ";stroke-width:";
+                svg += strokeWidth;
+                svg += ";'/>";
+                svg += "</svg>";
+
+                legendObj.graphic = svg;
+            }
+
             return legendObj;
         },
 

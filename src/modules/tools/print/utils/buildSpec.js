@@ -847,6 +847,9 @@ const BuildSpecModel = {
         if (typeof fillColor === "string") {
             fillColor = this.colorStringToRgbArray(fillColor);
         }
+        else if (fillColor instanceof CanvasPattern) {
+            fillColor = [0, 0, 0, 0];
+        }
 
         obj.fillColor = convertColor(fillColor, "hex");
         obj.fillOpacity = fillColor[3];
