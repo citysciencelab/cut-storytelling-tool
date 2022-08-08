@@ -75,37 +75,36 @@ describe("src/modules/tools/filter/components/LayerFilterSnippet.vue", () => {
         });
     });
     describe("hasUnfixedRules", () => {
-        it("should return false if there are no rules with fixed=false", async () => {
-            wrapper.vm.changeRule({
+        it("should return false if there are no rules with fixed=false", () => {
+            const rules = {
                 snippetId: 1,
                 startup: false,
                 fixed: true,
                 attrName: "test",
                 operator: "EQ"
-            });
-            await wrapper.vm.$nextTick();
-            expect(wrapper.vm.hasUnfixedRules()).to.be.false;
+            };
+
+            expect(wrapper.vm.hasUnfixedRules(rules)).to.be.false;
         });
-        it("should return true if there are rules with fixed=false in the rules", async () => {
-            await wrapper.setProps({
-                filterRules: [
-                    {
-                        snippetId: 0,
-                        startup: false,
-                        fixed: false,
-                        attrName: "test",
-                        operator: "EQ"
-                    },
-                    {
-                        snippetId: 1,
-                        startup: false,
-                        fixed: true,
-                        attrName: "test",
-                        operator: "EQ"
-                    }
-                ]
-            });
-            expect(wrapper.vm.hasUnfixedRules()).to.be.true;
+        it("should return true if there are rules with fixed=false in the rules", () => {
+            const rules = [
+                {
+                    snippetId: 1,
+                    startup: false,
+                    fixed: true,
+                    attrName: "test",
+                    operator: "EQ"
+                },
+                {
+                    snippetId: 0,
+                    startup: false,
+                    fixed: false,
+                    attrName: "test",
+                    operator: "EQ"
+                }
+            ];
+
+            expect(wrapper.vm.hasUnfixedRules(rules)).to.be.true;
         });
     });
     describe("getTitle", () => {

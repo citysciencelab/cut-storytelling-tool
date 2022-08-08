@@ -1,5 +1,7 @@
 >**[Back to the Masterportal documentation](doc.md)**.
 
+>If this site isn´t displayed correctly please use this link: **[alternative config.json documentation](https://www.masterportal.org/files/masterportal/html-doku/doc/latest/config.json.html)**
+
 [TOC]
 
 ***
@@ -1593,6 +1595,7 @@ The filter tool offers a range of options to filter vector data.
 |layerSelectorVisible|no|Boolean|true|To display a selector for the layers. Put to `false` to show without selector.|false|
 |multiLayerSelector|no|Boolean|true|If layerSelectorVisible true, wether one can open multiple sections of the selector at the same time.|false|
 |liveZoomToFeatures|no|Boolean|true|Defines whether the filter immediately zooms to filter results.|false|
+|geometrySelectorOptions|no|[filterGeometrySelector](#markdown-header-portalconfigmenutoolfilterfiltergeometryselector)[]|false|Options for an additional tool for filtering within a self-drawn area.|false|
 |minScale|no|Integer|5000|Minimum zoom level the filter zooms in when displaying filter results.|false|
 |layers|no|[filterLayer](#markdown-header-portalconfigmenutoolfilterfilterlayer)[]|[]|Configuration of layers to be filtered. Can be an array of plain layer ids also - if so the layer and all snippets are identified automatically.|false|
 
@@ -1609,12 +1612,76 @@ The following example uses only a layer id to generate the filter automatically.
         "renderToWindow": false,
         "deactivateGFI": false,
         "layerSelectorVisible": false,
+        "geometrySelectorOptions": {
+            "visible": true
+        },
         "layers": [
             {
                 "layerId": "8712"
             }
         ]
     }
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.filter.filterGeometrySelector
+
+An additional selection appears above the filter where a geometry can be selected and drawn on the map. The filter filters only in the selected area.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|visible|yes|Boolean|true|Activates the geometry selector.|false|
+|geometries|no|String[]|["Polygon", "Rectangle", "Circle", "LineString"]|The selectable geometries and their order.|false|
+|invertGeometry|no|Boolean|true|true: The geometry is transparent, the outer area is displayed as a shadow. false: The fill specifications apply to the geometry itself.|false|
+|fillColor|no|String|"rgba(0, 0, 0, 0.33)"|The fill color of the outer area (or geometry if invertGeometry = `false`).|false|
+|strokeColor|no|String|"rgba(0, 0, 0, 1)"|The color of the border of the geometry.|false|
+|strokeWidth|no|Number|1|The thickness of the border of the geometry.|false|
+|defaultBuffer|no|Number|20|The geometry "LineString" is given a buffer (in meters) to make the LineString a "tube". This is the default distance from the center to the edge in meters.|false|
+|circleSides|no|Number|256|The geometry "Circle" is converted to a polygon for technical reasons. This is the number of polygon points of the resulting geometry.|false|
+
+**Example**
+
+Example of the minimal configuration of the filterGeometrySelector.
+
+```json
+{
+    "visible": true
+}
+```
+
+**Example**
+
+Example of a complete configuration with the default settings of the filterGeometrySelector.
+
+```json
+{
+    "visible": true,
+    "circleSides": 256,
+    "defaultBuffer": 20,
+    "geometries": ["Polygon", "Rectangle", "Circle", "LineString"],
+    "invertGeometry": true,
+    "fillColor": "rgba(0, 0, 0, 0.33)",
+    "strokeColor": "rgba(0, 0, 0, 1)",
+    "strokeWidth": 1
+}
+```
+
+**Example**
+
+Example of a completely changed configuration of the filterGeometrySelector.
+
+```json
+{
+    "visible": true,
+    "circleSides": 32,
+    "defaultBuffer": 60,
+    "geometries": ["LineString", "Rectangle", "Circle", "Polygon"],
+    "invertGeometry": false,
+    "fillColor": "rgba(0, 0, 200, 0.1)",
+    "strokeColor": "rgba(255, 0, 0, 1)",
+    "strokeWidth": 2
 }
 ```
 
@@ -1636,12 +1703,15 @@ An object to define a layer to filter with.
 |strategy|no|String||There are two filter strategies: `passive` - a filter button is used. And `active` - the filter will be triggered immediately by any choice made. Passive strategy is used by default.|false|
 |searchInMapExtent|no|Boolean|false|Set to `true` to activate a generic checkbox, where you can set the filtering to `only filter in current browser extent`. If the extent checkbox is checked, automatic zooming is disabled. Make sure to set [loadingStrategy](#markdown-header-themenconfiglayervector) to `all` to avoid weird effects when zooming out after filtering in extent.|false|
 |searchInMapExtentInfo|no|Boolean|true|A little icon is shown right hand side of the checkbox. Clicking the icon, a standard description is shown. Set to `false` to disable this feature. Set to a individual text to use an own description or use a translation key.|false|
+|searchInMapExtentProactive|no|Boolean|true|The checkbox for filtering in the browser extent triggers direct filtering in the current browser extent under `strategy`: `active`. This can be disabled by setting `searchInMapExtentProactive`: `false`.|false|
 |showHits|no|Boolean|true|After filtering, the hits are displayed. Set to `false` to not show the hits.|false|
 |clearAll|no|Boolean|false|After clicking button Reset all, all the features will be shown. Set to `true` to clear all the features after clicking Reselt all button.|false|
+|wmsRefId|no|String|""|If the layer is filtered, the WMS layer with `wmsRefId` will be invisible and deactivated from Tree. After resetting the layer, the WMS layer will be activated and visible again.|false|
 |snippetTags|no|Boolean|true|After filtering the current setting is displayed as tags. Set to `false` to turn of this feature.|false|
 |labelFilterButton|no|String|"common:modules.tools.filter.filterButton"|If strategy is set to `passive` only: The text of the filter button. Can be a translation key.|false|
 |paging|no|Number|1000|The filter will load features into the map in chunks. Paging is the chunk size. If the chunk size is set too low, the filtering will be slowed down. Set the chunk size too high, the loading of the chunk will slow the filtering down. Try it out to find your fastes setup.|false|
 |extern|no|Boolean|false|When set to `true`, filtering is done on the server side. Useful for big sets of data that can't be loaded into the browser at once. Remember to set the **[isNeverVisibleInTree](#markdown-header-themenconfiglayer)** flag of the layer to `true` to avoid loading of the whole data set by user click on its entry in the tree.|false|
+|geometryName|no|String|""|Only for extern `true` in connection with filtering within polygons: The geometry name of the features to be able to detect an intersection.|false|
 |snippets|no|[snippets](#markdown-header-portalconfigmenutoolfilterfilterlayersnippets)[]|[]|Configuration of snippets to adjust the filtering. Can be a minimalistic array of attribute names. Can be left empty to use the automatic identification of all snippets possible.|false|
 
 **Example**
@@ -1657,6 +1727,7 @@ In this example one snippet is set with only an attrName. The snippet type is de
     "searchInMapExtentInfo": true,
     "showHits": true,
     "clearAll": false,
+    "wmsRefId": "21066",
     "shortDescription": "School master data and pupil numbers of Hamburg schools",
     "description": "School master data and pupil numbers of Hamburg schools",
     "snippetTags": true,

@@ -378,6 +378,11 @@
                 "hintInfoScale": "Der ausgewählte Druckmaßstab weicht vom Maßstab im Kartenfenster ab. Das kann zu einem veränderten Kartenlayout im Druck führen.",
                 "invisibleLayer": "Folgende Themen können im ausgewählten Druckmaßstab {{scale}} nicht gedruckt werden:"
             },
+            "sessionTool": {
+                "uploadHeader": "Sitzung laden",
+                "buttonText": "Datei auswählen",
+                "downloadHeader": "Sitzung speichern"
+            },
             "shadow": {
                 "shadowDisplay": "Schattendarstellung"
               },
@@ -467,6 +472,19 @@
                 "filterResult": {
                     "label": "Alle Filter-Treffer",
                     "unit": "{{amountOfFilteredItems}} Treffer"
+                },
+                "geometryFilter": {
+                    "activate": "Gebiets-Filter aktivieren",
+                    "help": "Wählen Sie auf der Karte ein Gebiet aus um nur innerhalb dieses Gebietes zu filtern.",
+                    "selectGeometry": "Wählen Sie eine Geometrie aus.",
+                    "buffer": "Puffer [m]",
+                    "removeGeometry": "Gebiet entfernen",
+                    "geometries": {
+                        "polygon": "Fläche",
+                        "rectangle": "Rechteck",
+                        "circle": "Kreis",
+                        "lineString": "Linie + Puffer"
+                    }
                 }
             },
             "pendler": {

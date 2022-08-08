@@ -175,8 +175,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
 
                     expect([566499, 5942803]).to.eql(center);
                 });
-                // https://www.jira.geoportal-hamburg.de/browse/BG-2999
-                it.skip("?zoomtogeometry=[number] zooms to a district", async function () {
+                it("?zoomtogeometry=[number] zooms to a district", async function () {
                     const expectedCoordinate = [556535.269, 5937846.413000001];
 
                     // Bezirk 1 is Altona according to portal/master/config.js listing
@@ -184,16 +183,14 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                     expect(await centersTo(driver, expectedCoordinate)).to.be.true;
                 });
-
-                it.skip("deprecated - ?bezirk=[districtName] zooms to a district", async function () {
+                it("deprecated - ?bezirk=[districtName] zooms to a district", async function () {
                     const expectedCoordinate = [578867.787, 5924175.483999999];
 
                     await loadUrl(driver, `${url}?bezirk=bergedorf`, mode);
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                     expect(await centersTo(driver, expectedCoordinate)).to.be.true;
                 });
-                // https://www.jira.geoportal-hamburg.de/browse/BG-2999
-                it.skip("?Map/zoomToGeometry=[number] zooms to a district", async function () {
+                it("?Map/zoomToGeometry=[number] zooms to a district", async function () {
                     const expectedCoordinate = [556535.269, 5937846.413000001];
 
                     // Bezirk 1 is Altona according to portal/master/config.js listing
@@ -726,8 +723,7 @@ async function ParametricUrlTests ({builder, url, resolution, browsername, mode,
                         {coordinate: [567043.565, 5934455.808], image: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg"}
                     ]), 20000);
                 });
-                // https://www.jira.geoportal-hamburg.de/browse/BG-3000
-                it.skip("?featureViaURL test point", async function () {
+                it("?featureViaURL test point", async function () {
                     await loadUrl(driver, `${url}?featureViaURL=[{"layerId":"42","features":[{"coordinates":[10,53.57],"label":"TestPunkt"}]}]`, mode);
 
                     await driver.wait(until.elementLocated(By.css(".navbar")), 12000);

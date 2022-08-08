@@ -16,7 +16,7 @@ export default {
      * @param {Object} context The context Vue instance.
      * @returns {Boolean} false, if config does not contain the mapMarker.
      */
-    initialize: ({context}) => {
+    initialize: (context) => {
         if (context) {
             return fetchFirstModuleConfig(context, configPaths, "MapMarker", false);
         }

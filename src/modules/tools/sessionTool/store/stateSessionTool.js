@@ -1,6 +1,6 @@
 /**
  * User type definition
- * @typedef {Object} filter
+ * @typedef {Object} sessionTool
  * @property {Boolean}  active - if true, component is rendered
  * @property {Boolean}  deactivateGFI - if true, component activation deactivates gfi component
  * @property {String}   icon - icon next to title
@@ -8,25 +8,17 @@
  * @property {String}   name - Module name
  * @property {Boolean}  renderToWindow - if true, component is rendered in a window pane instead of sidebar
  * @property {Boolean}  resizableWindow - if true and if rendered to window pane, the pane is resizable
- * @property {Array}  layers - the layer configuration for filter
+ * @property {Array}  isVisibleInMenu: if true, component can be activatet over menu
  */
-
-export default {
+const state = {
     active: false,
-    icon: "bi-funnel-fill",
-    id: "filter",
-    name: "common:menu.tools.filter",
+    deactivateGFI: true,
+    icon: "bi-bullseye",
+    id: "sessionTool",
+    name: "common:menu.tools.sessionTool",
     renderToWindow: false,
     resizableWindow: true,
-    resetLayer: false,
-    deactivateGFI: false,
-    layerSelectorVisible: true,
-    multiLayerSelector: true,
-    liveZoomToFeatures: true,
-    geometrySelectorOptions: false,
-    minScale: 5000,
-    saveTo: "void",
-    layers: [],
-    filters: [],
-    filtersHits: []
+    isVisibleInMenu: true
 };
+
+export default state;

@@ -30,11 +30,6 @@ export default {
             }
         }
     },
-    mounted () {
-        this.$nextTick(() => {
-            this.emitCurrentCommand(this.checked);
-        });
-    },
     methods: {
         /**
          * Emits the current command to whoever is listening.

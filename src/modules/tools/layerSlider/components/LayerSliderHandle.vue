@@ -112,11 +112,13 @@ export default {
          * @returns {void}
          */
         showLayer: function (layerId, transparency, layerIds) {
-            this.sendModification({
-                layerId: layerId,
-                status: transparency >= 0 && transparency <= 100,
-                transparency: transparency === 100 ? 0 : transparency
-            });
+            if (layerIds.filter(layer => layer.layerId === layerId).length > 0) {
+                this.sendModification({
+                    layerId: layerId,
+                    status: transparency >= 0 && transparency <= 100,
+                    transparency: transparency
+                });
+            }
 
             if (transparency === 0) {
                 const filteredObj = layerIds.filter(obj => obj.layerId === layerId),

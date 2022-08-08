@@ -3,9 +3,9 @@
  * @see https://datatracker.ietf.org/doc/html/rfc4180
  * @param {Array[]|Object[]} jsonData an array of String[] (first set could be the header) or an array of Object[] (keys of record with the most fields will be set as header, make sure that all sets have the same order of keys)
  * @param {Function|Boolean} [onerror=false] the error handler to receive errors with as function(error)
- * @param {Boolean} [useSemicolon=false] rfc4180 describes the use of "," - set this to true to use ";" as delimitor instead
+ * @param {Boolean} [useSemicolon=false] rfc4180 describes the use of "," - set this to true to use ";" as delimiter instead
  * @param {Boolean} [useLineFeedOnly=false] rfc4180 describes the use of "CRLF" - set this to true to use only "LF" as line ending instead
- * @returns {String|Boolean} the resulting csv data as plain text (string) or false if an error occured
+ * @returns {String|Boolean} the resulting csv data as plain text (string) or false if an error occurred
  */
 function convertJsonToCsv (jsonData, onerror = false, useSemicolon = false, useLineFeedOnly = false) {
     if (!Array.isArray(jsonData)) {

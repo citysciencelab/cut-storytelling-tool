@@ -12,17 +12,42 @@
 
 ### Added
 - #657: Polygon hatch patterns to allow for further design options in the style.json file have been implemented.
+
+### Changed
+- Filter:
+    - Making intern wfs layer loadingStrategy with 'all' by filtering
+    - The checkbox for filtering in the browsers extent now triggers direct filtering with `strategy`: `active`. This can be disabled by setting `searchInMapExtentProactive` to `false`.
+    - New parameter wmsRefId is added. If the layer is filtered, the WMS layer with "wmsRefId" will be invisible and deactivated from Tree. After resetting the layer, the WMS layer will be activated and visible again.
+- The version of node was updated, must be >= 16.13.2 <= 16.16.0 and the version of npm was updated, must be >= 8.1.2 <=8.11.0.
+- Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
+
+### Deprecated
+
+### Removed
+The following NPM package is removed:
+    - @intlify/vue-i18n-loader
+
+### Fixed
+
+## v2.24.0 - 2022-08-03
+### __Breaking Changes__
+
+### Added
 - PortalFooter:
     - Possibility to display additional information in the footer
 - Added DPI selection to print dialog (as advertised by mapfish print via "dpiSuggestions")
 - Filter:
     - New option added called "resetLayer". If true it will change the reset button in the filter to a button which resets the whole layer and ignores the prechecked values
+    - New component GeometryFilter added. If "geometrySelectorVisible" is true, selecting an area on the map, to filter only within that area, is activated.
 - GFI: Show `GFI` (Tool: `Retrieve information`) for vectorTiles layers is now possible.
 
 ### Changed
 - CompareFeatures: The values true and false are now translated.
 - The interactions between the `GFI` and the `Map` have been moved from the Map module to the GFI module/tool.
 - Rename the layer names `measure_layer` to `measureLayer` and draw `import_draw_layer` to `importDrawLayer`.
+- The following NPM packages have been updated:
+    - dependencies:
+        - core-js: 3.15.2 to 3.24.0
 
 ### Deprecated
 
@@ -30,18 +55,21 @@
 
 ### Fixed
 - Fix unix-related path issue in findWhereJs.js
-- Issue #804: Legend window will not be cut off when width changes to a maximum.
-- Correct documentation regarding field names (serviceID -> serviceId)
+- Correct documentation regarding field names (serviceID -> serviceId).
 - Link in footer will now have white text for better readability.
-- Issue #807: transparency setting for child layers is getting set/initialized now for grouped layers.
 - Print: Polygon representations are now correctly shown in the map and in the legend.
-- layerSequence: fix possibility to move layers in tree despite defined layerSequence
-- Print: fix handling for highresolution plotService
+- layerSequence: fix possibility to move layers in tree despite defined layerSequence.
+- Print: fix handling for highresolution plotService.
 - Fixed a bug where the wrong GFi was displayed after turning on and off different layers.
 - Url parameter 'featureViaURL' with test point is fixed.
+- Issue #689: The layerSlider handle mode displays the layers correctly at the steps.
 - Issue #798: If a tool is opened by url parameter and 'deactivateGFI' is true at tool-config, no gfi is available if tool is open.
-- Issue #810: Filter overwrites the "attributions" status
 - Issue #800: The Zoom-Out control works again with `startZoomlevel: 0`.
+- Issue #802: Custom mapMarker configurations is respected again.
+- Issue #804: Legend window will not be cut off when width changes to a maximum.
+- Issue #807: transparency setting for child layers is getting set/initialized now for grouped layers.
+- Issue #810: Filter overwrites the "attributions" status.
+- Fixed language switching bug in the addWMS tool.
 
 ---
 

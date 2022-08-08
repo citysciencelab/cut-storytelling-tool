@@ -49,6 +49,14 @@ describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
     afterEach(() => {
         sinon.restore();
     });
+    describe("initializePointMarker", () => {
+        it("check initialization of the pointMarker", () => {
+            const context = {state: {context: "content"}},
+                initResult = actions.initialize(context);
+
+            expect(initResult).to.be.not.null;
+        });
+    });
     describe("placingPointMarker", () => {
         it("placingPointMarker if no styleListModel exist", done => {
             const payload = [10, 10],

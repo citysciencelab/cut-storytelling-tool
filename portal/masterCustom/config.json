@@ -247,7 +247,7 @@
               },
               {
                 "title": "translate#common:modules.tools.layerSlider.serviceFour",
-                "layerId": "1103"
+                "layerId": "1757"
               }
             ]
           },
@@ -302,8 +302,7 @@
           },
           "featureLister": {
             "name": "Liste",
-            "icon": "bi-list",
-            "lister": 10
+            "icon": "bi-list"
           },
           "saveSelection": {
             "name": "translate#common:menu.tools.saveSelection",
@@ -867,7 +866,7 @@
                 }
               ],
               "name": "Krankenhäuser und Schulen",
-              "visibility": true
+              "visibility": false
             }
           ]
         }
