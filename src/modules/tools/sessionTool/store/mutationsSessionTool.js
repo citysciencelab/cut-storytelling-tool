@@ -8,7 +8,11 @@ const mutations = {
      * {setKey:   (state, payload) => *   state[key] = payload * }
      * will be returned.
      */
-    ...generateSimpleMutations(sessionToolState)
+    ...generateSimpleMutations(sessionToolState),
+
+    addObserver: (state, payload) => {
+        state.observer.push(payload);
+    }
 };
 
 export default mutations;

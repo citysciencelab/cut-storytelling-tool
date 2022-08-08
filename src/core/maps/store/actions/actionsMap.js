@@ -39,6 +39,16 @@ export default {
         // triggers the function checkForScale modules\core\modelList\layer\model.js
         Radio.trigger("MapView", "changedOptions", params);
         commit("setScale", params.scale);
+
+        dispatch("Tools/SessionTool/register", {key: "Maps", getter: () => {
+            return {
+                extent: getters.getCurrentExtent
+            };
+        }, setter: (payload) => {
+            if (payload?.extent) {
+                dispatch("zoomToExtent", {extent: payload.extent});
+            }
+        }}, {root: true});
     },
 
     /**

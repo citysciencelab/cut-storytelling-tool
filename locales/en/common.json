@@ -380,8 +380,10 @@
             },
             "sessionTool": {
                 "uploadHeader": "Load Session",
-                "buttonText": "Select file",
-                "downloadHeader": "Save Session"
+                "buttonTextUpload": "Upload",
+                "buttonTextDownload": "Download",
+                "downloadHeader": "Save Session",
+                "errorOnLoad": "An error occurred during upload!"
             },
             "shadow": {
                 "shadowDisplay": "Shadow display"

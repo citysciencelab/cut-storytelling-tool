@@ -380,8 +380,10 @@
             },
             "sessionTool": {
                 "uploadHeader": "Sitzung laden",
-                "buttonText": "Datei auswählen",
-                "downloadHeader": "Sitzung speichern"
+                "buttonTextUpload": "Hochladen",
+                "buttonTextDownload": "Herunterladen",
+                "downloadHeader": "Sitzung speichern",
+                "errorOnLoad": "Beim hochladen ist ein Fehler aufgetreten!"
             },
             "shadow": {
                 "shadowDisplay": "Schattendarstellung"
