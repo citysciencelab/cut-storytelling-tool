@@ -4,7 +4,7 @@ import Feature from "ol/Feature";
 import {defaultInteractionConfig} from "../../../constantsWfsTransaction";
 import gettersWfsTransaction from "../../../store/gettersWfsTransaction";
 
-describe("src/modules/tools/wfsTransaction/tests/unit/utils/addFeaturePropertiesToFeature.js", () => {
+describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () => {
     let state;
 
     describe("currentInteractionConfig", () => {
