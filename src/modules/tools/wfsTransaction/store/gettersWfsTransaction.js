@@ -31,8 +31,13 @@ const getters = {
             }
             if (val === "edit") {
                 console.warn("WfsTransaction: The parameter 'edit' has been deprecated in version 3.0.0. Please use 'update' instead.");
-                configuration.update.available = typeof interactionConfiguration === "boolean" ? interactionConfiguration : false;
-                configuration.update.caption = typeof interactionConfiguration === "string" ? interactionConfiguration : configuration.update.caption;
+                if (typeof interactionConfiguration === "boolean") {
+                    configuration.update.available = interactionConfiguration;
+                }
+                else {
+                    configuration.update.available = typeof interactionConfiguration === "string";
+                }
+                configuration.update.text = typeof interactionConfiguration === "string" ? interactionConfiguration : configuration.update.text;
                 editUsed = true;
                 return;
             }
@@ -42,7 +47,7 @@ const getters = {
             }
             if (typeof interactionConfiguration === "string") {
                 console.warn("WfsTransaction: Please add the caption in an object as the parameter 'text'; adding it directly will be deprecated in version 3.0.0.");
-                configuration[val].caption = interactionConfiguration;
+                configuration[val].text = interactionConfiguration;
                 configuration[val].available = true;
                 return;
             }
@@ -64,7 +69,7 @@ const getters = {
             }
             if (layerConfiguration.caption !== undefined) {
                 console.warn("WfsTransaction: The parameter 'caption' has been deprecated in version 3.0.0. Please use 'text' instead.");
-                configuration[val].caption = layerConfiguration.caption;
+                configuration[val].text = layerConfiguration.caption;
             }
             else {
                 configuration[val].text = layerConfiguration.text ? layerConfiguration.text : configuration[val].text;
