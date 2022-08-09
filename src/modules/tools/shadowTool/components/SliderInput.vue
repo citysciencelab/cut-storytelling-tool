@@ -12,10 +12,6 @@ export default {
             required: true,
             default: ""
         },
-        valueLabel: {
-            type: String,
-            required: true
-        },
         value: {
             type: Number,
             required: true
