@@ -5,7 +5,7 @@ import Style from "ol/style/Style";
 import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import Icon from "ol/style/Icon";
-import createDrawStyle from "../../draw/utils/style/createDrawStyle";
+import {createDrawStyle} from "../../draw/utils/style/createDrawStyle";
 
 const supportedFormats = {
     kml: new KML({extractStyles: true, iconUrlFunction: (url) => proxyGstaticUrl(url)}),
@@ -337,11 +337,9 @@ export default {
             return;
         }
 
-        vectorLayer.importStyleFunction = (feature, resolution) => {
-            let drawState = feature.get("drawState");
-            console.log(drawState.drawType.geometry);
-            console.log(drawState);
-            let style = undefined;
+        vectorLayer.importStyleFunction = (feature) => {
+            const drawState = feature.getProperties().drawState;
+            let style;
 
             if (drawState.drawType.geometry === "Point") {
                 if (drawState.symbol.value !== "simple_point") {
@@ -355,21 +353,7 @@ export default {
                     });
                 }
                 else {
-                    style = new Style({
-                        image: new Circle({
-                            radius: drawState.pointSite / 2,
-                            fill: new Fill({color: drawState.color})
-                        }),
-                        fill: new Fill({
-                            color: drawState.color
-                        }),
-                        stroke: new Stroke({
-                            color: drawState.color,
-                            width: 1
-                        }),
-                        zIndex: drawState.zIndex
-                    });
-                    //style = createDrawStyle(drawState.color, drawState.color, drawState.drawType.geometry, drawState.pointSize, 1, drawState.zIndex);
+                    style = createDrawStyle(drawState.color, drawState.color, drawState.drawType.geometry, drawState.pointSize, 1, drawState.zIndex);
                 }
             }
             else if (drawState.drawType.geometry === "LineString") {
@@ -392,7 +376,6 @@ export default {
                 });
             }
             else if (drawState.drawType.geometry === "Circle") {
-                console.log("Circle");
                 style = new Style({
                     stroke: new Stroke({
                         color: drawState.colorContour,
@@ -408,24 +391,15 @@ export default {
                 });
             }
 
-            return style;
+            return style.clone();
         };
         vectorLayer.setStyle(vectorLayer.importStyleFunction);
 
-        console.log(vectorLayer);
         features.forEach(feature => {
-            let drawState = feature.get("drawState");
-
-            if (!drawState) {
-                return;
-            }
-
             feature.setStyle(vectorLayer.getStyleFunction()(feature));
 
             vectorLayer.getSource().addFeature(feature);
         });
-
-        //vectorLayer.getSource().addFeatures(features);
 
         alertingMessage = {
             category: i18next.t("common:modules.alerting.categories.info"),

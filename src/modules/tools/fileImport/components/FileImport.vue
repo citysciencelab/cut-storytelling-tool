@@ -96,10 +96,16 @@ export default {
                 const reader = new FileReader();
 
                 reader.onload = async f => {
-                    const vectorLayer = await this.addNewLayerIfNotExists("importDrawLayer");
+                    const vectorLayer = await this.addNewLayerIfNotExists("importDrawLayer"),
+                        fileNameSplit = file.name.split("."),
+                        fileExtension = fileNameSplit.length > 0 ? fileNameSplit[fileNameSplit.length - 1].toLowerCase() : "";
 
-                    this.importKML({raw: f.target.result, layer: vectorLayer, filename: file.name});
-                    this.importGeoJSON({raw: f.target.result, layer: vectorLayer, filename: file.name});
+                    if (fileExtension === "geosjon" || fileExtension === "json") {
+                        this.importGeoJSON({raw: f.target.result, layer: vectorLayer, filename: file.name});
+                    }
+                    else {
+                        this.importKML({raw: f.target.result, layer: vectorLayer, filename: file.name});
+                    }
                 };
 
                 reader.readAsText(file);
