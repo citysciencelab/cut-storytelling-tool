@@ -71,11 +71,12 @@ describe("src/modules/tools/wfsSearch/components/WfsSearchField.vue", () => {
             propsData: {
                 fieldId: "fieldId",
                 fieldName: "fieldName",
-                inputLabel: "common:modules.tools.wfsSearch.parcelNumber"
+                inputLabel: "common:modules.tools.wfsSearch.parcelNumber*"
             }
         });
 
         expect(wrapper.find("label").exists()).to.be.true;
-        expect(wrapper.find("label").classes("common")).to.be.true;
+        expect(wrapper.find("label").text()).to.equals("common:modules.tools.wfsSearch.parcelNumber*");
+        expect(wrapper.find("label").classes()).to.includes("col-md-5", "col-form-label");
     });
 });
