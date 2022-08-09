@@ -52,6 +52,7 @@ Generally it ist best practice to use
 ## Sizing
 
 For sizes we also have different variables that you can use:
+Usually the base size for rem is 16px (Browser Default). This can be changed by setting font-size in the html tag. Masterportal is also based on 16px for rem calculations but the base font size is 12 px (0.75rem based on 16px).
 
 ### Font Size / Typography
 Bootstrap offers these:
@@ -67,5 +68,8 @@ You can overwrite these variables if need be.
 Tools should be rendered to the sidebar. You can enable this by setting "renderToWindow": true.
 Tools should have the `$content_upper_space` at the top between content and the top line.
 Between two different content sections `$content_section_space` and between content within a section (for example between an input field and the next input field) itself `$content_space`.
-Theses variables also depend on the base font size 12. If you change the font size, the spaces will also be bigger.
+Theses variables also depend on the base font size 16. If you change the font size in the html tag, the spaces will also be bigger/smaller.
+
+In this image you can see how the variables are meant to be used in tools:
+![toolSpacerVariables.png](toolSpacerVariables.PNG)
 

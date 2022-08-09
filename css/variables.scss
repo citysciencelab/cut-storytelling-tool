@@ -33,13 +33,14 @@ $link-decoration: none;
 // Typography
 //
 // Font, line-height, and color for body text, headings, and more.
-// In the case of masterportal, the base size is 12 px not the browser's default 16 px
+// In the case of masterportal, the base size is 16 px, the browser's default, as we do set a base font but not in the html tag.
+// We set the base variable to 12px. This is the base that bootstrap uses internally to calculate sizes (such as $font-size-sm)
 
-$font-size-base: 1rem;
+$font-size-base: .75rem;
 
 // Buttons + Forms
 //
-// Shared variables that are reassigned to `$input-` and `$btn-` specific variables.
+// Shared variables that are reassigned to `$input-` and `$btn-` specific variables.$conte
 
 $input-btn-font-size: $font-size-base * 0.875;
 
@@ -84,7 +85,7 @@ url("../node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2?a74547b2f0
 // Colors
 
 /* light_grey
- * Used for control elements placed directly on the map and wherever a light grey is needed
+ * Used for backgrounds and light elements that are not necessarily primary.
  * Elements: Buttons and button-like elements, borders, backgrounds
  */
 $light_grey: #E3E3E3;
@@ -145,8 +146,8 @@ $accent_contrast: #ffffff;
  $danger: $light_red;
 
 /* ICON SIZES */
-$icon_length: 3rem;
-$icon_length_small: 2rem;
+$icon_length: 2.25rem;
+$icon_length_small: 1.5rem;
 $icon_length_menu: 0; // TODO figure out correct value before usage
 $icon_length_list: 0; // TODO figure out correct value before usage
 
@@ -155,19 +156,25 @@ $font_family_default: "MasterPortalFont", "Arial", sans-serif;
 $font_family_narrow: "MasterPortalFont", "Arial Narrow", Arial, sans-serif;
 $font_family_accent: "MasterPortalFont Bold", "Arial Narrow Bold", Arial, sans-serif;
 
-/* NOTE we use bootstrap fint-sizes and only add font-sizes if really necessary */
-$font_size_huge: 16px;
+/* NOTE we use bootstrap font-sizes and only add font-sizes if really necessary 
+ * bootstrap sizes:
+ * $font-size-base = 12px (see this file)
+ * $font-size-sm = 10.5px (based on 12px base font size)
+ * $font-size-lg = 15px (based on 12px base font size)
+ * for different base-size the font sizes will be different as well, see variables.md
+ */
+$font_size_huge: 1rem; //16px should be replaced by font-size-lg
 $font_size_big: 14px;
 $font_size_default: 12px;
 $font_size_small_custom: 11px;
 $font_size_tiny: 10px;
 
 /* tool sizes */
-$content_upper_space: 3.5rem;
-$content_section_space: 2.5rem;
-$content_space: 1.25rem;
+$content_upper_space: 2.5rem;
+$content_section_space: 2rem;
+$content_space: 1rem;
 // Padding used for the Tool windows
-$padding: 1.75rem;
+$padding: 1.25rem;
 
 /* other */
 $shadow: rgba(0, 0, 0, 0.176);
