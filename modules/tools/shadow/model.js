@@ -106,6 +106,12 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
      * @returns {timestamp} timestamp the combined timestamp
      */
     combineTimeAndDate: function (time, date) {
+        console.log('-----------------');
+        var date = new Date("08/08/2022 00:00:00"); // some mock date.
+        var milliseconds = date.getTime();
+        console.log(date.getTime());
+        console.log(moment().year("2022").month("8").day("8").hour("00").minute("00").second("0").valueOf());
+        console.log(moment(date).hour(moment(time).get("hour")).minute(moment(time).get("minute")).second(moment(time).get("second")).valueOf());
         return moment(date).hour(moment(time).get("hour")).minute(moment(time).get("minute")).second(moment(time).get("second")).valueOf();
     },
 
@@ -154,6 +160,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
 
         if (typeof Cesium !== "undefined") {
             julianDate = Cesium.JulianDate.fromDate(moment(datetime).toDate());
+            console.log(julianDate);
             Radio.trigger("Map", "setShadowTime", julianDate);
         }
     },

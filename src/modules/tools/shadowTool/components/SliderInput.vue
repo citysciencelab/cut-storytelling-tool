@@ -1,12 +1,12 @@
 <script>
 export default {
-    name: "ShadowSliderInput",
+    name: "SliderInput",
     props: {
         label: {
             type: String,
             required: true
         },
-        valueLabel: {
+        valuelabel: {
             type: String,
             required: true
         },
@@ -47,9 +47,9 @@ export default {
         <div class="d-flex justify-content-between">
             <!-- <span>{{ unit }}</span> -->
             <span>
-               <!--  <b>{{ value }}</b> <span>{{ unit }}</span> -->
+            <!--  <b>{{ value }}</b> <span>{{ unit }}</span> -->
             </span>
-            <span>{{ valueLabel }}</span>
+            <span>{{ valuelabel }}</span>
         </div>
         <input
             :id="'shadow-slider-input-' + label"
