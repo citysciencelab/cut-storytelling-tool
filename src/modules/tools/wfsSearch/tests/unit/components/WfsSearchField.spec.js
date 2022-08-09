@@ -64,7 +64,7 @@ describe("src/modules/tools/wfsSearch/components/WfsSearchField.vue", () => {
         expect(options.at(2).text()).to.equal("Option B");
     });
 
-    it("renders a label with string that conatins 'common'", () => {
+    it("renders a label with string that contains '*'", () => {
         const wrapper = mount(WfsSearchField, {
             localVue,
             store,
