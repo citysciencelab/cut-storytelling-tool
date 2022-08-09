@@ -100,7 +100,7 @@ export default {
                         fileNameSplit = file.name.split("."),
                         fileExtension = fileNameSplit.length > 0 ? fileNameSplit[fileNameSplit.length - 1].toLowerCase() : "";
 
-                    if (fileExtension === "geosjon" || fileExtension === "json") {
+                    if (fileExtension === "geojson" || fileExtension === "json") {
                         this.importGeoJSON({raw: f.target.result, layer: vectorLayer, filename: file.name});
                     }
                     else {

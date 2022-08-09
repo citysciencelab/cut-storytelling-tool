@@ -395,6 +395,8 @@ export default {
         };
         vectorLayer.setStyle(vectorLayer.importStyleFunction);
 
+        features = checkIsVisibleSetting(features);
+
         features.forEach(feature => {
             feature.setStyle(vectorLayer.getStyleFunction()(feature));
 
