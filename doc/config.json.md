@@ -1442,7 +1442,7 @@ A tool's attribute key defines which tool is loaded. Each tool provides at least
 |active|no|Boolean|false|Whether the tool is open initially.|false|
 |icon|no|String||CSS icon class. Icon is shown before the tool name.|false|
 |isVisibleInMenu|no|Boolean|true|If true, the tool is listed in the menu.|false|
-|keepOpen|no|Boolean|false|Whether the tool remains open parallel to other tools.|false|
+|keepOpen|no|Boolean|false|Whether the tool remains open parallel to other tools. Only works if it is used for one tool and if tool is rendered to sidebar, other tools should be rendered to window.|false|
 |name|yes|String||Name displayed in the menu.|false|
 |onlyDesktop|no|Boolean|false|Whether the tool should only be visible in desktop mode.|false|
 |renderToWindow|no|Boolean|true|Whether the tool should be displayed in the movable widget element.|false|

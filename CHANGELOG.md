@@ -11,6 +11,8 @@
 ### __Breaking Changes__
 
 ### Added
+- KeepOpen attribute for tools:
+    - Allows to keep a tool open (that is rendered in a sidebar) when other tools (that are rendered to the window) are used.  
 - The following NPM packages are added:
     - dependencies:
         - "vue2-datepicker"
