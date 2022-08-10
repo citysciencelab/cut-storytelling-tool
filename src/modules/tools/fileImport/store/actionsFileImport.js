@@ -145,6 +145,14 @@ export default {
 
     },
 
+    /**
+     * Imports the given KML file from datasrc.raw, creating the features into datasrc.layer.
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} param.rootGetters the root getters
+     * @param {Object} datasrc data source to import, with properties filename, layer and raw.
+     * @returns {void}
+     */
     importKML: ({state, dispatch, rootGetters}, datasrc) => {
         const
             vectorLayer = datasrc.layer,
@@ -291,6 +299,14 @@ export default {
         dispatch("addImportedFilename", datasrc.filename);
     },
 
+    /**
+     * Imports the given GeoJSON file from datasrc.raw, creating the features into datasrc.layer.
+     * @param {Object} param.state the state
+     * @param {Object} param.dispatch the dispatch
+     * @param {Object} param.rootGetters the root getters
+     * @param {Object} datasrc data source to import, with properties filename, layer and raw.
+     * @returns {void}
+     */
     importGeoJSON: ({state, dispatch, rootGetters}, datasrc) => {
         const
             vectorLayer = datasrc.layer,
@@ -337,7 +353,7 @@ export default {
             return;
         }
 
-        vectorLayer.importStyleFunction = (feature) => {
+        vectorLayer.setStyle((feature) => {
             const drawState = feature.getProperties().drawState;
             let style;
 
@@ -392,8 +408,8 @@ export default {
             }
 
             return style.clone();
-        };
-        vectorLayer.setStyle(vectorLayer.importStyleFunction);
+        });
+        // vectorLayer.setStyle(vectorLayer.setStyleFunc);
 
         features = checkIsVisibleSetting(features);
 
