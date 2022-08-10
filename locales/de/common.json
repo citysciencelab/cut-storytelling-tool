@@ -380,8 +380,10 @@
             },
             "sessionTool": {
                 "uploadHeader": "Sitzung laden",
-                "buttonText": "Datei auswählen",
-                "downloadHeader": "Sitzung speichern"
+                "buttonTextUpload": "Hochladen",
+                "buttonTextDownload": "Herunterladen",
+                "downloadHeader": "Sitzung speichern",
+                "errorOnLoad": "Beim hochladen ist ein Fehler aufgetreten!"
             },
             "shadow": {
                 "shadowDisplay": "Schattendarstellung"
@@ -485,6 +487,9 @@
                         "circle": "Kreis",
                         "lineString": "Linie + Puffer"
                     }
+                },
+                "downloadAsCSV": {
+                    "label": "Gefilterte Daten herunterladen"
                 }
             },
             "pendler": {
@@ -772,6 +777,7 @@
                     "saveDrawing": "Zeichnung speichern"
                 },
                 "symbol": "Symbol",
+                "geometry": "Geometrie",
                 "iconList": {
                     "iconPoint": "Punkt",
                     "iconLeaf": "Blatt",
@@ -826,7 +832,9 @@
                     "or": "oder",
                     "label": "Informationen bezüglich der Suchergebnisse",
                     "text": "Die Ergebnisse der Suche werden die Bedingungen / Klauseln {{userHelp}} erfüllen. <br /> *Pflichtfeld"
-                }
+                },
+                "district": "Gemarkung",
+                "parcelNumber": "Flurstücksnummer"
             },
             "routing": {
                 "coordinateInputHelp": "Suchen Sie einen Ort oder fügen Sie einen Punkt durch Klick in die Karte hinzu",
@@ -901,6 +909,7 @@
                             "profile": "Profil"
                         }
                     },
+                    "preferenceLabel": "Präferenz",
                     "preference": {
                         "RECOMMENDED": "Empfohlene Route",
                         "SHORTEST": "Kürzeste Route"

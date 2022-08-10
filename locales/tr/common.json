@@ -681,7 +681,9 @@
                   "or": "veya",
                   "label": "Arama sonuçlarıyla ilgili bilgiler",
                   "text": "Aramanın sonuçları şartlara / maddelere {{userHelp}} uygun olacaktır. <br /> *Pflichtfeld"
-              }
+              },
+              "district": "Bölge",
+              "parcelNumber": "Parsel numarası"
             }
         },
         "controls": {

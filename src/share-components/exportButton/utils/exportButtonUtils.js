@@ -50,6 +50,7 @@ function downloadBlobPerHTML5 (blob, filename, onerror = false) {
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
+    URL.revokeObjectURL(url);
     document.body.removeChild(link);
 
     return true;

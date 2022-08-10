@@ -380,8 +380,10 @@
             },
             "sessionTool": {
                 "uploadHeader": "Load Session",
-                "buttonText": "Select file",
-                "downloadHeader": "Save Session"
+                "buttonTextUpload": "Upload",
+                "buttonTextDownload": "Download",
+                "downloadHeader": "Save Session",
+                "errorOnLoad": "An error occurred during upload!"
             },
             "shadow": {
                 "shadowDisplay": "Shadow display"
@@ -485,6 +487,9 @@
                         "circle": "Circle",
                         "lineString": "Line + Buffer"
                     }
+                },
+                "downloadAsCSV": {
+                    "label": "Download filtered data"
                 }
             },
             "pendler": {
@@ -772,6 +777,7 @@
                     "saveDrawing": "Save drawing"
                 },
                 "symbol": "Symbol",
+                "geometry": "Geometry",
                 "iconList": {
                     "iconPoint": "Point",
                     "iconLeaf": "Leaf",
@@ -826,7 +832,9 @@
                     "or": "or",
                     "label": "Information regarding the results of the search",
                     "text": "The results of the search will fulfill the conditions / clauses {{userHelp}}. <br /> *Mandatory field"
-                }
+                },
+                "district": "District",
+                "parcelNumber": "Parcel number"
             },
             "routing": {
                 "coordinateInputHelp": "Finde a place or add a point by clicking on the map",
@@ -901,6 +909,7 @@
                             "profile": "Profile"
                         }
                     },
+                    "preferenceLabel": "Preference",
                     "preference": {
                         "RECOMMENDED": "Recommended",
                         "SHORTEST": "Shortest"

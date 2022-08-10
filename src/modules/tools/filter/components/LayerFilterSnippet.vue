@@ -10,6 +10,7 @@ import SnippetSlider from "./SnippetSlider.vue";
 import SnippetSliderRange from "./SnippetSliderRange.vue";
 import SnippetTag from "./SnippetTag.vue";
 import SnippetFeatureInfo from "./SnippetFeatureInfo.vue";
+import ExportButtonCSV from "../../../../share-components/exportButton/components/ExportButtonCSV.vue";
 import isObject from "../../../../utils/isObject";
 import FilterApi from "../interfaces/filter.api.js";
 import MapHandler from "../utils/mapHandler.js";
@@ -32,6 +33,7 @@ export default {
         SnippetSliderRange,
         SnippetTag,
         SnippetFeatureInfo,
+        ExportButtonCSV,
         ProgressBar
     },
     props: {
@@ -567,8 +569,8 @@ export default {
                         }
 
                         this.paging = filterAnswer.paging;
-                        this.filteredItems = [];
                         if (this.paging?.page === 1) {
+                            this.filteredItems = [];
                             this.mapHandler.clearLayer(filterId, this.isExtern());
                         }
 
@@ -684,6 +686,43 @@ export default {
                 return snippet.api;
             }
             return this.api;
+        },
+        /**
+         * Download handler for csv export.
+         * @param {Function} onsuccess The function to hand over the data.
+         * @returns {void}
+         */
+        getDownloadHandlerCSV (onsuccess) {
+            const result = [],
+                features = this.filteredItems,
+                model = getLayerByLayerId(this.layerConfig.layerId),
+                gfiAttributes = isObject(model) && typeof model.get === "function" && isObject(model.get("gfiAttributes")) ? model.get("gfiAttributes") : {};
+
+            if (!Array.isArray(features)) {
+                onsuccess([]);
+                return;
+            }
+            features.forEach(item => {
+                if (!isObject(item) || typeof item.getProperties !== "function" || !isObject(item.getProperties())) {
+                    return;
+                }
+                const properties = {},
+                    geometryName = typeof item.getGeometryName === "function" ? item.getGeometryName() : false;
+
+                Object.entries(item.getProperties()).forEach(([attrName, value]) => {
+                    if (attrName === geometryName) {
+                        return;
+                    }
+                    else if (Object.prototype.hasOwnProperty.call(gfiAttributes, attrName)) {
+                        properties[gfiAttributes[attrName]] = value;
+                        return;
+                    }
+                    properties[attrName] = value;
+                });
+
+                result.push(properties);
+            });
+            onsuccess(result);
         }
     }
 };
@@ -975,6 +1014,15 @@ export default {
             <ProgressBar
                 :paging="paging"
             />
+            <div v-if="layerConfig.downloadAsCSV">
+                <ExportButtonCSV
+                    :url="false"
+                    :filename="layerConfig.downloadAsCSV"
+                    :handler="getDownloadHandlerCSV"
+                    :use-semicolon="true"
+                    :title="$t('modules.tools.filter.downloadAsCSV.label')"
+                />
+            </div>
         </div>
     </div>
 </template>

@@ -18,6 +18,11 @@ export default {
             type: Boolean,
             default: false,
             required: false
+        },
+        // The label of the select
+        label: {
+            type: String,
+            required: true
         }
     },
     data () {
@@ -51,18 +56,28 @@ export default {
 </script>
 
 <template>
-    <select
-        ref="select-option"
-        v-model="selectedOption"
-        class="form-select"
-        @input="changedValue"
-    >
-        <option
-            v-for="(val, key) in options"
-            :key="key"
-            :value="key"
+    <div class="form-group form-group-sm row">
+        <label
+            for="select"
+            class="dropdown col-sm-5 col-form-label"
         >
-            {{ val }}
-        </option>
-    </select>
+            {{ $t(label) }}
+        </label>
+        <div class="col-sm-7 ">
+            <select
+                ref="select-option"
+                v-model="selectedOption"
+                class="form-select dropdown"
+                @input="changedValue"
+            >
+                <option
+                    v-for="(val, key) in options"
+                    :key="key"
+                    :value="key"
+                >
+                    {{ val }}
+                </option>
+            </select>
+        </div>
+    </div>
 </template>

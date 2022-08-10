@@ -18,8 +18,54 @@
     - Making intern wfs layer loadingStrategy with 'all' by filtering
     - The checkbox for filtering in the browsers extent now triggers direct filtering with `strategy`: `active`. This can be disabled by setting `searchInMapExtentProactive` to `false`.
     - New parameter wmsRefId is added. If the layer is filtered, the WMS layer with "wmsRefId" will be invisible and deactivated from Tree. After resetting the layer, the WMS layer will be activated and visible again.
+    - Added an option to activate a csv download button for filtered data.
 - The version of node was updated, must be >= 16.13.2 <= 16.16.0 and the version of npm was updated, must be >= 8.1.2 <=8.11.0.
 - Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
+- The following NPM packages have been updated:
+    - dependencies:
+        - @masterportal/masterportalapi: 2.4.0 to 2.5.1
+        - @popperjs/core: 2.10.2 to 2.11.5
+        - axios: 0.25.0 to 0.27.2
+        - bootstrap-icons: 1.7.1 to 1.9.1
+        - bootstrap-sass: 3.4.1 to 3.4.3
+        - core-js: 3.24.0 to 3.24.1
+        - i18next: 21.6.7 to 21.8.16
+        - i18next-browser-languagedetector: 6.1.3 to 6.1.4
+        - i18next-http-backend: 1.3.2 to 1.4.1
+        - jquery-ui: 1.13.0 to 1.13.2
+        - jsts: 2.8.1 to 2.9.0
+        - moment: 2.29.1 to 2.29.4
+        - mqtt: 4.3.4 to 4.3.7
+        - object-hash: 2.2.0 to 3.0.0
+        - vue: 2.6.14 to 2.7.8
+        - vue-template-compiler: 2.6.14 to 2.7.8
+    - devDependencies
+        - @geoblocks/print: 0.7.1 to 0.7.2
+        - @sinonjs/fake-timers: 8.1.0 to 9.1.2
+        - babel-loader: 8.2.3 to 8.2.5
+        - canvas: 2.8.0 to 2.9.3
+        - chai: 4.3.4 to 4.3.6
+        - dotenv: 11.0.0 to 16.0.1
+        - eslint: 8.7.0 to 8.21.0
+        - eslint-plugin-vue: 8.3.0 to 9.3.0
+        - eslint-plugin-vuejs-accessibility: 1.1.1 to 1.2.0
+        - fs-extra: 10.0.0 to 10.1.0
+        - git-rev-sync: 3.0.1 to 3.0.2
+        - https-proxy-agent: 5.0.0 to 5.0.1
+        - husky: 7.0.4 to 8.0.1
+        - inquirer: 8.2.0 to 8.2.4
+        - jsdoc: 3.6.10 to 3.6.11
+        - markdown-it: 13.0.0 to 13.0.1
+        - mocha: 9.2.0 to 9.2.2
+        - mock-local-storage: 1.1.19 to 1.1.23
+        - node-fetch: 3.1.0 to 3.2.10
+        - replace-in-file: 6.3.2 to 6.3.5
+        - sass: 1.45.2 to 1.54.0
+        - selenium-webdriver: 4.1.1 to 4.3.1
+        - sinon: 12.0.1 to 14.0.0
+        - zip-a-folder: 1.1.3 to 1.1.5
+- WfsSearch: `inputLabel` are now translated.
+- In the `light` topic tree, the `singleBaselayer` attribute can now also be used.
 
 ### Deprecated
 
@@ -29,9 +75,9 @@ The following NPM package is removed:
 
 ### Fixed
 
-## v2.24.0 - 2022-08-03
-### __Breaking Changes__
+---
 
+## v2.24.0 - 2022-08-03
 ### Added
 - PortalFooter:
     - Possibility to display additional information in the footer
@@ -48,10 +94,6 @@ The following NPM package is removed:
 - The following NPM packages have been updated:
     - dependencies:
         - core-js: 3.15.2 to 3.24.0
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 - Fix unix-related path issue in findWhereJs.js

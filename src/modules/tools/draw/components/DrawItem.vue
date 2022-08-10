@@ -384,23 +384,35 @@ export default {
         :deactivate-gfi="deactivateGFI"
     >
         <template #toolBody>
-            <select
-                id="tool-draw-drawType"
-                ref="tool-draw-drawType"
-                class="form-select form-select-sm"
-                :disabled="drawHTMLElements"
-                @change="setDrawType"
-            >
-                <option
-                    v-for="option in constants.drawTypeOptions"
-                    :id="option.id"
-                    :key="'draw-drawType-' + option.id"
-                    :value="option.geometry"
-                    :selected="option.id === drawType.id"
-                >
-                    {{ $t("common:modules.tools.draw." + option.id) }}
-                </option>
-            </select>
+            <div class="form-group form-group-sm">
+                <div class="row">
+                    <label
+                        for="tool-draw-drawType"
+                        class="col-md-5 col-form-label"
+                    >
+                        {{ $t("common:modules.tools.draw.geometry") }}
+                    </label>
+                    <div class="col-md-7">
+                        <select
+                            id="tool-draw-drawType"
+                            ref="tool-draw-drawType"
+                            class="form-select form-select-sm"
+                            :disabled="drawHTMLElements"
+                            @change="setDrawType"
+                        >
+                            <option
+                                v-for="option in constants.drawTypeOptions"
+                                :id="option.id"
+                                :key="'draw-drawType-' + option.id"
+                                :value="option.geometry"
+                                :selected="option.id === drawType.id"
+                            >
+                                {{ $t("common:modules.tools.draw." + option.id) }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <hr>
             <template
                 v-if="isFromDrawTool && isFilterListValid"
