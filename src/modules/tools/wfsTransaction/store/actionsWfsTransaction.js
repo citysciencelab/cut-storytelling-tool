@@ -231,7 +231,7 @@ const actions = {
         }
     },
     setFeatureProperty ({commit, dispatch}, {key, type, value}) {
-        if (type === "number" && Number.isFinite(parseFloat(value))) {
+        if (type === "number" && !Number.isFinite(parseFloat(value))) {
             dispatch("Alerting/addSingleAlert", {
                 category: "Info",
                 displayClass: "info",
