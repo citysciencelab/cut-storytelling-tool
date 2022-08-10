@@ -506,7 +506,6 @@ function handleSingleBaseLayer (isSelected, layer) {
         singleBaselayer = layer.get("singleBaselayer") && layer.get("isBaseLayer") === true;
 
     if (isSelected) {
-        // This only works for treeType 'custom', otherwise the parentId is not set on the layer
         if (singleBaselayer) {
             const map2D = mapCollection.getMap("2D");
 
