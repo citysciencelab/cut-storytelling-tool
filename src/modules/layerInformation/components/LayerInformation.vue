@@ -372,9 +372,6 @@ export default {
         margin: 15px 0 10px 0;
     }
 
-    #layerInformation .abstract >>> p {
-        padding: 2px 10px 2px 0;
-    }
     .body {
         >ul {
             background-color: $white;
