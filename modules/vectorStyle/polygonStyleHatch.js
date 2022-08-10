@@ -10,7 +10,7 @@ export function drawHatch (context, size, pattern) {
         ? namedHatches[pattern]
         : pattern;
 
-    if (pattern) {
+    if (hatchDefinition) {
         const {draw, rotate} = hatchDefinition;
 
         if (draw) {
