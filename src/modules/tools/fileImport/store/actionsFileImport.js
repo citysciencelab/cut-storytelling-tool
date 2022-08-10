@@ -291,7 +291,7 @@ export default {
         dispatch("addImportedFilename", datasrc.filename);
     },
 
-    importGeoJSON: ({state, dispatch}, datasrc) => {
+    importGeoJSON: ({state, dispatch, rootGetters}, datasrc) => {
         const
             vectorLayer = datasrc.layer,
             format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
@@ -398,7 +398,27 @@ export default {
         features = checkIsVisibleSetting(features);
 
         features.forEach(feature => {
+            let geometries;
+
             feature.setStyle(vectorLayer.getStyleFunction()(feature));
+
+            if (feature.get("isGeoCircle")) {
+                const circleCenter = feature.get("geoCircleCenter").split(",").map(parseFloat),
+                    circleRadius = parseFloat(feature.get("geoCircleRadius"));
+
+                feature.setGeometry(new Circle(circleCenter, circleRadius));
+            }
+
+            if (feature.getGeometry().getType() === "GeometryCollection") {
+                geometries = feature.getGeometry().getGeometries();
+            }
+            else {
+                geometries = [feature.getGeometry()];
+            }
+
+            geometries.forEach(geometry => {
+                geometry.transform("EPSG:4326", rootGetters["Maps/projectionCode"]);
+            });
 
             vectorLayer.getSource().addFeature(feature);
         });
