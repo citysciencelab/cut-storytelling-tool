@@ -33,8 +33,8 @@ $link-decoration: none;
 // Typography
 //
 // Font, line-height, and color for body text, headings, and more.
-// In the case of masterportal, the base size is 16 px, the browser's default, as we do set a base font but not in the html tag.
-// We set the base variable to 12px. This is the base that bootstrap uses internally to calculate sizes (such as $font-size-sm)
+// In the case of Masterportal, the base size is 16 px, the browser's default, as we do set a base font but not in the html tag.
+// We set the base variable to 12px. This is the base that Bootstrap uses internally to calculate sizes (such as $font-size-sm)
 
 $font-size-base: .75rem;
 
@@ -97,7 +97,7 @@ $light_grey_inactive: darken($light_grey, 20%);
 $light_grey_inactive_contrast: #424242;
 $light_grey_outline: #050505;
 
-/* PRIMARY: The primary Buttons blue
+/* PRIMARY: The primary buttons blue
 * Used for primary buttons like start a search, print etc.
 */
 $dark_blue: #003063;
@@ -110,7 +110,7 @@ $light_blue: #00437A;
 
 $navbar-light-color: $dark_grey;
 
-/* SECONDARY: Navigation & secondary Buttons/elements
+/* SECONDARY: Navigation & secondary buttons/elements
  * Used for the nav bar, its children, and going back and forth within elements.
  * Elements: Navigation bars and togglers, overall content.
  * Examples: NavBar, open/close tool, layer list, cancel Buttons ...

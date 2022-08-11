@@ -2,7 +2,7 @@
 
 # Variables Documentation
 
-This documentation describes how the Variables in Masteroportal are intended to be used.
+This documentation describes how the variables in Masterportal are intended to be used.
 
 
 ## Structure of this documentation
@@ -28,16 +28,16 @@ $light_blue: #00437A;
 These colors are Hamburg specific colors and can be overwritten.
 
 ### Primary variable
-Furthermore we overwrite bootstrap's `$primary` variable with the `$dark_blue` variable which means all bootstrap uses of the primary variable are now in this dark blue. For Example the class btn-primary or bg-primary.
+Furthermore we overwrite bootstrap's `$primary` variable with the `$dark_blue` variable which means all bootstrap uses of the primary variable are now in this dark blue. For example the class btn-primary or bg-primary.
 The primary button in a tool should have the class btn-primary.
-Primary Buttons should always be used if there is only one button.
+Primary buttons should always be used if there is only one button.
 
 ### Secondary variable
-We also overwrite the secondary variable. Secondary Buttons should be used as the less important buttons in a tool etc.
-For Example Cancel or Back Buttons that are less important. Secondary Buttons should always be used if there is more than one Button.
+We also overwrite the secondary variable. Secondary buttons should be used as the less important buttons in a tool etc.
+For example cancel or back buttons that are less important. Secondary buttons should always be used if there is more than one button.
 
 ### Table styles
-Additionally there are certain table styles set as well as contrasting colors for the light_grey variable.
+Additionally, there are certain table styles set as well as contrasting colors for the light_grey variable.
 
 ### Notification colours
 Notification colours can be used directly from Bootstrap.
@@ -65,7 +65,7 @@ If you want a bigger default size, change the `$font_size_default` and everywher
 You can overwrite these variables if need be.
 
 ### Tools
-Tools should be rendered to the sidebar. You can enable this by setting "renderToWindow": true.
+Tools should be rendered to the sidebar. You can enable this by setting "renderToWindow": false.
 Tools should have the `$content_upper_space` at the top between content and the top line.
 Between two different content sections `$content_section_space` and between content within a section (for example between an input field and the next input field) itself `$content_space`.
 Theses variables also depend on the default base size 16px. If you change the font size in the html tag, the spaces will also be bigger/smaller, because this changes the base size.
