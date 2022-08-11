@@ -187,7 +187,7 @@ export default {
 
             wgs84ProjDez.name = "EPSG:4326";
             wgs84ProjDez.id = "EPSG:4326-DG";
-            wgs84ProjDez.title = "WGS 84(Dezimalgrad) (EPSG:4326)";
+            wgs84ProjDez.title = "WGS 84 (Dezimalgrad) (EPSG:4326)";
             projections.splice(index + 1, 0, wgs84ProjDez);
         },
         /**
