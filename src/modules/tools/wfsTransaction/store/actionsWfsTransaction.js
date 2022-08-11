@@ -168,15 +168,12 @@ const actions = {
         let messageKey = `success.${transactionMethod}`;
 
         loader.show();
-        axios({
-            url: layer.url,
-            data: writeTransaction(
-                feature,
-                layer,
-                transactionMethod,
-                rootGetters["Maps/projectionCode"]
-            ),
-            method: "POST",
+        axios.post(layer.url, writeTransaction(
+            feature,
+            layer,
+            transactionMethod,
+            rootGetters["Maps/projectionCode"]
+        ), {
             withCredentials: layer.isSecured,
             headers: {"Content-Type": "text/xml"},
             responseType: "text/xml"
