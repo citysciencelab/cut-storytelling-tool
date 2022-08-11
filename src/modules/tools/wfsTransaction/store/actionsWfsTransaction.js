@@ -6,6 +6,7 @@ import getLayerInformation from "../utils/getLayerInformation";
 import prepareFeatureProperties from "../utils/prepareFeatureProperties";
 import writeTransaction from "../utils/writeTransaction";
 import loader from "../../../../utils/loaderOverlay";
+import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
 
 let drawInteraction,
     drawLayer,
@@ -180,8 +181,9 @@ const actions = {
             headers: {"Content-Type": "text/xml"},
             responseType: "text/xml"
         })
-            .then(response => {
-                const xmlDocument = new DOMParser().parseFromString(response.data, "text/xml"),
+            .then(response => handleAxiosResponse(response, "wfsTransaction.actions.sendTransaction"))
+            .then(data => {
+                const xmlDocument = new DOMParser().parseFromString(data, "text/xml"),
                     transactionSummary = xmlDocument.getElementsByTagName("wfs:TransactionSummary");
                 let exception = null,
                     exceptionText = null;
