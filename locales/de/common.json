@@ -378,13 +378,6 @@
                 "hintInfoScale": "Der ausgewählte Druckmaßstab weicht vom Maßstab im Kartenfenster ab. Das kann zu einem veränderten Kartenlayout im Druck führen.",
                 "invisibleLayer": "Folgende Themen können im ausgewählten Druckmaßstab {{scale}} nicht gedruckt werden:"
             },
-            "sessionTool": {
-                "uploadHeader": "Sitzung laden",
-                "buttonTextUpload": "Hochladen",
-                "buttonTextDownload": "Herunterladen",
-                "downloadHeader": "Sitzung speichern",
-                "errorOnLoad": "Beim hochladen ist ein Fehler aufgetreten!"
-            },
             "shadow": {
                 "shadowDisplay": "Schattendarstellung"
               },
