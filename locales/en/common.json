@@ -723,6 +723,7 @@
                 }
             },
             "draw": {
+                "drawLayerVisible": "Show/hide drawing",
                 "clickToPlaceText": "Click on the map to place the text",
                 "download": {
                   "createFirst": "Please create a drawing or text first!",

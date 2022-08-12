@@ -25,13 +25,32 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/Draw", constants.keyStore.getters),
+
+        /**
+         * Shows/hides the draw layer and enables/disables the tools of the draw tool.
+         * @returns {Boolean} drawLayerVisible.
+         */
+        drawLayerVisibleComputed: {
+            get () {
+                return this.drawLayerVisible;
+            },
+            set (value) {
+                if (value) {
+                    this.setCanvasCursorByInteraction(this.currentInteraction);
+                }
+                else {
+                    this.resetCanvasCursor();
+                }
+                this.setDrawLayerVisible(value);
+            }
+        },
         /**
          * Enables or disables all the select or input elements depending on if the currentInteraction is "draw".
          * @returns {Boolean} currentInteraction === "draw": return false and activate the HTML elements, else: return true and deactivate the HTML elements.
          */
         drawHTMLElements () {
             // remember: true means disable, false means enable
-            return !(this.currentInteraction === "draw");
+            return !this.drawLayerVisible || this.currentInteraction !== "draw";
         },
         /**
          * Enables or disables the select- or input-boxes depending on the state of currentInteraction and selectedFeature.
@@ -42,7 +61,7 @@ export default {
                 return false;
             }
             // remember: true means disable, false means enable
-            return !(this.currentInteraction === "draw");
+            return !this.drawLayerVisible || this.currentInteraction !== "draw";
         },
         /**
          * Enables the input for the radius if the circleMethod is "defined", for interaction "modify" the rule of drawHTMLElementsModifyFeature takes place.
@@ -51,7 +70,7 @@ export default {
         drawCircleMethods () {
             if (this.currentInteraction === "draw") {
                 // remember: true means disable, false means enable
-                return !(this.styleSettings?.circleMethod === "defined");
+                return !this.drawLayerVisible || this.styleSettings?.circleMethod !== "defined";
             }
             return this.drawHTMLElementsModifyFeature;
         },
@@ -384,6 +403,26 @@ export default {
         :deactivate-gfi="deactivateGFI"
     >
         <template #toolBody>
+            <div class="form-group form-group-sm">
+                <div class="row">
+                    <label
+                        class="col-md-5 form-check-label"
+                        for="tool-draw-drawLayerVisible"
+                    >
+                        {{ $t("common:modules.tools.draw.drawLayerVisible") }}
+                    </label>
+                    <div class="col-md-7">
+                        <input
+                            id="tool-draw-drawLayerVisible"
+                            v-model="drawLayerVisibleComputed"
+                            class="form-check-input"
+                            type="checkbox"
+                            name="checkbox-drawLayerVisible"
+                        >
+                    </div>
+                </div>
+            </div>
+            <hr>
             <div class="form-group form-group-sm">
                 <div class="row">
                     <label
@@ -851,7 +890,7 @@ export default {
                             id="tool-draw-drawInteraction"
                             class="btn btn-sm"
                             :class="currentInteraction === 'draw' ? 'btn-primary' : 'btn-secondary'"
-                            :disabled="currentInteraction === 'draw'"
+                            :disabled="!drawLayerVisible || currentInteraction === 'draw'"
                             @click="toggleInteraction('draw'); setCanvasCursorByInteraction('draw')"
                         >
                             <span class="bootstrap-icon">
@@ -866,6 +905,7 @@ export default {
                         <button
                             id="tool-draw-undoInteraction"
                             class="btn btn-sm btn-secondary"
+                            :disabled="!drawLayerVisible"
                             @click="undoLastStep"
                         >
                             <span class="bootstrap-icon">
@@ -880,6 +920,7 @@ export default {
                         <button
                             id="tool-draw-redoInteraction"
                             class="btn btn-sm btn-secondary"
+                            :disabled="!drawLayerVisible"
                             @click="redoLastStep"
                         >
                             <span class="bootstrap-icon">
@@ -895,7 +936,7 @@ export default {
                             id="tool-draw-editInteraction"
                             class="btn btn-sm"
                             :class="currentInteraction === 'modify' ? 'btn-primary' : 'btn-secondary'"
-                            :disabled="currentInteraction === 'modify'"
+                            :disabled="!drawLayerVisible || currentInteraction === 'modify'"
                             @click="toggleInteraction('modify'); setCanvasCursorByInteraction('modify')"
                         >
                             <span class="bootstrap-icon">
@@ -911,7 +952,7 @@ export default {
                             id="tool-draw-deleteInteraction"
                             class="btn btn-sm"
                             :class="currentInteraction === 'delete' ? 'btn-primary' : 'btn-secondary'"
-                            :disabled="currentInteraction === 'delete'"
+                            :disabled="!drawLayerVisible || currentInteraction === 'delete'"
                             @click="toggleInteraction('delete'); setCanvasCursorByInteraction('delete')"
                         >
                             <span class="bootstrap-icon">
@@ -926,6 +967,7 @@ export default {
                         <button
                             id="tool-draw-deleteAllInteraction"
                             class="btn btn-sm btn-secondary"
+                            :disabled="!drawLayerVisible"
                             @click="clearLayer"
                         >
                             <span class="bootstrap-icon">
@@ -935,7 +977,7 @@ export default {
                         </button>
                     </div>
                 </div>
-                <DownloadItem v-if="download.enabled" />
+                <DownloadItem v-if="drawLayerVisible && download.enabled" />
             </div>
         </template>
     </ToolTemplate>

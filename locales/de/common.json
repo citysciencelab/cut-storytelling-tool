@@ -723,6 +723,7 @@
                 }
             },
             "draw": {
+                "drawLayerVisible": "Zeichnung ein-/ausblenden",
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
                 "download": {
                   "createFirst": "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!",

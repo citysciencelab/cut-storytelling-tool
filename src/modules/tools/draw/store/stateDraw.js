@@ -5,8 +5,10 @@ const symbol = {
     },
     /**
      * @property {Boolean} active Current status of the Tool.
+     * @property {Boolean} drawLayerVisible Shows/hides the draw layer and enables/disables the tools of the draw tool.
      * @property {Object} addFeatureListener Listens to the the event "addFeature" which is fired after a feature has been added to the map.
-     * @property {String} currentInteraction The current interaction. Could be either "draw", "modify" or "delete"
+     * @property {String} currentInteraction The current interaction. Could be either "draw", "modify", "delete" or "none"
+     * @property {String} formerInteraction The former interaction. Could be either "draw", "modify", "delete" or "none"
      * @property {Object[]} deactivatedDrawInteractions Array of draw interactions which are deactivated in the process of the tool. Can be used to reactivate them from another point.
      * @property {Boolean} deactivateGFI If set to true, the activation of the tool deactivates the GFI tool.
      * @property {String} download.dataString Data that will be written to the file for the Download.
@@ -92,8 +94,10 @@ const symbol = {
      */
     state = {
         active: false,
+        drawLayerVisible: true,
         addFeatureListener: {},
         currentInteraction: "draw",
+        formerInteraction: "",
         deactivatedDrawInteractions: [],
         deactivateGFI: true,
         download: {

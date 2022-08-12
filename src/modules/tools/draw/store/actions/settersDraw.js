@@ -30,6 +30,7 @@ async function setActive ({state, commit, dispatch, rootState}, active) {
         dispatch("createDrawInteractionAndAddToMap", {active: state.currentInteraction === "draw"});
         dispatch("createSelectInteractionAndAddToMap", state.currentInteraction === "delete");
         dispatch("createModifyInteractionAndAddToMap", state.currentInteraction === "modify");
+        dispatch("setDrawLayerVisible", true);
 
         if (state.withoutGUI) {
             dispatch("toggleInteraction", "draw");
@@ -336,6 +337,30 @@ function setUnit ({getters, commit, dispatch}, {target}) {
     dispatch("updateDrawInteraction");
 }
 
+/**
+ * Sets drawLayervisible and let layer and interactions react in a logic way.
+ *
+ * @param {Object} context Actions context object.
+ * @param {Boolean} value The value to set.
+ * @returns {void}
+ */
+function setDrawLayerVisible ({getters, commit, dispatch}, value) {
+    if (typeof getters?.layer?.setVisible === "function") {
+        getters.layer.setVisible(value);
+    }
+
+    if (value) {
+        if (getters.formerInteraction) {
+            dispatch("toggleInteraction", getters.formerInteraction);
+        }
+    }
+    else {
+        commit("setFormerInteraction", getters.currentInteraction);
+        dispatch("toggleInteraction", "none");
+    }
+    commit("setDrawLayerVisible", value);
+}
+
 export {
     setStyleSettings,
     setActive,
@@ -354,5 +379,6 @@ export {
     setStrokeWidth,
     setSymbol,
     setText,
-    setUnit
+    setUnit,
+    setDrawLayerVisible
 };
