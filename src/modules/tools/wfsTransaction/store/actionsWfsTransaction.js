@@ -168,7 +168,7 @@ const actions = {
         let messageKey = `success.${transactionMethod}`;
 
         loader.show();
-        axios.post(layer.url, writeTransaction(
+        return axios.post(layer.url, writeTransaction(
             feature,
             layer,
             transactionMethod,
