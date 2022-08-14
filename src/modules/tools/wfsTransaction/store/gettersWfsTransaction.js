@@ -6,6 +6,15 @@ import deepCopy from "../../../../utils/deepCopy";
 
 const getters = {
     ...generateSimpleGetters(initialState),
+    /**
+     * Interaction configuration regarding which interactions
+     * are allowed by the currently selected layer.
+     *
+     * @param {object} state Local vuex state.
+     * @param {object} getters Local vuex getters.
+     * @param {string} getters.currentLayerId Id of the currently selected layer
+     * @returns {object} The interaction configuration for the currently selected layer.
+     */
     currentInteractionConfig (state, {currentLayerId}) {
         const configuration = deepCopy(defaultInteractionConfig);
         let editUsed = false;
@@ -84,6 +93,14 @@ const getters = {
     currentLayerId (state) {
         return state.layerIds[state.currentLayerIndex];
     },
+    /**
+     * Returns a function which checks whether a feature is given
+     * and an actual OL Feature as well whether all the required
+     * values have been set by the user.
+     *
+     * @param {object} state Local vuex state.
+     * @returns {(function(feature: Feature): string)} Validity function.
+     */
     savingErrorMessage: state => feature => {
         const requiredPropertiesWithNoValue = state.featureProperties
             .filter(property => property.type !== "geometry"

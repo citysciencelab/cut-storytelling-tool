@@ -16,7 +16,9 @@ let drawInteraction,
 
 const actions = {
     /**
-     * @param {object} context actions context object.
+     * Prepares everything so that the user can interact with features or draw features
+     * to be able to send a transaction to the service.
+     *
      * @param {("LineString"|"Point"|"Polygon"|"delete"|"update")} interaction Identifier of the selected interaction.
      * @returns {void}
      */
@@ -135,6 +137,12 @@ const actions = {
             modifyFeature = undefined;
         }
     },
+    /**
+     * Checks whether all required values have been set and a feature is present
+     * and either dispatches an alert or sends a transaction.
+     *
+     * @returns {void}
+     */
     async save ({dispatch, getters}) {
         const feature = modifyFeature ? modifyFeature : drawLayer.getSource().getFeatures()[0],
             {currentLayerIndex, featureProperties, layerInformation, selectedInteraction} = getters,
@@ -159,6 +167,13 @@ const actions = {
             )
         );
     },
+    /**
+     * Sends a transaction to the service and handles the response
+     * by presenting the user with an alert where the message depends on the response.
+     *
+     * @param {module:ol/Feature} feature Feature to by inserted / updated / deleted.
+     * @returns {Promise} Promise to react to the result of the transaction.
+     */
     sendTransaction ({dispatch, getters, rootGetters}, feature) {
         const {currentLayerIndex, layerInformation, selectedInteraction} = getters,
             layer = layerInformation[currentLayerIndex],
