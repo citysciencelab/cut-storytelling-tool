@@ -3797,7 +3797,7 @@ Mit diesem Werkzeug lassen sich zusätzliche WMS Layer über eine angegebene URL
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Mit diesem Werkzeug lassen sich die Features einer Ziel-Layer anzeigen, die sich inner- oder außerhalb einer Kreisfläche um die Features einer Quell-Layer befinden. Dabei wird die Kreisfläche, ausgehend von den Quell-Layer Features, über den Buffer-Radius definiert. Die Quell- und Ziel-Layer benötigen hierzu vekrtobasierte Daten aus WFS(❗) Diensten.   
+Mit diesem Werkzeug lassen sich die Features einer Ziel-Layer anzeigen, die sich inner- oder außerhalb einer Kreisfläche um die Features einer Quell-Layer befinden. Dabei wird die Kreisfläche, ausgehend von den Quell-Layer Features, über den Buffer-Radius definiert. Die Quell- und Ziel-Layer benötigen hierzu vektorbasierte Daten aus WFS(❗) Diensten.   
 
 ***
 
@@ -3807,7 +3807,7 @@ Mit diesem Werkzeug lassen sich die Features einer Ziel-Layer anzeigen, die sich
 
 ⚠️Deprecated in 3.0.0 Bitte "supplyCoord" verwenden.
 
-Ermöglicht die Abrfage von Koordinaten per Maus(-Klick). 
+Ermöglicht die Abfrage von Koordinaten per Maus(-Klick). 
 
 ***
 
@@ -3815,7 +3815,7 @@ Ermöglicht die Abrfage von Koordinaten per Maus(-Klick).
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Ermöglicht die Suche von Koordinaten mit Hilfe einer Eingabemaske sowie die Abrfage von Koordinaten per Maus(-Klick).
+Ermöglicht die Suche von Koordinaten mithilfe einer Eingabemaske sowie die Abfrage von Koordinaten per Maus(-Klick).
 
 ***
 
@@ -3825,7 +3825,7 @@ Ermöglicht die Suche von Koordinaten mit Hilfe einer Eingabemaske sowie die Abr
 
 ⚠️Deprecated in 3.0.0 Bitte "filter" verwenden.
 
-Über dieses Werkzeug können WFS(❗) features dynamisch gefiltert werden. Dafür müssen die entsprechenden WFS Layer jedoch entsprechend **[konfiguriert](#markdown-header-themenconfiglayervector)** werden.
+Über dieses Werkzeug können WFS(❗) Features dynamisch gefiltert werden. Dafür müssen die entsprechenden WFS Layer jedoch **[konfiguriert](#markdown-header-themenconfiglayervector)** werden.
 
 
 ***
@@ -3860,8 +3860,8 @@ Mit diesem Werkzeug lassen sich Layer in Clustern gleichzeitig aktivieren/laden 
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute. Zur verwendung werden
-verktorbasierte Daten aus WFS(❗) Layern benötigt.
+Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute. Zur Verwendung werden
+vektorbasierte Daten aus WFS(❗) Layern benötigt.
 
 ***
 

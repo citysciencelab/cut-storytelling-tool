@@ -3922,7 +3922,7 @@ With this tool one can de-/activate clusters of layers together.
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Allows selecting a set of vector features by letting the user draw a box on the map. Features in that box will be displayed with GFI information. The tool requres WFS(❗) features.
+Allows selecting a set of vector features by letting the user draw a box on the map. Features in that box will be displayed with GFI information. The tool requires WFS(❗) features.
 
 ***
 
