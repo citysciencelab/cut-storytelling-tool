@@ -3850,7 +3850,7 @@ Coordinates tool. To display the height above sea level in addition to the 2 dim
 
 [inherits]: # (Portalconfig.menu.tool)
 
-The tool allows to add additional WMS layers via an provided URL.
+The tool allows for adding additional WMS layers via a provided URL.
 
 
 ***
@@ -3859,7 +3859,7 @@ The tool allows to add additional WMS layers via an provided URL.
 
 [inherits]: # (Portalconfig.menu.tool)
 
-The tool highlights features of a target layer, that are located within or outside a circle arround the features of a source-Layer. The circle is defined by a buffer-radius. The tool requres verctor based Data from WFS(❗) services for both the source and the target layer. 
+The tool highlights features of a target layer, that are located within or outside a circle around the features of a source-Layer. The circle is defined by a buffer-radius. The tool requires vector based Data from WFS(❗) services for both the source and the target layer. 
 
 ***
 
