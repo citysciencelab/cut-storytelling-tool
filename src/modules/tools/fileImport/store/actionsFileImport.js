@@ -355,6 +355,10 @@ export default {
 
         vectorLayer.setStyle((feature) => {
             const drawState = feature.getProperties().drawState;
+
+            if (!drawState) {
+                return undefined;
+            }
             let style;
 
             if (drawState.drawType.geometry === "Point") {
@@ -409,7 +413,6 @@ export default {
 
             return style.clone();
         });
-        // vectorLayer.setStyle(vectorLayer.setStyleFunc);
 
         features = checkIsVisibleSetting(features);
 
