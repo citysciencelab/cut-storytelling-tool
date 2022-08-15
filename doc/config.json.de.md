@@ -3815,7 +3815,7 @@ Ermöglicht die Abfrage von Koordinaten per Maus(-Klick).
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Ermöglicht die Suche von Koordinaten mithilfe einer Eingabemaske sowie die Abfrage von Koordinaten per Maus(-Klick).
+Ermöglicht die Suche von Koordinaten mithilfe einer Eingabemaske sowie die Abfrage von Koordinaten per Maus(-Klick). 
 
 ***
 
