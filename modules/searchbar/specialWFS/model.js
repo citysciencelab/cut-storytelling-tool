@@ -1,3 +1,5 @@
+import WFS from "ol/format/WFS";
+
 import "../model";
 import store from "../../../src/app-store";
 
@@ -244,7 +246,9 @@ const SpecialWFSModel = Backbone.Model.extend({
             elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]),
             multiGeometries = ["MULTIPOLYGON"];
 
-        for (const element of elements) {
+        for (let i = 0; i < elements.length; i++) {
+            const element = elements[i];
+
             propertyNames.forEach(propertyName => {
                 if (element.getElementsByTagName(propertyName).length > 0 && element.getElementsByTagName(geometryName).length > 0) {
                     if (element.getElementsByTagName(propertyName)[0].textContent.toUpperCase().includes(definition.searchString.toUpperCase())) {
@@ -262,10 +266,17 @@ const SpecialWFSModel = Backbone.Model.extend({
                             geometry = coordinates[0];
                         }
                         else {
-                            const geometryString = element.getElementsByTagName(geometryName)[0].textContent;
-
-                            geometry = geometryString.trim().split(" ");
+                            geometry = new WFS()
+                                .readFeatures(data)[i]
+                                .getGeometry()
+                                .getCoordinates()
+                                .map(entry => Array.isArray(entry[0])
+                                    ? entry
+                                        .map(coord => coord.slice(0, 2))
+                                        .flat()
+                                    : entry);
                         }
+
                         this.pushHitListObjects(type, identifier, firstChildNameUpperCase, geometry, icon);
                     }
                 }
@@ -338,6 +349,7 @@ const SpecialWFSModel = Backbone.Model.extend({
                 coords.forEach(coordArray => coordinateArray.push(Object.values(coordArray.replace(/\s\s+/g, " ").split(" "))));
             }
         }
+
         return [coordinateArray];
     },
 

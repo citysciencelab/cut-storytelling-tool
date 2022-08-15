@@ -77,6 +77,7 @@ The following NPM package is removed:
     - @intlify/vue-i18n-loader
 
 ### Fixed
+- Issue #808: Fix Polygon with Hole geometry for searchBar/specialWfs.
 
 ---
 
