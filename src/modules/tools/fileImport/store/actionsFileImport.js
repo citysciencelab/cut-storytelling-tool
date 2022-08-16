@@ -6,7 +6,6 @@ import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import Icon from "ol/style/Icon";
 import {createDrawStyle} from "../../draw/utils/style/createDrawStyle";
-import {vectorStyleModel} from "../../../../../modules/vectorStyle/styleModel.js";
 
 const supportedFormats = {
     kml: new KML({extractStyles: true, iconUrlFunction: (url) => proxyGstaticUrl(url)}),
