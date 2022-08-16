@@ -301,6 +301,29 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
     });
+    describe("addSymbolIfNotExists", () => {
+        it("should commit the given icon", () => {
+            const icon = {
+                id: "id"
+            };
+
+            state = {iconList: [{id: "otherId"}]};
+            actions.addSymbolIfNotExists({state, commit}, icon);
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["addSymbol", {id: "id"}]);
+        });
+        it("should not commit if the given icon already exists", () => {
+            const icon = {
+                id: "id"
+            };
+
+            state = {iconList: [{id: "id"}]};
+            actions.addSymbolIfNotExists({state, commit}, icon);
+
+            expect(commit.callCount).to.equal(0);
+        });
+    });
     describe("setText", () => {
         it("should commit as intended", () => {
             getters = createGetters("test", {text: "test"});
