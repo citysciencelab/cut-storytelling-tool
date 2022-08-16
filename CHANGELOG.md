@@ -86,6 +86,7 @@ The following NPM package is removed:
     - @intlify/vue-i18n-loader
 
 ### Fixed
+- Issue #818: Back to InitialView works again
 - Issue #808: Fix geometry polygon-with-hole for searchBar/specialWfs.
 - Issue #813: Fix various WMS-T bugs and styling.
 - Save Selection: takes over the transparency of the layer again.
