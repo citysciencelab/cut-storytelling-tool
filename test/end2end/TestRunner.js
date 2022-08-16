@@ -134,7 +134,7 @@ function runTests (browsers) {
                     if (localHttpProxy || localHttpsProxy) {
                         setLocalProxy(currentBrowser, builder);
                     }
-
+                    console.warn(completeUrl);
                     resolutions.forEach(resolution => {
                         tests(builder, completeUrl, currentBrowser, resolution, config, mode, null);
                     });

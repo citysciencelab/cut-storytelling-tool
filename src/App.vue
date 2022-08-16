@@ -4,6 +4,7 @@ import MainNav from "./MainNav.vue";
 import MapRegion from "./MapRegion.vue";
 import isDevMode from "./utils/isDevMode";
 import PortalFooter from "./modules/portalFooter/components/PortalFooter.vue";
+import LayerSelector from "./modules/layerSelector/components/LayerSelector.vue";
 import {checkIsURLQueryValid} from "./utils/parametricUrl/stateModifier";
 
 export default {
@@ -11,7 +12,8 @@ export default {
     components: {
         MainNav,
         MapRegion,
-        PortalFooter
+        PortalFooter,
+        LayerSelector
         // ,MapModuleDebug
     },
     data: () => ({isDevMode}),
@@ -68,6 +70,7 @@ export default {
         <MainNav />
         <MapRegion class="map-region" />
         <PortalFooter />
+        <LayerSelector />
         <!-- <MapModuleDebug v-if="isDevMode" /> -->
         <!-- keep loader last so it's above it all
 

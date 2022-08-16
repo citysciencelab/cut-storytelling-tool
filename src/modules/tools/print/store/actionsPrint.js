@@ -77,8 +77,8 @@ export default {
                     "title": state.title,
                     "map": {
                         "dpi": state.dpiForPdf,
-                        "projection": Radio.request("MapView", "getProjection").getCode(),
-                        "center": Radio.request("MapView", "getCenter"),
+                        "projection": mapCollection.getMapView("2D").getProjection().getCode(),
+                        "center": mapCollection.getMapView("2D").getCenter(),
                         "scale": state.currentScale
                     }
                 }
@@ -218,7 +218,7 @@ export default {
             response = "",
             serviceUrlDefinition = state.serviceUrl;
 
-        if (!state.serviceUrl.includes("/print/")) {
+        if (state.printService !== "plotservice" && !state.serviceUrl.includes("/print/")) {
             serviceUrlDefinition = state.serviceUrl + "print/";
         }
 
@@ -233,7 +233,7 @@ export default {
                 serviceUrl = rootGetters.getRestServiceById("mapfish").url;
             }
 
-            if (!serviceUrl.includes("/print/")) {
+            if (state.printService !== "plotservice" && !serviceUrl.includes("/print/")) {
                 serviceUrl = serviceUrl + "print/";
             }
 
@@ -307,7 +307,7 @@ export default {
     waitForPrintJob: async function ({state, dispatch, commit}, response) {
         let printFolderUrlPart = "";
 
-        if (!state.serviceUrl.includes("/print/")) {
+        if (state.printService !== "plotservice" && !state.serviceUrl.includes("/print/")) {
             printFolderUrlPart = "print/";
         }
 
@@ -327,7 +327,7 @@ export default {
     waitForPrintJobSuccess: async function ({state, dispatch, commit}, response) {
         let printFolderUrlPart = "";
 
-        if (!state.serviceUrl.includes("/print/")) {
+        if (state.printService !== "plotservice" && !state.serviceUrl.includes("/print/")) {
             printFolderUrlPart = "print/";
         }
 

@@ -34,6 +34,16 @@ describe("src/share-components/graphicalSelect/components/GraphicalSelect.vue", 
         };
 
     beforeEach(function () {
+        const map = {
+            id: "ol",
+            mode: "2D",
+            addOverlay: sinon.spy(),
+            removeOverlay: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "2D");
+
         store = new Vuex.Store({
             namespaces: true,
             modules: {

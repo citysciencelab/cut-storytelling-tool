@@ -236,7 +236,7 @@ export default {
             class="col-md-5 col-form-label"
             :for="`tool-wfsSearch-${selectableParameters.fieldName}-${selectableParameters.fieldId}-input`"
         >
-            {{ inputLabel }}
+            {{ inputLabel.endsWith("*") ? $t(inputLabel.split("*")[0]) + "*" : $t(inputLabel) }}
         </label>
         <div class="col-md-7">
             <component

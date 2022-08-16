@@ -550,7 +550,8 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * @param {String} interaction The interaction to be enabled.
          * @returns {void}
          */
-        toggleInteraction ({commit, dispatch}, interaction) {
+        toggleInteraction ({getters, commit, dispatch}, interaction) {
+            commit("setFormerInteraction", getters.currentInteraction);
             commit("setCurrentInteraction", interaction);
             commit("setSelectedFeature", null);
             if (interaction === "draw") {
@@ -568,6 +569,11 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                 dispatch("manipulateInteraction", {interaction: "draw", active: false});
                 dispatch("manipulateInteraction", {interaction: "modify", active: false});
                 dispatch("manipulateInteraction", {interaction: "delete", active: true});
+            }
+            else if (interaction === "none") {
+                dispatch("manipulateInteraction", {interaction: "draw", active: false});
+                dispatch("manipulateInteraction", {interaction: "modify", active: false});
+                dispatch("manipulateInteraction", {interaction: "delete", active: false});
             }
         },
         /**

@@ -4,6 +4,7 @@ import Cluster from "ol/source/Cluster.js";
 import {GeoJSON} from "ol/format.js";
 import {expect} from "chai";
 import sinon from "sinon";
+import Map from "ol/Map";
 import GeoJSONLayer from "../../geojson";
 import store from "../../../../app-store";
 
@@ -32,6 +33,9 @@ describe("src/core/layers/geojson.js", () => {
         });
     });
     beforeEach(() => {
+        mapCollection.clear();
+        mapCollection.addMap(new Map(), "2D");
+
         attributes = {
             url: "https://urlgeojson.de",
             name: "geojsonTestLayer",

@@ -20,6 +20,7 @@ In the following, all configuration options are described. For all configuration
 |cesiumParameter|no|**[cesiumParameter](#markdown-header-cesiumparameter)**||Cesium flags||
 |cswId|no|String|`"3"`|Reference to a CSW interface used to retrieve layer information. The ID will be resolved to a service defined in the **[rest-services.json](rest-services.json.md)** file.|`"my CSW-ID"`|
 |defaultToolId|no|String|`"gfi"`|The tool with the given ID will be active when no other tool is active.|"filter"|
+|layerSelector|no|**[layerSelector](#markdown-header-layerselector)**||Module to configure interactions with the layertree and the map, executed on a defined event.||
 |featureViaURL|no|**[featureViaURL](#markdown-header-featureviaurl)**||Optional configuration for the URL parameter `featureViaURL`. See **[urlParameter](urlParameter.md)** for details. Implemented for treeTypes *light* and *custom*.||
 |footer|no|**[footer](#markdown-header-footer)**||If set, a footer is shown and configured with this object.||
 |gfiWindow|no|String|`"detached"`|_Deprecated in the next major release. Please use the attribute "Portalconfig.menu.tool.gfi.desktopType" of the **[config.json](#config.json.md)** instead._ Display type and attribute information for all layer types. **attached**: the attribute information window is opened at click position **detached**: the attribute information window is opened at the top right of the map; a marker is set to the click position.|`"attached"`|
@@ -50,6 +51,7 @@ In the following, all configuration options are described. For all configuration
 |zoomTo|no|**[zoomTo](#markdown-header-zoomto)**[]|Configuration for the URL query parameters `zoomToFeatureId` and `zoomToGeometry`.||
 |layerInformation|no|**[layerInformation](#markdown-header-layerinformation)**||Configuration for the layerInformation window.||
 |vuetify|no|String|undefined|Path to the optional instance of the vuetify UI library. e.g. portal or addon specific.|`addons/cosi/vuetify/index.js`|
+|layerSequence|no|**[layerSequence](#markdown-header-layersequence)**||Configuration for layerSequence.||
 
 ***
 
@@ -184,6 +186,7 @@ For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Glob
 |----|--------|----|-------|-----------|
 |urls|no|**[urls](#markdown-header-footerurls)**[]||Array of URL configuration objects.|
 |showVersion|no|Boolean|`false`|If `true`, the Masterportal version number is included in the footer.|
+|footerInfo|no|**[footerInfo](#markdown-header-footerfooterInfo)**[]||Array of information configuration objects.|
 
 ***
 
@@ -225,6 +228,54 @@ For more attributes see **[Scene](https://cesium.com/learn/cesiumjs/ref-doc/Glob
 }
 ```
 
+***
+
+### footer.footerInfo
+|Name|Required|Type|Default|Description|
+|----|-------------|---|-------|------------|
+|title|yes|String||Title of the information tab.|
+|description|no|String||Text displayed under the title.|
+|subtexts|no|**[subtexts](#markdown-header-footerfooterInfosubtexts)**[]||Array of subtext configuration objects.|
+
+***
+
+### footer.footerInfo.subtexts
+|Name|Required|Type|Default|Description|
+|----|-------------|---|-------|------------|
+|subtitle|yes|String||Subtitle of the subtext.|
+|text|no|String||Text displayed under the subtitle.|
+
+**Beispiel:**
+
+```json
+{
+    "footerInfo": [
+        {
+            "title": "Contact",
+            "description": "Text under the titel",
+            "subtexts": [
+                {
+                    "subtitle": "Postal address",
+                    "text": "Max-Mustermann-Str. 1 <br> 12345 City <br> Germany"
+                },
+                {
+                    "subtitle": "Phone and fax",
+                    "text": "Tel: +49 (0) 1234 56789 <br> Fax: +49 (0) 1234 5678910"
+                }
+            ]
+        },
+        {
+            "title": "Privacy",
+            "subtexts": [
+                {
+                    "subtitle": "Subtitle",
+                    "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt..."
+                }
+            ]
+        }
+    ]
+}
+```
 ***
 
 ## mapMarker
@@ -500,6 +551,81 @@ _Deprecated in the next major release. Please use **[zoomTo](#markdown-header-zo
 
 ***
 
+## layerSelector
+
+Module to configure interactions with the layertree and the map, executed on a defined event.
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|events|yes|Object[]||Events to be executed from other modules to select or add layers in layertree.|
+|default|no|Object||Object to overwrite the missing parts in the events objects.|
+
+**Example:**
+
+```json
+{
+    "events": [
+        {
+            "event": "modulname",
+            "deselectPreviousLayers": "always",
+            "layerIds": ["1001"]
+        },
+        {
+            "event": "modulname",
+            "deselectPreviousLayers": "always",
+            "layerIds": ["1000"]
+        }
+    ],
+    "default": {
+        "openFolderForLayerIds": []
+    }
+}
+```
+
+***
+
+### layerSelector.events
+
+Array of Objects. In a single object, interactions with the layertree and the map can be configured. Those interactions are executed on a defined event.
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|event|yes|String||The name of the event that can trigger actions. For possible values and their meanings see the table below.|
+|showLayerId|no|String||Layer ID of the layer to be shown in the layer tree. Opens the layer tree and extends all correspoding folders at the location of the defined layer. Only in destop mode.|
+|layerIds|no|String[]||Layer IDs to select in the layer tree.|
+|openFolderForLayerIds|no|String[]||List of Layer IDs to open their folders in the layer tree.|
+|extent|no|Integer[]||Bounding Box to zoom to when this event is triggered.|
+|deselectPreviousLayers|no|String|always|Deselects all selected layers if it has the value 'always'. For value 'none' nothing happens.|
+
+**Example:**
+
+```json
+{
+    "events": [{
+        "event": "measure_geometry",
+        "showLayerId": "1234",
+        "layerIds": ["2345", "3456", "4567"],
+        "openFolderForLayerIds": ["2345"],
+        "extent": [550697, 5927004,579383, 5941340],
+        "deselectPreviousLayers": "always",
+    }]
+}
+```
+
+***
+
+**Values for event**
+
+Events that can trigger actions.
+
+|event|Description|
+|------|-----------|
+|comparefeatures_select|When a layer is selected for comparison in CompareFeatures module|
+|fileimport_imported|When files were successfully imported in FileImport module|
+|measure_geometry|When the selected geometry value changed in Measure module|
+
+***
+
 ## featureViaURL
 
 |Name|Required|Type|Default|Description|
@@ -601,6 +727,27 @@ Configuration for the layerInformation window.
     "layerInformation": {
         "showUrlGlobal": true
     },
+}
+```
+
+***
+
+## layerSequence
+
+Configuration for the layerSequence.
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|moveModelInTree|no|Boolean|true|Flag whether it should be possible to move a layer in the topic tree despite a defined LayerSequence.|
+
+
+**Example:**
+
+```json
+{
+    "layerSequence": {
+        "moveModelInTree": true
+    }
 }
 ```
 

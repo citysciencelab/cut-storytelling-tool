@@ -15,7 +15,8 @@ import highlightFeaturesByAttribute from "../../api/highlightFeaturesByAttribute
  */
 function searchAndSetValue (state, keySplitted, value, found = false) {
     let foundInState = found,
-        vuexState = state;
+        vuexState = state,
+        id;
 
     if (Array.isArray(keySplitted)) {
         if (vuexState[keySplitted[0]]) {
@@ -25,11 +26,17 @@ function searchAndSetValue (state, keySplitted, value, found = false) {
             if (newState) {
                 foundInState = true;
                 vuexState = newState;
+                id = keySplitted[1];
             }
         }
         else {
             foundInState = inspectStateForTools(vuexState, keySplitted, value);
+            id = keySplitted[0];
         }
+    }
+    if (foundInState && id) {
+        // NOTICE Activate Tool in Menu. Can be removed if menu is refactord to vue.
+        store.dispatch("Tools/setToolActive", {id: id, active: value});
     }
     return foundInState;
 }
@@ -163,13 +170,18 @@ export async function setValueToState (state, key, value) {
                     const stateEntry = state.urlParams[oldParam.key];
 
                     if (!stateEntry || typeof stateEntry === "string" && stateEntry.toLowerCase().indexOf(oldParam.value.toLowerCase()) === -1) {
+                        let entryKey, entryValue;
+
                         if (stateEntry) {
                             // e.g. isinitopen shall contain comma-separated ids of tools
-                            state.urlParams[oldParam.key] = oldParam.value + "," + state.urlParams[oldParam.key];
+                            entryKey = oldParam.key;
+                            entryValue = oldParam.value + "," + state.urlParams[oldParam.key];
                         }
                         else {
-                            state.urlParams[oldParam.key] = oldParam.value;
+                            entryKey = oldParam.key;
+                            entryValue = oldParam.value;
                         }
+                        store.commit("addUrlParams", {key: entryKey, value: entryValue});
                     }
                 }
             }
@@ -177,7 +189,7 @@ export async function setValueToState (state, key, value) {
                 state.ZoomTo[entry.key.substring(5)] = entry.value;
             }
             else {
-                state.urlParams[entry.key] = entry.value;
+                store.commit("addUrlParams", {key: entry.key, value: entry.value});
             }
             return entry;
         }).catch(error => {

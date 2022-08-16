@@ -358,6 +358,7 @@
                 "titlePlaceholder": "My title",
                 "layoutLabel": "Layout",
                 "formatLabel": "Format",
+                "dpiLabel": "DPI",
                 "scaleLabel": "Printing scale",
                 "withLegendLabel": "With legend",
                 "autoAdjustScale": "Adjust printing scale automatically",
@@ -376,6 +377,13 @@
                 },
                 "hintInfoScale": "The selected print scale differs from the scale in the map window. This can lead to a different map layout in print.",
                 "invisibleLayer": "The following topics cannot be printed in the selected print scale {{scale}}:"
+            },
+            "sessionTool": {
+                "uploadHeader": "Load Session",
+                "buttonTextUpload": "Upload",
+                "buttonTextDownload": "Download",
+                "downloadHeader": "Save Session",
+                "errorOnLoad": "An error occurred during upload!"
             },
             "shadow": {
                 "shadowDisplay": "Shadow display"
@@ -466,6 +474,22 @@
                 "filterResult": {
                     "label": "All filtered Counts",
                     "unit": "{{amountOfFilteredItems}} Results"
+                },
+                "geometryFilter": {
+                    "activate": "Activate area filter",
+                    "help": "Select an area on the map to filter only within that area.",
+                    "selectGeometry": "Choose an area.",
+                    "buffer": "Buffer [m]",
+                    "removeGeometry": "Remove that area",
+                    "geometries": {
+                        "polygon": "Polygon",
+                        "rectangle": "Rectangle",
+                        "circle": "Circle",
+                        "lineString": "Line + Buffer"
+                    }
+                },
+                "downloadAsCSV": {
+                    "label": "Download filtered data"
                 }
             },
             "pendler": {
@@ -524,6 +548,10 @@
                     "limitReached": "The maximum number of objects in the comparison list has been reached.",
                     "removeObjects": "Please remove at least one object before proceeding.",
                     "goToComparisonlist": "To the comparison list"
+                },
+                "trueFalse": {
+                  "true": "Yes",
+                  "false": "No"
                 }
             },
             "saveSelection": {
@@ -695,6 +723,7 @@
                 }
             },
             "draw": {
+                "drawLayerVisible": "Show/hide drawing",
                 "clickToPlaceText": "Click on the map to place the text",
                 "download": {
                   "createFirst": "Please create a drawing or text first!",
@@ -749,6 +778,7 @@
                     "saveDrawing": "Save drawing"
                 },
                 "symbol": "Symbol",
+                "geometry": "Geometry",
                 "iconList": {
                     "iconPoint": "Point",
                     "iconLeaf": "Leaf",
@@ -803,7 +833,9 @@
                     "or": "or",
                     "label": "Information regarding the results of the search",
                     "text": "The results of the search will fulfill the conditions / clauses {{userHelp}}. <br /> *Mandatory field"
-                }
+                },
+                "district": "District",
+                "parcelNumber": "Parcel number"
             },
             "wfsTransaction": {
                 "layerSelectLabel": "Current layer:",
@@ -925,6 +957,7 @@
                             "profile": "Profile"
                         }
                     },
+                    "preferenceLabel": "Preference",
                     "preference": {
                         "RECOMMENDED": "Recommended",
                         "SHORTEST": "Shortest"
@@ -1203,7 +1236,9 @@
               "No": "no"
             },
             "zoomToResult": "Zoom to result",
-            "pagination": "Pagination"
+            "zoomToResults": "Zoom to selection",
+            "pagination": "Pagination",
+            "selection": "Row selection"
         }
     }
 }

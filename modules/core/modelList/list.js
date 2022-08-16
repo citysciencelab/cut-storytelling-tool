@@ -7,7 +7,7 @@ import WMSTimeLayer from "../../../src/core/layers/wmsTime";
 import WMTSLayer from "../../../src/core/layers/wmts";
 import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "../../../src/core/layers/geojson";
-import SensorLayer from "./layer/sensor";
+import STALayer from "../../../src/core/layers/sta";
 import HeatmapLayer from "./layer/heatmap";
 import TerrainLayer from "../../../src/core/layers/terrain";
 import EntitiesLayer from "../../../src/core/layers/entities";
@@ -113,6 +113,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "setIsSelectedOnParent": this.setIsSelectedOnParent,
             "showModelInTree": this.showModelInTree,
             "closeAllExpandedFolder": this.closeAllExpandedFolder,
+            "addAndExpandModelsRecursive": this.addAndExpandModelsRecursive,
             "setAllDescendantsInvisible": this.setAllDescendantsInvisible,
             "renderTree": function () {
                 this.trigger("renderTree");
@@ -167,6 +168,45 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
         });
         this.defaultToolId = Object.prototype.hasOwnProperty.call(Config, "defaultToolId") ? Config.defaultToolId : "gfi";
+        store.dispatch("Tools/SessionTool/register", {key: "Layers", getter: () => {
+            const models = this.where({isSelected: true, type: "layer"}),
+                layerIds = [];
+
+            if (Array.isArray(models) && models.length) {
+                models.forEach(model => layerIds.push(model.id));
+            }
+            else if (models?.id) {
+                layerIds.push(models.id);
+            }
+            return {
+                layerIds
+            };
+        }, setter: ({layerIds}) => {
+            if (!Array.isArray(layerIds)) {
+                return;
+            }
+
+            layerIds.forEach(layerId => {
+                const layers = this.where({id: layerId});
+                let model;
+
+                if (Array.isArray(layers) && layers.length > 0) {
+                    model = layers[0];
+                }
+                else {
+                    Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
+                    model = this.findWhere({id: layerId});
+                }
+
+                if (!model) {
+                    return;
+                }
+                if (typeof model.setIsSelected === "function") {
+                    model.setIsSelected(true);
+                }
+            });
+
+        }}, {root: true});
     },
     defaultToolId: "",
     alwaysActiveTools: [],
@@ -200,7 +240,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return new GroupedLayers(attrs, options);
             }
             else if (attrs.typ === "SensorThings") {
-                return new SensorLayer(attrs, options);
+                const sensorLayer = new STALayer(attrs, options);
+
+                sensorLayer.initializeSensorThings();
+                return sensorLayer;
             }
             else if (attrs.typ === "Heatmap") {
                 return new HeatmapLayer(attrs, options);
@@ -661,7 +704,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     getSortedTreeLayers: function () {
         const combinedLayers = this.getTreeLayers(),
             newLayers = combinedLayers.filter(layer => layer.get("selectionIDX") === 0),
-            treeType = Radio.request("Parser", "getTreeType");
+            treeType = Radio.request("Parser", "getTreeType"),
+            isTreeMove = Config?.layerSequence?.moveModelInTree !== undefined ? Config?.layerSequence?.moveModelInTree : true;
 
         // we need to devide current layers from newly added ones to be able to put the latter ones in
         // at a nice position
@@ -674,7 +718,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         });
 
         // if the treeType is custom, handle sorting according to layerSequence
-        if (treeType === "custom" && combinedLayers.find(layer => layer.get("layerSequence"))) {
+        if (treeType === "custom" && !isTreeMove && combinedLayers.find(layer => layer.get("layerSequence"))) {
             currentLayers = this.handleLayerSequence(combinedLayers, currentLayers, newLayers);
         }
         else {

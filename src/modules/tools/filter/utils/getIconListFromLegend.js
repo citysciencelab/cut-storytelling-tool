@@ -22,7 +22,7 @@ function getIconListFromLegend (legendInfoList, styleModel) {
                 result[legendInfo.label] = createLineSVG(legendInfo.styleObject);
             }
             else if (legendInfo.geometryType === "Polygon") {
-                result[legendInfo.label] = createPolygonSVG(legendInfo.styleObject);
+                result[legendInfo.label] = createPolygonGraphic(legendInfo.styleObject);
             }
         }
     });
@@ -47,21 +47,26 @@ function getStyleModel (layerId) {
         }
     }
 
-    return styleModel;
+    return Object.freeze(styleModel);
 }
 
 /**
- * Creates an SVG for a polygon
+ * Creates a graphic for a polygon
  * @param   {vectorStyle} style feature styles
- * @returns {string} svg
+ * @returns {string} svg or data URL
  */
-function createPolygonSVG (style) {
+function createPolygonGraphic (style) {
     let svg = "";
     const fillColor = style.get("polygonFillColor") ? convertColor(style.get("polygonFillColor"), "rgbString") : "black",
         strokeColor = style.get("polygonStrokeColor") ? convertColor(style.get("polygonStrokeColor"), "rgbString") : "black",
         strokeWidth = style.get("polygonStrokeWidth"),
-        fillOpacity = style.get("polygonFillColor")[3] || 0,
-        strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
+        fillOpacity = style.get("polygonFillColor")?.[3] || 0,
+        strokeOpacity = style.get("polygonStrokeColor")[3] || 0,
+        fillHatch = style.get("polygonFillHatch");
+
+    if (fillHatch) {
+        return style.getPolygonFillHatchLegendDataUrl();
+    }
 
     svg += "<svg height='25' width='25'>";
     svg += "<polygon points='5,5 20,5 20,20 5,20' style='fill:";

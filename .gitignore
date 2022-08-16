@@ -27,6 +27,8 @@ css/modules.css
 
 dist
 
+devtools/certificate*
+
 examples*
 
 examples.zip

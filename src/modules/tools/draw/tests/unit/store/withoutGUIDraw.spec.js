@@ -157,11 +157,11 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
             expect(commit.secondCall.args).to.eql(["setWithoutGUI", true]);
             expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawSymbol", geometry: "Point"}]);
-            expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
-            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
-            expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
+            expect(commit.lastCall.args).to.eql(["setLayer", undefined]);
+            expect(dispatch.firstCall.args).to.eql(["Maps/addNewLayerIfNotExists", "importDrawLayer", {root: true}]);
+            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
+            expect(dispatch.thirdCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(3).args).to.eql(["createModifyInteractionAndAddToMap", false]);
 
         });
         it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle and the color is defined", async () => {
@@ -174,11 +174,11 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
             expect(commit.secondCall.args).to.eql(["setWithoutGUI", true]);
             expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawLine", geometry: "LineString"}]);
             expect(commit.getCall(3).args).to.eql(["setLineStringSettings", {color, colorContour: color}]);
-            expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
-            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
-            expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
+            expect(commit.lastCall.args).to.eql(["setLayer", undefined]);
+            expect(dispatch.firstCall.args).to.eql(["Maps/addNewLayerIfNotExists", "importDrawLayer", {root: true}]);
+            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
+            expect(dispatch.thirdCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(3).args).to.eql(["createModifyInteractionAndAddToMap", false]);
         });
         it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle and the opacity is defined", async () => {
             const opacity = "3.5",
@@ -194,11 +194,11 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
             expect(commit.secondCall.args).to.eql(["setWithoutGUI", true]);
             expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawArea", geometry: "Polygon"}]);
             expect(commit.getCall(3).args).to.eql(["setPolygonSettings", {color: resultColor, opacity}]);
-            expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
-            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
-            expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
+            expect(commit.lastCall.args).to.eql(["setLayer", undefined]);
+            expect(dispatch.firstCall.args).to.eql(["Maps/addNewLayerIfNotExists", "importDrawLayer", {root: true}]);
+            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
+            expect(dispatch.thirdCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(3).args).to.eql(["createModifyInteractionAndAddToMap", false]);
         });
     });
 });

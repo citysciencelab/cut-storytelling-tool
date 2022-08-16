@@ -11,14 +11,133 @@
 ### __Breaking Changes__
 
 ### Added
-- FilterModule:
-    - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
-- api/highlightFeaturesByAttribute URL mechanism to query WFS data by parameters and configuration
+- #657: Polygon hatch patterns to allow for further design options in the style.json file have been implemented.
+- Possibility for development with self-signed SSL-certificates. See [wiki-doc](https://bitbucket.org/geowerkstatt-hamburg/masterportal/wiki/Entwicklungsumgebung%20mit%20selbstsignierten%20SSL-Zertifikat%20einrichten)
 
 ### Changed
-- WMTS feature is now realized via masterportalAPI functions.
+- Filter:
+    - Making intern wfs layer loadingStrategy with 'all' by filtering
+    - The checkbox for filtering in the browsers extent now triggers direct filtering with `strategy`: `active`. This can be disabled by setting `searchInMapExtentProactive` to `false`.
+    - New parameter wmsRefId is added. If the layer is filtered, the WMS layer with "wmsRefId" will be invisible and deactivated from Tree. After resetting the layer, the WMS layer will be activated and visible again.
+    - Added an option to activate a csv download button for filtered data.
+- Draw-Tool:
+    - A new checkbox has been added to the Draw tool that can be used to hide and retrieve the drawing.
+- The version of node was updated, must be >= 16.13.2 <= 16.16.0 and the version of npm was updated, must be >= 8.1.2 <=8.11.0.
+- Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
+- The following NPM packages have been updated:
+    - dependencies:
+        - @masterportal/masterportalapi: 2.4.0 to 2.5.1
+        - @popperjs/core: 2.10.2 to 2.11.5
+        - axios: 0.25.0 to 0.27.2
+        - bootstrap-icons: 1.7.1 to 1.9.1
+        - bootstrap-sass: 3.4.1 to 3.4.3
+        - core-js: 3.24.0 to 3.24.1
+        - i18next: 21.6.7 to 21.8.16
+        - i18next-browser-languagedetector: 6.1.3 to 6.1.4
+        - i18next-http-backend: 1.3.2 to 1.4.1
+        - jquery-ui: 1.13.0 to 1.13.2
+        - jsts: 2.8.1 to 2.9.0
+        - moment: 2.29.1 to 2.29.4
+        - mqtt: 4.3.4 to 4.3.7
+        - object-hash: 2.2.0 to 3.0.0
+        - vue: 2.6.14 to 2.7.8
+        - vue-template-compiler: 2.6.14 to 2.7.8
+    - devDependencies
+        - @geoblocks/print: 0.7.1 to 0.7.2
+        - @sinonjs/fake-timers: 8.1.0 to 9.1.2
+        - babel-loader: 8.2.3 to 8.2.5
+        - canvas: 2.8.0 to 2.9.3
+        - chai: 4.3.4 to 4.3.6
+        - dotenv: 11.0.0 to 16.0.1
+        - eslint: 8.7.0 to 8.21.0
+        - eslint-plugin-vue: 8.3.0 to 9.3.0
+        - eslint-plugin-vuejs-accessibility: 1.1.1 to 1.2.0
+        - fs-extra: 10.0.0 to 10.1.0
+        - git-rev-sync: 3.0.1 to 3.0.2
+        - https-proxy-agent: 5.0.0 to 5.0.1
+        - husky: 7.0.4 to 8.0.1
+        - inquirer: 8.2.0 to 8.2.4
+        - jsdoc: 3.6.10 to 3.6.11
+        - markdown-it: 13.0.0 to 13.0.1
+        - mocha: 9.2.0 to 9.2.2
+        - mock-local-storage: 1.1.19 to 1.1.23
+        - node-fetch: 3.1.0 to 3.2.10
+        - replace-in-file: 6.3.2 to 6.3.5
+        - sass: 1.45.2 to 1.54.0
+        - selenium-webdriver: 4.1.1 to 4.3.1
+        - sinon: 12.0.1 to 14.0.0
+        - zip-a-folder: 1.1.3 to 1.1.5
+- WfsSearch: `inputLabel` are now translated.
+- In the `light` topic tree, the `singleBaselayer` attribute can now also be used.
 
 ### Deprecated
+
+### Removed
+The following NPM package is removed:
+    - @intlify/vue-i18n-loader
+
+### Fixed
+
+---
+
+## v2.24.0 - 2022-08-03
+### Added
+- PortalFooter:
+    - Possibility to display additional information in the footer
+- Added DPI selection to print dialog (as advertised by mapfish print via "dpiSuggestions")
+- Filter:
+    - New option added called "resetLayer". If true it will change the reset button in the filter to a button which resets the whole layer and ignores the prechecked values
+    - New component GeometryFilter added. If "geometrySelectorVisible" is true, selecting an area on the map, to filter only within that area, is activated.
+- GFI: Show `GFI` (Tool: `Retrieve information`) for vectorTiles layers is now possible.
+
+### Changed
+- CompareFeatures: The values true and false are now translated.
+- The interactions between the `GFI` and the `Map` have been moved from the Map module to the GFI module/tool.
+- Rename the layer names `measure_layer` to `measureLayer` and draw `import_draw_layer` to `importDrawLayer`.
+- The following NPM packages have been updated:
+    - dependencies:
+        - core-js: 3.15.2 to 3.24.0
+
+### Fixed
+- Fix unix-related path issue in findWhereJs.js
+- Correct documentation regarding field names (serviceID -> serviceId).
+- Link in footer will now have white text for better readability.
+- Print: Polygon representations are now correctly shown in the map and in the legend.
+- layerSequence: fix possibility to move layers in tree despite defined layerSequence.
+- Print: fix handling for highresolution plotService.
+- Fixed a bug where the wrong GFi was displayed after turning on and off different layers.
+- Url parameter 'featureViaURL' with test point is fixed.
+- Issue #689: The layerSlider handle mode displays the layers correctly at the steps.
+- Issue #798: If a tool is opened by url parameter and 'deactivateGFI' is true at tool-config, no gfi is available if tool is open.
+- Issue #800: The Zoom-Out control works again with `startZoomlevel: 0`.
+- Issue #802: Custom mapMarker configurations is respected again.
+- Issue #804: Legend window will not be cut off when width changes to a maximum.
+- Issue #807: transparency setting for child layers is getting set/initialized now for grouped layers.
+- Issue #810: Filter overwrites the "attributions" status.
+- Fixed language switching bug in the addWMS tool.
+
+---
+
+## v2.23.0 - 2022-07-06
+### Added
+- FilterModule:
+    - A new attribute clearAll for clearing all the filtered results after clicking button "Reset All"
+- Api/highlightFeaturesByAttribute URL mechanism to query WFS data by parameters and configuration
+- WfsSearch: A `multiSelect` mode has been added where multiple search results can be selected and viewn on the map.
+- A new type of addons can be loaded: pure javascript-files with locale-files. See https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/addOnsVue.md
+- The elasticsearch now sends `layerIDsToIgnore` (as `id`) and `metaIDsToIgnore` (as `datasets.md_id`) to the service as well. These associated layers are filtered out of the response from Elastic.
+- LayerSelector module:
+    - Module to configure interactions with the layertree and the map, executed on a defined event.
+
+### Changed
+- Changed class for several title elements on page from span to h1 or h2 and standardized their styling.
+- WMTS feature is now realized via masterportalAPI functions.
+- SensorThingsAPI: The sensor layer has been moved from Backbone to Vue.
+- Fix config.json.md regarding chapter depth.
+- The following NPM packages are updated:
+    - @masterportal/mpconfigparser: 1.2.0 to 1.3.0
+    - @masterportal/masterportalapi: 2.3.0 to 2.4.0
+  - Some `Radio.trigger` and `Radio.request` calls have been replaced by direct accesses to the `Vuex store`.
 
 ### Removed
 - Deleted the following snippets: dropdown, exportButton, graphicalSelect, multiCheckbox.
@@ -28,14 +147,24 @@
 - Lines imported as KML can now be edited and modified with the Draw tool.
 - Issue #663: Fixed tool Buffer Analysis where layer visibility updates would not be recognized in custom trees. Now, all visible layers at tool starting time are available within the tool.
 - Issue #778: Fixed layer information display selection in metadata window that now always has names options in its select input.
-- Issue #788: Legend not updating correctly
+- Issue #788: Legend not updating correctly.
 - Download print Buttons will now be blue at first and grey once the button was clicked.
 - Attached Gfi is styled correctly.
+- Quickly clicking on a tab in the Elektro GFI will now not lead to a reload of the page.
+- Tools without icon attribute in config.json use default icon from state now.
+- MouseHover Module
+  - Instead of getting all the layers from config.js, only the layers in portal will be loaded.
+  - It does not depend on the gfi attributes to show the mouseHover tooltip.
+  - Instead of text, the mouseHover tooltip will be shown as html content.
+- The minimized ToolTemplate will now be blue and variables are used in css the template's css code.
+- The transparency of a layer in the topic tree can now only be between 0 and 100 for increase or decrease.
+- 3D-UrlParameters heading, tilt and altitude are now set.
+- UrlParameter zoomtogeometry={number} is fixed.
+- Fix error when defining a `styleID` for an OAF layer type.
 
 ---
 
 ## v2.22.2 - 2022-06-15
-
 ### Fixed
 - Addons: Fixed tool Commuter flows.
 

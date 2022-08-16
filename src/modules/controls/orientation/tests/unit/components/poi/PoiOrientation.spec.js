@@ -145,10 +145,10 @@ describe("src/modules/controls/orientation/components/PoiOrientation.vue", () =>
     });
 
     describe("SVG Functions", function () {
-        it("createPolygonSVG should return an SVG", function () {
+        it("createPolygonGraphic should return an SVG", function () {
             const style = new PolygonStyle();
 
-            expect(wrapper.vm.createPolygonSVG(style)).to.be.an("string").to.equal("<svg height='35' width='35'><polygon points='5,5 30,5 30,30 5,30' style='fill:#0ac864;fill-opacity:0.5;stroke:#000000;stroke-opacity:1;stroke-width:1;'/></svg>");
+            expect(wrapper.vm.createPolygonGraphic(style)).to.be.an("string").to.equal("<svg height='35' width='35'><polygon points='5,5 30,5 30,30 5,30' style='fill:#0ac864;fill-opacity:0.5;stroke:#000000;stroke-opacity:1;stroke-width:1;'/></svg>");
         });
         it("createLineSVG should return an SVG", function () {
             const style = new LinestringStyle();

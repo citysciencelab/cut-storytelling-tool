@@ -276,6 +276,7 @@
                 "titlePlaceholder": "Mien Titel",
                 "layoutLabel": "Layout",
                 "formatLabel": "Format",
+                "dpiLabel": "DPI",
                 "scaleLabel": "Druckmaßstab",
                 "withLegendLabel": "Mit Legende",
                 "printLabel": "Drucken",
@@ -681,7 +682,9 @@
                     "or": "oder",
                     "label": "Informationen bezüglich der Suchergebnisse",
                     "text": "Die Ergebnisse der Suche werden die Bedingungen / Klauseln {{userHelp}} erfüllen. <br /> *Pflichtfeld"
-                }
+                },
+                "district": "Gemarkung",
+                "parcelNumber": "Flurstücksnummer"
             }
         },
         "controls": {

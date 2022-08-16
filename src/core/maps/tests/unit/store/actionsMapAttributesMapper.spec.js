@@ -10,7 +10,6 @@ describe("src/core/maps/store/actions/actionsMapAttributesMapper.js", () => {
                     mode: "2D"
                 },
                 rootGetters = {
-                    "Tools/Gfi/active": false,
                     "controls/orientation/poiModeCurrentPositionEnabled": true
                 },
                 commit = sinon.spy(),
@@ -30,7 +29,6 @@ describe("src/core/maps/store/actions/actionsMapAttributesMapper.js", () => {
                     mode: "3D"
                 },
                 rootGetters = {
-                    "Tools/Gfi/active": false,
                     "controls/orientation/poiModeCurrentPositionEnabled": true
                 },
                 commit = sinon.spy(),
@@ -50,27 +48,6 @@ describe("src/core/maps/store/actions/actionsMapAttributesMapper.js", () => {
             expect(commit.secondCall.args).to.deep.equal([
                 "setClickCartesianCoordinate", [12, 99]
             ]);
-        });
-
-        it("commits setClickCoord, setClickPixel and setFeaturesAtCoordinate if gfi tool is active", () => {
-            const getters = {
-                    mode: "2D"
-                },
-                rootGetters = {
-                    "Tools/Gfi/active": true,
-                    "controls/orientation/poiModeCurrentPositionEnabled": true
-                },
-                dispatch = sinon.spy(),
-                commit = sinon.spy(),
-                obj = {
-                    coordinate: [4, 56]
-                };
-
-            actions.updateClick({commit, getters, dispatch, rootGetters}, obj);
-            expect(commit.calledThrice).to.be.true;
-            expect(dispatch.calledTwice).to.be.true;
-            expect(dispatch.firstCall.args[0]).to.equal("MapMarker/removePolygonMarker");
-            expect(dispatch.secondCall.args[0]).to.equal("collectGfiFeatures");
         });
     });
 

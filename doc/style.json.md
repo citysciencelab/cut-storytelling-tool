@@ -353,7 +353,7 @@ For individual legend texts, see chapter [Legend](#markdown-header-legend).
 
 ### Use Fallback, if no rule available
 
-If the number of child *Features*  of a *MultiGeomtry* feature is higher than the number of rules or no rule can be found, and no fallbacks shall be used you can set the property *styleMultiGeomOnlyWithRule* to true. 
+If the number of child *Features*  of a *MultiGeomtry* feature is higher than the number of rules or no rule can be found, and no fallbacks shall be used you can set the property *styleMultiGeomOnlyWithRule* to true.
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
@@ -534,7 +534,135 @@ Please see the [OpenLayers Fill]([-](https://openlayers.org/en/latest/apidoc/mod
 |polygonStrokeDash||Integer[]|`null`|Line dash style|
 |polygonStrokeDashOffset||Integer|`0`|Line dash offset|
 |polygonStrokeMiterLimit||Integer|`10`|`Miter limit`|
-|polygonFillColor||Integer[]|`[10, 200, 100, 0.5]`|Fill color in rgba|
+|polygonFillColor|no|Integer[]|`[10, 200, 100, 0.5]`|Fill color in rgba|
+|polygonFillHatch|no|**[polygonFillHatch](#markdown-header-polygonpolygonfillhatch)**[]|`undefined`|Can be used to define a hatch pattern. Mutually exclusive to polygonFillColor – only one of the fields may be used. If both are defined, `polygonFillHatch` takes precedence.|
+
+#### Polygon.polygonFillHatch
+
+The polygonFillHatch allows drawing various patterns to distinguish polygons by style configuration. Use these patterns to enhance accessibility. [This article](http://betweentwobrackets.com/data-graphics-and-colour-vision/#patternstotherescue) about cake diagrams also applies to polygons.
+
+> ⚠️ *Please mind that hatch patterns for vector layers are not supported by the [MapFish JSON parser](https://mapfish.github.io/mapfish-print-doc/styles.html#mapfishJsonParser), and hence can't be printed.*
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|pattern|no|enum["diagonal", "diagonal-right", "zig-line", "zig-line-horizontal", "circle", "rectangle", "triangle", "diamond"]/Object|`"diagonal"`|Draw pattern. You may either use a pre-defined pattern from the enum or specify one yourself. For both, examples are given below.|
+|size|no|Number|`30`|Edge length of a singular repeated pattern element.|
+|lineWidth|no|Number|`10`|Line width of drawn pattern. To achieve an even distribution in diagonal and zig-line pattern, choose lineWidth as (1/3 * size). For triangle and diamond, a lineWidth of 1 must be chosen. For rectangle, a lineWidth of at most (1/4 * size) should be chosen. Deviating from these rules is not harmful, but patterns may seem off.|
+|backgroundColor|no|Number[]|`[0, 0, 0, 1]`|Background color of polygon.|
+|patternColor|no|Number[]|`[255, 255, 255, 1]`|Fill color of pattern drawn on polygon.|
+
+```json
+{
+    "polygonStrokeColor": [0, 0, 0, 1],
+    "polygonStrokeWidth": 2,
+    "polygonFillHatch": {
+        "pattern": "diagonal",
+        "lineWidth": 10,
+        "size": 30,
+        "backgroundColor": [100, 100, 255, 0.5],
+        "patternColor": [255, 255, 255, 1]
+    }
+}
+```
+
+With the example style above, the following patterns are rendered, where `pattern` and `lineWidth` are adjusted as follows:
+
+|`polygonFillHatch` override|Result|
+|-|-|
+|`{"patternCode": "rectangle", "lineWidth": 2}`|![Polygon Fill Rectangle Hatch Pattern Example](images/style/style.rectangle.png)|
+|`{"patternCode": "triangle", "lineWidth": 1}`|![Polygon Fill Triangle Hatch Pattern Example](images/style/style.triangle.png)|
+|`{"patternCode": "diamond", "lineWidth": 1}`|![Polygon Fill Diamond Hatch Pattern Example](images/style/style.diamond.png)|
+|`{"patternCode": "circle", "lineWidth": 2}`|![Polygon Fill Circle Hatch Pattern Example](images/style/style.circle.png)|
+|`{"patternCode": "circle", "lineWidth": 10}`|![Polygon Fill Filled Circle Hatch Pattern Example](images/style/style.filledcircle.png)|
+|`{"patternCode": "diagonal", "lineWidth": 10}`|![Polygon Fill Diagonal Hatch Pattern Example](images/style/style.diagonal.png)|
+|`{"patternCode": "zig-line", "lineWidth": 10}`|![Polygon Fill Zig-Line Hatch Pattern Example](images/style/style.zigline.png)|
+
+The alternatives `"zig-lines-horizontal"` and `"diagonal-right"` match the above patterns rotated by 90°.
+
+>🛠️ Expert feature: Defining your own pattern.
+
+Should the givens pattern not suffice, you may use an object defining the hatch rules. For example, the following object will draw a triangle and rotate it around its center by 90 degrees. The given parameters are relative to size. In this example, the starting point is "half way to the right, one third from the top". You may also use numbers above 1 and below 0 to draw over the borders. This will be cut, but may come in handy for using rotation.
+
+```json
+{
+    "draw": [
+        {
+            "type": "line",
+            "parameters": [
+                [0.5, 0.33],
+                [0.66, 0.66],
+                [0.33, 0.66],
+                [0.5, 0.33]
+            ]
+        }
+    ],
+    "rotate": 90
+}
+```
+
+To draw circles or circle parts, this syntax can be used:
+
+```json
+{
+    "draw": [
+        {
+            "type": "arc",
+            "parameters": [
+                0.75, 0.75, 2.5, 0, 6.283185307179586
+            ]
+        }
+    ]
+}
+```
+
+The parameters match the [arc](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/arc) function parameters.
+
+With these, the following example pattern resembling a commonly used deciduous tree symbol can be produced:
+
+![Polygon Fill Hatch Pattern Expert Feature Tree Pattern Example](images/style/style.trees.png)
+
+It is drawn with three elements: A 2/3 circle describing the general shape, and a 1/3 circle to the right and a short line at the ground level to indicate shadow.
+
+```json
+{
+    "pattern": {
+        "draw": [
+            {
+                "type": "arc",
+                "parameters": [
+                    0.5, 0.5, 7.5, -4.14, 1.14
+                ]
+            },
+            {
+                "type": "arc",
+                "parameters": [
+                    0.55, 0.5, 7.5, -2, 1.14
+                ]
+            },
+            {
+                "type": "line",
+                "parameters": [
+                    [0.66, 0.75],
+                    [1, 0.75]
+                ]
+            }
+        ]
+    },
+    "lineWidth": 1,
+    "size": 30,
+    "backgroundColor": [255, 255, 255, 1],
+    "patternColor": [0, 100, 0, 1]
+}
+```
+
+You may also use [rect](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect) for convenience. In that case, "parameters" is an array of call argument arrays, matching the `rect` function definition. The following is the default implementation for the "rectangle" pattern.
+
+```json
+{"type": "rect", "parameters": [
+    [0.125, 0.125, 0.25, 0.25],
+    [0.625, 0.625, 0.25, 0.25]
+]}
+```
 
 ### Cesium
 
@@ -680,12 +808,12 @@ A SensorLayer example configuration.
                 }
             },
             {
-                "conditions": { 
+                "conditions": {
                     "properties":{
                         "@Datastreams.0.Observations.0.result":true
                     }
                 },
-                "style": { 
+                "style": {
                     "lineStrokeColor": [44,127,184, 0.7]
                 }
             },

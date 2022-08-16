@@ -2,16 +2,26 @@ import {createGeoJSON, getFeatureIds} from "../../../featureViaURL";
 import {expect} from "chai";
 import sinon from "sinon";
 import {transform} from "@masterportal/masterportalapi/src/crs";
+import Map from "ol/Map";
 
 describe("featureViaURL", function () {
     const spy = sinon.spy();
 
+    before(() => {
+        mapCollection.clear();
+    });
     beforeEach(function () {
+        mapCollection.clear();
+        mapCollection.addMap(new Map(), "2D");
+
         sinon.stub(console, "warn").callsFake(spy);
     });
     afterEach(function () {
         sinon.restore();
         spy.resetHistory();
+    });
+    after(() => {
+        mapCollection.clear();
     });
     describe("createGeoJSON", function () {
         const geometryType = "Point",
@@ -100,9 +110,6 @@ describe("featureViaURL", function () {
 
         beforeEach(function () {
             sinon.stub(Radio, "request").callsFake(fakeFunction);
-        });
-        it("should return an array of feature Ids if the layer was found", function () {
-            expect(getFeatureIds(correctId)).to.eql(["66", "89"]);
         });
         it("should log an error on the console if no layer was found with the specified layerId and return an empty array", function () {
             const wrongId = "402";

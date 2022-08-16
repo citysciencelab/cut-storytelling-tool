@@ -5,7 +5,7 @@ import {Point, MultiPoint} from "ol/geom.js";
 import Feature from "ol/Feature.js";
 import Layer from "../../layer";
 import Group from "../../group";
-
+import Collection from "ol/Collection";
 
 describe("src/core/layers/layer.js", () => {
     let attributes,
@@ -51,7 +51,8 @@ describe("src/core/layers/layer.js", () => {
         },
         getMinResolution: () => {
             return layerResoMin;
-        }
+        },
+        setZIndex: () => sinon.spy()
     };
 
     before(() => {
@@ -69,6 +70,9 @@ describe("src/core/layers/layer.js", () => {
                 return {
                     getResolutions: () => [2000, 1000]
                 };
+            },
+            getLayers: () => {
+                return new Collection();
             }
         };
 
@@ -257,6 +261,30 @@ describe("src/core/layers/layer.js", () => {
         expect(layerWrapper.attributes.transparency).to.be.equals(100);
         layerWrapper.incTransparency();
         expect(layerWrapper.attributes.transparency).to.be.equals(100);
+    });
+    it("incTransparency shall work in 10er steps and max 100, even if the starting transparency is 75", function () {
+        attributes.transparency = 75;
+        const layerWrapper = new Layer(attributes, olLayer);
+
+        expect(layerWrapper.attributes.transparency).to.be.equals(75);
+        layerWrapper.incTransparency();
+        expect(layerWrapper.attributes.transparency).to.be.equals(85);
+        layerWrapper.incTransparency();
+        expect(layerWrapper.attributes.transparency).to.be.equals(95);
+        layerWrapper.incTransparency();
+        expect(layerWrapper.attributes.transparency).to.be.equals(100);
+    });
+    it("decTransparency shall work in 10er steps and min 0, even if the starting transparency is 25", function () {
+        attributes.transparency = 25;
+        const layerWrapper = new Layer(attributes, olLayer);
+
+        expect(layerWrapper.attributes.transparency).to.be.equals(25);
+        layerWrapper.decTransparency();
+        expect(layerWrapper.attributes.transparency).to.be.equals(15);
+        layerWrapper.decTransparency();
+        expect(layerWrapper.attributes.transparency).to.be.equals(5);
+        layerWrapper.decTransparency();
+        expect(layerWrapper.attributes.transparency).to.be.equals(0);
     });
     it("updateLayerTransparency shall update layers opacity", function () {
         attributes.isSelected = false;
@@ -460,11 +488,13 @@ describe("src/core/layers/layer.js", () => {
         });
         attributes.singleBaselayer = true;
         attributes.parentId = "Baselayer";
+        attributes.isBaseLayer = true;
         layerWrapper = new Layer(attributes, olLayer);
 
         attCopy.isSelected = true;
         attCopy.isVisibleInMap = true;
         attCopy.id = "anotherId";
+        attCopy.isBaseLayer = true;
         layerWrapper2 = new Layer(attCopy, olLayer);
         layerWrapper3 = new Layer(attCopy, olLayer);
 

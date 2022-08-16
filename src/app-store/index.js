@@ -7,6 +7,7 @@ import PortalFooter from "../modules/portalFooter/store/indexPortalFooter";
 import GraphicalSelect from "../share-components/graphicalSelect/store/indexGraphicalSelect";
 import Language from "../modules/language/store/indexLanguage";
 import LayerInformation from "../modules/layerInformation/store/indexLayerInformation";
+import LayerSelector from "../modules/layerSelector/store/indexLayerSelector";
 import Legend from "../modules/legend/store/indexLegend";
 import Maps from "../core/maps/store/indexMap";
 import MapMarker from "../modules/mapMarker/store/indexMapMarker";
@@ -37,6 +38,7 @@ const store = new Vuex.Store({
         GraphicalSelect,
         Language,
         LayerInformation,
+        LayerSelector,
         Legend,
         Maps,
         MapMarker,

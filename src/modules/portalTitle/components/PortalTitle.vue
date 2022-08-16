@@ -122,7 +122,7 @@ export default {
                 :src="logo"
                 :alt="title"
             >
-            <span
+            <h1
                 id="title-text"
                 v-html="title"
             />
@@ -147,7 +147,7 @@ export default {
             display: inline-block;
             vertical-align: middle;
         }
-        span {
+        h1 {
             color: $secondary_contrast;
             margin-left: 5px;
             font-size: 26px;

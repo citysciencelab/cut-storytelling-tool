@@ -67,8 +67,6 @@ async function doLoadUrl (driver, url) {
     /* eslint-disable no-process-env */
     const testService = process.env.npm_config_testservice;
 
-    await driver.get(url);
-
     if (url.indexOf("localhost") === -1) {
 
         if (testService === "saucelabs") {
@@ -77,8 +75,13 @@ async function doLoadUrl (driver, url) {
                 urlWithBasicAuth = firstPart + "lgv:test@" + secondPart;
 
             await driver.get(urlWithBasicAuth);
+            await driver.findElements(By.css(".loader-is-initially-loading"));
+            await driver.wait(until.elementIsNotVisible(driver.findElement(By.css(".loader-is-initially-loading"))), 10000);
         }
 
+    }
+    else {
+        await driver.get(url);
     }
 }
 

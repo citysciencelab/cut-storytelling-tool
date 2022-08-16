@@ -1,5 +1,5 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 import getters from "../store/gettersOrientation";
 import mutations from "../store/mutationsOrientation";
 import ControlIcon from "../../ControlIcon.vue";
@@ -10,6 +10,7 @@ import Overlay from "ol/Overlay.js";
 import proj4 from "proj4";
 import * as Proj from "ol/proj.js";
 import {Circle, LineString} from "ol/geom.js";
+import LoaderOverlay from "../../../../utils/loaderOverlay";
 
 export default {
     name: "OrientationItem",
@@ -78,6 +79,7 @@ export default {
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),
+        ...mapActions("Maps", ["setCenter", "setZoomLevel"]),
 
         setIsGeoLocationPossible () {
             this.isGeoLocationPossible = window.location.protocol === "https:" || ["localhost", "127.0.0.1"].indexOf(window.location.hostname);
@@ -222,7 +224,8 @@ export default {
          * @returns {void}
          */
         zoomAndCenter (position) {
-            Radio.trigger("MapView", "setCenter", position, 6);
+            this.setCenter(position);
+            this.setZoomLevel(6);
         },
 
         /**
@@ -334,7 +337,7 @@ export default {
          */
         showPoiWindow () {
             if (!this.position) {
-                Radio.trigger("Util", "showLoader");
+                LoaderOverlay.show();
                 const geolocation = this.geolocation,
                     position = geolocation.getPosition(),
                     centerPosition = proj4(proj4("EPSG:4326"), proj4(this.projection.getCode()), position);
@@ -357,7 +360,7 @@ export default {
             if (this.geolocation !== null) {
                 this.untrack();
             }
-            Radio.trigger("Util", "hideLoader");
+            LoaderOverlay.hide();
         },
 
         /**

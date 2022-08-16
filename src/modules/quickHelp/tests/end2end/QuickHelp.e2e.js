@@ -59,7 +59,7 @@ async function QuickHelpTests ({builder, url, resolution, capability}) {
             });
 
             it.skip("will close the quickHelp if clicking the questionmark sign twice", async () => {
-                navBarIcon = await driver.findElement(By.css("div#searchbar span.glyphicon-question-sign"));
+                navBarIcon = await driver.findElement(By.css("div#searchbar span.bootstrap-icon > .bi-question-circle-fill"));
                 await navBarIcon.click();
 
                 quickHelp = await driver.wait(until.elementLocated(By.css("#quickHelp")), 1000);

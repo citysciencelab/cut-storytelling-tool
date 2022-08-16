@@ -50,10 +50,10 @@ export default {
         ...mapGetters("Maps", ["mode"]),
 
         component () {
-            return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
+            return this.uiStyle === "TABLE" ? TableStyleControl : ControlIcon;
         },
         localeSuffix () {
-            return Radio.request("Util", "getUiStyle") === "TABLE" ? "Table" : "Control";
+            return this.uiStyle === "TABLE" ? "Table" : "Control";
         }
     },
     watch: {

@@ -31,7 +31,7 @@ describe("src/modules/tools/actionsTools.js", () => {
             };
 
             testAction(setToolActive, payload, state, {}, [
-                {type: "controlActivationOfTools", payload: payload.name, dispatch: true},
+                {type: "controlActivationOfTools", payload: {id: payload.id, name: payload.name, active: payload.active}, dispatch: true},
                 {type: Object.keys(state)[0] + "/setActive", payload: payload.active, dispatch: true},
                 {type: "Gfi/setActive", payload: true, commit: true},
                 {type: "activateToolInModelList", payload: {tool: "Gfi", active: true}, dispatch: true}
@@ -45,7 +45,7 @@ describe("src/modules/tools/actionsTools.js", () => {
             };
 
             testAction(setToolActive, payload, state, {}, [
-                {type: "controlActivationOfTools", payload: payload.name, dispatch: true},
+                {type: "controlActivationOfTools", payload: {id: payload.id, name: payload.name, active: payload.active}, dispatch: true},
                 {type: Object.keys(state)[0] + "/setActive", payload: payload.active, commit: true},
                 {type: "Gfi/setActive", payload: true, commit: true},
                 {type: "activateToolInModelList", payload: {tool: "Gfi", active: true}, dispatch: true}
@@ -125,15 +125,17 @@ describe("src/modules/tools/actionsTools.js", () => {
                         active: false
                     }
                 },
+                activeToolId = "supplyCoord",
                 activeToolName = "SupplyCoord";
 
-            testAction(controlActivationOfTools, activeToolName, state, {}, [
+            testAction(controlActivationOfTools, {id: activeToolId, name: activeToolName, active: true}, state, {}, [
                 {type: "Draw/setActive", payload: false},
                 {type: "ScaleSwitcher/setActive", payload: false},
                 {type: "SupplyCoord/setActive", payload: true},
                 {type: "activateToolInModelList", payload: {tool: "SupplyCoord", active: true}, dispatch: true}
             ], {
                 getConfiguredToolNames: ["Draw", "ScaleSwitcher", "SupplyCoord"],
+                getConfiguredToolKeys: ["draw", "scaleSwitcher", "supplyCoord"],
                 getActiveToolNames: ["Draw", "ScaleSwitcher"]
             }, done);
         });

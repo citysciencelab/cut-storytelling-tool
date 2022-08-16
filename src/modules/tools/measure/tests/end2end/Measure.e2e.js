@@ -16,7 +16,7 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
     const testIsApplicable = !isMobile(resolution) && isMaster(url);
 
     if (testIsApplicable) {
-        describe.skip("Measure Tool", function () {
+        describe("Measure Tool", function () {
             if (!is3D(mode)) {
                 describe("2D measurement", function () {
                     let driver, selectGeometry, selectUnit, deleteButton, viewport;
@@ -48,7 +48,7 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
 
                     it("opens a widget with distance/meters preconfigured for geometry/unit", async function () {
                         await reclickUntilNotStale(driver, By.xpath("//ul[@id='tools']//.."));
-                        await (await driver.findElement(By.css("#tools .bi-arrows-angle-expand"))).click();
+                        await (await driver.findElement(By.css("#tools .bi-rulers"))).click();
 
                         selectGeometry = await driver.findElement(By.id("measure-tool-geometry-select"), 5000);
                         selectUnit = await driver.findElement(By.id("measure-tool-unit-select"), 5000);
@@ -103,9 +103,9 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                     });
 
                     it("allows deleting made measurements by clicking the deletion button", async function () {
-                        expect(await driver.executeScript(hasVectorLayerLength, "measure_layer", 0)).to.be.false;
+                        expect(await driver.executeScript(hasVectorLayerLength, "measureLayer", 0)).to.be.false;
                         await deleteButton.click();
-                        expect(await driver.executeScript(hasVectorLayerLength, "measure_layer", 0)).to.be.true;
+                        expect(await driver.executeScript(hasVectorLayerLength, "measureLayer", 0)).to.be.true;
                     });
 
                     it("draws a polygon, ending in double-click, displaying area in meters² and deviation", async function () {

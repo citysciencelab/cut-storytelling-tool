@@ -42,14 +42,35 @@ function getFeaturesByLayerId (layerId) {
 }
 
 /**
+ * Returns the current browser extent.
+ * @returns {ol/Extent} The current browser extent.
+ */
+function getCurrentExtent () {
+    return store.getters["Maps/getCurrentExtent"];
+}
+
+/**
  * Checks if the given feature is in the current map extent of the browser.
  * @param {ol/Feature} feature the feature to check
  * @returns {Boolean} true if the feature is in the current map extent of the browser
  */
 function isFeatureInMapExtent (feature) {
-    const mapExtent = Radio.request("MapView", "getCurrentExtent");
+    const mapExtent = getCurrentExtent();
 
     return intersects(mapExtent, feature.getGeometry().getExtent());
+}
+
+/**
+ * Checks if the given geometry intersects with the extent of the given feature.
+ * @param {ol/Feature} feature the feature to check
+ * @param {ol/Geometry} geometry the geometry to intersect with
+ * @returns {Boolean} true if the feature intersects the geometry
+ */
+function isFeatureInGeometry (feature, geometry) {
+    if (typeof geometry?.intersectsExtent !== "function") {
+        return false;
+    }
+    return geometry.intersectsExtent(feature.getGeometry().getExtent());
 }
 
 /**
@@ -89,7 +110,8 @@ function createLayerIfNotExists (layername) {
  * @returns {void}
  */
 function liveZoom (minScale, featureIds, layerId, callback) {
-    const minResolution = Radio.request("MapView", "getResolutionByScale", minScale);
+    // eslint-disable-next-line new-cap
+    const minResolution = store.getters["Maps/getResolutionByScale"](minScale);
 
     store.dispatch("Maps/zoomToFilteredFeatures", {ids: featureIds, layerId: layerId, zoomOptions: {
         minResolution,
@@ -128,7 +150,7 @@ function setParserAttributeByLayerId (layerId, key, value) {
  * @returns {ol/Layer[]} a list of layers
  */
 function getLayers () {
-    return Radio.request("Map", "getLayers");
+    return mapCollection.getMap("2D").getLayers();
 }
 
 /**
@@ -136,7 +158,7 @@ function getLayers () {
  * @returns {Boolean} true/false if current ui style of portal is table
  */
 function isUiStyleTable () {
-    return Radio.request("Util", "getUiStyle") === "TABLE";
+    return store.getters.uiStyle === "TABLE";
 }
 
 /**
@@ -161,7 +183,9 @@ export {
     createLayerIfNotExists,
     getFeaturesByLayerId,
     getLayerByLayerId,
+    getCurrentExtent,
     isFeatureInMapExtent,
+    isFeatureInGeometry,
     liveZoom,
     showFeaturesByIds,
     addLayerByLayerId,

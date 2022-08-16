@@ -10,6 +10,7 @@ import SnippetSlider from "./SnippetSlider.vue";
 import SnippetSliderRange from "./SnippetSliderRange.vue";
 import SnippetTag from "./SnippetTag.vue";
 import SnippetFeatureInfo from "./SnippetFeatureInfo.vue";
+import ExportButtonCSV from "../../../../share-components/exportButton/components/ExportButtonCSV.vue";
 import isObject from "../../../../utils/isObject";
 import FilterApi from "../interfaces/filter.api.js";
 import MapHandler from "../utils/mapHandler.js";
@@ -32,6 +33,7 @@ export default {
         SnippetSliderRange,
         SnippetTag,
         SnippetFeatureInfo,
+        ExportButtonCSV,
         ProgressBar
     },
     props: {
@@ -68,6 +70,11 @@ export default {
             type: [Number, Boolean],
             required: false,
             default: undefined
+        },
+        filterGeometry: {
+            type: [Object, Boolean],
+            required: false,
+            default: false
         }
     },
     data () {
@@ -265,6 +272,10 @@ export default {
          */
         setSearchInMapExtent (value) {
             this.searchInMapExtent = value;
+
+            if (this.layerConfig?.searchInMapExtentProactive !== false && this.isStrategyActive()) {
+                this.handleActiveStrategy();
+            }
         },
         /**
          * Resets a snippet by its snippetId.
@@ -301,13 +312,14 @@ export default {
         },
         /**
          * Checks if there are rules with fixed=false in the set of rules.
+         * @param {Object[]} rules an array of rules
          * @returns {Boolean} true if there are unfixed rules, false if no rules or only fixed rules are left
          */
-        hasUnfixedRules () {
-            const len = this.filterRules.length;
+        hasUnfixedRules (rules) {
+            const len = rules.length;
 
             for (let i = 0; i < len; i++) {
-                if (!this.filterRules[i] || this.isRule(this.filterRules[i]) && this.filterRules[i].fixed) {
+                if (!rules[i] || this.isRule(rules[i]) && rules[i].fixed) {
                     continue;
                 }
                 return true;
@@ -317,12 +329,18 @@ export default {
         /**
          * Handles the active strategy.
          * @param {Number|Number[]} snippetId the snippet Id(s)
+         * @param {Boolean|undefined} reset true if filtering should reset the layer (fuzzy logic)
          * @returns {void}
          */
-        handleActiveStrategy (snippetId) {
+        handleActiveStrategy (snippetId, reset = undefined) {
             if (this.isLockedHandleActiveStrategy) {
                 return;
             }
+
+            // Please use the true or false check otherwise the fuzzy logic (true, false, undefined) wouldn't work anymore
+            const rules = reset === true ? [] : false,
+                adjust = reset !== true,
+                alterMap = reset !== false;
 
             this.filter(snippetId, filterAnswer => {
                 const adjustments = getSnippetAdjustments(this.snippets, filterAnswer?.items, filterAnswer?.paging?.page, filterAnswer?.paging?.total),
@@ -337,7 +355,11 @@ export default {
                         adjust: isObject(adjustments[snippet.snippetId]) ? adjustments[snippet.snippetId] : false
                     };
                 });
-            });
+            }, adjust, alterMap, rules);
+
+            if (reset) {
+                this.handleActiveStrategy(snippetId, false);
+            }
         },
         /**
          * Pushing the value if there are prechecked value in snippet
@@ -384,7 +406,7 @@ export default {
             this.deleteRulesOfChildren(this.getSnippetById(snippetId));
             if (this.isStrategyActive() || this.isParentSnippet(snippetId)) {
                 this.$nextTick(() => {
-                    this.handleActiveStrategy(snippetId);
+                    this.handleActiveStrategy(snippetId, !this.hasUnfixedRules(this.filterRules) && this.layerConfig.resetLayer ? true : undefined);
                 });
             }
         },
@@ -424,7 +446,7 @@ export default {
             if (this.isStrategyActive()) {
                 this.$nextTick(() => {
                     this.isLockedHandleActiveStrategy = false;
-                    this.handleActiveStrategy();
+                    this.handleActiveStrategy(undefined, this.layerConfig.resetLayer ? true : undefined);
                 });
             }
         },
@@ -509,18 +531,23 @@ export default {
          * Filters the layer with the current snippet rules.
          * @param {Number|Number[]} [snippetId=false] the id(s) of the snippet that triggered the filtering
          * @param {Function} [onsuccess=false] a function to call on success
+         * @param {Boolean} adjustment true if the filter should adjust
+         * @param {Boolean} alterLayer true if the layer should alter the layer items
+         * @param {Object[]} rules array of rules
          * @returns {void}
          */
-        filter (snippetId = false, onsuccess = false) {
+        filter (snippetId = false, onsuccess = false, adjustment = true, alterLayer = true, rules = false) {
             const filterId = this.layerConfig.filterId,
                 filterQuestion = {
                     filterId,
                     snippetId: typeof snippetId === "number" || Array.isArray(snippetId) ? snippetId : false,
                     commands: {
                         paging: this.layerConfig?.paging ? this.layerConfig.paging : 1000,
-                        searchInMapExtent: this.getSearchInMapExtent()
+                        searchInMapExtent: this.getSearchInMapExtent(),
+                        geometryName: this.layerConfig.geometryName,
+                        filterGeometry: this.filterGeometry
                     },
-                    rules: this.getCleanArrayOfRules()
+                    rules: Array.isArray(rules) ? rules : this.getCleanArrayOfRules()
                 };
 
             this.setFormDisable(true);
@@ -528,15 +555,30 @@ export default {
 
             if (this.api instanceof FilterApi && this.mapHandler instanceof MapHandler) {
                 this.mapHandler.activateLayer(filterId, () => {
+                    if (Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")) {
+                        this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, !this.hasUnfixedRules(filterQuestion.rules));
+                        this.mapHandler.toggleWFSLayerInTree(filterId, this.hasUnfixedRules(filterQuestion.rules));
+                    }
                     this.api.filter(filterQuestion, filterAnswer => {
+                        if (typeof onsuccess === "function" && !alterLayer) {
+                            this.amountOfFilteredItems = false;
+                            if (adjustment) {
+                                onsuccess(filterAnswer);
+                            }
+                            return;
+                        }
+
                         this.paging = filterAnswer.paging;
-                        this.filteredItems = [];
                         if (this.paging?.page === 1) {
+                            this.filteredItems = [];
                             this.mapHandler.clearLayer(filterId, this.isExtern());
                         }
 
                         if (!this.isParentSnippet(snippetId) && !this.hasOnlyParentRules()) {
-                            if (this.layerConfig.clearAll && (!Array.isArray(filterQuestion.rules) || !filterQuestion.rules.length)) {
+                            if (!this.hasUnfixedRules(filterQuestion.rules) && (this.layerConfig.clearAll || Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId"))) {
+                                if (this.layerConfig.clearAll && Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")) {
+                                    this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, false, false);
+                                }
                                 this.amountOfFilteredItems = false;
                                 if (typeof onsuccess === "function") {
                                     onsuccess(filterAnswer);
@@ -571,8 +613,7 @@ export default {
                         else {
                             this.amountOfFilteredItems = false;
                         }
-
-                        if (typeof onsuccess === "function") {
+                        if (typeof onsuccess === "function" && adjustment) {
                             onsuccess(filterAnswer);
                         }
                     }, error => {
@@ -611,7 +652,7 @@ export default {
                 return snippet.title;
             }
             const model = getLayerByLayerId(layerId),
-                title = isObject(model) ? model.get("gfiAttributes")[
+                title = typeof model?.get === "function" && isObject(model.get("gfiAttributes")) ? model.get("gfiAttributes")[
                     Array.isArray(snippet.attrName) ? snippet.attrName[0] : snippet.attrName
                 ] : undefined;
 
@@ -645,6 +686,43 @@ export default {
                 return snippet.api;
             }
             return this.api;
+        },
+        /**
+         * Download handler for csv export.
+         * @param {Function} onsuccess The function to hand over the data.
+         * @returns {void}
+         */
+        getDownloadHandlerCSV (onsuccess) {
+            const result = [],
+                features = this.filteredItems,
+                model = getLayerByLayerId(this.layerConfig.layerId),
+                gfiAttributes = isObject(model) && typeof model.get === "function" && isObject(model.get("gfiAttributes")) ? model.get("gfiAttributes") : {};
+
+            if (!Array.isArray(features)) {
+                onsuccess([]);
+                return;
+            }
+            features.forEach(item => {
+                if (!isObject(item) || typeof item.getProperties !== "function" || !isObject(item.getProperties())) {
+                    return;
+                }
+                const properties = {},
+                    geometryName = typeof item.getGeometryName === "function" ? item.getGeometryName() : false;
+
+                Object.entries(item.getProperties()).forEach(([attrName, value]) => {
+                    if (attrName === geometryName) {
+                        return;
+                    }
+                    else if (Object.prototype.hasOwnProperty.call(gfiAttributes, attrName)) {
+                        properties[gfiAttributes[attrName]] = value;
+                        return;
+                    }
+                    properties[attrName] = value;
+                });
+
+                result.push(properties);
+            });
+            onsuccess(result);
         }
     }
 };
@@ -665,7 +743,7 @@ export default {
             class="snippetTags"
         >
             <div
-                v-show="hasUnfixedRules()"
+                v-show="hasUnfixedRules(filterRules)"
                 class="snippetTagsWrapper"
             >
                 <div
@@ -936,6 +1014,15 @@ export default {
             <ProgressBar
                 :paging="paging"
             />
+            <div v-if="layerConfig.downloadAsCSV">
+                <ExportButtonCSV
+                    :url="false"
+                    :filename="layerConfig.downloadAsCSV"
+                    :handler="getDownloadHandlerCSV"
+                    :use-semicolon="true"
+                    :title="$t('modules.tools.filter.downloadAsCSV.label')"
+                />
+            </div>
         </div>
     </div>
 </template>

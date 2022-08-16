@@ -4,6 +4,7 @@ import {expect} from "chai";
 import sinon from "sinon";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
+import Map from "ol/Map";
 
 import ListItem from "../../../components/ListItem.vue";
 
@@ -24,8 +25,7 @@ describe("src/share-components/list/components/ListItem.vue", () => {
             tableData: [],
             geometryName: "qwertz"
         };
-    let trigger,
-        store;
+    let store;
 
     before(() => {
         olFeature.set("x", "Gary");
@@ -36,8 +36,6 @@ describe("src/share-components/list/components/ListItem.vue", () => {
     });
 
     beforeEach(() => {
-        trigger = sinon.spy();
-
         store = new Vuex.Store({
             namespaces: true,
             modules: {
@@ -46,12 +44,20 @@ describe("src/share-components/list/components/ListItem.vue", () => {
                     actions: {
                         placingPointMarker: sinon.stub()
                     }
+                },
+                Maps: {
+                    namespaced: true,
+                    actions: {
+                        zoomToExtent: sinon.spy()
+                    }
                 }
             }
         });
 
-        sinon.stub(Radio, "trigger").callsFake(trigger);
+        mapCollection.addMap(new Map(), "2D");
     });
+
+    afterEach(sinon.restore);
 
     it("should zoom to extent of a given feature", async () => {
         const wrapper = shallowMount(ListItem, {
@@ -59,12 +65,64 @@ describe("src/share-components/list/components/ListItem.vue", () => {
                 propsData: props,
                 localVue
             }),
-            feature = new Feature();
+            feature = new Feature(),
+            spyZoomToExtent = sinon.spy(wrapper.vm, "zoomToExtent");
 
         feature.setGeometry(new Point([583805.011, 5923760.691]));
-        wrapper.vm.setCenter(feature);
+        wrapper.vm.setCenter([feature]);
 
-        expect(trigger.calledOnce).to.be.true;
-        expect(trigger.firstCall.args).to.eql(["Map", "zoomToExtent", {extent: feature.getGeometry(), options: {maxZoom: 5}}]);
+        expect(spyZoomToExtent.calledOnce).to.be.true;
+        expect(spyZoomToExtent.firstCall.args).to.eql([
+            {
+                extent: [583805.011, 5923760.691, 583805.011, 5923760.691],
+                options: {
+                    maxZoom: 5,
+                    padding: [
+                        5,
+                        5,
+                        5,
+                        5
+                    ]
+                }
+            }
+        ]);
+    });
+
+    it("should zoom to combined extent of given features in multiSelect mode", async () => {
+        const wrapper = shallowMount(ListItem, {
+                store,
+                propsData: props,
+                localVue
+            }),
+            featureOne = new Feature(),
+            featureTwo = new Feature(),
+            coordsOne = [583805.011, 5923760.691],
+            coordsTwo = [683804.011, 6923761.691],
+            spyZoomToExtent = sinon.spy(wrapper.vm, "zoomToExtent");
+
+        featureOne.setGeometry(new Point(coordsOne));
+        featureTwo.setGeometry(new Point(coordsTwo));
+        wrapper.vm.setCenter([featureOne, featureTwo]);
+
+        expect(spyZoomToExtent.calledOnce).to.be.true;
+        expect(spyZoomToExtent.firstCall.args).to.eql([
+            {
+                extent: [
+                    583805.011,
+                    5923760.691,
+                    683804.011,
+                    6923761.691
+                ],
+                options: {
+                    maxZoom: 5,
+                    padding: [
+                        5,
+                        5,
+                        5,
+                        5
+                    ]
+                }
+            }
+        ]);
     });
 });

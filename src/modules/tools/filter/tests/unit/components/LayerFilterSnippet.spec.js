@@ -75,37 +75,36 @@ describe("src/modules/tools/filter/components/LayerFilterSnippet.vue", () => {
         });
     });
     describe("hasUnfixedRules", () => {
-        it("should return false if there are no rules with fixed=false", async () => {
-            wrapper.vm.changeRule({
+        it("should return false if there are no rules with fixed=false", () => {
+            const rules = {
                 snippetId: 1,
                 startup: false,
                 fixed: true,
                 attrName: "test",
                 operator: "EQ"
-            });
-            await wrapper.vm.$nextTick();
-            expect(wrapper.vm.hasUnfixedRules()).to.be.false;
+            };
+
+            expect(wrapper.vm.hasUnfixedRules(rules)).to.be.false;
         });
-        it("should return true if there are rules with fixed=false in the rules", async () => {
-            await wrapper.setProps({
-                filterRules: [
-                    {
-                        snippetId: 0,
-                        startup: false,
-                        fixed: false,
-                        attrName: "test",
-                        operator: "EQ"
-                    },
-                    {
-                        snippetId: 1,
-                        startup: false,
-                        fixed: true,
-                        attrName: "test",
-                        operator: "EQ"
-                    }
-                ]
-            });
-            expect(wrapper.vm.hasUnfixedRules()).to.be.true;
+        it("should return true if there are rules with fixed=false in the rules", () => {
+            const rules = [
+                {
+                    snippetId: 1,
+                    startup: false,
+                    fixed: true,
+                    attrName: "test",
+                    operator: "EQ"
+                },
+                {
+                    snippetId: 0,
+                    startup: false,
+                    fixed: false,
+                    attrName: "test",
+                    operator: "EQ"
+                }
+            ];
+
+            expect(wrapper.vm.hasUnfixedRules(rules)).to.be.true;
         });
     });
     describe("getTitle", () => {
@@ -132,6 +131,108 @@ describe("src/modules/tools/filter/components/LayerFilterSnippet.vue", () => {
             expect(wrapper.vm.getTagTitle({value: "title", tagTitle: false})).to.equal("false");
             expect(wrapper.vm.getTagTitle({value: "title", tagTitle: 0})).to.equal("0");
             expect(wrapper.vm.getTagTitle({value: "title", tagTitle: null})).to.equal("null");
+        });
+    });
+    describe("getDownloadHandlerCSV", () => {
+        it("should hand over an empty array if filteredItems is anything but an array", () => {
+            let last_result = false;
+            const dummy = {
+                handler: result => {
+                    last_result = result;
+                }
+            };
+
+            wrapper.vm.filteredItems = undefined;
+            wrapper.vm.getDownloadHandlerCSV(dummy.handler);
+            expect(last_result).to.be.an("array").that.is.empty;
+        });
+        it("should hand over an empty array if filteredItems is an array but has no objects in it", () => {
+            let last_result = false;
+            const dummy = {
+                handler: result => {
+                    last_result = result;
+                }
+            };
+
+            wrapper.vm.filteredItems = [undefined, null, 1234, "string", true, false, []];
+            wrapper.vm.getDownloadHandlerCSV(dummy.handler);
+            expect(last_result).to.be.an("array").that.is.empty;
+        });
+        it("should hand over an empty array if filteredItems is an array with objects but without getProperties function", () => {
+            let last_result = false;
+            const dummy = {
+                handler: result => {
+                    last_result = result;
+                }
+            };
+
+            wrapper.vm.filteredItems = [{
+                notGetProperties: () => false
+            }];
+            wrapper.vm.getDownloadHandlerCSV(dummy.handler);
+            expect(last_result).to.be.an("array").that.is.empty;
+        });
+        it("should hand over an array of properties", () => {
+            let last_result = false;
+            const dummy = {
+                    handler: result => {
+                        last_result = result;
+                    }
+                },
+                expected = [
+                    {a: 1, b: 2},
+                    {a: 3, b: 4},
+                    {a: 5, b: 6},
+                    {a: 7, b: 8}
+                ];
+
+            wrapper.vm.filteredItems = [
+                {getProperties: () => {
+                    return {a: 1, b: 2};
+                }},
+                {getProperties: () => {
+                    return {a: 3, b: 4};
+                }},
+                {getProperties: () => {
+                    return {a: 5, b: 6};
+                }},
+                {getProperties: () => {
+                    return {a: 7, b: 8};
+                }}
+            ];
+            wrapper.vm.getDownloadHandlerCSV(dummy.handler);
+            expect(last_result).to.deep.equal(expected);
+        });
+        it("should hand over an array of properties, excluding the geometry", () => {
+            let last_result = false;
+            const dummy = {
+                    handler: result => {
+                        last_result = result;
+                    }
+                },
+                expected = [
+                    {a: 1},
+                    {a: 3},
+                    {a: 5},
+                    {a: 7}
+                ];
+
+            wrapper.vm.filteredItems = [
+                {getProperties: () => {
+                    return {a: 1, b: 2};
+                }, getGeometryName: () => "b"},
+                {getProperties: () => {
+                    return {a: 3, b: 4};
+                }, getGeometryName: () => "b"},
+                {getProperties: () => {
+                    return {a: 5, b: 6};
+                }, getGeometryName: () => "b"},
+                {getProperties: () => {
+                    return {a: 7, b: 8};
+                }, getGeometryName: () => "b"}
+            ];
+            wrapper.vm.getDownloadHandlerCSV(dummy.handler);
+            expect(last_result).to.deep.equal(expected);
         });
     });
 });

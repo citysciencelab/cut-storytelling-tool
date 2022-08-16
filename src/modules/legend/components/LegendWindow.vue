@@ -7,11 +7,13 @@ import actions from "../store/actionsLegend";
 import LegendSingleLayer from "./LegendSingleLayer.vue";
 import {convertColor} from "../../../utils/convertColor";
 import getComponent from "../../../utils/getComponent";
+import BasicDragHandle from "../../../share-components/BasicDragHandle.vue";
 
 export default {
     name: "LegendWindow",
     components: {
-        LegendSingleLayer
+        LegendSingleLayer,
+        BasicDragHandle
     },
     computed: {
         ...mapGetters("Legend", Object.keys(getters)),
@@ -56,31 +58,6 @@ export default {
     },
     mounted () {
         this.getLegendConfig();
-    },
-    updated () {
-        $(this.$el).draggable({
-            containment: "#map",
-            handle: this.uiStyle === "TABLE" ? ".legend-title-table" : ".legend-title",
-            stop: function (event, ui) {
-                const legendElem = ui.helper[0].querySelector(".legend-window") || ui.helper[0].querySelector(".legend-window-table"),
-                    legendOuterWidth = legendElem.offsetWidth,
-                    legendOuterHeight = legendElem.offsetHeight,
-                    mapWidth = document.getElementById("map").offsetWidth,
-                    mapHeight = document.getElementById("map").offsetHeight;
-
-                if (ui.offset.left - legendOuterWidth < 0) {
-                    ui.helper.css({
-                        left: -(mapWidth - legendOuterWidth)
-                    });
-                }
-
-                if (ui.offset.top + legendOuterHeight >= mapHeight) {
-                    ui.helper.css({
-                        top: mapHeight - legendOuterHeight
-                    });
-                }
-            }
-        });
     },
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
@@ -541,25 +518,33 @@ export default {
             const fillColor = style.get("polygonFillColor") ? convertColor(style.get("polygonFillColor"), "rgbString") : "black",
                 strokeColor = style.get("polygonStrokeColor") ? convertColor(style.get("polygonStrokeColor"), "rgbString") : "black",
                 strokeWidth = style.get("polygonStrokeWidth"),
-                fillOpacity = style.get("polygonFillColor")[3] || 0,
+                fillOpacity = style.get("polygonFillColor")?.[3] || 0,
+                fillHatch = style.get("polygonFillHatch"),
                 strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
-            let svg = "data:image/svg+xml;charset=utf-8,";
 
-            svg += "<svg height='35' width='35' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
-            svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
-            svg += fillColor;
-            svg += ";fill-opacity:";
-            svg += fillOpacity;
-            svg += ";stroke:";
-            svg += strokeColor;
-            svg += ";stroke-opacity:";
-            svg += strokeOpacity;
-            svg += ";stroke-width:";
-            svg += strokeWidth;
-            svg += ";'/>";
-            svg += "</svg>";
+            if (fillHatch) {
+                legendObj.graphic = style.getPolygonFillHatchLegendDataUrl();
+            }
+            else {
+                let svg = "data:image/svg+xml;charset=utf-8,";
 
-            legendObj.graphic = svg;
+                svg += "<svg height='35' width='35' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
+                svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
+                svg += fillColor;
+                svg += ";fill-opacity:";
+                svg += fillOpacity;
+                svg += ";stroke:";
+                svg += strokeColor;
+                svg += ";stroke-opacity:";
+                svg += strokeOpacity;
+                svg += ";stroke-width:";
+                svg += strokeWidth;
+                svg += ";'/>";
+                svg += "</svg>";
+
+                legendObj.graphic = svg;
+            }
+
             return legendObj;
         },
 
@@ -740,34 +725,41 @@ export default {
             v-if="showLegend"
             :class="mobile ? 'legend-window-mobile' : (uiStyle === 'TABLE' ? 'legend-window-table': 'legend-window')"
         >
-            <div :class="uiStyle === 'TABLE' ? 'legend-title-table': 'legend-title'">
-                <span class="bootstrap-icon d-md-none d-lg-inline-block">
-                    <i :class="icon" />
-                </span>
-                <span>{{ $t(name) }}</span>
-                <div class="float-right">
-                    <span
-                        v-if="showCollapseAllButton"
-                        ref="collapse-all-icon"
-                        tabindex="0"
-                        class="bootstrap-icon toggle-collapse-all legend"
-                        :title="$t('common:modules.legend.toggleCollapseAll')"
-                        @click="toggleCollapseAll($event)"
-                        @keydown="toggleCollapseAll($event)"
-                    >
-                        <i class="bi-arrow-up" />
+            <BasicDragHandle
+                target-sel="#legend"
+                :margin-bottom="100"
+            >
+                <div :class="uiStyle === 'TABLE' ? 'legend-title-table': 'legend-title'">
+                    <span class="bootstrap-icon d-md-none d-lg-inline-block">
+                        <i :class="icon" />
                     </span>
-                    <span
-                        ref="close-icon"
-                        class="bootstrap-icon close-legend"
-                        tabindex="0"
-                        @click="closeLegend($event)"
-                        @keydown="closeLegend($event)"
-                    >
-                        <i class="bi-x-lg" />
-                    </span>
+                    <h2 class="title">
+                        {{ $t(name) }}
+                    </h2>
+                    <div class="float-right">
+                        <span
+                            v-if="showCollapseAllButton"
+                            ref="collapse-all-icon"
+                            tabindex="0"
+                            class="bootstrap-icon toggle-collapse-all legend"
+                            :title="$t('common:modules.legend.toggleCollapseAll')"
+                            @click="toggleCollapseAll($event)"
+                            @keydown="toggleCollapseAll($event)"
+                        >
+                            <i class="bi-arrow-up" />
+                        </span>
+                        <span
+                            ref="close-icon"
+                            class="bootstrap-icon close-legend"
+                            tabindex="0"
+                            @click="closeLegend($event)"
+                            @keydown="closeLegend($event)"
+                        >
+                            <i class="bi-x-lg" />
+                        </span>
+                    </div>
                 </div>
-            </div>
+            </BasicDragHandle>
             <div class="legend-content">
                 <div
                     v-for="legendObj in legends"
@@ -804,11 +796,14 @@ export default {
         width: 100%;
     }
     #legend {
+        position: absolute;
+        right: 1px;
         .legend-window {
             position: absolute;
             min-width:200px;
             max-width:600px;
-            right: 0;
+            right: 45px;
+            top: 10px;
             margin: 10px 10px 30px 10px;
             background-color: $white;
             z-index: 9999;
@@ -825,6 +820,10 @@ export default {
             padding: 10px;
             border-bottom: 2px solid #e7e7e7;
             cursor: move;
+            .title{
+                @include tool-headings-h2();
+                display: inline-block;
+            }
             .close-legend {
                 padding: 5px;
                 cursor: pointer;

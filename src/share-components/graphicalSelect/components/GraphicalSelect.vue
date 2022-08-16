@@ -41,6 +41,11 @@ export default {
             type: Boolean,
             default: false,
             required: false
+        },
+        // The label of the select
+        label: {
+            type: String,
+            required: true
         }
     },
     data () {
@@ -111,8 +116,8 @@ export default {
                 if (typeof this.drawInteraction === "object") {
                     this.drawInteraction.setActive(false);
                 }
-                Radio.trigger("Map", "removeOverlay", this.circleOverlay);
-                Radio.trigger("Map", "removeOverlay", this.tooltipOverlay);
+                mapCollection.getMap("2D").removeOverlay(this.circleOverlay);
+                mapCollection.getMap("2D").removeOverlay(this.tooltipOverlay);
             }
         },
 
@@ -158,8 +163,9 @@ export default {
             this.layer.getSource().clear();
             this.removeInteraction(this.draw);
             this.circleOverlay.element.innerHTML = "";
-            Radio.trigger("Map", "removeOverlay", this.circleOverlay);
-            Radio.trigger("Map", "removeOverlay", this.tooltipOverlay);
+
+            mapCollection.getMap("2D").removeOverlay(this.circleOverlay);
+            mapCollection.getMap("2D").removeOverlay(this.tooltipOverlay);
         },
 
         /**
@@ -269,6 +275,7 @@ export default {
             v-model="selectedOptionData"
             :options="optionsValue"
             :focus-on-creation="focusOnCreation"
+            :label="label"
         />
     </form>
 </template>

@@ -142,9 +142,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         });
 
         if (this.get("treeType") === "light") {
-            this.parseTree(this.get("overlayer"), "tree", 0);
-            this.parseTree(this.get("overlayer_time"), "tree", 0);
-            this.parseTree(this.get("baselayer"), "tree", 0);
+            this.parseTree(this.get("overlayer"), "tree", 0, false);
+            this.parseTree(this.get("overlayer_time"), "tree", 0, false);
+            this.parseTree(this.get("baselayer"), "tree", 0, true);
         }
         else if (this.get("treeType") === "custom") {
             this.addTreeMenuItems();

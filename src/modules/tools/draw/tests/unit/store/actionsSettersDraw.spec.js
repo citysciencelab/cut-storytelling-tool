@@ -29,13 +29,9 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
     }
 
     describe("setActive", () => {
-        let active,
-            request,
-            trigger;
+        let active;
 
         beforeEach(() => {
-            request = sinon.spy(() => ({}));
-            trigger = sinon.spy();
             state = {
                 withoutGUI: false,
                 currentInteraction: "draw",
@@ -45,8 +41,6 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
                     value: "simple_point"
                 }]
             };
-            sinon.stub(Radio, "request").callsFake(request);
-            sinon.stub(Radio, "trigger").callsFake(trigger);
         });
 
         it("should commit as intended if 'active' is false", () => {
@@ -66,13 +60,13 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
             expect(commit.callCount).to.equal(4);
             expect(commit.firstCall.args).to.eql(["setActive", true]);
             expect(commit.thirdCall.args[0]).to.equal("setLayer");
-            expect(typeof commit.thirdCall.args[1]).to.equal("object");
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true}]);
-            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
-            expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
-            expect(request.calledOnce).to.be.true;
-            expect(request.firstCall.args).to.eql(["Map", "createLayerIfNotExists", "import_draw_layer"]);
+            expect(commit.thirdCall.args[1]).to.be.undefined;
+            expect(dispatch.callCount).to.equal(5);
+            expect(dispatch.firstCall.args).to.eql(["Maps/addNewLayerIfNotExists", "importDrawLayer", {root: true}]);
+            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true}]);
+            expect(dispatch.thirdCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(3).args).to.eql(["createModifyInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(4).args).to.eql(["setDrawLayerVisible", true]);
         });
         it("should commit and dispatch as intended if 'active' and 'withoutGUI' are true", async () => {
             active = true;
@@ -83,14 +77,14 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
             expect(commit.callCount).to.equal(4);
             expect(commit.firstCall.args).to.eql(["setActive", true]);
             expect(commit.thirdCall.args[0]).to.equal("setLayer");
-            expect(typeof commit.thirdCall.args[1]).to.equal("object");
-            expect(dispatch.callCount).to.equal(4);
-            expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true}]);
-            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
-            expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
+            expect(commit.thirdCall.args[1]).to.be.undefined;
+            expect(dispatch.callCount).to.equal(6);
+            expect(dispatch.firstCall.args).to.eql(["Maps/addNewLayerIfNotExists", "importDrawLayer", {root: true}]);
+            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true}]);
+            expect(dispatch.thirdCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(3).args).to.eql(["createModifyInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(4).args).to.eql(["setDrawLayerVisible", true]);
             expect(dispatch.lastCall.args).to.eql(["toggleInteraction", "draw"]);
-            expect(request.calledOnce).to.be.true;
-            expect(request.firstCall.args).to.eql(["Map", "createLayerIfNotExists", "import_draw_layer"]);
         });
     });
     describe("setStyleSettings", () => {

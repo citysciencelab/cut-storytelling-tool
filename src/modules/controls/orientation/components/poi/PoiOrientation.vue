@@ -1,9 +1,10 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 import getters from "../../store/gettersOrientation";
 import mutations from "../../store/mutationsOrientation";
 import {extractEventCoordinates} from "../../../../../../src/utils/extractEventCoordinates";
 import Icon from "ol/style/Icon";
+import LoaderOverlay from "../../../../../utils/loaderOverlay";
 
 export default {
     name: "PoiOrientation",
@@ -37,7 +38,7 @@ export default {
         }
     },
     mounted () {
-        Radio.trigger("Util", "hideLoader");
+        LoaderOverlay.hide();
         this.show();
         this.getFeatures();
         this.initActiveCategory();
@@ -49,6 +50,7 @@ export default {
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),
+        ...mapActions("Maps", ["zoomToExtent"]),
 
         /**
          * Callback when close icon has been clicked.
@@ -169,7 +171,7 @@ export default {
             if (style) {
                 const featureStyle = style.createStyle(feat, false);
 
-                if (featureStyle?.getImage() instanceof Icon) {
+                if (featureStyle?.getImage?.() instanceof Icon) {
                     imagePath = featureStyle.getImage()?.getSrc() ? featureStyle.getImage()?.getSrc() : "";
                 }
                 else {
@@ -181,7 +183,7 @@ export default {
                             imagePath = this.createLineSVG(legendInfo.styleObject);
                         }
                         else if (legendInfo.geometryType === "Polygon") {
-                            imagePath = this.createPolygonSVG(legendInfo.styleObject);
+                            imagePath = this.createPolygonGraphic(legendInfo.styleObject);
                         }
                     });
                 }
@@ -207,10 +209,10 @@ export default {
                 }),
                 extent = feature.getGeometry().getExtent(),
                 coordinate = extractEventCoordinates(extent),
-                resolutions = Radio.request("MapView", "getResolutions"),
+                resolutions = mapCollection.getMapView("2D").getResolutions(),
                 index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
 
-            Radio.trigger("Map", "zoomToExtent", {extent: coordinate, options: {maxZoom: index}});
+            this.zoomToExtent({extent: coordinate, options: {maxZoom: index}});
             this.$emit("hide");
         },
 
@@ -269,17 +271,22 @@ export default {
         },
 
         /**
-         * Creating the polygon svg
+         * Creating the polygon graphic
          * @param  {ol/style} style ol style
-         * @return {string} SVG
+         * @return {string} SVG or data URL
          */
-        createPolygonSVG (style) {
+        createPolygonGraphic (style) {
             let svg = "";
-            const fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
+            const fillColor = style.returnColor(style.get("polygonFillColor") || "black", "hex"),
                 strokeColor = style.returnColor(style.get("polygonStrokeColor"), "hex"),
                 strokeWidth = parseInt(style.get("polygonStrokeWidth"), 10),
-                fillOpacity = style.get("polygonFillColor")[3].toString() || 0,
-                strokeOpacity = style.get("polygonStrokeColor")[3].toString() || 0;
+                fillOpacity = style.get("polygonFillColor")?.[3]?.toString() || 0,
+                strokeOpacity = style.get("polygonStrokeColor")[3].toString() || 0,
+                fillHatch = style.get("polygonFillHatch");
+
+            if (fillHatch) {
+                return style.getPolygonFillHatchLegendDataUrl();
+            }
 
             svg += "<svg height='35' width='35'>";
             svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";

@@ -35,7 +35,7 @@ export default {
         this.$on("close", this.close);
         // updateMap is called too late in Tool.vue when routing tool is set to active:true in config.json
         if (!this.renderToWindow) {
-            Radio.trigger("Map", "updateSize");
+            mapCollection.getMap("2D").updateSize();
         }
         try {
             await this.initRouting();

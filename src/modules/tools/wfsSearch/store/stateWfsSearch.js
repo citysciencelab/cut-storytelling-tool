@@ -24,6 +24,7 @@
  * @property {boolean} valuesReset If the values are reset, no values should be set on a select element.
  * @property {number} zoomLevel zoom level to switch to on focusing a result
  * @property {number} resultsPerPage used for pagination
+ * @property {boolean} multiSelect whether multiple result list entries may be selected
  */
 const state = {
     active: false,
@@ -49,7 +50,8 @@ const state = {
     showResultList: false,
     valuesReset: false,
     zoomLevel: 5,
-    resultsPerPage: 0
+    resultsPerPage: 0,
+    multiSelect: false
 };
 
 export default state;

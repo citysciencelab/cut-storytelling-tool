@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
-    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver, loadUrl} = require("../../../../../../test/end2end/library/driver"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {expect} = require("chai"),
     {By, until} = webdriver,
@@ -27,6 +27,8 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
                     builder.withCapabilities(capability);
                 }
                 driver = await getDriver();
+                // load url new, to get scale of just started app
+                await loadUrl(driver, `${url}`);
             });
 
             after(async function () {
@@ -58,7 +60,7 @@ async function ScaleSwitcherTests ({builder, url, resolution, capability}) {
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.id("scale-switcher"))));
 
-                const header = await driver.findElement(By.css("div.win-heading div.heading-element p.title"), 5000),
+                const header = await driver.findElement(By.css("div.win-heading div.basic-drag-handle h2.title"), 5000),
                     label = await driver.findElement(By.css("div#scale-switcher label"), 5000),
                     select = await driver.findElement(By.id("scale-switcher-select"), 5000),
                     selectValue = await select.getAttribute("value");

@@ -19,7 +19,8 @@ const {
     drawMask,
     drawPrintPage,
     getPrintMapSize,
-    getPrintMapScales
+    getPrintMapScales,
+    setDpiList
 } = actions;
 
 describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", () => {
@@ -29,7 +30,8 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
         map = {
             id: "ol",
             mode: "2D",
-            render: sinon.spy()
+            render: sinon.spy(),
+            getLayers: sinon.spy()
         };
 
         mapCollection.clear();
@@ -236,20 +238,14 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                     eventListener: undefined,
                     layoutList: []
                 },
-                request = sinon.spy(() => ({
-                    setIsOutOfRange: () => false
-                }));
+                rootGetters = {
+                    "Maps/getResolutionByScale": () => 10
+                };
 
-            sinon.stub(Radio, "request").callsFake(request);
-
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(setPrintLayers, scale, state, {}, [
                 {type: "setHintInfo", payload: "", commit: true},
                 {type: "setInvisibleLayer", payload: [], commit: true}
-            ], {}, done);
-        });
-        after(function () {
-            sinon.restore();
+            ], {}, done, rootGetters);
         });
     });
 
@@ -261,17 +257,12 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                     setVisible: () => true
                 },
                 scale = 40000,
-                options = {
-                    resolution: 15.874991427504629,
-                    scale: 60000,
-                    zoomLevel: 2
-                },
                 state = {
                     active: true,
                     visibleLayerList: [
                         TileLayer
                     ],
-                    eventListener: undefined,
+                    eventListener: {abc: 123},
                     layoutList: [
                         {
                             name: "A4 Hochformat"
@@ -286,18 +277,14 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
                             name: "A3 Querformat"
                         }
                     ]
-                },
-                request = sinon.spy(() => ({
-                    getOptions: () => options
-                }));
+                };
 
             Canvas.getCanvasLayer = sinon.spy(() => ({
                 on: () => "postrender"
             }));
 
-            sinon.stub(Radio, "request").callsFake(request);
-            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
             testAction(updateCanvasLayer, scale, state, {}, [
+                {type: "Maps/unregisterListener", payload: {type: state.eventListener}, dispatch: true},
                 {type: "chooseCurrentLayout", payload: state.layoutList, dispatch: true},
                 {type: "setEventListener", payload: "postrender", commit: true}
             ], {}, done);
@@ -599,6 +586,28 @@ describe("src/modules/tools/print/store/actions/actionsPrintInitialization.js", 
             testAction(getPrintMapScales, undefined, state, {}, [
                 {type: "getAttributeInLayoutByName", payload: "map", dispatch: true},
                 {type: "setScaleList", payload: state.mapAttribute.clientInfo.scales, commit: true}
+            ], {}, done);
+        });
+    });
+    describe("getPrintDpis", function () {
+        it("should commit the dpis", done => {
+            const dpis = [72, 150, 300],
+                state = {
+                    currentLayout: {
+                        attributes: [
+                            {
+                                name: "map",
+                                clientInfo: {
+                                    dpiSuggestions: dpis
+                                }
+                            }
+                        ]
+                    }
+                };
+
+            // action, payload, state, rootState, expectedMutationsAndActions, getters = {}, done, rootGetters
+            testAction(setDpiList, undefined, state, {}, [
+                {type: "setDpiList", payload: dpis, commit: true}
             ], {}, done);
         });
     });

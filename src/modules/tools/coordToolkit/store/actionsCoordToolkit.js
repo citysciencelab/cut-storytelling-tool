@@ -387,7 +387,7 @@ export default {
      * @returns {void}
      */
     transformCoordinates ({state, dispatch}) {
-        const mapProjection = Radio.request("MapView", "getProjection").getCode();
+        const mapProjection = mapCollection.getMapView("2D").getProjection().getCode();
 
         if (state.selectedCoordinates.length === 2) {
             dispatch("setZoom", state.zoomLevel);

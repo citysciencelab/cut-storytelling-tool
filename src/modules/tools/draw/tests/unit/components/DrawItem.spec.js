@@ -42,6 +42,11 @@ describe("src/tools/draw/components/DrawItem.vue", () => {
 
     beforeEach(function () {
         Draw.state.layer = {
+            visible: true,
+            getVisible: () => Draw.state.layer.visible,
+            setVisible: value => {
+                Draw.state.layer.visible = value;
+            },
             getSource: () => {
                 return {
                     getFeatures: () => []
@@ -90,5 +95,29 @@ describe("src/tools/draw/components/DrawItem.vue", () => {
         wrapper.vm.setFocusToFirstControl();
         await wrapper.vm.$nextTick();
         expect(wrapper.find("#tool-draw-drawType").element).to.equal(document.activeElement);
+    });
+    it("should hide layer and disable controls", async () => {
+        wrapper = shallowMount(DrawItemComponent, {store, localVue, data: componentData});
+        expect(wrapper.find("#tool-draw-drawLayerVisible").exists()).to.be.true;
+
+        expect(wrapper.vm.drawLayerVisible).to.be.true;
+        expect(wrapper.vm.layer.getVisible()).to.be.true;
+        expect(wrapper.find("#tool-draw-drawType").element.disabled).to.be.false;
+        expect(wrapper.find("#tool-draw-undoInteraction").element.disabled).to.be.false;
+        expect(wrapper.find("#tool-draw-redoInteraction").element.disabled).to.be.false;
+        expect(wrapper.find("#tool-draw-deleteInteraction").element.disabled).to.be.false;
+        expect(wrapper.find("#tool-draw-deleteAllInteraction").element.disabled).to.be.false;
+
+        await wrapper.find("#tool-draw-drawLayerVisible").trigger("click");
+
+        expect(wrapper.vm.drawLayerVisible).to.be.false;
+        expect(wrapper.vm.layer.getVisible()).to.be.false;
+        expect(wrapper.find("#tool-draw-drawType").element.disabled).to.be.true;
+        expect(wrapper.find("#tool-draw-drawInteraction").element.disabled).to.be.true;
+        expect(wrapper.find("#tool-draw-undoInteraction").element.disabled).to.be.true;
+        expect(wrapper.find("#tool-draw-redoInteraction").element.disabled).to.be.true;
+        expect(wrapper.find("#tool-draw-editInteraction").element.disabled).to.be.true;
+        expect(wrapper.find("#tool-draw-deleteInteraction").element.disabled).to.be.true;
+        expect(wrapper.find("#tool-draw-deleteAllInteraction").element.disabled).to.be.true;
     });
 });

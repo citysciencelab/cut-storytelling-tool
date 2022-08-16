@@ -266,6 +266,7 @@
                 "titlePlaceholder": "Mio titolo",
                 "layoutLabel": "Layout",
                 "formatLabel": "Formato",
+                "dpiLabel": "DPI",
                 "scaleLabel": "Scala di stampa",
                 "withLegendLabel": "Con legenda",
                 "printLabel": "Stampa",

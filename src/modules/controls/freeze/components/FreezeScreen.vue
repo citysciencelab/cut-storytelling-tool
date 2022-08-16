@@ -1,4 +1,5 @@
 <script>
+import {mapGetters} from "vuex";
 import ControlIcon from "../../ControlIcon.vue";
 import TableStyleControl from "../../TableStyleControl.vue";
 import FreezeScreenWindow from "./FreezeScreenWindow.vue";
@@ -19,8 +20,10 @@ export default {
         };
     },
     computed: {
+        ...mapGetters(["uiStyle"]),
+
         component () {
-            return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
+            return this.uiStyle === "TABLE" ? TableStyleControl : ControlIcon;
         }
     },
     methods: {

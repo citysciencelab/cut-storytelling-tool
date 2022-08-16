@@ -676,15 +676,19 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
     });
     describe("toggleInteraction", () => {
         let interaction;
+        const getters = {
+            currentInteraction: "none"
+        };
 
         it("should enable the draw interactions and disable the other interactions if the given interaction equals 'draw'", () => {
             interaction = "draw";
 
-            actions.toggleInteraction({commit, dispatch}, interaction);
+            actions.toggleInteraction({getters, commit, dispatch}, interaction);
 
-            expect(commit.calledTwice).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setCurrentInteraction", "draw"]);
-            expect(commit.secondCall.args).to.eql(["setSelectedFeature", null]);
+            expect(commit.calledThrice).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setFormerInteraction", "none"]);
+            expect(commit.secondCall.args).to.eql(["setCurrentInteraction", "draw"]);
+            expect(commit.thirdCall.args).to.eql(["setSelectedFeature", null]);
             expect(dispatch.callCount).to.equal(4);
             expect(dispatch.args[0]).to.eql(["manipulateInteraction", {interaction: "draw", active: true}]);
             expect(dispatch.args[1]).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
@@ -694,11 +698,12 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         it("should enable the modify interaction and disable the other interactions if the given interaction equals 'modify'", () => {
             interaction = "modify";
 
-            actions.toggleInteraction({commit, dispatch}, interaction);
+            actions.toggleInteraction({getters, commit, dispatch}, interaction);
 
-            expect(commit.calledTwice).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setCurrentInteraction", "modify"]);
-            expect(commit.secondCall.args).to.eql(["setSelectedFeature", null]);
+            expect(commit.calledThrice).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setFormerInteraction", "none"]);
+            expect(commit.secondCall.args).to.eql(["setCurrentInteraction", "modify"]);
+            expect(commit.thirdCall.args).to.eql(["setSelectedFeature", null]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
             expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: true}]);
@@ -707,11 +712,12 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         it("should enable the select interaction and disable the other interactions if the given interaction equals 'delete'", () => {
             interaction = "delete";
 
-            actions.toggleInteraction({commit, dispatch}, interaction);
+            actions.toggleInteraction({getters, commit, dispatch}, interaction);
 
-            expect(commit.calledTwice).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setCurrentInteraction", "delete"]);
-            expect(commit.secondCall.args).to.eql(["setSelectedFeature", null]);
+            expect(commit.calledThrice).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setFormerInteraction", "none"]);
+            expect(commit.secondCall.args).to.eql(["setCurrentInteraction", "delete"]);
+            expect(commit.thirdCall.args).to.eql(["setSelectedFeature", null]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
             expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);

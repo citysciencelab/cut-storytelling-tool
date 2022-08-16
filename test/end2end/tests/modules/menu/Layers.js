@@ -32,13 +32,15 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function checkLayersettings (driver) {
-    if (Object.keys(await driver.findElements(By.css("ul#root li.layer div"))).length === 0) {
-        await (await driver.wait(
-            until.elementLocated(By.css("ul#root li.layer span.bootstrap-icon > .bi-gear")),
-            12000,
+    if (Object.keys(await driver.findElements(By.css(".layer-settings"))).length === 0) {
+        const button = await driver.wait(
+            until.elementLocated(By.css("#tree > li:nth-child(1) > div > span > span.bootstrap-icon.settings-icon.rotate.settings.tabable > i")),
+            1000,
             "layer settings did not appear"
-        )).click();
-        await new Promise(r => setTimeout(r, 200));
+        );
+
+        button.click();
+        await new Promise(r => setTimeout(r, 2000));
     }
 }
 
@@ -126,7 +128,7 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                 // expect(arrayDeepEqualsWithOptions(configGivenTitleOrder, mapOrderedElementTexts)).to.be.true;
             });
 
-            it.skip("has the same layer order in tree and map in LT", async function () {
+            it("has the same layer order in tree and map in LT", async function () {
                 mapOrderedLayerIds = await driver.executeScript(getOrderedLayerIds);
 
                 expect(mapOrderedLayerIds).to.deep.equal(configGivenIdOrder);
@@ -214,7 +216,7 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                 await new Promise(r => setTimeout(r, 200));
             });
 
-            it.skip("allows manipulating layer transparency", async function () {
+            it("allows manipulating layer transparency", async function () {
                 await checkLayersettings(driver);
                 /**
                  * @param {string} sign must be "plus" or "minus"
@@ -222,9 +224,9 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                  */
                 async function getButton (sign) {
                     if (sign === "plus") {
-                        return driver.findElement(By.css(`span.transparency span.bootstrap-icon > .bi-${sign}-circle-fill`));
+                        return driver.findElement(By.css("span.transparency span.bootstrap-icon.increase-icon.tabable"));
                     }
-                    return driver.findElement(By.css("span.transparency span.bootstrap-icon > .bi-dash-circle-fill"));
+                    return driver.findElement(By.css("span.transparency span.bootstrap-icon.decrease-icon.tabable > i.bi-dash-circle-fill"));
                 }
 
 
@@ -247,7 +249,7 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                 expect(await driver.executeScript(isLayerVisible, id, "0.25")).to.be.true;
             });
 
-            it.skip("arrows allow moving layers up in tree and map order", async function () {
+            it("arrows allow moving layers up in tree and map order", async function () {
                 await checkLayersettings(driver);
                 await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.bootstrap-icon > .bi-arrow-down"))).click();
 
@@ -264,7 +266,7 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                     .to.equal(newMapOrder[0]);
             });
 
-            it.skip("arrows allow moving layers down in tree and map order", async function () {
+            it("arrows allow moving layers down in tree and map order", async function () {
                 await checkLayersettings(driver);
                 await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.bootstrap-icon > .bi-arrow-up"))).click();
 
@@ -282,7 +284,7 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                     .to.equal(newMapOrder[lastMapOrderIndex]);
             });
 
-            it.skip("arrows moving up do nothing if layer is already first", async function () {
+            it("arrows moving up do nothing if layer is already first", async function () {
                 await checkLayersettings(driver);
                 await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings span.bootstrap-icon > .bi-arrow-up")), 12000);
                 await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.bootstrap-icon > .bi-arrow-up"))).click();
@@ -301,10 +303,10 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                     .to.equal(newMapOrder[lastMapOrderIndex]);
             });
 
-            it.skip("allows removing layer from tree and map", async function () {
+            it("allows removing layer from tree and map", async function () {
                 await checkLayersettings(driver);
-                await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings span.remove-layer")), 12000);
-                await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.remove-layer"))).click();
+                await driver.wait(until.elementLocated(By.css("#tree li div.layer-settings span.remove-layer.tabable")), 12000);
+                await (await driver.findElement(By.css("#tree li div.layer-settings span.remove-layer.tabable"))).click();
 
                 await new Promise(r => setTimeout(r, 1000));
 
@@ -315,17 +317,17 @@ async function MenuLayersTests ({builder, url, resolution, capability}) {
                 expect(await driver.executeScript(isLayerVisible, mapOrderedLayerIds[0])).to.be.false;
             });
 
-            it.skip("arrows moving down do nothing if layer is already last", async function () {
+            it("arrows moving down do nothing if layer is already last", async function () {
+                mapOrderedElementTexts = await getOrderedTitleTexts(driver);
                 await checkLayersettings(driver);
-                await driver.wait(until.elementLocated(By.css("ul#root li.layer:nth-child(29) span.bootstrap-icon > .bi-gear")), 12000);
-                await (await driver.findElement(By.css("ul#root li.layer:nth-child(29) span.bootstrap-icon > .bi-gear"))).click();
+                await driver.wait(until.elementLocated(By.css("#tree li.layer:nth-child(30) > div > span >  span.bootstrap-icon.settings-icon.rotate.settings.tabable > i")), 12000);
+                await (await driver.findElement(By.css("#tree li.layer:nth-child(30) > div > span >  span.bootstrap-icon.settings-icon.rotate.settings.tabable > i"))).click();
 
                 await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings")));
 
                 // wait for animation to finish
                 await new Promise(r => setTimeout(r, 500));
-
-                await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.bootstrap-icon > .bi-arrow-down"))).click();
+                await (await driver.findElement(By.css("#tree li:nth-child(30) > div.layer-settings  > span.arrows.float-end >  span.bootstrap-icon.down-icon.tabable > i"))).click();
 
                 const newTitleOrder = await getOrderedTitleTexts(driver),
                     newMapOrder = await driver.executeScript(getOrderedLayerIds),

@@ -43,6 +43,22 @@ export default {
                 this.setTitle(value);
             }
         },
+        dpiForPdf: {
+            get () {
+                return this.$store.state.Tools.Print.dpiForPdf;
+            },
+            set (value) {
+                this.setDpiForPdf(value);
+            }
+        },
+        dpiList: {
+            get () {
+                return this.$store.state.Tools.Print.dpiList;
+            },
+            set (value) {
+                this.setDpiList(value);
+            }
+        },
         shownLayoutList: {
             get () {
                 let filterArray = [];
@@ -215,7 +231,7 @@ export default {
             const scale = parseInt(event.target.value, 10),
                 resolution = {
                     "scale": scale,
-                    "mapSize": Radio.request("Map", "getSize"),
+                    "mapSize": mapCollection.getMap("2D").getSize(),
                     "printMapSize": this.layoutMapInfo
                 };
 
@@ -402,6 +418,33 @@ export default {
                                 :selected="format === currentFormat"
                             >
                                 {{ format }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div
+                    v-if="dpiList.length > 0"
+                    class="form-group form-group-sm row"
+                >
+                    <label
+                        class="col-md-5 col-form-label"
+                        for="printDpi"
+                    >
+                        {{ $t("common:modules.tools.print.dpiLabel") }}
+                    </label>
+                    <div class="col-md-7">
+                        <select
+                            id="printDpi"
+                            class="form-select form-select-sm"
+                            @change="setDpiForPdf($event.target.value)"
+                        >
+                            <option
+                                v-for="(dpi, i) in dpiList"
+                                :key="i"
+                                :value="dpi"
+                                :selected="dpi === dpiForPdf"
+                            >
+                                {{ dpi }}
                             </option>
                         </select>
                     </div>

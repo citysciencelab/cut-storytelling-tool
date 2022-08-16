@@ -170,9 +170,10 @@ const BuildSpecModel = {
     /**
      * Defines the layers attribute of the map spec
      * @param {ol.layer.Layer[]} layerList All visible layers on the map.
+     * @param {Number} [dpi] The dpi to use instead of the dpi from store.
      * @returns {void}
      */
-    buildLayers: async function (layerList) {
+    buildLayers: async function (layerList, dpi) {
         const layers = [],
             attributes = this.defaults.attributes,
             currentResolution = Radio.request("MapView", "getOptions")?.resolution,
@@ -184,12 +185,12 @@ const BuildSpecModel = {
 
                 if (layer instanceof Group) {
                     for (const childLayer of layer.getLayers().getArray()) {
-                        printLayers.push(await this.buildLayerType(childLayer, currentResolution));
+                        printLayers.push(await this.buildLayerType(childLayer, currentResolution, dpi));
                         visibleLayerIds.push(childLayer.get("id"));
                     }
                 }
                 else {
-                    printLayers.push(await this.buildLayerType(layer, currentResolution));
+                    printLayers.push(await this.buildLayerType(layer, currentResolution, dpi));
                 }
                 printLayers.forEach(printLayer => {
                     if (typeof printLayer !== "undefined") {
@@ -203,7 +204,12 @@ const BuildSpecModel = {
             }
         }
         this.setVisibleLayerIds(visibleLayerIds);
-        attributes.map.layers = layers.reverse();
+        if (store.state.Tools.Print.printService === "plotservice") {
+            attributes.map.layers = layers;
+        }
+        else {
+            attributes.map.layers = layers.reverse();
+        }
     },
 
     /**
@@ -234,10 +240,11 @@ const BuildSpecModel = {
      *
      * @param  {ol.layer} layer ol.Layer with features
      * @param {Number} currentResolution Current map resolution
+     * @param {Number} [dpi] The dpi to use instead of the dpi from store.
      * @returns {Object} - LayerObject for MapFish print.
      */
-    buildLayerType: async function (layer, currentResolution) {
-        const extent = Radio.request("MapView", "getCurrentExtent"),
+    buildLayerType: async function (layer, currentResolution, dpi) {
+        const extent = store.getters["Maps/getCurrentExtent"],
             layerMinRes = typeof layer?.get === "function" ? layer.get("minResolution") : false,
             layerMaxRes = typeof layer?.get === "function" ? layer.get("maxResolution") : false,
             isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);
@@ -253,18 +260,18 @@ const BuildSpecModel = {
                 returnLayer = await this.buildVectorTile(layer, currentResolution, maskExtent);
             }
             else if (layer instanceof Image) {
-                returnLayer = this.buildImageWms(layer);
+                returnLayer = this.buildImageWms(layer, dpi);
             }
             else if (layer instanceof Tile) {
                 // The source of a TileWMS has a params object while the source of a WMTS has a layer object
                 if (source?.getParams) {
-                    returnLayer = this.buildTileWms(layer);
+                    returnLayer = this.buildTileWms(layer, dpi);
                 }
                 else if (source?.getLayer) {
                     returnLayer = this.buildWmts(layer, source);
                 }
             }
-            else if (typeof layer?.get === "function" && layer.get("name") === "import_draw_layer") {
+            else if (typeof layer?.get === "function" && layer.get("name") === "importDrawLayer") {
                 returnLayer = this.getDrawLayerInfo(layer, extent);
             }
             else if (layer instanceof Vector) {
@@ -383,9 +390,10 @@ const BuildSpecModel = {
     /**
      * returns tile wms layer information
      * @param {ol.layer.Tile} layer tile layer with tile wms source
+     * @param {Number} [dpi] The dpi to use instead of the dpi from store.
      * @returns {Object} - wms layer spec
      */
-    buildTileWms: function (layer) {
+    buildTileWms: function (layer, dpi) {
         const source = layer.getSource(),
             mapObject = {
                 baseURL: source.getUrls()[0],
@@ -396,7 +404,7 @@ const BuildSpecModel = {
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
                     "TRANSPARENT": source.getParams().TRANSPARENT,
-                    "DPI": store.state.Tools.Print.dpiForPdf
+                    "DPI": typeof dpi === "number" ? dpi : store.state.Tools.Print.dpiForPdf
                 }
             };
 
@@ -413,9 +421,10 @@ const BuildSpecModel = {
     /**
      * Returns image wms layer information
      * @param {ol.layer.Image} layer - image layer with image wms source
+     * @param {Number} [dpi] The dpi to use instead of the dpi from store.
      * @returns {Object} - wms layer spec
      */
-    buildImageWms: function (layer) {
+    buildImageWms: function (layer, dpi) {
         const source = layer.getSource(),
             mapObject = {
                 baseURL: source.getUrl(),
@@ -426,7 +435,7 @@ const BuildSpecModel = {
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
                     "TRANSPARENT": source.getParams().TRANSPARENT,
-                    "DPI": store.state.Tools.Print.dpiForPdf
+                    "DPI": typeof dpi === "number" ? dpi : store.state.Tools.Print.dpiForPdf
                 }
             };
 
@@ -460,7 +469,7 @@ const BuildSpecModel = {
         const mapfishStyleObject = {
                 "version": "2"
             },
-            layersToNotReverse = ["measure_layer", "import_draw_layer"];
+            layersToNotReverse = ["measureLayer", "importDrawLayer"];
 
         if (!layersToNotReverse.includes(layer.values_.id)) {
             features.reverse();
@@ -538,7 +547,7 @@ const BuildSpecModel = {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                     }
                     else if (geometryType === "LineString" || geometryType === "MultiLineString") {
-                        if (layer.values_.id === "measure_layer" && style.stroke_ === null) {
+                        if (layer.values_.id === "measureLayer" && style.stroke_ === null) {
                             return;
                         }
                         styleObject.symbolizers.push(this.buildLineStringStyle(style, layer));
@@ -841,6 +850,9 @@ const BuildSpecModel = {
 
         if (typeof fillColor === "string") {
             fillColor = this.colorStringToRgbArray(fillColor);
+        }
+        else if (fillColor instanceof CanvasPattern) {
+            fillColor = [0, 0, 0, 0];
         }
 
         obj.fillColor = convertColor(fillColor, "hex");
@@ -1173,11 +1185,13 @@ const BuildSpecModel = {
                         metaDataLayerList.push(legendObj.name);
                     }
                     if (legendContainsPdf) {
-                        Radio.trigger("Alert", "alert", {
-                            kategorie: "alert-info",
-                            text: "<b>The layer \"" + legendObj.name + "\" contains a pre-defined Legend. " +
-                                "This legens cannot be added to the print.</b><br>" +
-                                "You can download the pre-defined legend from the download menu seperately."
+                        store.dispatch("Alerting/addSingleAlert", {
+                            category: i18next.t("common:modules.alerting.categories.info"),
+                            content: "<b>The layer \"" + legendObj.name + "\" contains a pre-defined Legend. " +
+                            "This legens cannot be added to the print.</b><br>" +
+                            "You can download the pre-defined legend from the download menu seperately.",
+                            displayClass: "info",
+                            kategorie: "alert-info"
                         });
                     }
                     else {
@@ -1281,18 +1295,14 @@ const BuildSpecModel = {
                 });
                 legendObj.legendType = "svgAndPng";
             }
-            else if (graphic.indexOf("data:image/svg+xml;charset=utf-8,<svg") !== -1) {
-                legendObj.svg = decodeURIComponent(graphic).split("data:image/svg+xml;charset=utf-8,")[1];
-                legendObj.legendType = "svg";
-            }
-            else if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
-                legendObj.legendType = "wmsGetLegendGraphic";
-                legendObj.imageUrl = graphic;
-            }
             else if (graphic.indexOf("<svg") !== -1) {
                 legendObj.color = this.getFillColorFromSVG(graphic);
                 legendObj.legendType = "geometry";
                 legendObj.geometryType = "polygon";
+            }
+            else if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
+                legendObj.legendType = "wmsGetLegendGraphic";
+                legendObj.imageUrl = graphic;
             }
             else {
                 legendObj.legendType = "wfsImage";
@@ -1302,6 +1312,7 @@ const BuildSpecModel = {
                 valuesArray.push(legendObj);
             }
         });
+
         return [].concat(...valuesArray);
     },
 

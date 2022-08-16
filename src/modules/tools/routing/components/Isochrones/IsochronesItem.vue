@@ -209,8 +209,12 @@ export default {
 
         <hr>
 
-        <h6>{{ $t('common:modules.tools.routing.isochrones.optimizeHeader') }}</h6>
-
+        <label
+            class="routing-isochrones-methodoption-lable"
+            for="routing-isochrones-methodoption"
+        >
+            {{ $t('common:modules.tools.routing.isochrones.optimizeHeader') }}
+        </label>
         <select
             id="routing-isochrones-methodoption"
             class="form-select form-select-sm"
@@ -337,5 +341,8 @@ export default {
 
 h6 {
     font-size: 12px;
+}
+.routing-isochrones-methodoption-lable {
+    padding: 0 0 5px 0;
 }
 </style>

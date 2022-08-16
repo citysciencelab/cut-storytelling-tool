@@ -16,7 +16,7 @@ export default {
      * @param {Object} context The context Vue instance.
      * @returns {Boolean} false, if config does not contain the mapMarker.
      */
-    initialize: ({context}) => {
+    initialize: (context) => {
         if (context) {
             return fetchFirstModuleConfig(context, configPaths, "MapMarker", false);
         }
@@ -27,13 +27,17 @@ export default {
     /**
      * With this function the coordinate, which has to be marked by the mapMarker, is written to the MapMarker state.
      * @param {String[]} value The array with the markable coordinate pair.
+     * @param {Boolean} [value.keepPreviousMarker] whether function should
+     *                  keep or erase previously drawn markers
      * @returns {void}
      */
     placingPointMarker ({state, rootState, commit, dispatch}, value) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.pointStyleId);
         let coordValues = [];
 
-        dispatch("removePointMarker");
+        if (!value.keepPreviousMarker) {
+            dispatch("removePointMarker");
+        }
 
         if (styleListModel) {
             if (rootState.Maps.mode === "3D") {
