@@ -77,6 +77,7 @@ The following NPM package is removed:
     - @intlify/vue-i18n-loader
 
 ### Fixed
+- Issue #813: Fix various WMS-T bugs and styling.
 
 ---
 

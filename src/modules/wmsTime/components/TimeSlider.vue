@@ -58,7 +58,7 @@ export default {
         animate () {
             const index = this.nextIndex();
 
-            if (index === this.timeRange.length - 1) {
+            if (index === this.timeRange.length) {
                 this.playing = false;
                 this.clearPlayback();
                 return;
@@ -150,6 +150,7 @@ export default {
             <input
                 :id="'timeSlider-input-range-' + layerId"
                 type="range"
+                class="timeSlider-input-range-label-input"
                 :value="sliderValue"
                 :min="0"
                 :max="sliderOptionCount"
@@ -157,7 +158,6 @@ export default {
                 :aria-label="$t('common:modules.wmsTime.timeSlider.inputRangeLabel')"
                 @input="setSliderValue($event.target.value)"
             >
-            <br>
             {{ selectedTime }}
         </label>
     </div>
@@ -195,6 +195,11 @@ export default {
 
     .timeSlider-input-range-label {
         margin: $bigger-margin;
+    }
+
+    .timeSlider-input-range-label-input {
+        display: block;
+        width: 100%;
     }
 
     .timeSlider-innerWrapper-interactions {
