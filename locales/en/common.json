@@ -481,8 +481,9 @@
                         "lineString": "Line + Buffer"
                     }
                 },
-                "downloadAsCSV": {
-                    "label": "Download filtered data"
+                "download": {
+                    "label": "Download filtered data",
+                    "labelBtn": "Download"
                 }
             },
             "pendler": {

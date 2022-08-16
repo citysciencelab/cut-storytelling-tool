@@ -481,8 +481,9 @@
                         "lineString": "Linie + Puffer"
                     }
                 },
-                "downloadAsCSV": {
-                    "label": "Gefilterte Daten herunterladen"
+                "download": {
+                    "label": "Gefilterte Daten herunterladen",
+                    "labelBtn": "Herunterladen"
                 }
             },
             "pendler": {
