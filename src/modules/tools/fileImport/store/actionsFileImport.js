@@ -6,6 +6,7 @@ import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import Icon from "ol/style/Icon";
 import {createDrawStyle} from "../../draw/utils/style/createDrawStyle";
+import {vectorStyleModel} from "../../../../../modules/vectorStyle/styleModel.js";
 
 const supportedFormats = {
     kml: new KML({extractStyles: true, iconUrlFunction: (url) => proxyGstaticUrl(url)}),
@@ -355,11 +356,57 @@ export default {
 
         vectorLayer.setStyle((feature) => {
             const drawState = feature.getProperties().drawState;
+            let style;
 
             if (!drawState) {
-                return undefined;
+                const defaultColor = [0, 0, 255, 1],
+                    defaultPointSize = 16,
+                    defaultStrokeWidth = 1,
+                    defaultCircleRadius = 300,
+                    geometryType = feature ? feature.getGeometry().getType() : "Cesium";
+
+                if (geometryType === "Point" || geometryType === "MultiPoint") {
+                    style = createDrawStyle(defaultColor, defaultColor, geometryType, defaultPointSize, 1, 1);
+                }
+                else if (geometryType === "LineString" || geometryType === "MultiLineString") {
+                    style = new Style({
+                        stroke: new Stroke({
+                            color: defaultColor,
+                            width: defaultStrokeWidth
+                        })
+                    });
+                }
+                else if (geometryType === "Polygon" || geometryType === "MultiPolygon") {
+                    style = new Style({
+                        stroke: new Stroke({
+                            color: defaultColor,
+                            width: defaultStrokeWidth
+                        }),
+                        fill: new Fill({
+                            color: defaultColor
+                        })
+                    });
+                }
+                else if (geometryType === "Circle") {
+                    style = new Style({
+                        stroke: new Stroke({
+                            color: defaultColor,
+                            width: defaultStrokeWidth
+                        }),
+                        fill: new Fill({
+                            color: defaultColor
+                        }),
+                        circleRadius: defaultCircleRadius,
+                        colorContour: defaultColor
+                    });
+                }
+                else {
+                    console.warn("Geometry type not implemented: " + geometryType);
+                    style = new Style();
+                }
+
+                return style.clone();
             }
-            let style;
 
             if (drawState.drawType.geometry === "Point") {
                 if (drawState.symbol.value !== "simple_point") {
@@ -419,7 +466,9 @@ export default {
         features.forEach(feature => {
             let geometries;
 
-            feature.setStyle(vectorLayer.getStyleFunction()(feature));
+            if (vectorLayer.getStyleFunction()(feature) !== undefined) {
+                feature.setStyle(vectorLayer.getStyleFunction()(feature));
+            }
 
             if (feature.get("isGeoCircle")) {
                 const circleCenter = feature.get("geoCircleCenter").split(",").map(parseFloat),
