@@ -1199,7 +1199,7 @@ STALayer.prototype.startSubscription = function (features) {
     }
     else {
         this.updateSubscription();
-        store.dispatch("Maps/registerListener", {type: "moveend", listener: this.updateSubscription.bind(this)});
+        setTimeout(store.dispatch("Maps/registerListener", {type: "moveend", listener: this.updateSubscription.bind(this)}), 2000);
     }
 };
 
