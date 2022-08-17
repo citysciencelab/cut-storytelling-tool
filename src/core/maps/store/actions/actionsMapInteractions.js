@@ -83,6 +83,10 @@ export default {
     resetView ({state, dispatch, getters}) {
         const view = getters.getView;
 
+        debugger;
+        if (state.mode === "3D") {
+            view.setZoom(state.changeZoomLevel[1]);
+        }
         view.setCenter(state.initialCenter);
         view.setResolution(state.initialResolution);
         dispatch("MapMarker/removePointMarker", null, {root: true});

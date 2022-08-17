@@ -38,7 +38,6 @@ export default {
 
         dispatch("unregisterListener", {type: "pointermove", listener: "updatePointer", listenerType: "dispatch"});
         dispatch("unregisterListener", {type: "click", listener: "updateClick", listenerType: "dispatch"});
-        dispatch("unregisterListener", {type: "moveend", listener: "updateAttributes", listenerType: "dispatch"});
         if (getters.is3D) {
             return;
         }
@@ -132,7 +131,6 @@ export default {
             eventHandler.destroy();
             dispatch("registerListener", {type: "pointermove", listener: "updatePointer", listenerType: "dispatch"});
             dispatch("registerListener", {type: "click", listener: "updateClick", listenerType: "dispatch"});
-            dispatch("registerListener", {type: "moveend", listener: "updateAttributes", listenerType: "dispatch"});
             Radio.trigger("Map", "beforeChange", "2D");
             view.animate({rotation: 0}, () => {
                 map3D.setEnabled(false);
