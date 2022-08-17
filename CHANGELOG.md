@@ -42,6 +42,7 @@
         - axios: 0.25.0 to 0.27.2
         - bootstrap-icons: 1.7.1 to 1.9.1
         - bootstrap-sass: 3.4.1 to 3.4.3
+        - bootstrap: 5.1.3 to 5.2.0
         - core-js: 3.24.0 to 3.24.1
         - i18next: 21.6.7 to 21.8.16
         - i18next-browser-languagedetector: 6.1.3 to 6.1.4
@@ -91,6 +92,9 @@
 ### Removed
 The following NPM package is removed:
     - @intlify/vue-i18n-loader
+    - bootstrap-colorpicker
+
+The Tool StyleWMS was removed.
 
 ### Fixed
 - Issue #818: Back to InitialView works again
