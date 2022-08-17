@@ -422,7 +422,7 @@ export default {
                     style = createDrawStyle(drawState.color, drawState.color, drawState.drawType.geometry, drawState.pointSize, 1, drawState.zIndex);
                 }
             }
-            else if (drawState.drawType.geometry === "LineString") {
+            else if (drawState.drawType.geometry === "LineString" || drawState.drawType.geometry === "MultiLineString") {
                 style = new Style({
                     stroke: new Stroke({
                         color: drawState.colorContour,
@@ -430,7 +430,7 @@ export default {
                     })
                 });
             }
-            else if (drawState.drawType.geometry === "Polygon") {
+            else if (drawState.drawType.geometry === "Polygon" || drawState.drawType.geometry === "MultiPolygon") {
                 style = new Style({
                     stroke: new Stroke({
                         color: drawState.colorContour,
@@ -455,6 +455,10 @@ export default {
                     colorContour: drawState.colorContour,
                     outerColorContour: drawState.outerColorContour
                 });
+            }
+            else {
+                console.warn("Geometry type not implemented: " + drawState.drawType.geometry);
+                style = new Style();
             }
 
             return style.clone();
