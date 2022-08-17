@@ -358,7 +358,8 @@ export default {
             let style;
 
             if (!drawState) {
-                const defaultColor = [0, 0, 255, 1],
+                const defaultColor = [255, 0, 0, 0.9],
+                    defaultFillColor = [200, 0, 0, 0.5],
                     defaultPointSize = 16,
                     defaultStrokeWidth = 1,
                     defaultCircleRadius = 300,
@@ -382,7 +383,7 @@ export default {
                             width: defaultStrokeWidth
                         }),
                         fill: new Fill({
-                            color: defaultColor
+                            color: defaultFillColor
                         })
                     });
                 }
@@ -393,7 +394,7 @@ export default {
                             width: defaultStrokeWidth
                         }),
                         fill: new Fill({
-                            color: defaultColor
+                            color: defaultFillColor
                         }),
                         circleRadius: defaultCircleRadius,
                         colorContour: defaultColor
