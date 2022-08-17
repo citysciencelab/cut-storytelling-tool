@@ -1,6 +1,5 @@
 import axios from "axios";
 import store from "../../../../src/app-store";
-import Dropdown from "bootstrap/js/dist/dropdown";
 
 /**
  * Base class for layer view that provides common functionality.

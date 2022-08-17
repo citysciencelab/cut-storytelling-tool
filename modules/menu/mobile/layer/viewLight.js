@@ -14,7 +14,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         "click .layer-sort-item > .up-icon": "moveModelUp",
         "click .layer-sort-item > .down-icon": "moveModelDown",
         "change select": "setTransparency",
-        "click .style-icon": "openStyleWMS",
         "click .remove-layer": "removeLayer"
     },
 
@@ -30,7 +29,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
      * @fires Map#RadioRequestMapGetMapMode
-     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
      * @fires Alerting#RadioTriggerAlertAlert
      */
@@ -266,16 +264,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (!this.model.get("isVisibleInTree")) {
             this.remove();
         }
-    },
-
-    /**
-     * todo
-     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
-     * @returns {void}
-     */
-    openStyleWMS: function () {
-        Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        $(".navbar-collapse").removeClass("show");
     },
 
     /**
