@@ -57,7 +57,6 @@
             "fileImport": "Datei-Import",
             "draw": "Zeichnen / Schreiben",
             "shadow": "Schatten",
-            "styleWMS": "Style WMS",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
             "layerSlider": "Zeitreihe",
@@ -390,24 +389,6 @@
               "theme": "Thema",
               "chooseTheme": "Bitte aktives Thema auswählen",
               "style": "Style"
-            },
-            "styleWMS": {
-                "noStyleableLayers": "Derzeit sind keine klassifizierbaren Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
-                "theme": "Thema",
-                "chooseTheme": "Bitte Thema auswählen",
-                "attribute": "Attribut",
-                "chooseAttribute": "Bitte Attribut wählen",
-                "countOfClasses": "Anzahl der Klassen",
-                "chooseNumberOfClasses": "Bitte Anzahl der Klassen auswählen",
-                "rangeOfValues": "Wertebereich Klasse",
-                "from": "von",
-                "to": "bis",
-                "reset": "Zurücksetzen",
-                "apply": "Anwenden",
-                "pleaseEnterInteger": "Bitte tragen Sie eine ganze Zahl ein.",
-                "pleaseChooseColor": "Bitte wählen Sie eine Farbe aus.",
-                "checkTheValues": "Überprüfen Sie die Werte.",
-                "overlappingValueRanges": "Überprüfen Sie die Werte. Wertebereiche dürfen sich nicht überschneiden."
             },
             "featureLister": {
                 "chooseTheme": "Thema wählen",

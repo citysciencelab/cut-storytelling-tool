@@ -34,7 +34,6 @@ import TreeFilter from "../../treeFilter/model";
  */
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
-import StyleWMS from "../../tools/styleWMS/model";
 import Viewpoint from "./viewPoint/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
 import store from "../../../src/app-store/index";
@@ -234,8 +233,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);
             }
-            else if (attrs.id === "styleWMS") {
-                return new StyleWMS(attrs, options);
+            else if (attrs.id === "shadow") {
+                return new Shadow(attrs, options);
             }
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(Object.assign(attrs, Object.prototype.hasOwnProperty.call(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);

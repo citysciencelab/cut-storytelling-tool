@@ -315,23 +315,6 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
     },
 
     /**
-     * Triggers the styleWMS tool to open
-     * Closes dropdown menu"
-     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
-     * @returns {void}
-     */
-    openStyleWMS: function () {
-        Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        // Upgrade to BT5, use JS method instead of class removal
-        const dropdown = Dropdown.getInstance(".nav li:first-child > .dropdown-toggle");
-
-        dropdown.hide();
-        $(".dropdown-menu.fixed").removeClass("fixed");
-        $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin");
-        $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin-back");
-    },
-
-    /**
      * Activates the StyleVT Tool and commits the current layer model to the state.
      *
      * @returns {void}

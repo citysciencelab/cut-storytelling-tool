@@ -311,11 +311,6 @@
           "addWMS": {
             "name": "translate#common:menu.tools.addWms",
             "icon": "bi-plus-lg"
-          },
-          "styleWMS": {
-            "name": "Style WMS",
-            "icon": "bi-paint-bucket",
-            "onlyDesktop": true
           }
         }
       },

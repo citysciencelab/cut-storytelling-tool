@@ -313,6 +313,7 @@ export default {
         border-radius: 4px;
         border: none;
         height: 12px;
+        min-height: 12px;
         margin-top: 19px;
         background: #cbcbcb;
     }

@@ -49,7 +49,7 @@ export function setLegendLayerList () {
 }
 /**
  * Listens to changes of attribute SLDBody.
- * Can be done directly or is no longer needed if tool styleWMS and tree filter are refactored.
+ * Can be done directly or is no longer needed if tree filter are refactored.
  * @param {Object} layerModel the layer
  * @returns {void}
  */

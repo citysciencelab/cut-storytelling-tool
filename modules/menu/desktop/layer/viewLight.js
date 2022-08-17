@@ -42,12 +42,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
                 this.setFocus(".decrease-icon");
             }
         },
-        "click .styleWMS": "openStyleWMS",
-        "keydown .styleWMS": function (event) {
-            if (this.handleKeyboardTriggeredAction(event, "openStyleWMS")) {
-                this.setFocus(".styleWMS");
-            }
-        },
         "click .styleVT": "openStyleVT",
         "keydown .styleVT": function (event) {
             if (this.handleKeyboardTriggeredAction(event, "openStyleVT")) {
@@ -75,7 +69,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
      * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
      * @listens i18next#RadioTriggerLanguageChanged
      * @fires Map#RadioRequestMapGetMapMode
-     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
      * @fires Alerting#RadioTriggerAlertAlert
      */

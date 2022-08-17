@@ -481,12 +481,6 @@
  */
 
 /**
- * @namespace StyleWMS
- * @memberof Tools
- * @description Tool that can modify wms tiles on request using an SLD-BODY
- */
-
-/**
  * @namespace StyleVT
  * @memberof Tools
  * @description Tool that can modify vtl styles with external style documents

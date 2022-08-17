@@ -49,12 +49,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
                 this.setFocus(".transparency .decrease-icon");
             }
         },
-        "click .style-icon": "openStyleWMS",
-        "keydown .style-icon": function (event) {
-            if (this.handleKeyboardTriggeredAction(event, "openStyleWMS")) {
-                this.setFocus(".styleWMS");
-            }
-        },
         "click .remove-layer": "removeLayer",
         "keydown .remove-layer": function (event) {
             if (this.handleKeyboardTriggeredAction(event, "removeLayer")) {

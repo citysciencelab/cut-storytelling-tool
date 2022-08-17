@@ -14,8 +14,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         "click .layer-info-item > .settings-icon": "toggleIsSettingVisible",
         "click .layer-sort-item > .up-icon": "moveModelUp",
         "click .layer-sort-item > .down-icon": "moveModelDown",
-        "change select": "setTransparency",
-        "click .style-icon": "openStyleWMS"
+        "change select": "setTransparency"
     },
 
     /**
@@ -30,7 +29,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @fires Map#RadioRequestMapGetMapMode
      * @fires BreadCrumb#RadioRequestBreadCrumbGetLastItem
      * @fires ModelList#RadioTriggerModelListSetIsSelectedOnParent
-     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
@@ -281,16 +279,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (!this.model.get("isVisibleInTree")) {
             this.remove();
         }
-    },
-
-    /**
-     * todo
-     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
-     * @returns {void}
-     */
-    openStyleWMS: function () {
-        Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        this.$(".navbar-collapse").removeClass("show");
     },
 
     /**
