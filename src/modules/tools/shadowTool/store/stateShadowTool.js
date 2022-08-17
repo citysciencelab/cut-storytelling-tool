@@ -38,17 +38,8 @@ const state = {
     resizableWindow: true,
     isVisibleInMenu: true,
     deactivateGFI: true,
-    timeslider: null,
-    dateslider: null,
-    toggleButton: null,
-    datepicker: null,
     isShadowEnabled: false,
-    snippetsReady: false,
-    shadowTime: {},
-    // translations
-    shadowDisplay: "",
-    time: "",
-    date: ""
+    shadowTime: {}
 };
 
 export default state;

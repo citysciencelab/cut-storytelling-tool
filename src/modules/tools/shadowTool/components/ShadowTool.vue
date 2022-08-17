@@ -7,15 +7,8 @@ import mutations from "../store/mutationsShadowTool";
 import actions from "../store/actionsShadowTool";
 import SliderInput from "./SliderInput.vue";
 import ToggleCheckbox from "../../../../share-components/toggleCheckbox/components/ToggleCheckbox.vue";
-// import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
 import moment from "moment";
-/* const configPaths = [
-        "configJson.Portalconfig.tools.shadow",
-        "configJson.Portalconfig.menu.shadow",
-    ],
- getLegendConfig: context => {
-            return fetchFirstModuleConfig(context, configPaths, "Legend");
-        }, */
+
 export default {
     name: "ShadowTool",
     components: {
@@ -37,8 +30,9 @@ export default {
             date: moment().format("YYYY-MM-DD"),
             showDate: moment().format("YYYY-MM-DD"),
             showTime: moment().format("HH:mm"),
-            timeSliderValue: null,
-            dateSliderValue: null,
+            displayedShadowTime: null,
+            timeSliderValue: 0,
+            dateSliderValue: 0,
             shadowActive: false
         };
     },
@@ -89,51 +83,52 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+            this.toggleShadow(false);
         },
         createDate () {
-            // check :value=
-            // add validate date
             const year = this.shadowTime.year ? this.shadowTime.year : this.currentYear,
-                month = this.shadowTime.month ? (this.shadowTime.month.length ===1 ? ("0"+this.shadowTime.month) : this.shadowTime.month) : this.currentMonth,
-                day = this.shadowTime.day ? (this.shadowTime.day.length ===1 ? ("0"+this.shadowTime.day) : this.shadowTime.day) : this.currentDay,
-                hour = this.shadowTime.hour ? (this.shadowTime.hour.length ===1 ? ("0"+this.shadowTime.hour) : this.shadowTime.hour) : this.currentHour,
-                minute = this.shadowTime.minute ? (this.shadowTime.minute.length ===1 ? ("0"+this.shadowTime.minute) : this.shadowTime.minute) : this.currentMinute,
-                // better moment format
-                showDate = year + "-" + month + "-" + day,
-                showTime = hour + ":" + minute,
-                shadowtime = new Date(year+"/"+month+"/"+day+" "+hour+":"+minute+":00");
+                checkedMonth = this.shadowTime.month.length === 1 ? "0" + this.shadowTime.month : this.shadowTime.month,
+                checkedDay = this.shadowTime.day.length === 1 ? "0" + this.shadowTime.day : this.shadowTime.day,
+                checkedHour = this.shadowTime.hour.length === 1 ? "0" + this.shadowTime.hour : this.shadowTime.hour,
+                checkedMinute = this.shadowTime.minute.length === 1 ? "0" + this.shadowTime.minute : this.shadowTime.minute,
+                month = this.shadowTime.month ? checkedMonth : this.currentMonth,
+                day = this.shadowTime.day ? checkedDay : this.currentDay,
+                hour = this.shadowTime.hour ? checkedHour : this.currentHour,
+                minute = this.shadowTime.minute ? checkedMinute : this.currentMinute,
+                showDate = [year, month, day].join("-"),
+                showTime = [hour, minute].join(":");
 
-            console.log(year+"/"+month+"/"+year+" "+hour+":"+minute+":00");
+
             this.date = showDate;
             this.checkDateFormat();
             this.showTime = showTime;
 
             if (document.getElementById("datePicker")) {
                 document.getElementById("datePicker").value = showDate;
-                // document.getElementById("timeSlider").children[2].value = (hour*60+minute)/100
             }
+
             this.syncDateSlider();
             this.initTimeSlider(hour, minute);
-            this.setCesiumTime(shadowtime.getTime());
+            this.updateShadow();
         },
         syncDateSlider () {
             const date = new Date(document.getElementById("datePicker").value);
 
             if (document.getElementById("datePicker")) {
-                this.showDate = document.getElementById("datePicker").value;
                 this.date = document.getElementById("datePicker").value;
                 this.checkDateFormat();
+                this.updateShadow();
                 this.dateSliderValue = moment(date).dayOfYear();
             }
         },
         checkDateFormat () {
-             const dates = this.date.split("-");
-            console.log(dates);
-            console.log(typeof this.currentLocale);
-            if (this.currentLocale === "de" || this.currentLocale === "platt"){
-                this.showDate = dates[2]+ "-" + dates[1] + "-" + dates[0];
-            } else {
-             this.showDate = dates[1]+ "-" + dates[2] + "-" + dates[0];
+            const dates = this.date.split("-");
+
+            if (this.currentLocale === "de" || this.currentLocale === "platt") {
+                this.showDate = [dates[2], dates[1], dates[0]].join("-");
+            }
+            else {
+                this.showDate = [dates[1], dates[2], dates[0]].join("-");
             }
         },
         initTimeSlider (hour, minute) {
@@ -158,6 +153,7 @@ export default {
 
             this.timeSliderValue = minuteValue;
             this.showTime = hours + ":" + minutesDisplay;
+            this.updateShadow();
         },
         syncDatePicker (totalDaysInYear) {
             const startDate = new Date(Number(this.currentYear), 0),
@@ -165,16 +161,16 @@ export default {
                 formatCalculateDate = moment(calculateDate).format("YYYY-MM-DD");
 
             if (document.getElementById("datePicker")) {
-                this.showDate = formatCalculateDate;
                 this.date = formatCalculateDate;
                 this.checkDateFormat();
                 this.dateSliderValue = totalDaysInYear;
                 document.getElementById("datePicker").value = this.date;
             }
+            this.updateShadow();
         },
         toggleShadow (visible) {
+            const scene = mapCollection.getMap("3D").getCesiumScene();
 
-            const scene =  mapCollection.getMap("3D").getCesiumScene()
             this.shadowActive = visible;
 
             if (scene) {
@@ -197,25 +193,22 @@ export default {
      * @param   {timestamp} date timestamd with date
      * @returns {timestamp} timestamp the combined timestamp
      */
-    combineTimeAndDate (time, date) {
-        return moment(date).hour(moment(time).get("hour")).minute(moment(time).get("minute")).second(moment(time).get("second")).valueOf();
-    },
-    /**
-     * Trigger new date to map3D
-     * @param {timestamp} datetime new Time
-     * @fires Core#RadioTriggerMapSetShadowTime
-     * @returns {void}
-     */
-    setCesiumTime (datetime) {
-        console.log(datetime);
-        let julianDate;
+        updateShadow () {
+            this.displayedShadowTime = new Date(this.date + " " + this.showTime + ":00");
+            this.setCesiumTime(this.displayedShadowTime.getTime());
+        },
+        /**
+         * Trigger new date to map3D
+         * @param {timestamp} datetime new Time
+         * @fires Core#RadioTriggerMapSetShadowTime
+         * @returns {void}
+         */
+        setCesiumTime (datetime) {
 
-        if (typeof Cesium !== "undefined") {
-            julianDate = Cesium.JulianDate.fromDate(moment(datetime).toDate());
-            console.log(julianDate);
-            Radio.trigger("Map", "setShadowTime", julianDate);
+            if (typeof Cesium !== "undefined") {
+                mapCollection.getMap("3D").time = Cesium.JulianDate.fromDate(moment(datetime).toDate());
+            }
         }
-    }
     }
 };
 </script>
@@ -240,7 +233,7 @@ export default {
                 <ToggleCheckbox
                     id="tool-shadow-checkbox"
                     ref="shadowCheckBox"
-                    :defaultState="isShadowEnabled"
+                    :default-state="isShadowEnabled"
                     :text-on="$t('common:snippets.checkbox.on')"
                     :text-off="$t('common:snippets.checkbox.off')"
                     @change="toggleShadow"

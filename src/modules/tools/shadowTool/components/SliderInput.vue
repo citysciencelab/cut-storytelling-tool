@@ -4,11 +4,13 @@ export default {
     props: {
         label: {
             type: String,
-            required: true
+            required: false,
+            default: ""
         },
         valuelabel: {
             type: String,
-            required: true
+            required: true,
+            default: ""
         },
         value: {
             type: Number,
@@ -29,7 +31,8 @@ export default {
         },
         unit: {
             type: String,
-            required: true
+            required: false,
+            default: ""
         },
         disabled: {
             type: Boolean,
