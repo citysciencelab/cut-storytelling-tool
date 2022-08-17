@@ -15,8 +15,9 @@
 
 // 3. Include remainder of required Bootstrap stylesheets
 @import "~bootstrap/scss/maps";
-@import "~bootstrap/scss/utilities";
 @import "~bootstrap-icons/font/bootstrap-icons";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
 
 .bootstrap-icon {
     position: relative;
@@ -27,6 +28,7 @@
 
 // 4. Include any optional Bootstrap CSS as needed
 // Layout & components
+@import "~bootstrap/scss/utilities";
 @import "~bootstrap/scss/root";
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
