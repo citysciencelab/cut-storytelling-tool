@@ -69,6 +69,7 @@
         - zip-a-folder: 1.1.3 to 1.1.5
 - WfsSearch: `inputLabel` are now translated.
 - In the `light` topic tree, the `singleBaselayer` attribute can now also be used.
+- fileImport: the styles of geoJsons are now retained on reimport of a previously in MP created file
 
 ### Deprecated
 
