@@ -69,6 +69,7 @@ export default {
         },
         isActive (val) {
             this.draw.setActive(val);
+            this.$emit("setGfiActive", !val);
         },
         buffer (val, oldVal) {
             if (!this.feature) {
