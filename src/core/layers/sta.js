@@ -1199,7 +1199,7 @@ STALayer.prototype.startSubscription = function (features) {
     }
     else {
         this.updateSubscription();
-        setTimeout(store.dispatch("Maps/registerListener", {type: "moveend", listener: this.updateSubscription.bind(this)}), 2000);
+        store.dispatch("Maps/registerListener", {type: "moveend", listener: this.updateSubscription.bind(this)});
     }
 };
 
@@ -1223,30 +1223,33 @@ STALayer.prototype.stopSubscription = function () {
  * @returns {void}
  */
 STALayer.prototype.updateSubscription = function () {
-    const datastreamIds = this.getDatastreamIdsInCurrentExtent(this.get("layer").getSource().getFeatures(), store.getters["Maps/getCurrentExtent"]),
-        subscriptionTopics = this.get("subscriptionTopics"),
-        version = this.get("version"),
-        isVisibleInMap = this.get("isVisibleInMap"),
-        mqttClient = this.mqttClient,
-        rh = this.get("mqttRh"),
-        qos = this.get("mqttQos");
+    // Timout to avoid display issues with url params see FLS-299 ticket. Issue has to be resolved without timeout.
+    setTimeout(() =>{
+        const datastreamIds = this.getDatastreamIdsInCurrentExtent(this.get("layer").getSource().getFeatures(), store.getters["Maps/getCurrentExtent"]),
+            subscriptionTopics = this.get("subscriptionTopics"),
+            version = this.get("version"),
+            isVisibleInMap = this.get("isVisibleInMap"),
+            mqttClient = this.mqttClient,
+            rh = this.get("mqttRh"),
+            qos = this.get("mqttQos");
 
-    if (!this.get("loadThingsOnlyInCurrentExtent")) {
-        this.unsubscribeFromSensorThings(datastreamIds, subscriptionTopics, version, isVisibleInMap, mqttClient);
-        this.subscribeToSensorThings(datastreamIds, subscriptionTopics, version, mqttClient, {rh, qos});
-    }
-    else {
-        this.unsubscribeFromSensorThings(datastreamIds, subscriptionTopics, version, isVisibleInMap, mqttClient);
-        this.initializeConnection(() => {
-            this.subscribeToSensorThings(
-                this.getDatastreamIdsInCurrentExtent(this.get("layer").getSource().getFeatures(), store.getters["Maps/getCurrentExtent"]),
-                subscriptionTopics,
-                version,
-                mqttClient,
-                {rh, qos}
-            );
-        });
-    }
+        if (!this.get("loadThingsOnlyInCurrentExtent")) {
+            this.unsubscribeFromSensorThings(datastreamIds, subscriptionTopics, version, isVisibleInMap, mqttClient);
+            this.subscribeToSensorThings(datastreamIds, subscriptionTopics, version, mqttClient, {rh, qos});
+        }
+        else {
+            this.unsubscribeFromSensorThings(datastreamIds, subscriptionTopics, version, isVisibleInMap, mqttClient);
+            this.initializeConnection(() => {
+                this.subscribeToSensorThings(
+                    this.getDatastreamIdsInCurrentExtent(this.get("layer").getSource().getFeatures(), store.getters["Maps/getCurrentExtent"]),
+                    subscriptionTopics,
+                    version,
+                    mqttClient,
+                    {rh, qos}
+                );
+            });
+        }
+    }, 2000);
 };
 
 /**
