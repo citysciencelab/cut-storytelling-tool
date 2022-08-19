@@ -26,7 +26,6 @@ const actions = {
                 }
             }
             else if (toolId === keepOpenToolId) {
-                dispatch("controlActivationOfTools", {id: keepOpenToolId, name: keepOpenToolId, active: true});
                 dispatch("controlActivationOfTools", {id: state[toolId].id, name: state[toolId].name, active: true});
                 commit(toolId + "/setActive", true);
             }
@@ -89,7 +88,7 @@ const actions = {
         else if (getters.getConfiguredToolKeys.includes(id)) {
             activeToolName = upperFirst(id);
         }
-        if (activeToolName) {
+        if (activeToolName !== "Gfi") {
             if (keepOpenToolId) {
                 commit(keepOpenToolId + "/setActive", true);
                 dispatch("activateToolInModelList", {tool: keepOpenToolId, active: true});
