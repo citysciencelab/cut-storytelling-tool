@@ -347,7 +347,7 @@ export default {
                 </div>
             </div>
             <div
-                v-if="isBufferInputVisible"
+                v-if="isActive && isBufferInputVisible"
                 class="mb-3"
             >
                 <label
