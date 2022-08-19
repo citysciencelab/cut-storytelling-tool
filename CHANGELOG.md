@@ -77,6 +77,7 @@
 - WfsSearch: `inputLabel` are now translated.
 - In the `light` topic tree, the `singleBaselayer` attribute can now also be used.
 - fileImport: the styles of geoJsons are now retained on reimport of a previously in MP created file
+- drawTool: previously set styles are now reflected in the drawTool and can be changed there. Exception is the doubleCircle wich is handled further on like a circle.
 
 ### Deprecated
 - The GeoJson-Layer subTyp: `OpenSenseMap` is deprecated. It will be removed in the next Major-Release!
