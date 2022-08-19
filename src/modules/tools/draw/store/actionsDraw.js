@@ -539,6 +539,8 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                 drawState.circleRadius,
                 drawState.circleOuterRadius);
 
+            console.log(styleSettings);
+
             commit("setSymbol", feature.get("drawState").symbol);
 
             setters.setStyleSettings({commit, getters}, styleSettings);
