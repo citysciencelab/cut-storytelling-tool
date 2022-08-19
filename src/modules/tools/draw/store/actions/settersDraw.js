@@ -9,8 +9,6 @@ function setStyleSettings ({getters, commit}, styleSettings) {
     const stateKey = getters.drawType.id + "Settings",
         mutationKey = `set${stateKey[0].toUpperCase()}${stateKey.slice(1)}`;
 
-    console.log(mutationKey);
-
     commit(mutationKey, styleSettings);
 }
 
