@@ -5,7 +5,6 @@ import * as getLayerInformation from "../../../utils/getLayerInformation";
 import * as prepareFeatureProperties from "../../../utils/prepareFeatureProperties";
 import * as writeTransaction from "../../../utils/writeTransaction";
 import actionsWfsTransaction from "../../../store/actionsWfsTransaction";
-// import loader from "../../../../../../utils/loaderOverlay";
 
 describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () => {
     let commit,
@@ -122,10 +121,6 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
             consoleSpy = sinon.spy();
             sinon.stub(console, "error").callsFake(consoleSpy);
             sinon.stub(writeTransaction, "default").callsFake(() => writeTransactionSymbol);
-            /* loaderHideSpy = sinon.spy();
-            loaderShowSpy = sinon.spy();
-            sinon.stub(loader, "hide").callsFake(loaderHideSpy);
-            sinon.stub(loader, "show").callsFake(loaderShowSpy); */
             refreshSpy = sinon.spy();
             sinon.stub(Radio, "request").withArgs("ModelList", "getModelByAttributes", {id: layer.id}).returns({
                 layer: {
