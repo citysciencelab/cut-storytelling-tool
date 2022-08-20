@@ -99,8 +99,7 @@ export default {
     name: "WfsTransaction",
     components: {SimpleButton, ToolTemplate},
     computed: {
-        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "requiredFieldsFilled", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"]),
-        ...mapGetters("Maps", ["getLayerById"])
+        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"])
     },
     watch: {
         active (val) {
@@ -123,7 +122,7 @@ export default {
         });
     },
     methods: {
-        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setLayerInformation", "setSelectedInteraction"]),
+        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setLayerInformation"]),
         ...mapActions("Tools/WfsTransaction", ["prepareInteraction", "reset", "save", "setActive", "setFeatureProperty", "setFeatureProperties"]),
         close () {
             this.setActive(false);
