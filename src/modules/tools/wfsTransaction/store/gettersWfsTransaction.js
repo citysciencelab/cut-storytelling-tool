@@ -93,6 +93,9 @@ const getters = {
     currentLayerId (state) {
         return state.layerIds[state.currentLayerIndex];
     },
+    layerSelectDisabled ({currentLayerIndex}, {showInteractionsButtons}) {
+        return currentLayerIndex === -1 || !showInteractionsButtons;
+    },
     /**
      * Returns a function which checks whether a feature is given
      * and an actual OL Feature as well whether all the required

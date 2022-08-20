@@ -17,7 +17,7 @@
                     <select
                         id="tool-wfsTransaction-layerSelect"
                         class="form-select"
-                        :disabled="currentLayerIndex === -1"
+                        :disabled="layerSelectDisabled"
                         @change="layerChanged($event.target.options.selectedIndex)"
                     >
                         <option
@@ -99,7 +99,7 @@ export default {
     name: "WfsTransaction",
     components: {SimpleButton, ToolTemplate},
     computed: {
-        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"])
+        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "layerSelectDisabled", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"])
     },
     watch: {
         active (val) {
