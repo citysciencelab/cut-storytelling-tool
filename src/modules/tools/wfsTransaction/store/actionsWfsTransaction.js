@@ -1,5 +1,6 @@
 import axios from "axios";
-import {Draw, Modify, Select} from "ol/interaction";
+import {Draw, Modify, Select, Translate} from "ol/interaction";
+import {platformModifierKeyOnly, primaryAction} from "ol/events/condition";
 import {exceptionCodes} from "../constantsWfsTransaction";
 import addFeaturePropertiesToFeature from "../utils/addFeaturePropertiesToFeature";
 import getLayerInformation from "../utils/getLayerInformation";
@@ -12,7 +13,8 @@ let drawInteraction,
     drawLayer,
     modifyInteraction,
     modifyFeature,
-    selectInteraction;
+    selectInteraction,
+    translateInteraction;
 
 const actions = {
     /**
@@ -45,7 +47,14 @@ const actions = {
                 drawOptions.style = style;
             }
             drawInteraction = new Draw(drawOptions);
-            modifyInteraction = new Modify({source: drawLayer.getSource()});
+            modifyInteraction = new Modify({
+                source: drawLayer.getSource(),
+                condition: event => primaryAction(event) && !platformModifierKeyOnly(event)
+            });
+            translateInteraction = new Translate({
+                layers: [drawLayer],
+                condition: event => primaryAction(event) && platformModifierKeyOnly(event)
+            });
             drawLayer.setStyle(style);
 
             if (toggleLayer) {
@@ -65,6 +74,7 @@ const actions = {
                 }
                 dispatch("Maps/removeInteraction", drawInteraction, {root: true});
                 dispatch("Maps/addInteraction", modifyInteraction, {root: true});
+                dispatch("Maps/addInteraction", translateInteraction, {root: true});
             });
             dispatch("Maps/addInteraction", drawInteraction, {root: true});
         }
@@ -76,10 +86,17 @@ const actions = {
                 commit("setSelectedInteraction", "selectedUpdate");
                 modifyFeature = event.target.getArray()[0];
                 modifyInteraction = new Modify({
-                    features: event.target
+                    features: event.target,
+                    condition: e => primaryAction(e) && !platformModifierKeyOnly(e)
                 });
+                translateInteraction = new Translate({
+                    features: event.target,
+                    condition: e => primaryAction(e) && platformModifierKeyOnly(e)
+                });
+
                 dispatch("Maps/removeInteraction", selectInteraction, {root: true});
                 dispatch("Maps/addInteraction", modifyInteraction, {root: true});
+                dispatch("Maps/addInteraction", translateInteraction, {root: true});
                 commit(
                     "setFeatureProperties",
                     featureProperties
@@ -119,11 +136,13 @@ const actions = {
         dispatch("Maps/removeInteraction", drawInteraction, {root: true});
         dispatch("Maps/removeInteraction", modifyInteraction, {root: true});
         dispatch("Maps/removeInteraction", selectInteraction, {root: true});
+        dispatch("Maps/removeInteraction", translateInteraction, {root: true});
         commit("Maps/removeLayerFromMap", drawLayer, {root: true});
         drawInteraction = undefined;
         modifyInteraction = undefined;
         selectInteraction?.getFeatures().clear();
         selectInteraction = undefined;
+        translateInteraction = undefined;
         drawLayer = undefined;
         if (layerSelected) {
             sourceLayer?.setVisible(true);
