@@ -3809,7 +3809,7 @@ The attributes `edit` and `delete` may be of type boolean or string. If of type 
 WFS-T module to visualize (*GetFeature*), create (*insert*), update (*update*) and delete (*delete*) features of a Web Feature Service (*WFS*) which is able to receive transactions.
 To use this tool, a WFS-T layer must be provided. For more configuration information see **[services.json](services.json.md)**.
 
-When editing properties of a feature / adding properties to a new features, the available values including its label is based on the layers configured `gfiAttributes`. For more information see **[services.json](services.json.md)**.
+When editing properties of a feature / adding properties to a new features, the available values including its label are based on the layers configured `gfiAttributes`. For more information see **[services.json](services.json.md)**.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
