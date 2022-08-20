@@ -116,8 +116,8 @@ export default {
                 this.setLayerInformation(newLayerInformation);
                 if ((this.currentLayerIndex === -1 && firstActiveLayer > -1) || (this.currentLayerIndex > -1 && firstActiveLayer === -1)) {
                     this.setCurrentLayerIndex(firstActiveLayer);
-                    this.setFeatureProperties();
                 }
+                this.setFeatureProperties();
             }
         });
     },
