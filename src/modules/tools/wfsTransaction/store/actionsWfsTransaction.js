@@ -17,6 +17,19 @@ let drawInteraction,
     translateInteraction;
 
 const actions = {
+    clearInteractions ({commit, dispatch}) {
+        dispatch("Maps/removeInteraction", drawInteraction, {root: true});
+        dispatch("Maps/removeInteraction", modifyInteraction, {root: true});
+        dispatch("Maps/removeInteraction", selectInteraction, {root: true});
+        dispatch("Maps/removeInteraction", translateInteraction, {root: true});
+        commit("Maps/removeLayerFromMap", drawLayer, {root: true});
+        drawInteraction = undefined;
+        modifyInteraction = undefined;
+        selectInteraction?.getFeatures().clear();
+        selectInteraction = undefined;
+        translateInteraction = undefined;
+        drawLayer = undefined;
+    },
     /**
      * Prepares everything so that the user can interact with features or draw features
      * to be able to send a transaction to the service.
@@ -25,6 +38,7 @@ const actions = {
      * @returns {void}
      */
     async prepareInteraction ({commit, dispatch, getters, rootGetters}, interaction) {
+        dispatch("clearInteractions");
         const {currentInteractionConfig, currentLayerId, currentLayerIndex, layerInformation, featureProperties, toggleLayer} = getters,
             // NOTE: As this is a rootGetter, the naming scheme is used like this.
             // eslint-disable-next-line new-cap
@@ -133,17 +147,7 @@ const actions = {
                 : getters.featureProperties
         );
         commit("setSelectedInteraction", null);
-        dispatch("Maps/removeInteraction", drawInteraction, {root: true});
-        dispatch("Maps/removeInteraction", modifyInteraction, {root: true});
-        dispatch("Maps/removeInteraction", selectInteraction, {root: true});
-        dispatch("Maps/removeInteraction", translateInteraction, {root: true});
-        commit("Maps/removeLayerFromMap", drawLayer, {root: true});
-        drawInteraction = undefined;
-        modifyInteraction = undefined;
-        selectInteraction?.getFeatures().clear();
-        selectInteraction = undefined;
-        translateInteraction = undefined;
-        drawLayer = undefined;
+        dispatch("clearInteractions");
         if (layerSelected) {
             sourceLayer?.setVisible(true);
         }

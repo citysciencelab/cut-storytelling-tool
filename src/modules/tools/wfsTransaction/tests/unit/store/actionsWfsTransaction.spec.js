@@ -18,6 +18,29 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
     });
     afterEach(sinon.restore);
 
+    describe("clearInteractions", () => {
+        it("should remove all interactions as well as the draw layer", () => {
+            actionsWfsTransaction.clearInteractions({commit, dispatch});
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args.length).to.equal(3);
+            expect(commit.firstCall.args[0]).to.equal("Maps/removeLayerFromMap");
+            expect(commit.firstCall.args[2]).to.eql({root: true});
+            expect(dispatch.callCount).to.equal(4);
+            expect(dispatch.firstCall.args.length).to.equal(3);
+            expect(dispatch.firstCall.args[0]).to.equal("Maps/removeInteraction");
+            expect(dispatch.firstCall.args[2]).to.eql({root: true});
+            expect(dispatch.secondCall.args.length).to.equal(3);
+            expect(dispatch.secondCall.args[0]).to.equal("Maps/removeInteraction");
+            expect(dispatch.secondCall.args[2]).to.eql({root: true});
+            expect(dispatch.thirdCall.args.length).to.equal(3);
+            expect(dispatch.thirdCall.args[0]).to.equal("Maps/removeInteraction");
+            expect(dispatch.thirdCall.args[2]).to.eql({root: true});
+            expect(dispatch.lastCall.args.length).to.equal(3);
+            expect(dispatch.lastCall.args[0]).to.equal("Maps/removeInteraction");
+            expect(dispatch.lastCall.args[2]).to.eql({root: true});
+        });
+    });
     describe("reset", () => {
         const featurePropertiesSymbol = Symbol("featureProperties");
         let setVisibleSpy;
@@ -38,34 +61,23 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
         it("should reset all values to its default state", () => {
             actionsWfsTransaction.reset({commit, dispatch, getters, rootGetters});
 
-            expect(commit.calledThrice).to.be.true;
+            expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);
             expect(commit.firstCall.args[0]).to.equal("setFeatureProperties");
             expect(commit.firstCall.args[1]).to.equal(featurePropertiesSymbol);
             expect(commit.secondCall.args.length).to.equal(2);
             expect(commit.secondCall.args[0]).to.equal("setSelectedInteraction");
             expect(commit.secondCall.args[1]).to.equal(null);
-            expect(commit.thirdCall.args.length).to.equal(3);
-            expect(commit.thirdCall.args[0]).to.equal("Maps/removeLayerFromMap");
-            expect(commit.thirdCall.args[2]).to.eql({root: true});
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args.length).to.equal(3);
-            expect(dispatch.firstCall.args[0]).to.equal("Maps/removeInteraction");
-            expect(dispatch.firstCall.args[2]).to.eql({root: true});
-            expect(dispatch.secondCall.args.length).to.equal(3);
-            expect(dispatch.secondCall.args[0]).to.equal("Maps/removeInteraction");
-            expect(dispatch.secondCall.args[2]).to.eql({root: true});
-            expect(dispatch.thirdCall.args.length).to.equal(3);
-            expect(dispatch.thirdCall.args[0]).to.equal("Maps/removeInteraction");
-            expect(dispatch.thirdCall.args[2]).to.eql({root: true});
-            expect(dispatch.thirdCall.args[2]).to.eql({root: true});
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.firstCall.args.length).to.equal(1);
+            expect(dispatch.firstCall.args[0]).to.equal("clearInteractions");
         });
         it("should reset all values to its default state and activate the current layer if it was previously unselected", () => {
             getters.featureProperties = [{symbol: featurePropertiesSymbol}];
 
             actionsWfsTransaction.reset({commit, dispatch, getters, rootGetters});
 
-            expect(commit.calledThrice).to.be.true;
+            expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);
             expect(commit.firstCall.args[0]).to.equal("setFeatureProperties");
             expect(Array.isArray(commit.firstCall.args[1])).to.be.true;
@@ -74,20 +86,9 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
             expect(commit.secondCall.args.length).to.equal(2);
             expect(commit.secondCall.args[0]).to.equal("setSelectedInteraction");
             expect(commit.secondCall.args[1]).to.equal(null);
-            expect(commit.thirdCall.args.length).to.equal(3);
-            expect(commit.thirdCall.args[0]).to.equal("Maps/removeLayerFromMap");
-            expect(commit.thirdCall.args[2]).to.eql({root: true});
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args.length).to.equal(3);
-            expect(dispatch.firstCall.args[0]).to.equal("Maps/removeInteraction");
-            expect(dispatch.firstCall.args[2]).to.eql({root: true});
-            expect(dispatch.secondCall.args.length).to.equal(3);
-            expect(dispatch.secondCall.args[0]).to.equal("Maps/removeInteraction");
-            expect(dispatch.secondCall.args[2]).to.eql({root: true});
-            expect(dispatch.thirdCall.args.length).to.equal(3);
-            expect(dispatch.thirdCall.args[0]).to.equal("Maps/removeInteraction");
-            expect(dispatch.thirdCall.args[2]).to.eql({root: true});
-            expect(dispatch.thirdCall.args[2]).to.eql({root: true});
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.firstCall.args.length).to.equal(1);
+            expect(dispatch.firstCall.args[0]).to.equal("clearInteractions");
             expect(setVisibleSpy.calledOnce).to.be.true;
             expect(setVisibleSpy.firstCall.args.length).to.equal(1);
             expect(setVisibleSpy.firstCall.args[0]).to.equal(true);
