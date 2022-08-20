@@ -98,7 +98,7 @@ const actions = {
             });
             selectInteraction.getFeatures().on("add", (event) => {
                 commit("setSelectedInteraction", "selectedUpdate");
-                modifyFeature = event.target.getArray()[0];
+                modifyFeature = event.target.getArray()[0].clone();
                 modifyInteraction = new Modify({
                     features: event.target,
                     condition: e => primaryAction(e) && !platformModifierKeyOnly(e)
