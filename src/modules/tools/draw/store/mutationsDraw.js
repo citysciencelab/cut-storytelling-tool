@@ -23,6 +23,9 @@ const mutations = {
     },
     setDownloadSelectedFormat: (state, payload) => {
         state.download.selectedFormat = payload;
+    },
+    addSymbol: (state, payload) => {
+        state.iconList.push(payload);
     }
 };
 

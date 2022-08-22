@@ -168,45 +168,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
         });
         this.defaultToolId = Object.prototype.hasOwnProperty.call(Config, "defaultToolId") ? Config.defaultToolId : "gfi";
-        store.dispatch("Tools/SessionTool/register", {key: "Layers", getter: () => {
-            const models = this.where({isSelected: true, type: "layer"}),
-                layerIds = [];
-
-            if (Array.isArray(models) && models.length) {
-                models.forEach(model => layerIds.push(model.id));
-            }
-            else if (models?.id) {
-                layerIds.push(models.id);
-            }
-            return {
-                layerIds
-            };
-        }, setter: ({layerIds}) => {
-            if (!Array.isArray(layerIds)) {
-                return;
-            }
-
-            layerIds.forEach(layerId => {
-                const layers = this.where({id: layerId});
-                let model;
-
-                if (Array.isArray(layers) && layers.length > 0) {
-                    model = layers[0];
-                }
-                else {
-                    Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
-                    model = this.findWhere({id: layerId});
-                }
-
-                if (!model) {
-                    return;
-                }
-                if (typeof model.setIsSelected === "function") {
-                    model.setIsSelected(true);
-                }
-            });
-
-        }}, {root: true});
     },
     defaultToolId: "",
     alwaysActiveTools: [],

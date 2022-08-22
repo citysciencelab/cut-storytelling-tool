@@ -378,13 +378,6 @@
                 "hintInfoScale": "Der ausgewählte Druckmaßstab weicht vom Maßstab im Kartenfenster ab. Das kann zu einem veränderten Kartenlayout im Druck führen.",
                 "invisibleLayer": "Folgende Themen können im ausgewählten Druckmaßstab {{scale}} nicht gedruckt werden:"
             },
-            "sessionTool": {
-                "uploadHeader": "Sitzung laden",
-                "buttonTextUpload": "Hochladen",
-                "buttonTextDownload": "Herunterladen",
-                "downloadHeader": "Sitzung speichern",
-                "errorOnLoad": "Beim hochladen ist ein Fehler aufgetreten!"
-            },
             "shadow": {
                 "shadowDisplay": "Schattendarstellung"
               },
@@ -488,8 +481,9 @@
                         "lineString": "Linie + Puffer"
                     }
                 },
-                "downloadAsCSV": {
-                    "label": "Gefilterte Daten herunterladen"
+                "download": {
+                    "label": "Gefilterte Daten herunterladen",
+                    "labelBtn": "Herunterladen"
                 }
             },
             "pendler": {
@@ -1192,6 +1186,21 @@
             "zoomToResults": "Zur Auswahl zoomen",
             "pagination": "Ergebnisseite",
             "selection": "Zeilenauswahl"
+        }
+    },
+    "libraries": {
+        "vue2-datepicker": {
+            "lang": {
+                "formatLocale": {
+                    "months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+                    "monthsShort": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
+                    "weekdays": ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+                    "weekdaysShort": ["Son", "Mon", "Die", "Mit", "Don", "Fre", "Sam"],
+                    "weekdaysMin": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+                    "firstDayOfWeek": 1,
+                    "firstWeekContainsDate": 4
+                }
+            }
         }
     }
 }

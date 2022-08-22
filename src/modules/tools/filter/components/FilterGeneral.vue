@@ -180,6 +180,17 @@ export default {
          */
         isGeometrySelectorVisible () {
             return isObject(this.geometrySelectorOptions) && this.geometrySelectorOptions.visible !== false;
+        },
+        /**
+         * Sets the active state of the gfi based on the given param.
+         * @param {Boolean} active True to enable it, false to disable it
+         * @returns {void}
+         */
+        setGfiActive (active) {
+            if (typeof active !== "boolean") {
+                return;
+            }
+            this.$store.commit("Tools/Gfi/setActive", active);
         }
     }
 };
@@ -210,6 +221,7 @@ export default {
                     :stroke-color="geometrySelectorOptions.strokeColor"
                     :stroke-width="geometrySelectorOptions.strokeWidth"
                     @updateFilterGeometry="updateFilterGeometry"
+                    @setGfiActive="setGfiActive"
                 />
                 <LayerCategory
                     v-if="Array.isArray(layerConfigs) && layerConfigs.length && layerSelectorVisible"
