@@ -75,6 +75,11 @@ export default {
             type: [Object, Boolean],
             required: false,
             default: false
+        },
+        isLayerFilterSelected: {
+            type: [Function, Boolean],
+            required: false,
+            default: false
         }
     },
     data () {
@@ -150,6 +155,11 @@ export default {
                 filterId: this.layerConfig?.filterId,
                 hits: amount
             });
+        },
+        filterGeometry () {
+            if (typeof this.isLayerFilterSelected === "function" && this.isLayerFilterSelected(this.layerConfig.filterId) || this.isLayerFilterSelected === true) {
+                this.handleActiveStrategy();
+            }
         }
     },
     created () {
@@ -556,8 +566,8 @@ export default {
             if (this.api instanceof FilterApi && this.mapHandler instanceof MapHandler) {
                 this.mapHandler.activateLayer(filterId, () => {
                     if (Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")) {
-                        this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, !this.hasUnfixedRules(filterQuestion.rules));
-                        this.mapHandler.toggleWFSLayerInTree(filterId, this.hasUnfixedRules(filterQuestion.rules));
+                        this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, !this.hasUnfixedRules(filterQuestion.rules) && !filterQuestion.commands.searchInMapExtent && !filterQuestion.commands.filterGeometry);
+                        this.mapHandler.toggleWFSLayerInTree(filterId, this.hasUnfixedRules(filterQuestion.rules) || filterQuestion.commands.searchInMapExtent || filterQuestion.commands.filterGeometry);
                     }
                     this.api.filter(filterQuestion, filterAnswer => {
                         if (typeof onsuccess === "function" && !alterLayer) {
@@ -575,7 +585,14 @@ export default {
                         }
 
                         if (!this.isParentSnippet(snippetId) && !this.hasOnlyParentRules()) {
-                            if (!this.hasUnfixedRules(filterQuestion.rules) && (this.layerConfig.clearAll || Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId"))) {
+                            if (
+                                !this.hasUnfixedRules(filterQuestion.rules)
+                                && (
+                                    this.layerConfig.clearAll || Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")
+                                )
+                                && !filterQuestion.commands.searchInMapExtent
+                                && !filterQuestion.commands.filterGeometry
+                            ) {
                                 if (this.layerConfig.clearAll && Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")) {
                                     this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, false, false);
                                 }

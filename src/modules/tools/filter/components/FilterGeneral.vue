@@ -134,7 +134,7 @@ export default {
          * @param {String} filterId filterId to check
          * @returns {Boolean} true if should be displayed false if not
          */
-        showLayerSnippet (filterId) {
+        isLayerFilterSelected (filterId) {
             if (!Array.isArray(this.selectedLayers)) {
                 return false;
             }
@@ -237,11 +237,11 @@ export default {
                         #default="slotProps"
                     >
                         <div
-                            :class="['accordion-collapse', 'collapse', showLayerSnippet(slotProps.layer.filterId) ? 'show' : '']"
+                            :class="['accordion-collapse', 'collapse', isLayerFilterSelected(slotProps.layer.filterId) ? 'show' : '']"
                             role="tabpanel"
                         >
                             <LayerFilterSnippet
-                                v-if="showLayerSnippet(slotProps.layer.filterId) || layerLoaded[slotProps.layer.filterId]"
+                                v-if="isLayerFilterSelected(slotProps.layer.filterId) || layerLoaded[slotProps.layer.filterId]"
                                 :api="slotProps.layer.api"
                                 :layer-config="slotProps.layer"
                                 :map-handler="mapHandler"
@@ -250,6 +250,7 @@ export default {
                                 :filter-rules="filters[slotProps.layer.filterId]"
                                 :filter-hits="filtersHits[slotProps.layer.filterId]"
                                 :filter-geometry="filterGeometry"
+                                :is-layer-filter-selected="isLayerFilterSelected"
                                 @updateRules="updateRules"
                                 @deleteAllRules="deleteAllRules"
                                 @updateFilterHits="updateFilterHits"
@@ -269,6 +270,7 @@ export default {
                         :filter-rules="filters[layerConfig.filterId]"
                         :filter-hits="filtersHits[layerConfig.filterId]"
                         :filter-geometry="filterGeometry"
+                        :is-layer-filter-selected="true"
                         @updateRules="updateRules"
                         @deleteAllRules="deleteAllRules"
                         @updateFilterHits="updateFilterHits"
