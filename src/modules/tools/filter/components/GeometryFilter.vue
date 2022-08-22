@@ -69,6 +69,7 @@ export default {
         },
         isActive (val) {
             this.draw.setActive(val);
+            this.$emit("setGfiActive", !val);
         },
         buffer (val, oldVal) {
             if (!this.feature) {
@@ -346,7 +347,7 @@ export default {
                 </div>
             </div>
             <div
-                v-if="isBufferInputVisible"
+                v-if="isActive && isBufferInputVisible"
                 class="mb-3"
             >
                 <label

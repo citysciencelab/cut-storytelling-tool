@@ -4,6 +4,7 @@ import DownloadItem from "../components/DownloadItem.vue";
 import DrawItemFeaturesFilter from "./DrawItemFeaturesFilter.vue";
 
 import getComponent from "../../../../utils/getComponent";
+import {listenToUpdatedSelectedLayerList} from "../utils/RadioBridge";
 
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import ToolTemplate from "../../ToolTemplate.vue";
@@ -305,11 +306,55 @@ export default {
 
         Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
         this.$on("close", this.close);
+
+        if (this.addIconsOfActiveLayers) {
+            listenToUpdatedSelectedLayerList(layerModels => {
+                this.addSymbolsByLayerModels(layerModels);
+            });
+        }
     },
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
         ...mapActions("Tools/Draw", constants.keyStore.actions),
 
+        /**
+         * Adds all symbols found in layerModels to the iconList.
+         * @param {Object[]} layerModels The layer models.
+         * @returns {void}
+         */
+        addSymbolsByLayerModels (layerModels) {
+            if (!Array.isArray(layerModels)) {
+                return;
+            }
+            layerModels.forEach(layerModel => {
+                if (typeof layerModel?.get !== "function") {
+                    return;
+                }
+                const legend = layerModel.get("legend");
+
+                if (!Array.isArray(legend)) {
+                    return;
+                }
+                legend.forEach(legendInfo => {
+                    if (
+                        typeof legendInfo?.styleObject?.get !== "function"
+                        || typeof legendInfo.styleObject.get("imageScale") !== "number"
+                        || typeof legendInfo.styleObject.get("imagePath") !== "string"
+                        || !legendInfo.styleObject.get("imageName")
+                    ) {
+                        return;
+                    }
+                    const icon = {
+                        "id": legendInfo.label || legendInfo.styleObject.get("imageName"),
+                        "type": "image",
+                        "scale": legendInfo.styleObject.get("imageScale"),
+                        "value": legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName")
+                    };
+
+                    this.addSymbolIfNotExists(icon);
+                });
+            });
+        },
         /**
          * Sets the focus to the first control
          * @returns {void}

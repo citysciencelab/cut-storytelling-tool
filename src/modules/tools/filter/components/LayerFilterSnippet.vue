@@ -10,7 +10,7 @@ import SnippetSlider from "./SnippetSlider.vue";
 import SnippetSliderRange from "./SnippetSliderRange.vue";
 import SnippetTag from "./SnippetTag.vue";
 import SnippetFeatureInfo from "./SnippetFeatureInfo.vue";
-import ExportButtonCSV from "../../../../share-components/exportButton/components/ExportButtonCSV.vue";
+import SnippetDownload from "./SnippetDownload.vue";
 import isObject from "../../../../utils/isObject";
 import FilterApi from "../interfaces/filter.api.js";
 import MapHandler from "../utils/mapHandler.js";
@@ -33,7 +33,7 @@ export default {
         SnippetSliderRange,
         SnippetTag,
         SnippetFeatureInfo,
-        ExportButtonCSV,
+        SnippetDownload,
         ProgressBar
     },
     props: {
@@ -692,7 +692,7 @@ export default {
          * @param {Function} onsuccess The function to hand over the data.
          * @returns {void}
          */
-        getDownloadHandlerCSV (onsuccess) {
+        getDownloadHandler (onsuccess) {
             const result = [],
                 features = this.filteredItems,
                 model = getLayerByLayerId(this.layerConfig.layerId),
@@ -1014,13 +1014,10 @@ export default {
             <ProgressBar
                 :paging="paging"
             />
-            <div v-if="layerConfig.downloadAsCSV">
-                <ExportButtonCSV
-                    :url="false"
-                    :filename="layerConfig.downloadAsCSV"
-                    :handler="getDownloadHandlerCSV"
-                    :use-semicolon="true"
-                    :title="$t('modules.tools.filter.downloadAsCSV.label')"
+            <div v-if="layerConfig.download && Array.isArray(filteredItems) && filteredItems.length">
+                <SnippetDownload
+                    :filtered-items="filteredItems"
+                    :layer-id="layerConfig.layerId"
                 />
             </div>
         </div>

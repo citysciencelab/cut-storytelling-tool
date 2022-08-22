@@ -30,12 +30,21 @@ const actions = {
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: state.layerSwiper.active ? id : secondId});
 
         if (state.layerSwiper.active) {
-            const {name, parentId, transparent, level, layers, url, version, time} = layerModel.attributes;
+            const {name, parentId, transparent, level, layers, styles, url, version,
+                gfiAttributes, featureCount, time} = layerModel.attributes;
 
             Radio.trigger("Parser", "addLayer",
                 name + "_second", secondId, parentId,
                 level, layers, url, version,
-                {transparent, isSelected: true, time}
+                {
+                    transparent,
+                    isSelected: true,
+                    styles: styles,
+                    legendURL: "ignore",
+                    gfiAttributes: gfiAttributes,
+                    featureCount: featureCount,
+                    time
+                }
             );
             Radio.trigger("ModelList", "addModelsByAttributes", {id: secondId});
         }
