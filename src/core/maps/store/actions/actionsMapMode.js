@@ -119,12 +119,13 @@ export default {
      * @param {Object} param store context.
      * @param {Object} param.commit the commit.
      * @param {Object} param.getters the getters.
+     * @param {Object} param.state the state.
      * @fires Core#RadioTriggerMapBeforeChange
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioTriggerMapChange
      * @returns {void}
      */
-    deactivateMap3D ({commit, getters, dispatch}) {
+    deactivateMap3D ({commit, getters, dispatch, state}) {
         const map3D = mapCollection.getMap("3D");
 
         if (map3D) {
@@ -139,6 +140,8 @@ export default {
                 view.setRotation(0);
                 Radio.trigger("Map", "change", "2D");
                 dispatch("controlZoomLevel", {currentMapMode: getters.mode, targetMapMode: "2D"});
+                commit("setInitialZoomLevel", state.changeZoomLevel["2D"]);
+                commit("setZoom", state.initialZoomLevel);
                 commit("setMode", "2D");
             });
         }

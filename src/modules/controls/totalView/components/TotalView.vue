@@ -37,8 +37,8 @@ export default {
          */
         mapMoved () {
             if (this.center) {
-                return this.initialCenter[0] !== this.center[0] ||
-                    this.initialCenter[1] !== this.center[1] ||
+                return this.initialCenter[0].toString() !== this.center[0].toString().split(".")[0] ||
+                    this.initialCenter[1].toString() !== this.center[1].toString().split(".")[0] ||
                     this.initialZoomLevel !== this.zoom;
             }
             return false;
