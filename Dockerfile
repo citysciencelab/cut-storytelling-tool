@@ -4,12 +4,6 @@ FROM node:12-alpine as build
 RUN mkdir -p /usr/app
 WORKDIR /usr/app
 
-ARG API_BASE_URL
-ENV API_BASE=$API_BASE_URL
-
-ARG TEST_ENV
-ENV TEST_ENV=$TEST_ENV
-
 RUN apk add --no-cache git
 RUN apk add --update --no-cache \
     make \
