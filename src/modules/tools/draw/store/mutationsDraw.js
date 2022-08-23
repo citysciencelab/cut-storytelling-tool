@@ -27,6 +27,10 @@ const mutations = {
     addSymbol: (state, payload) => {
         state.iconList.push(payload);
     },
+    setDrawSymbolSettings: (state, styleSettings) => {
+        state.drawSymbolSettings.color = styleSettings.color;
+        state.drawSymbolSettings.opacity = styleSettings.opacity;
+    },
     setDrawCurveSettings: (state, styleSettings) => {
         state.drawCurveSettings.color = styleSettings.color;
         state.drawCurveSettings.colorContour = styleSettings.colorContour;
