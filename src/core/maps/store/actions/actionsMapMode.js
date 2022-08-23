@@ -26,13 +26,14 @@ export default {
      * @param {Object} param.dispatch the dispatch.
      * @param {Object} param.commit the commit.
      * @param {Object} param.rootState the rootState.
+     * @param {Object} param.state the state.
      * @fires Core#RadioRequestMapGetMapMode
      * @fires Core#RadioTriggerMapBeforeChange
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioTriggerMapChange
      * @returns {void}
      */
-    async activateMap3D ({getters, dispatch, commit, rootState}) {
+    async activateMap3D ({getters, dispatch, commit, rootState, state}) {
         const mapMode = getters.mode;
         let map3D = mapCollection.getMap("3D");
 
@@ -55,6 +56,7 @@ export default {
                     "3D": zoomLevelmap2D
                 });
             }
+            commit("setInitialZoomLevel", state.changeZoomLevel["3D"]);
             Radio.trigger("Map", "beforeChange", "3D");
             allLayerModels = allLayerModels.filter(layerModel => {
                 return ["Oblique", "TileSet3D", "Terrain3D", "Entities3D"].indexOf(layerModel.get("typ")) === -1;
