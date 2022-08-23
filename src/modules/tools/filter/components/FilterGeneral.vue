@@ -46,7 +46,6 @@ export default {
                 getLayers
             }),
             layerConfigs: [],
-            selectedLayers: [],
             layerLoaded: {},
             layerFilterSnippetPostKey: "",
             filterGeometry: false
@@ -102,23 +101,30 @@ export default {
             }
         },
         /**
-         * Update selectedLayers array.
+         * Updates the selected categories in the store.
+         * @param {String[]} categories An array of the categories name.
+         * @return {void}
+         */
+        updateSelectedCategories (categories) {
+            if (!Array.isArray(categories)) {
+                return;
+            }
+            this.setSelectedCategories(categories);
+        },
+        /**
+         * Update selectedAccordions array.
          * @param {String[]|String} filterIds ids which should be added or removed
          * @returns {Object[]} selected layer fetched from config
          */
-        updateSelectedLayers (filterIds) {
+        updateSelectedAccordions (filterIds) {
             if (!Array.isArray(filterIds) && typeof filterIds !== "number") {
                 return;
             }
-            const confLayers = this.layerConfigs.filter(layer => {
-                return Array.isArray(filterIds) ? filterIds.includes(layer.filterId) : layer.filterId === filterIds;
-            });
+            const confLayers = this.transformLayerConfig(this.layerConfigs, filterIds);
 
             for (const layer of this.layerConfigs) {
                 if (layer?.category) {
-                    const filteredSubLayer = layer.layers.filter(subLayer => {
-                        return Array.isArray(filterIds) ? filterIds.includes(subLayer.filterId) : subLayer.filterId === filterIds;
-                    });
+                    const filteredSubLayer = this.transformLayerConfig(layer.layers, filterIds);
 
                     if (filteredSubLayer.length === 0) {
                         continue;
@@ -129,7 +135,26 @@ export default {
                     });
                 }
             }
-            this.selectedLayers = confLayers;
+            this.setSelectedAccordions(confLayers);
+        },
+        /**
+         * Transform given layer config to an lightweight array of layerIds and filterIds.
+         * @param {Object[]} configs The layer configs.
+         * @param {String[]} filterIds The filter ids.
+         * @returns {Object[]} array of lightweight filter objects which includes filterId and layerId.
+         */
+        transformLayerConfig (configs, filterIds) {
+            const layers = [];
+
+            configs.forEach(layerConfig => {
+                if (Array.isArray(filterIds) && filterIds.includes(layerConfig.filterId) || layerConfig.filterId === filterIds) {
+                    layers.push({
+                        layerId: layerConfig.layerId,
+                        filterId: layerConfig.filterId
+                    });
+                }
+            });
+            return layers;
         },
         /**
          * Check if layer filter should be displayed.
@@ -137,13 +162,13 @@ export default {
          * @returns {Boolean} true if should be displayed false if not
          */
         isLayerFilterSelected (filterId) {
-            if (!Array.isArray(this.selectedLayers)) {
+            if (!Array.isArray(this.selectedAccordions)) {
                 return false;
             }
             if (!this.layerSelectorVisible) {
                 return true;
             }
-            return this.selectedLayers.filter(selectedLayer => {
+            return this.selectedAccordions.filter(selectedLayer => {
                 if (selectedLayer.category) {
                     return selectedLayer.layers.filter(subLayer => {
                         return subLayer.filterId === filterId;
@@ -230,9 +255,11 @@ export default {
                     class="layerSelector"
                     :filters-only="filtersOnly"
                     :categories-only="categoriesOnly"
-                    :changed-selected-layers="selectedLayers"
+                    :changed-selected-layers="selectedAccordions"
+                    :selected-categories="selectedCategories"
                     :multi-layer-selector="multiLayerSelector"
-                    @updateselectedlayers="updateSelectedLayers"
+                    @selectedaccordions="updateSelectedAccordions"
+                    @selectedcategories="updateSelectedCategories"
                     @setLayerLoaded="setLayerLoaded"
                 >
                     <template
@@ -249,7 +276,7 @@ export default {
                                 :map-handler="mapHandler"
                                 :min-scale="minScale"
                                 :live-zoom-to-features="liveZoomToFeatures"
-                                :filter-rules="filters[slotProps.layer.filterId]"
+                                :filter-rules="rulesOfFilters[slotProps.layer.filterId]"
                                 :filter-hits="filtersHits[slotProps.layer.filterId]"
                                 :filter-geometry="filterGeometry"
                                 :is-layer-filter-selected="isLayerFilterSelected"
@@ -269,7 +296,7 @@ export default {
                         :map-handler="mapHandler"
                         :min-scale="minScale"
                         :live-zoom-to-features="liveZoomToFeatures"
-                        :filter-rules="filters[layerConfig.filterId]"
+                        :filter-rules="rulesOfFilters[layerConfig.filterId]"
                         :filter-hits="filtersHits[layerConfig.filterId]"
                         :filter-geometry="filterGeometry"
                         :is-layer-filter-selected="true"

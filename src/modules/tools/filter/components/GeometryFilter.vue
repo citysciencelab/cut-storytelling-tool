@@ -173,7 +173,6 @@ export default {
                 geometryFunction: this.getGeometryFunction(selectedGeometry.type, this.circleSides)
             });
             this.draw.setActive(this.isActive);
-
             this.draw.on("drawend", (evt) => {
                 const geometry = this.getGeometryOnDrawEnd(evt.feature, selectedGeometry.type, this.buffer);
 

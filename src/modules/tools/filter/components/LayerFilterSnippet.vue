@@ -192,7 +192,6 @@ export default {
         }, error => {
             console.warn(error);
         });
-
         this.setSnippetValueByState(this.filterRules);
         if (typeof this.filterHits === "number" && !this.isStrategyActive()) {
             this.amountOfFilteredItems = this.filterHits;
@@ -214,11 +213,14 @@ export default {
 
             rules.forEach(rule => {
                 if (this.isRule(rule)) {
-                    if (this.snippets[rule.snippetId]?.type === "dropdown"
+                    if (!Array.isArray(rule?.value)
+                        && (this.snippets[rule.snippetId]?.type === "dropdown"
                         || this.snippets[rule.snippetId]?.type === "sliderRange"
                         || this.snippets[rule.snippetId]?.type === "dateRange"
-                        && !Array.isArray(rule?.value)) {
+                        )
+                    ) {
                         this.snippets[rule.snippetId].prechecked = [rule?.value];
+                        return;
                     }
                     this.snippets[rule.snippetId].prechecked = rule?.value;
                 }

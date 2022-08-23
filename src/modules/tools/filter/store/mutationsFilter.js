@@ -11,16 +11,22 @@ const mutations = {
      */
     ...generateSimpleMutations(filterState),
     addSpotForRule (state, payload) {
-        Vue.set(state.filters, payload.filterId, []);
+        Vue.set(state.rulesOfFilters, payload.filterId, []);
     },
     updateRules (state, payload) {
-        Vue.set(state.filters, payload.filterId, payload.rules);
+        Vue.set(state.rulesOfFilters, payload.filterId, payload.rules);
     },
     deleteFilter (state, payload) {
-        Vue.set(state.filters, payload.filterId, []);
+        Vue.set(state.rulesOfFilters, payload.filterId, []);
     },
     updateFilterHits (state, payload) {
         Vue.set(state.filtersHits, payload.filterId, payload.hits);
+    },
+    setSerializedString (state, payload) {
+        state.serializedString = payload.serializiedString;
+    },
+    setRulesOfFilters (state, payload) {
+        state.rulesOfFilters = payload.rulesOfFilters;
     }
 };
 
