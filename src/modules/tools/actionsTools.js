@@ -31,7 +31,6 @@ const actions = {
             }
         }
     },
-
     /**
      * Sets the translated name of the tool to the given parameter for the tool with the given id.
      * @param {Object} payload The given parameters
