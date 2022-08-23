@@ -120,9 +120,16 @@ export default {
             if (val.page >= val.total) {
                 this.setFormDisable(false);
                 if (!this.isRefreshing && !this.getSearchInMapExtent() && this.liveZoomToFeatures) {
-                    this.mapHandler.zoomToFilteredFeature(this.layerConfig?.filterId, this.minScale, error => {
-                        console.warn("map error", error);
-                    });
+                    if (this.filterGeometry) {
+                        this.mapHandler.zoomToGeometry(this.filterGeometry, this.minScale, error => {
+                            console.warn(error);
+                        });
+                    }
+                    else {
+                        this.mapHandler.zoomToFilteredFeature(this.layerConfig?.filterId, this.minScale, error => {
+                            console.warn(error);
+                        });
+                    }
                 }
                 this.isRefreshing = false;
             }

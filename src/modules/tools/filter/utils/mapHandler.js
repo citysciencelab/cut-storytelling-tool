@@ -34,9 +34,14 @@ export default class MapHandler {
                 onerror(new Error("Filter MapHandler.constructor: The given handler needs a function 'createLayerIfNotExists'"));
             }
         }
-        if (typeof this.handlers?.liveZoom !== "function") {
+        if (typeof this.handlers?.zoomToFilteredFeatures !== "function") {
             if (typeof onerror === "function") {
-                onerror(new Error("Filter MapHandler.constructor: The given handler needs a function 'liveZoom'"));
+                onerror(new Error("Filter MapHandler.constructor: The given handler needs a function 'zoomToFilteredFeatures'"));
+            }
+        }
+        if (typeof this.handlers?.zoomToExtent !== "function") {
+            if (typeof onerror === "function") {
+                onerror(new Error("Filter MapHandler.constructor: The given handler needs a function 'zoomToExtent'"));
             }
         }
         if (typeof this.handlers?.addLayerByLayerId !== "function") {
@@ -339,7 +344,7 @@ export default class MapHandler {
         }
         else if (typeof minScale !== "number") {
             if (typeof onerror === "function") {
-                onerror(new Error("Filter MapHandler.zoomToFilteredFeature: The format of minScale is not right"));
+                onerror(new Error("Filter MapHandler.zoomToFilteredFeature: The format of minScale should be number."));
             }
             return;
         }
@@ -348,10 +353,40 @@ export default class MapHandler {
 
         if (isObject(layerModel) && Array.isArray(filteredFeatureIds) && filteredFeatureIds.length) {
             this.isZooming = true;
-            this.handlers.liveZoom(minScale, filteredFeatureIds, layerModel.get("id"), () => {
+            this.handlers.zoomToFilteredFeatures(minScale, filteredFeatureIds, layerModel.get("id"), () => {
                 this.isZooming = false;
             });
         }
+    }
+
+    /**
+     * Zoom to given geometry.
+     * @param {ol/geom/Geometry} geometry The geometry to zoom to.
+     * @param {Number} minScale The minimum scale.
+     * @param {Function} onerror A function(error) with error of type Error to call on error .
+     * @returns {void}
+     */
+    zoomToGeometry (geometry, minScale, onerror) {
+        if (this.isZooming) {
+            return;
+        }
+        else if (typeof minScale !== "number") {
+            if (typeof onerror === "function") {
+                onerror(new Error("Filter MapHandler.zoomToGeometry: The format of minScale should be number."));
+            }
+            return;
+        }
+        else if (typeof geometry?.getExtent !== "function") {
+            if (typeof onerror === "function") {
+                onerror(new Error("Filter MapHandler.zoomToGeometry: The given geometry has not function to get the extent."));
+            }
+            return;
+        }
+
+        this.isZooming = true;
+        this.handlers.zoomToExtent(geometry.getExtent(), minScale, () => {
+            this.isZooming = false;
+        });
     }
 
     /**
