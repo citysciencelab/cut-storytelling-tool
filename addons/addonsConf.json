@@ -1,8 +1,5 @@
 {
   "storyTellingTool": {
     "type": "tool"
-  }, 
-  "storyCreationTool": {
-    "type": "tool"
   }
 }
