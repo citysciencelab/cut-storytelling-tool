@@ -111,11 +111,17 @@ export default {
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": async () => {
                 const newLayerInformation = await getLayerInformation(this.layerIds),
-                    firstActiveLayer = newLayerInformation.findIndex(layer => layer.isSelected);
+                    firstActiveLayer = newLayerInformation.findIndex(layer => layer.isSelected),
+                    currentLayerDeactivated = this.currentLayerIndex > -1 && !newLayerInformation[this.currentLayerIndex].isSelected;
 
                 this.setLayerInformation(newLayerInformation);
-                if ((this.currentLayerIndex === -1 && firstActiveLayer > -1) || (this.currentLayerIndex > -1 && firstActiveLayer === -1)) {
+                if ((this.currentLayerIndex === -1 && firstActiveLayer > -1) ||
+                    (this.currentLayerIndex > -1 && firstActiveLayer === -1) ||
+                    (currentLayerDeactivated && firstActiveLayer > -1)) {
                     this.setCurrentLayerIndex(firstActiveLayer);
+                }
+                if (currentLayerDeactivated) {
+                    this.reset();
                 }
                 this.setFeatureProperties();
             }
