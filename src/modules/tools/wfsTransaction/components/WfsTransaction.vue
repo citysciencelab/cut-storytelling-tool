@@ -49,40 +49,42 @@
                     </template>
                 </div>
                 <template v-else>
-                    <hr>
-                    <form id="tool-wfsTransaction-form">
-                        <template v-for="property of featureProperties">
-                            <template v-if="property.type !== 'geometry'">
-                                <label
-                                    :key="`${property.key}-label`"
-                                    :for="`tool-wfsTransaction-form-input-${property.key}`"
-                                    class="form-label"
-                                >
-                                    {{ $t(property.label) }}
-                                </label>
-                                <input
-                                    :id="`tool-wfsTransaction-form-input-${property.key}`"
-                                    :key="`${property.key}-input`"
-                                    class="form-control"
-                                    :type="getInputType(property.type)"
-                                    :required="property.required"
-                                    :value="property.value"
-                                    @input="event => setFeatureProperty({key: property.key, type: getInputType(property.type), value: event.target.value})"
-                                >
+                    <div>
+                        <hr>
+                        <form id="tool-wfsTransaction-form">
+                            <template v-for="property of featureProperties">
+                                <template v-if="property.type !== 'geometry'">
+                                    <label
+                                        :key="`${property.key}-label`"
+                                        :for="`tool-wfsTransaction-form-input-${property.key}`"
+                                        class="form-label"
+                                    >
+                                        {{ $t(property.label) }}
+                                    </label>
+                                    <input
+                                        :id="`tool-wfsTransaction-form-input-${property.key}`"
+                                        :key="`${property.key}-input`"
+                                        class="form-control"
+                                        :type="getInputType(property.type)"
+                                        :required="property.required"
+                                        :value="property.value"
+                                        @input="event => setFeatureProperty({key: property.key, type: getInputType(property.type), value: event.target.value})"
+                                    >
+                                </template>
                             </template>
-                        </template>
-                        <div id="tool-wfsTransaction-form-buttons">
-                            <SimpleButton
-                                :interaction="reset"
-                                text="common:modules.tools.wfsTransaction.form.discard"
-                            />
-                            <SimpleButton
-                                :interaction="save"
-                                text="common:modules.tools.wfsTransaction.form.save"
-                                type="submit"
-                            />
-                        </div>
-                    </form>
+                            <div id="tool-wfsTransaction-form-buttons">
+                                <SimpleButton
+                                    :interaction="reset"
+                                    text="common:modules.tools.wfsTransaction.form.discard"
+                                />
+                                <SimpleButton
+                                    :interaction="save"
+                                    text="common:modules.tools.wfsTransaction.form.save"
+                                    type="submit"
+                                />
+                            </div>
+                        </form>
+                    </div>
                 </template>
             </div>
         </template>
