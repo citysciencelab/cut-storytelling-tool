@@ -100,6 +100,17 @@ export default {
                     properties[attrName] = value;
                 });
 
+                if (typeof item?.getGeometry === "function" &&
+                    item.getGeometry().getType() === "Point" &&
+                    typeof item.getGeometry().getCoordinates()[0] !== "undefined" &&
+                    typeof item.getGeometry().getCoordinates()[1] !== "undefined") {
+                    const map = Radio.request("Map", "getMap"),
+                        view = typeof map?.getView === "function" ? map.getView() : undefined,
+                        projection = typeof view?.getProjection === "function" ? view.getProjection() : undefined,
+                        code = typeof projection?.getCode === "function" ? projection.getCode() + " | " : "";
+
+                    properties["Koordinaten-System"] = code + item.getGeometry().getCoordinates()[0] + " | " + item.getGeometry().getCoordinates()[1];
+                }
                 result.push(properties);
             });
             onsuccess(result);
