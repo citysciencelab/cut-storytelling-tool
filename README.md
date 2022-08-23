@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/36763878/158801092-5258806e-32e3-4512-9e72-8b5cf9534d1a.jpg" alt="drawing" width="400"/>
+<img src="https://user-images.githubusercontent.com/61881523/186185988-e0eeb32a-3d2c-4fcc-bd33-bfb4abd7a35c.png" alt="drawing" width="400"/>
 </p>
 
 # Storytelling Tool
