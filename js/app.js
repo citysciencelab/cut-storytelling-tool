@@ -33,13 +33,6 @@ import mapCollection from "../src/core/maps/mapCollection.js";
 import {instantiateVuetify} from "../src/plugins/vuetify/vuetify";
 
 /**
- * Vuetify
- * @description Test vuetify as main UI framework in /addons/cosi
- * @external
- */
-import {instantiateVuetify} from "../src/plugins/vuetify/vuetify";
-
-/**
  * WFSFeatureFilterView
  * @deprecated in 3.0.0
  */
