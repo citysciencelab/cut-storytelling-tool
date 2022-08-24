@@ -323,7 +323,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #tool-storyTellingTool-player {
     display: grid;
     grid-template-rows: 1fr auto;

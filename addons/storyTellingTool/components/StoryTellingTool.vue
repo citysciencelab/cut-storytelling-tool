@@ -1,6 +1,6 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
-import Tool from "../../../src/modules/tools/Tool.vue";
+import Tool from "../../../modules/core/modelList/tool/model";
 import StoryCreator from "./storyCreator/StoryCreator.vue";
 import StoryPlayer from "./storyPlayer/StoryPlayer.vue";
 import actions from "../store/actionsStoryTellingTool";
@@ -206,7 +206,7 @@ export default {
                                             Eigene {{ option.title }}
                                         </v-btn>
                                     </v-col>
-                                    
+
                                 </v-card-actions>
                             </v-card>
                         </v-item>
@@ -229,7 +229,7 @@ export default {
     </Tool>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #tool-storyTellingTool {
     background: none;
 
@@ -255,8 +255,15 @@ export default {
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 // Fix masterportal main menu styles for "TABLE" UI Style
+
+//Colors
+$main-pink: #f2b1b7;
+$main-mint: #73c1a9;
+$main-blue: #8ea0d2;
+$white: #FFFFFF;
+
 
 .custom-table-row {
     margin-right: -15px;
@@ -305,13 +312,13 @@ export default {
 }
 
 .table-tool {
-    border: 0px;
+    border: 0;
     padding: 5px;
     border-radius: 5px;
 }
 
 .table-tool:hover {
-    background-color: fade(@main-blue , 20%);
+    background-color: fade($main-blue , 20%);
 }
 
 
@@ -393,37 +400,31 @@ export default {
     color: #f2b1b7
 }
 
-    // New style for the Storytelling tool
+// New style for the Storytelling tool
 
-    //Colors
-    @main-pink: #f2b1b7;
-    @main-mint: #73c1a9;
-    @main-blue: #8ea0d2;
-    @white: #FFFFFF;
+.win-heading, .table-tool-win-all-vue {
+    background-color: $main-blue !important;
+}
 
-    .win-heading, .table-tool-win-all-vue {
-        background-color: @main-blue !important;
-    }
+.legend-title-table, ui-draggable-handle {
+    background-color: $main-mint !important;
+    border-bottom: 0px !important;
 
-    .legend-title-table, ui-draggable-handle {
-        background-color: @main-mint !important;
-        border-bottom: 0px !important;
+}
 
-    }
+.legend-window-table .legend-content, .panel, .panel-default {
+    background-color: $white !important;
 
-    .legend-window-table .legend-content, .panel, .panel-default {
-        background-color: @white !important;
+}
 
-    }
+.panel-heading, .layer-title {
+    border-radius: 4px !important;
+    background-color: fade($main-mint, 20%) !important;
+    border-bottom: 0px !important;
+}
 
-    .panel-heading, .layer-title {
-        border-radius: 4px !important;
-        background-color: fade(@main-mint , 20%) !important;
-        border-bottom: 0px !important;
-    }
-
-    .win-body-vue {
-        background-color: @white !important;
-    }
+.win-body-vue {
+    background-color: $white !important;
+}
 
 </style>
