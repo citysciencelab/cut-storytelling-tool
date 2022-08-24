@@ -1,17 +1,32 @@
 <!DOCTYPE html>
-    <% if (this.model.get("isExpanded")) { %>
-        <span class="glyphicon glyphicon-minus-sign"> </span>
-   <% } else { %>
-        <span class="glyphicon glyphicon-plus-sign"> </span>
-   <% } %>
-    <% if(isLeafFolder && isFolderSelectable) { %>
-        <% if(isSelected) { %>
-            <span class="glyphicon glyphicon-check selectall" title="<%= hideAllTopicsText %>"></span>
-        <%} else {%>
-            <span class="glyphicon glyphicon-unchecked selectall" title="<%= showAllTopicsText %>"></span>
-        <%}%>
-    <%}%>
-    <% if (isSecured) { %>
-        <span class="glyphicon glyphicon-lock" title="<%=securedAllTopicsText%>"></span>
+<div class="menu-row">
+    <% if(isFolderSelectable && isSelected) { %>
+        <a class="<%= id %> dropdown-item layer-dropdown-item tabable checked" tabindex="0">
+    <%} else {%>
+        <a class="<%= id %> dropdown-item layer-dropdown-item tabable" tabindex="0">
     <% } %>
-    <span class="title"><%= name %></span>
+
+        <% if (this.model.get("isExpanded")) { %>
+        <span class="bootstrap-icon minimize-icon"><i class="bi-dash-circle-fill"></i></span>
+        <% } else { %>
+        <span class="bootstrap-icon maximize-icon"><i class="bi-plus-circle-fill"></i></span>
+        <% } %>
+        <% if(isFolderSelectable) { %> <% if(isSelected) { %>
+        <span
+            class="bootstrap-icon selectall"
+            title="<%= hideAllTopicsText %>"
+        ><i class="bi-check2-square"></i></span>
+        <%} else {%>
+        <span
+            class="bootstrap-icon selectall"
+            title="<%= showAllTopicsText %>"
+        ><i class="bi-square"></i></span>
+        <%}%> <%}%> <% if (isSecured) { %>
+        <span
+            class="bootstrap-icon lock-icon"
+            title="<%=securedAllTopicsText%>"
+        ><i class="bi-lock-fill"></i></span>
+        <% } %>
+        <span class="title"><%= name %></span>
+    </a>
+</div>

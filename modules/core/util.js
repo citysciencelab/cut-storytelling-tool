@@ -1,5 +1,6 @@
-import uniqueId from "../../src/utils/uniqueId.js";
+import uniqueId from "../../src/utils/uniqueId";
 import LoaderOverlay from "../../src/utils/loaderOverlay";
+import findWhereJs from "../../src/utils/findWhereJs";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -30,11 +31,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilIsChrome
      * @listens Core#RadioRequestUtilIsInternetExplorer
      * @listens Core#RadioRequestUtilIsAny
-     * @listens Core#RadioRequestUtilGetConfig
      * @listens Core#RadioRequestUtilGetUiStyle
      * @listens Core#RadioRequestUtilGetIgnoredKeys
      * @listens Core#RadioRequestUtilSort
-     * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
      * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
      * @listens Core#RadioRequestUtilRenameKeys
      * @listens Core#RadioRequestUtilRenameValues
@@ -65,9 +64,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "isChrome": this.isChrome,
             "isInternetExplorer": this.isInternetExplorer,
             "isAny": this.isAny,
-            "getConfig": function () {
-                return this.get("config");
-            },
             "getUiStyle": function () {
                 return this.get("uiStyle");
             },
@@ -75,7 +71,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 return this.get("ignoredKeys");
             },
             "sort": this.sort,
-            "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
             "convertArrayElementsToString": this.convertArrayElementsToString,
             "renameKeys": this.renameKeys,
             "renameValues": this.renameValues,
@@ -91,13 +86,12 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "differenceJs": this.differenceJs,
             "toObject": this.toObject,
             "isEmpty": this.isEmpty,
-            "setUrlQueryParams": this.setUrlQueryParams,
             "searchNestedObject": this.searchNestedObject
         }, this);
 
         channel.on({
             "hideLoader": this.hideLoader,
-            "hideLoadingModule": this.hideLoadingModule,
+            "refreshTree": this.refreshTree,
             "showLoader": this.showLoader,
             "setUiStyle": this.setUiStyle
         }, this);
@@ -112,7 +106,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         });
 
         $(window).on("resize", this.toggleIsViewMobile.bind(this));
-        this.parseConfigFromURL();
     },
 
     /**
@@ -156,10 +149,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                     return -1;
                 }
                 else if (iteratee !== undefined) {
-                    if (typeof a !== "object" || !a.hasOwnProperty(iteratee)) {
+                    if (typeof a !== "object" || !Object.prototype.hasOwnProperty.call(a, iteratee)) {
                         return 1;
                     }
-                    else if (typeof b !== "object" || !b.hasOwnProperty(iteratee)) {
+                    else if (typeof b !== "object" || !Object.prototype.hasOwnProperty.call(b, iteratee)) {
                         return -1;
                     }
                     else if (a[iteratee] > b[iteratee]) {
@@ -398,7 +391,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             sortedObj = this.sortObjectsAsAddress(sortedObj, first);
         }
         else {
-            sortedObj = this.sortObjectsNonAddress(sortedObj, first, second);
+            sortedObj = this.sortObjectsNonAddress(first, second, sortedObj);
         }
 
         return sortedObj;
@@ -406,12 +399,12 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /**
      * Sorts Objects not as address.
-     * @param {Object[]} [input=[]] Array with object to be sorted.
      * @param {String} first First attribute to sort by.
      * @param {String} second Second attribute to sort by.
+     * @param {Object[]} [input=[]] Array with object to be sorted.
      * @returns {Object[]} - Sorted array of objects.
      */
-    sortObjectsNonAddress: function (input = [], first, second) {
+    sortObjectsNonAddress: function (first, second, input = []) {
         const sortedOjectSecond = input.sort((elementA, elementB) => this.compareInputs(elementA, elementB, second)),
             sortedObjectFirst = sortedOjectSecond.sort((elementA, elementB) => this.compareInputs(elementA, elementB, first));
 
@@ -538,14 +531,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
-     * hides the loading module until the timeout has expired
-     * @returns {void}
-     */
-    hideLoadingModule: function () {
-        $(".loading").fadeOut(this.get("fadeOut"));
-    },
-
-    /**
      * Setter for attribute isViewMobile
      * @param {boolean} value visibility
      * @return {void}
@@ -565,71 +550,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         else {
             this.setIsViewMobile(true);
         }
-    },
-
-    /**
-     * todo
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @returns {void}
-     */
-    parseConfigFromURL: function () {
-        const query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
-            result = {};
-
-        let config;
-
-        query.split("&").forEach(function (keyValue) {
-            const item = keyValue.split("=");
-
-            result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
-        });
-
-        if (result.hasOwnProperty("CONFIG")) {
-            config = result.CONFIG;
-
-            if (config.slice(-5) === ".json") {
-                this.setConfig(config);
-            }
-            else {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong>"
-                        + "<br> Der URL-Paramater <strong>Config</strong> verlangt eine Datei mit der Endung \".json\"."
-                        + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
-                    kategorie: "alert-warning"
-                });
-            }
-        }
-    },
-
-    /**
-     * converts an array of objects to csv
-     * @param {object[]} data - array of object (no nested objects)
-     * @param {string} colDeli - column delimiter
-     * @param {string} lineDeli - line delimiter
-     * @returns {string} csv
-     */
-    convertArrayOfObjectsToCsv: function (data, colDeli, lineDeli) {
-        const keys = Object.keys(data[0]),
-            columnDelimiter = colDeli || ";",
-            lineDelimiter = lineDeli || "\n";
-
-        // header line
-        let result = keys.join(columnDelimiter) + lineDelimiter;
-
-        data.forEach(function (item) {
-            let colCounter = 0;
-
-            keys.forEach(function (key) {
-                if (colCounter > 0) {
-                    result += columnDelimiter;
-                }
-                result += item[key];
-                colCounter++;
-            }, this);
-            result += lineDelimiter;
-        }, this);
-
-        return result;
     },
 
     /**
@@ -682,7 +602,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         const result = {};
 
         keys.forEach(function (key) {
-            if (obj.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
                 result[key] = obj[key];
             }
         });
@@ -695,10 +615,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * Use Array.prototype.map() to map the values of an array to a function or property name.
      * Use Array.prototype.reduce() to create an object, where the keys are produced from the mapped results.
      * @param {array} [arr=[]] - elements to group
-     * @param {function} fn - reducer function
+     * @param {function} [fn=null] - reducer function
      * @returns {object} - the grouped object
      */
-    groupBy: function (arr = [], fn) {
+    groupBy: function (arr = [], fn = null) {
         return arr.map(typeof fn === "function" ? fn : val => val[fn]).reduce((acc, val, i) => {
             acc[val] = (acc[val] || []).concat(arr[i]);
             return acc;
@@ -712,15 +632,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     uniqueId: function (prefix) {
         return uniqueId(prefix);
-    },
-
-    /**
-     * Setter for config
-     * @param {*} value todo
-     * @returns {void}
-     */
-    setConfig: function (value) {
-        this.set("config", value);
     },
 
     /**
@@ -791,7 +702,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     pick: function (object, keys) {
         return keys.reduce((obj, key) => {
-            if (object && object.hasOwnProperty(key)) {
+            if (object && Object.prototype.hasOwnProperty.call(object, key)) {
                 obj[key] = object[key];
             }
             return obj;
@@ -831,18 +742,14 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         return arrayWithStrings;
     },
 
-    /** Looks through the list and returns the first value that matches all of the key-value pairs listed in properties
-     * listed in hitId.
-     * @param {Object[]} [list=[]] - the list.
-     * @param {Object} properties property/entry to search for.
-     * @returns {Object} - returns the first value/entry, that matches.
+    /**
+     * Looks through the given list and returns the first value that matches all of the key value pairs of properties.
+     * @param {Object[]} list A list of objects to look through.
+     * @param {Object} properties An object to match with all key value pairs.
+     * @returns {Object} Returns the first object in list which matches all given properties.
      */
     findWhereJs: function (list = [], properties = "") {
-        return list.find(
-            item => Object.keys(properties).every(
-                key => item[key] === properties[key]
-            )
-        );
+        return findWhereJs(list, properties);
     },
 
     /**

@@ -8,7 +8,7 @@ Explanations and examples are given for some points mentioned in the [coding con
 
 #### A.1.6
 
-Babel currently does not translate TPL files. Since the IE11 does not support arrow functions, they may not be used in the template.
+Babel currently does not translate TPL files.
 
 ---
 
@@ -387,7 +387,7 @@ const mutations = {
 #### B.5.4
 
 ```html
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 </style>
 ```

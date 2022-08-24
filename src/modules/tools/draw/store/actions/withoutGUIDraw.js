@@ -1,7 +1,7 @@
 import {fromCircle} from "ol/geom/Polygon.js";
 import {createStyle} from "../../utils/style/createStyle";
 import Feature from "ol/Feature";
-import {getMapProjection} from "masterportalAPI/src/crs";
+import {getMapProjection} from "@masterportal/masterportalapi/src/crs";
 import {GeoJSON} from "ol/format.js";
 import MultiLine from "ol/geom/MultiLineString.js";
 import MultiPoint from "ol/geom/MultiPoint.js";
@@ -51,7 +51,7 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
         targetProjection = null;
     const featureArray = [],
         format = new GeoJSON(),
-        mapProjection = getMapProjection(rootState.Map.map),
+        mapProjection = getMapProjection(mapCollection.getMap(rootState.Maps.mode)),
         multiLine = new MultiLine([]),
         multiPoint = new MultiPoint([]),
         multiPolygon = new MultiPolygon([]);
@@ -193,7 +193,7 @@ function editFeaturesWithoutGUI ({dispatch}) {
  * @param {Boolean} prmObject.zoomToExtent The map will be zoomed to the extent of the GeoJson if set to true.
  * @returns {String} GeoJSON of all Features as a String
  */
-function initializeWithoutGUI ({state, commit, dispatch, getters}, {drawType, color, opacity, maxFeatures, initialJSON, transformWGS, zoomToExtent}) {
+async function initializeWithoutGUI ({state, commit, dispatch, getters, rootState}, {drawType, color, opacity, maxFeatures, initialJSON, transformWGS, zoomToExtent}) {
     const collection = Radio.request("ModelList", "getCollection"),
         drawTypeId = getDrawId(drawType);
     let featJSON,
@@ -228,7 +228,7 @@ function initializeWithoutGUI ({state, commit, dispatch, getters}, {drawType, co
             setters.setStyleSettings({getters, commit}, styleSettings);
         }
 
-        commit("setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer"));
+        commit("setLayer", await dispatch("Maps/addNewLayerIfNotExists", "importDrawLayer", {root: true}));
 
         dispatch("createDrawInteractionAndAddToMap", {active: true, maxFeatures});
         dispatch("createSelectInteractionAndAddToMap", false);
@@ -237,13 +237,15 @@ function initializeWithoutGUI ({state, commit, dispatch, getters}, {drawType, co
         if (initialJSON) {
             try {
                 if (transformWGS) {
+                    const mapProjection = getMapProjection(mapCollection.getMap(rootState.Maps.mode));
+
                     format = new GeoJSON({
                         defaultDataProjection: "EPSG:4326"
                     });
-                    // read GeoJSON and transform the coordiantes from WGS84 to UTM32
+                    // read GeoJSON and transform the coordiantes from WGS84 to the projection of the map
                     featJSON = format.readFeatures(initialJSON, {
                         dataProjection: "EPSG:4326",
-                        featureProjection: "EPSG:25832"
+                        featureProjection: mapProjection
                     });
                 }
                 else {
@@ -255,7 +257,7 @@ function initializeWithoutGUI ({state, commit, dispatch, getters}, {drawType, co
                     state.layer.getSource().addFeatures(featJSON);
                 }
                 if (featJSON.length > 0 && zoomToExtent) {
-                    Radio.trigger("Map", "zoomToExtent", state.layer.getSource().getExtent());
+                    dispatch("Maps/zoomToExtent", {extent: state.layer.getSource().getExtent()}, {root: true});
                 }
             }
             catch (e) {

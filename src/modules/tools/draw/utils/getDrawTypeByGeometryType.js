@@ -10,13 +10,13 @@ function getDrawTypeByGeometryType (geometryType, drawTypeOptions) {
     }
 
     for (let i = 0; i < drawTypeOptions.length; i++) {
-        if (drawTypeOptions[i] === null || typeof drawTypeOptions[i] !== "object" || !drawTypeOptions[i].hasOwnProperty("geometry")) {
+        if (drawTypeOptions[i] === null || typeof drawTypeOptions[i] !== "object" || !Object.prototype.hasOwnProperty.call(drawTypeOptions[i], "geometry")) {
             continue;
         }
         else if (drawTypeOptions[i].geometry === geometryType) {
             return drawTypeOptions[i];
         }
-        else if (drawTypeOptions[i].hasOwnProperty("altGeometry") && Array.isArray(drawTypeOptions[i].altGeometry)) {
+        else if (Object.prototype.hasOwnProperty.call(drawTypeOptions[i], "altGeometry") && Array.isArray(drawTypeOptions[i].altGeometry)) {
             for (let n = 0; n < drawTypeOptions[i].altGeometry.length; n++) {
                 if (drawTypeOptions[i].altGeometry[n] === geometryType) {
                     return drawTypeOptions[i];

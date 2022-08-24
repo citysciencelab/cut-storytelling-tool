@@ -54,6 +54,12 @@
     "typ" : "WFS"
   },
   {
+    "id" : "11",
+    "name" : "Komoot Photon Suche",
+    "url" : "https://photon.komoot.io/api/?",
+    "typ" : "WFS"
+  },
+  {
     "id" : "1001",
     "name" : "Deegree WPS RZ2 Produktion",
     "url" : "https://geodienste.hamburg.de/HH_WPS",

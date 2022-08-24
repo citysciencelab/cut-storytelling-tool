@@ -24,12 +24,12 @@ label {
     position: relative;
 }
 
-.glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh, .glyphicon-folder-close, .glyphicon-folder-open, .glyphicon-question-sign {
+.bi-check2-square, .bi-square, .bi-arrow-down-circle, .bi-arrow-up-circle, .bi-chevron-down, .bi-plus-circle-fill, .bi-dash-circle-fill, .bi-arrow-repeat, .bi-folder2, .bi-folder2-open, .bi-question-circle-fill {
     cursor: pointer;
 }
 
 @media (max-width: 767px) {
-    .btn-glyphicon, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-envelope, .glyphicon-book {
+    .bi-plus-circle-fill, .bi-dash-circle-fill, .bi-info-circle-fill, .bi-check2-square, .bi-square, .bi-envelope-fill, .bi-lightbulb {
         font-size: 18px !important;
     }
     html, body {
@@ -76,11 +76,15 @@ label {
 
 /*bootstrap überschreiben*/
 .list-group {
-    margin-bottom: 0px !important;
+    margin-bottom: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
 }
 
 .form-group:last-child {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .cluster {
@@ -89,12 +93,6 @@ label {
     float:left;
     margin:10px;
 }
-
-.btn-lgv-grey {
-    background-color:#E3E3E3;
-    color: #000000;
-}
-
 
 /* For center anything in the unknown */
 .centered-box-wrapper {
@@ -252,8 +250,28 @@ label {
     margin-top: 5%;
 }
 
+/* we need to increase the color of placeholder because of accessibilty reasons (contrast) */
+::placeholder {
+    color:#767676 !important;
+    opacity: 1 !important;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #767676 !important;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #767676 !important;
+}
+.bs-placeholder, 
+.bs-placeholder:hover, 
+.bs-placeholder:focus, 
+.bs-placeholder:active {
+    color: #767676 !important;
+    opacity: 1 !important;
+}
+
+
 /* only for firefox */
-@-moz-document url-prefix() { 
+/* @-moz-document url-prefix() { 
     .form-group-sm .form-control{
         padding-right: 0;
         padding-top: 0;
@@ -264,6 +282,6 @@ label {
         padding-top: 0;
         padding-bottom: 0;
       }
-}
+} */
 
 

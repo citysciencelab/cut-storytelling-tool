@@ -70,8 +70,8 @@ describe("src/share-components/graphicalSelect/store/actionsGraphicalSelect", ()
                 tooltipMessagePolygon: "MessagePolygon"
             },
             rootState = {
-                Map: {
-                    mouseCoord: [11.549606597773037, 48.17285700012215]
+                Maps: {
+                    mouseCoordinate: [11.549606597773037, 48.17285700012215]
                 }
             };
 
@@ -90,28 +90,14 @@ describe("src/share-components/graphicalSelect/store/actionsGraphicalSelect", ()
                 tooltipMessagePolygon: "MessagePolygon"
             },
             rootState = {
-                Map: {
-                    mouseCoord: [11.549606597773037, 48.17285700012215]
+                Maps: {
+                    mouseCoordinate: [11.549606597773037, 48.17285700012215]
                 }
             };
 
         await actions.showTooltipOverlay({state, rootState});
 
-        expect(state.tooltipOverlay.getPosition()).to.eql(rootState.Map.mouseCoord);
-
-    });
-    it("toggleOverlay adds overlayCircle for type Circle with Radio.trigger", () => {
-        const payload = {
-                type: "Circle",
-                overlayCircle: {},
-                overlayTool: {}
-            },
-            radioTrigger = sinon.spy(Radio, "trigger");
-
-        actions.toggleOverlay(context, payload);
-
-        expect(radioTrigger.calledWithExactly("Map", "addOverlay", payload.overlayCircle)).to.be.true;
-        expect(radioTrigger.calledWithExactly("Map", "addOverlay", payload.overlayTool)).to.be.true;
+        expect(state.tooltipOverlay.getPosition()).to.eql(rootState.Maps.mouseCoordinate);
 
     });
     it("createDomOverlay creates div with id", () => {

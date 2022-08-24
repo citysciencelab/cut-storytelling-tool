@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {isMobile, isMaster, isCustom, isDefault} = require("../../../../../../test/end2end/settings"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
+    {isMaster, isSafari} = require("../../../../../../test/end2end/settings"),
     {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, until} = webdriver;
 
@@ -13,11 +13,9 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ContactTests ({builder, url, resolution, capability}) {
+async function ContactTests ({builder, url, browsername, resolution, capability}) {
     // for a start, testing from 2D desktop mode
-    const testIsApplicable = !isMobile(resolution) && (
-        isMaster(url) || isCustom(url) || isDefault(url)
-    );
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         describe("Contact", function () {
@@ -32,7 +30,7 @@ async function ContactTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
             });
 
             after(async function () {
@@ -41,19 +39,18 @@ async function ContactTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                 }
             });
 
+
             it("clicking menu entry opens contact form", async function () {
-                navBarIcon = await driver.findElement(By.css("div#navbarRow li.dropdown span.glyphicon-envelope"));
+                navBarIcon = await driver.findElement(By.css("div#navbarRow li.dropdown span.bootstrap-icon > .bi-envelope-fill"));
                 await navBarIcon.click();
 
                 toolWindow = await driver.wait(until.elementLocated(By.css(".tool-window-vue")), 5000);
@@ -95,8 +92,9 @@ async function ContactTests ({builder, url, resolution, capability}) {
                 expect(await textInput.getAttribute("value")).to.equal("Test crashed? A happy little mistake.");
             });
 
-            it("making the view smaller keeps form in window", async function () {
+            (isSafari(browsername) ? it.skip : it)("making the view smaller keeps form in window", async function () {
                 await driver.manage().window().setRect({width: windowWidth, height: windowHeight});
+
 
                 const {height, width, x, y} = await toolWindow.getRect();
 
@@ -106,6 +104,10 @@ async function ContactTests ({builder, url, resolution, capability}) {
                 // top and bottom border of tool within window
                 expect(y).to.be.greaterThan(0).and.to.be.lessThan(windowHeight);
                 expect(y + height).to.be.greaterThan(0).and.to.be.lessThan(windowHeight);
+            });
+
+            it("making the view larger keeps form in window", async function () {
+                await driver.manage().window().setRect({width: 1920, height: 1080});
             });
         });
     }

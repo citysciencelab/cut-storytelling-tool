@@ -1,33 +1,31 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import constants from "../store/constantsSaveSelection";
 
 export default {
     name: "SaveSelection",
     components: {
-        Tool
+        ToolTemplate
     },
     computed: {
         ...mapGetters("Tools/SaveSelection", constants.getters)
     },
     watch: {
         /**
-         * Prepares the Url that can be copied.
-         *
+         * Prepares the Url that can be copied and sets focus.
+         * @param {Boolean} isActive - if active or not
          * @returns {void}
          */
-        active () {
-            this.filterExternalLayer(Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
+        active (isActive) {
+            if (isActive) {
+                this.setFocusToFirstControl();
+            }
         }
     },
     created () {
-        Backbone.Events.listenTo(Radio.channel("ModelList"), {
-            "updatedSelectedLayerList": this.filterExternalLayer
-        });
-
-        if (Config.hasOwnProperty("simpleMap")) {
+        if (Object.prototype.hasOwnProperty.call(Config, "simpleMap")) {
             console.warn("The Parameter 'simpleMap' in the config.js is deprecated in the next major release. Please use the parameter 'simpleMap' as part of the configuration of the 'saveSelection' tool in the config.json.");
             this.setSimpleMap(Config.simpleMap);
         }
@@ -37,6 +35,18 @@ export default {
     methods: {
         ...mapMutations("Tools/SaveSelection", constants.mutations),
         ...mapActions("Tools/SaveSelection", constants.actions),
+
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["tool-saveSelection-input-url"]) {
+                    this.$refs["tool-saveSelection-input-url"].focus();
+                }
+            });
+        },
         close () {
             this.setActive(false);
 
@@ -52,22 +62,23 @@ export default {
 </script>
 
 <template>
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <form id="tool-saveSelection-form">
                 <div class="form-group form-group-sm">
                     <label for="tool-saveSelection-input-url">{{ simpleMap ? "Geoportal" : "" }} URL</label>
                     <input
                         id="tool-saveSelection-input-url"
+                        ref="tool-saveSelection-input-url"
                         type="text"
-                        class="form-control input-sm"
+                        class="form-control form-control-sm"
                         :value="url"
                         @click="copyToClipboard($event.currentTarget)"
                     >
@@ -81,8 +92,8 @@ export default {
                     <input
                         id="tool-saveSelection-input-simpleMapUrl"
                         type="text"
-                        class="form-control input-sm"
-                        :value="url + '&style=simple'"
+                        class="form-control form-control-sm"
+                        :value="url + '&uiStyle=simple'"
                         @click="copyToClipboard($event.currentTarget)"
                     >
                 </div>
@@ -95,10 +106,10 @@ export default {
                 </span>
             </form>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
 
 @media (min-width: 768px) {

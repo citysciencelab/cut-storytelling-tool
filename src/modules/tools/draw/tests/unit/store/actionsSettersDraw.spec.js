@@ -29,19 +29,18 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
     }
 
     describe("setActive", () => {
-        let active,
-            request,
-            trigger;
+        let active;
 
         beforeEach(() => {
-            request = sinon.spy(() => ({}));
-            trigger = sinon.spy();
             state = {
                 withoutGUI: false,
-                currentInteraction: "draw"
+                currentInteraction: "draw",
+                iconList: [{
+                    id: "iconPoint",
+                    type: "simple_point",
+                    value: "simple_point"
+                }]
             };
-            sinon.stub(Radio, "request").callsFake(request);
-            sinon.stub(Radio, "trigger").callsFake(trigger);
         });
 
         it("should commit as intended if 'active' is false", () => {
@@ -53,39 +52,39 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
             expect(commit.firstCall.args).to.eql(["setActive", false]);
             expect(dispatch.notCalled).to.be.true;
         });
-        it("should commit and dispatch as intended if 'active' is true", () => {
+        it("should commit and dispatch as intended if 'active' is true", async () => {
             active = true;
 
-            actions.setActive({state, commit, dispatch}, active);
+            await actions.setActive({state, commit, dispatch}, active);
 
-            expect(commit.calledThrice).to.be.true;
+            expect(commit.callCount).to.equal(4);
             expect(commit.firstCall.args).to.eql(["setActive", true]);
-            expect(commit.secondCall.args[0]).to.equal("setLayer");
-            expect(typeof commit.secondCall.args[1]).to.equal("object");
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true}]);
-            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
-            expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
-            expect(request.calledOnce).to.be.true;
-            expect(request.firstCall.args).to.eql(["Map", "createLayerIfNotExists", "import_draw_layer"]);
+            expect(commit.thirdCall.args[0]).to.equal("setLayer");
+            expect(commit.thirdCall.args[1]).to.be.undefined;
+            expect(dispatch.callCount).to.equal(5);
+            expect(dispatch.firstCall.args).to.eql(["Maps/addNewLayerIfNotExists", "importDrawLayer", {root: true}]);
+            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true}]);
+            expect(dispatch.thirdCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(3).args).to.eql(["createModifyInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(4).args).to.eql(["setDrawLayerVisible", true]);
         });
-        it("should commit and dispatch as intended if 'active' and 'withoutGUI' are true", () => {
+        it("should commit and dispatch as intended if 'active' and 'withoutGUI' are true", async () => {
             active = true;
             state.withoutGUI = true;
 
-            actions.setActive({state, commit, dispatch}, active);
+            await actions.setActive({state, commit, dispatch}, active);
 
-            expect(commit.calledThrice).to.be.true;
+            expect(commit.callCount).to.equal(4);
             expect(commit.firstCall.args).to.eql(["setActive", true]);
-            expect(commit.secondCall.args[0]).to.equal("setLayer");
-            expect(typeof commit.secondCall.args[1]).to.equal("object");
-            expect(dispatch.callCount).to.equal(4);
-            expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true}]);
-            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
-            expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
+            expect(commit.thirdCall.args[0]).to.equal("setLayer");
+            expect(commit.thirdCall.args[1]).to.be.undefined;
+            expect(dispatch.callCount).to.equal(6);
+            expect(dispatch.firstCall.args).to.eql(["Maps/addNewLayerIfNotExists", "importDrawLayer", {root: true}]);
+            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true}]);
+            expect(dispatch.thirdCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(3).args).to.eql(["createModifyInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(4).args).to.eql(["setDrawLayerVisible", true]);
             expect(dispatch.lastCall.args).to.eql(["toggleInteraction", "draw"]);
-            expect(request.calledOnce).to.be.true;
-            expect(request.firstCall.args).to.eql(["Map", "createLayerIfNotExists", "import_draw_layer"]);
         });
     });
     describe("setStyleSettings", () => {
@@ -300,6 +299,29 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
             expect(commit.firstCall.args).to.eql(["setSymbol", {caption: myIcon}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+        });
+    });
+    describe("addSymbolIfNotExists", () => {
+        it("should commit the given icon", () => {
+            const icon = {
+                id: "id"
+            };
+
+            state = {iconList: [{id: "otherId"}]};
+            actions.addSymbolIfNotExists({state, commit}, icon);
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["addSymbol", {id: "id"}]);
+        });
+        it("should not commit if the given icon already exists", () => {
+            const icon = {
+                id: "id"
+            };
+
+            state = {iconList: [{id: "id"}]};
+            actions.addSymbolIfNotExists({state, commit}, icon);
+
+            expect(commit.callCount).to.equal(0);
         });
     });
     describe("setText", () => {

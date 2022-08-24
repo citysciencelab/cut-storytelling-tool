@@ -132,6 +132,10 @@ export default {
             isInTime = false,
             displayAlert = false;
 
+        if (newAlertObj === undefined) {
+            return false;
+        }
+
         // in case its an object with deprecated text property, display warning and continue
         if (typeof newAlertObj.text === "string" && typeof newAlertObj.content !== "string") {
             console.warn("Deprecated: Alerting module - property \"text\" is deprecated. Use \"content\" instead.");
@@ -179,6 +183,10 @@ export default {
 
         // even if current alert got seeded out, there still might be another one in the pipe
         if (state.alerts.length > 0) {
+            if (findSingleAlertByHash(state.alerts, alertProtoClone.hash) !== false && isInTime && isNotRestricted) {
+                // this is necessary because this action returned false even if the alert was displayed
+                displayAlert = true;
+            }
             commit("setReadyToShow", true);
         }
 

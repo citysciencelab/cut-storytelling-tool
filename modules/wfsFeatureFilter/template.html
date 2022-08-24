@@ -1,16 +1,16 @@
 <% if (wfsList.length > 0) { %>
-<div class="panel panel-default" style="margin: 0px;">
+<div class="card" style="margin: 0;">
 <% wfsList.forEach(function (wfslayer) { %>
-    <div id="<%= wfslayer.id %>" class="panel-heading">
-        <p class="buttons pull-right">
-            <span id="wfsfeaturefilter_resizemarker" class="glyphicon glyphicon-resize-full" title="Ein- und ausklappen"></span>
+    <div id="<%= wfslayer.id %>" class="card-header">
+        <p class="buttons float-end">
+            <span id="wfsfeaturefilter_resizemarker" class="bootstrap-icon" title="Ein- und ausklappen"><i class="bi-arrows-angle-expand"></i></span>
         </p>
         <span style="font-size: 14px; "><%=wfslayer.name %></span>
     </div>
 <% wfslayer.filterOptions.forEach(function (filter) { if (filter.filterType === 'combo') { %>
-    <div class="panel-body <%= wfslayer.id %>_wfs_panel">
-        <label for="" class="control-label"><%=filter.filterName%></label>
-        <select class="form-control input-sm" id="<%=wfslayer.id %>_<%=filter.fieldName %>">
+    <div class="card-body <%= wfslayer.id %>_wfs_panel">
+        <label for="" class="form-label"><%=filter.filterName%></label>
+        <select class="form-select form-select-sm" id="<%=wfslayer.id %>_<%=filter.fieldName %>">
 <% filter.filterString.forEach(function (value) { if (value === '*') { %>
             <option title="keine Filterung der Elemente auf dieses Attribut">*</option>
 <% } else { %>
@@ -18,12 +18,12 @@
 <% } }); %>
         </select>
 <% } else { %>
-        <label for="" class="control-label">Unbekannter Filtertyp.</label>
+        <label for="" class="form-label">Unbekannter Filtertyp.</label>
 <% } %>
    </div>
 <% }); }); %>
-    <div class="panel-footer">
-        <button id="filterbutton" title="Nur Elemente mit diesen Filtereinstellungen anzeigen." class="btn btn-lgv-grey" type="button">Filter anwenden</button>
+    <div class="card-footer">
+        <button id="filterbutton" title="Nur Elemente mit diesen Filtereinstellungen anzeigen." class="btn btn-secondary" type="button">Filter anwenden</button>
     </div>
 </div>
 <% } else { %>

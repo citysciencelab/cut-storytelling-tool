@@ -13,7 +13,7 @@
 export default {
     name: "TableStyleControl",
     props: {
-        /** Name of the glyphicon, with or without prefix "glyphicon-". */
+        /** Name of the bootstrap, with or without prefix "bi-". */
         iconName: {
             type: String,
             required: true
@@ -38,10 +38,10 @@ export default {
     },
     computed: {
         /**
-         * @returns {String} string with prefixed "glyphicon-" if it was missing
+         * @returns {String} string with prefixed "bi-" if it was missing
          */
-        glyphiconClass () {
-            return this.iconName.startsWith("glyphicon-") ? this.iconName : `glyphicon-${this.iconName}`;
+        iconClass () {
+            return this.iconName.startsWith("bi-") ? this.iconName : `bi-${this.iconName}`;
         }
     },
     mounted () {
@@ -64,17 +64,19 @@ export default {
         @keyup.space.stop.prevent="onClick"
     >
         <a
-            aria-role="button"
+            role="button"
             href="#"
             :tabindex="disabled ? '-1' : '0'"
         >
-            <span :class="['glyphicon', glyphiconClass]" />
+            <span class="bootstrap-icon">
+                <i :class="iconClass" />
+            </span>
             {{ title }}
         </a>
     </button>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 
     .control-icon-table-style {
@@ -87,15 +89,15 @@ export default {
         margin: 0 0 6px;
         padding: 6px 0 0;
 
-        color: #808080;
+        color: $dark_grey;
         font-size: 17px;
 
         border-style: solid;
-        border-color: #C0C0C0;
+        border-color: $light_grey;
         border-width: 1px 0 0 0;
 
         > a {
-            color: #808080;
+            color: $dark_grey;
         }
 
         /* position icon in center of button */

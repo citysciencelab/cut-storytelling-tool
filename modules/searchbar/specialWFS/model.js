@@ -1,9 +1,12 @@
+import WFS from "ol/format/WFS";
+
 import "../model";
+import store from "../../../src/app-store";
 
 const SpecialWFSModel = Backbone.Model.extend({
     defaults: {
         minChars: 3,
-        glyphicon: "glyphicon-home",
+        icon: "bi-house-door-fill",
         geometryName: "app:geom",
         maxFeatures: 20,
         timeout: 6000,
@@ -25,7 +28,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @param {string} config.definitions[].definition.typeName - Layername des WFS Dienstes
      * @param {string} [config.definitions[].definition.geometryName="app:geom"] - Name des Attributs mit Geometrie
      * @param {integer} [config.definitions[].definition.maxFeatures="20"] - Anzahl der vom Dienst maximal zurückgegebenen Features
-     * @param {string_} [config.definitions[].definition.glyphicon="glyphicon-home"] - Name des Glyphicon für Vorschlagssuche
+     * @param {string_} [config.definitions[].definition.icon="bi-house-door-fill"] - Name des Icon für Vorschlagssuche
      * @param {strings[]} config.definitions[].definition.propertyNames - Name der Attribute die zur Suche ausgewertet werden
      * @returns {void}
      */
@@ -48,9 +51,9 @@ const SpecialWFSModel = Backbone.Model.extend({
             "search": this.search
         });
 
-        // initiale Suche
-        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
-            this.search(Radio.request("ParametricURL", "getInitString"));
+        // initial search
+        if (store.state.urlParams && store.state.urlParams["Search/query"]) {
+            this.search(store.state.urlParams && store.state.urlParams["Search/query"]);
         }
     },
 
@@ -66,11 +69,11 @@ const SpecialWFSModel = Backbone.Model.extend({
             let definition = value;
 
             // @deprecated since 3.0.0
-            if (value.hasOwnProperty("data")) {
+            if (value?.data) {
                 definition = Object.assign(value, this.getDataParameters(value));
             }
 
-            if (!definition.hasOwnProperty("typeName") || !definition.hasOwnProperty("propertyNames")) {
+            if (!definition?.typeName || !definition?.propertyNames) {
                 console.error("SpecialWFS (setDefinitions): parameters missing - definition of specialWFS is ignored.");
                 return undefined;
             }
@@ -95,7 +98,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             parameters[keyValue.split("=")[0].toUpperCase()] = decodeURIComponent(keyValue.split("=")[1]);
         });
 
-        if (!parameters.hasOwnProperty("TYPENAMES") || !parameters.hasOwnProperty("PROPERTYNAME")) {
+        if (!parameters?.TYPENAMES || !parameters?.PROPERTYNAME) {
             console.error("SpecialWFS (getDataParameters): parameters missing - definition of specialWFS is ignored.");
             return undefined;
         }
@@ -239,11 +242,13 @@ const SpecialWFSModel = Backbone.Model.extend({
             typeName = definition.typeName,
             propertyNames = definition.propertyNames,
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
-            glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
+            icon = definition.icon ? definition.icon : this.get("icon"),
             elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]),
             multiGeometries = ["MULTIPOLYGON"];
 
-        for (const element of elements) {
+        for (let i = 0; i < elements.length; i++) {
+            const element = elements[i];
+
             propertyNames.forEach(propertyName => {
                 if (element.getElementsByTagName(propertyName).length > 0 && element.getElementsByTagName(geometryName).length > 0) {
                     if (element.getElementsByTagName(propertyName)[0].textContent.toUpperCase().includes(definition.searchString.toUpperCase())) {
@@ -251,8 +256,7 @@ const SpecialWFSModel = Backbone.Model.extend({
                             elementGeometryFirstChild = elementGeometryName.firstElementChild,
                             firstChildNameUpperCase = elementGeometryFirstChild.localName.toUpperCase(),
                             identifier = element.getElementsByTagName(propertyName)[0].textContent;
-                        let interiorGeometry = [],
-                            geometry;
+                        let geometry;
 
                         if (multiGeometries.includes(firstChildNameUpperCase)) {
                             const memberName = elementGeometryFirstChild.firstElementChild.localName,
@@ -260,14 +264,20 @@ const SpecialWFSModel = Backbone.Model.extend({
                                 coordinates = this.getInteriorAndExteriorPolygonMembers(geometryMembers);
 
                             geometry = coordinates[0];
-                            interiorGeometry = coordinates[1];
                         }
                         else {
-                            const geometryString = element.getElementsByTagName(geometryName)[0].textContent;
-
-                            geometry = geometryString.trim().split(" ");
+                            geometry = new WFS()
+                                .readFeatures(data)[i]
+                                .getGeometry()
+                                .getCoordinates()
+                                .map(entry => Array.isArray(entry[0])
+                                    ? entry
+                                        .map(coord => coord.slice(0, 2))
+                                        .flat()
+                                    : entry);
                         }
-                        this.pushHitListObjects(type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon);
+
+                        this.pushHitListObjects(type, identifier, firstChildNameUpperCase, geometry, icon);
                     }
                 }
                 else {
@@ -275,7 +285,9 @@ const SpecialWFSModel = Backbone.Model.extend({
                 }
             });
         }
-        Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
+        if (elements.length) {
+            Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
+        }
     },
 
     /**
@@ -284,50 +296,61 @@ const SpecialWFSModel = Backbone.Model.extend({
     * @param {string} identifier - Name frmom target result.
     * @param {string} firstChildNameUpperCase - Geometrie type.
     * @param {string[]} geometry - The coordinates from exterior geometry.
-    * @param {string[]} interiorGeometry - The coordinates from interior geometry.
-    * @param {string} glyphicon - The glyphicon for hit.
+    * @param {string} icon - The icon for hit.
     * @returns {void}
     */
-    pushHitListObjects: function (type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon) {
+    pushHitListObjects: function (type, identifier, firstChildNameUpperCase, geometry, icon) {
         Radio.trigger("Searchbar", "pushHits", "hitList", {
             id: Radio.request("Util", "uniqueId", type.toString()),
             name: identifier.trim(),
             geometryType: firstChildNameUpperCase,
             type: type,
             coordinate: geometry,
-            interiorGeometry: interiorGeometry,
-            glyphicon: glyphicon
+            icon: icon
         });
     },
 
     /**
-     * Function to extract the coordinates of every polygon and - if available - the index/position of interior polygons in the array of coordinates
+     * Function to extract the coordinates of every polygon and polygons with interior polygons / holes
      * @param   {Object} polygonMembers members of the polygon
-     * @returns {Array[]} returns the coordinates of every polygon and also an array with the postions of interior polygons
+     * @returns {Array[]} returns the coordinates of every polygon
      */
     getInteriorAndExteriorPolygonMembers: function (polygonMembers) {
         const lengthIndex = polygonMembers.length,
-            coordinateArray = [],
-            interiorPositions = [];
+            coordinateArray = [];
 
         for (let i = 0; i < lengthIndex; i++) {
             const coords = [],
-                posListPolygonMembers = polygonMembers[i].getElementsByTagNameNS("*", "posList");
+                polygonsWithInteriors = [],
+                interiorCoords = [];
+            let posListPolygonMembers, exterior, interior, exteriorCoord;
 
-            for (const key in Object.keys(posListPolygonMembers)) {
-                coords.push(posListPolygonMembers[key].textContent);
-            }
-            coords.forEach(coordArray => coordinateArray.push(Object.values(coordArray.replace(/\s\s+/g, " ").split(" "))));
+            posListPolygonMembers = polygonMembers[i].getElementsByTagNameNS("*", "posList");
 
-            if (coords.length > 1) {
-                const interiorPosition = coordinateArray.length - coords.length;
+            // polygon with interior polygons
+            // make sure that the exterior coordinates are always at the first posiion in the array
+            if (posListPolygonMembers.length > 1) {
+                posListPolygonMembers = [];
+                exterior = polygonMembers[i].getElementsByTagNameNS("*", "exterior");
+                exteriorCoord = exterior[0].getElementsByTagNameNS("*", "posList")[0].textContent;
+                polygonsWithInteriors.push(Object.values(exteriorCoord.replace(/\s\s+/g, " ").split(" ")));
 
-                for (let n = 1; n < coords.length; n++) {
-                    interiorPositions.push(interiorPosition + n);
+                interior = polygonMembers[i].getElementsByTagNameNS("*", "interior");
+                for (const key in Object.keys(interior)) {
+                    interiorCoords.push(interior[key].getElementsByTagNameNS("*", "posList")[0].textContent);
                 }
+                interiorCoords.forEach(coord => polygonsWithInteriors.push(Object.values(coord.replace(/\s\s+/g, " ").split(" "))));
+                coordinateArray.push(polygonsWithInteriors);
+            }
+            else {
+                for (const key in Object.keys(posListPolygonMembers)) {
+                    coords.push(posListPolygonMembers[key].textContent);
+                }
+                coords.forEach(coordArray => coordinateArray.push(Object.values(coordArray.replace(/\s\s+/g, " ").split(" "))));
             }
         }
-        return [coordinateArray, interiorPositions];
+
+        return [coordinateArray];
     },
 
     /**

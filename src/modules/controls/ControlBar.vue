@@ -1,16 +1,13 @@
 <script>
 import {mapGetters} from "vuex";
-import ControlBarBackwardsCompatibility from "./ControlBarBackwardsCompatibility.vue";
 
 const fallbackTopRight = {
-        component: ControlBarBackwardsCompatibility,
-        props: {id: "top-right-fallback"},
-        key: "top-right-fallback"
+        key: "top-right-fallback",
+        fallback: true
     },
     fallbackBottomRight = {
-        component: ControlBarBackwardsCompatibility,
-        props: {id: "bottom-right-fallback"},
-        key: "bottom-right-fallback"
+        key: "bottom-right-fallback",
+        fallback: true
     };
 
 /* TODO
@@ -35,12 +32,13 @@ export default {
         return {
             categories: [
                 {categoryName: "top", className: "top-controls"},
+                {categoryName: "separator", className: "control-separator"},
                 {categoryName: "bottom", className: "bottom-controls"}
             ]
         };
     },
     computed: {
-        ...mapGetters(["controlsConfig", "mobile", "isSimpleStyle"]),
+        ...mapGetters(["controlsConfig", "mobile", "uiStyle"]),
         ...mapGetters("controls", ["componentMap", "mobileHiddenControls", "bottomControls"]),
         /** @returns {Object} contains controls to-be-rendered sorted by placement */
         categorizedControls () {
@@ -55,6 +53,18 @@ export default {
                     bottom: [fallbackBottomRight]
                 };
             }
+            this.$controlAddons.forEach(controlName => {
+                const addonControlConfig = this.controlsConfig[controlName];
+
+                if (addonControlConfig) {
+                    if (addonControlConfig.hiddenMobile) {
+                        this.mobileHiddenControls.push(controlName);
+                    }
+                    if (addonControlConfig.bottomControl) {
+                        this.bottomControls.push(controlName);
+                    }
+                }
+            }, this);
 
             Object
                 .keys(this.controlsConfig)
@@ -93,58 +103,128 @@ export default {
          */
         hiddenMobile (componentName) {
             return this.mobileHiddenControls.includes(componentName);
+        },
+        isSimpleStyle () {
+            return this.uiStyle === "SIMPLE";
         }
     }
 };
 </script>
 
 <template>
-    <div class="right-bar">
-        <template v-if="!isSimpleStyle">
-            <div
-                v-for="{categoryName, className} in categories"
-                :key="className"
+    <ul
+        v-if="!isSimpleStyle()"
+        class="right-bar"
+    >
+        <template v-for="({categoryName, className}, categoryIndex) in categories">
+            <li
+                v-if="categoryName === 'separator'"
+                :key="categoryIndex"
                 :class="className"
+                aria-hidden="true"
+            />
+            <template
+                v-for="(control, index) in categorizedControls[categoryName]"
+                v-else
             >
-                <template v-for="(control, index) in categorizedControls[categoryName]">
+                <!--
+                NOTE This li is a temporary implementation. As soon as "old-style" controls
+                are no longer supported, this li and related contents may be deleted.
+                -->
+                <li
+                    v-if="control.fallback"
+                    :id="control.key"
+                    :key="control.key"
+                    :class="[
+                        'backwards-compatibility-controls',
+                        className
+                    ]"
+                />
+                <li
+                    v-else
+                    :key="`${categoryIndex}-${index}`"
+                >
                     <component
                         :is="control.component"
-                        :key="'control-' + control.key"
+                        :key="control.key"
                         :class="[
                             index !== categorizedControls[categoryName].length - 1 ? 'spaced' : '',
-                            mobile && hiddenMobile(control.key) ? 'hidden' : ''
+                            mobile && hiddenMobile(control.key) ? 'hidden' : '',
+                            className
                         ]"
                         v-bind="control.props"
                     />
-                </template>
-            </div>
+                </li>
+            </template>
         </template>
-    </div>
+    </ul>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
-
-    .hidden {
-        display: none;
-    }
-
-    .spaced {
-        margin-bottom: 1em;
-    }
 
     .right-bar {
         pointer-events: none;
 
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
         padding: 5px;
         margin: 5px 5px 12px 5px;
 
+        display: flex;
+        flex-direction: column;
+
+        list-style-type: none;
+
+        .control-separator {
+            flex-grow: 1;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .spaced {
+            margin-bottom: 0.5em;
+        }
+
         .top-controls, .bottom-controls {
             pointer-events: all;
+        }
+    }
+</style>
+
+<style lang="scss">
+    @import "~variables";
+    /* using this classname to scope css effects; can not use scoped scss here since controls are not within scope, but added by jQuery */
+    .backwards-compatibility-controls {
+        /* use old styling way for icons for old controls */
+        .bootstrap-icon {
+            color: $white;
+            background-color: $primary;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        > .toggleButtonPressed {
+            background-color: $light_blue;
+        }
+        /* forcing compatibility by overriding old-style layouting */
+        .controls-row-right {
+            position: relative;
+            margin-right: 0;
+            min-height: 0;
+        }
+        .row {
+            margin-right: 0;
+            margin-left: 0;
+
+            > * {
+                padding-right: 0;
+                padding-left: 0;
+            }
+        }
+        > div {
+            padding: 5px;
+            > div {
+                margin-top: 0;
+            }
         }
     }
 </style>

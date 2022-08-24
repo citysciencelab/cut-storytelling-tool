@@ -3,7 +3,7 @@
 /**
  * @event StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
  * @param {Object} model Layer model to be styled
- * @description Opens the Tool and sets the layer model. Event is triggered by clicking on the glyphicon in the layer tree.
+ * @description Opens the Tool and sets the layer model. Event is triggered by clicking on the icon in the layer tree.
  * @example Radio.trigger("StyleWMS", "openStyleWMS", model)
  */
 
@@ -42,7 +42,7 @@
 /**
  * @event StyleVT#RadioTriggerStyleVTOpenStyleVT
  * @param {Object} model Layer model to be styled
- * @description Opens the Tool and sets the layer model. Event is triggered by clicking on the glyphicon in the layer tree.
+ * @description Opens the Tool and sets the layer model. Event is triggered by clicking on the icon in the layer tree.
  * @example Radio.trigger("StyleVT", "open", model)
  */
 
@@ -144,34 +144,6 @@
  * @event Alerting#RadioTriggerAlertConfirmed
  * @param {String} id The id of the alert that has been confirmed.
  * @example Radio.trigger("Alert", "confirmed", id)
- */
-
-
-/** -------------------- CLICK COUNTER -------------------- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterToolChanged
- * @example Radio.trigger("ClickCounter", "toolChanged")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterCalcRoute
- * @example Radio.trigger("ClickCounter", "calcRoute")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterZoomChanged
- * @example Radio.trigger("ClickCounter", "zoomChanged")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
- * @example Radio.trigger("ClickCounter", "layerVisibleChanged")
- */
-
-/**
- * @event ClickCounter#RadioTriggerClickCounterGfi
- * @example Radio.trigger("ClickCounter", "gfi")
  */
 
 
@@ -293,8 +265,12 @@
  * @param {*} layers - todo
  * @param {*} url - todo
  * @param {*} version - todo
+ * @param {object} [optionalParameters] Object of optional parameters to be set for the Layer. Empty object required if no opional parameters set.
+ * @param {boolean} [optionalParameters.transparent = true] Whether the given layer is transparent.
+ * @param {boolean} [optionalParameters.isSelected = false] Whether the given layer is selected .
+ * @param {(boolean/object)} [optionalParameters.time = false] If set to `true` or and Object, the configured Layer is expected to be a WMS-T.
  * @returns {void}
- * @example Radio.trigger("Parser", "addLayer", name, id, parentId, level, layers, url, version)
+ * @example Radio.trigger("Parser", "addLayer", name, id, parentId, level, layers, url, version, transparent, isSelected, time)
  */
 
 /**
@@ -402,12 +378,6 @@
  */
 
 /**
- * @event Layer#RadioTriggerLayerUpdateLayerInfo
- * @param {String} name The name of the layer.
- * @example Radio.trigger("Layer", "updateLayerInfo", name)
- */
-
-/**
  * @event Layer#RadioTriggerLayerSetLayerInfoChecked
  * @param {Boolean} value Flag that signs that the layer informations has been checked.
  * @example Radio.trigger("Layer", "setLayerInfoChecked", value)
@@ -441,280 +411,6 @@
  * @example Radio.request("VectorLayer", "getFeatures", id)
  */
 
-/** -------------------- MAP -------------------- */
-
-/**
- * @event Core#RadioTriggerMapChange
- * @param {String} mode Mode of the map.
- * @description Event that gets fired when the map mode ("2D" / "3D", /"Oblique") has changed.
- * @example Radio.trigger("Map", "change", mode)
- */
-
-/**
- * @event Core#RadioTriggerMapUpdateSize
- * @description Event that forces the map to update its size.
- * @example Radio.trigger("Map", "updateSize")
- */
-
-/**
- * @event Core#RadioTriggerMapSetLayerToIndex
- * @description Sets layer to given index
- * @param {ol.Layer} layer Layer to set to new index
- * @param {integer} [index=0] new index
- * @example Radio.trigger("Map", "setLayerToIndex", layer, index)
- */
-
-/**
- * @event Core#RadioTriggerMapAddLayer
- * @description Adds layer to map
- * @param {Object} layer Layer to add to map
- * @example Radio.trigger("Map", "addLayer", layer)
- */
-
-/**
- * @event Core#RadioTriggerMapAddLayerToIndex
- * @description Adds layer to given index
- * @param {Array} array Array consisting of the ol/layer and the given index. [layer, index]
- * @example Radio.trigger("Map", "addLayerToIndex", array)
- */
-
-/**
- * @event Core#RadioRequestMapGetMapMode
- * @description Adds layer to given index
- * @returns {string} - The mode of the map. Value can be "2D" or "3D"
- * @example Radio.request("Map", "getMapMode")
- */
-
-/**
- * @event Core#RadioRequestMapCreateLayerIfNotExists
- * @description Creates a layer if it does not exist
- * @returns {Object} - The newly created layer
- * @example Radio.request("Map", "createLayerIfNotExists", "newLayerName");
- */
-
-/**
- * @event Core#RadioRequestMapGetMap
- * @returns {ol/map} - The Openlayers Map.
- * @example Radio.request("Map", "getMap")
- */
-
-/**
- * @event Core#RadioRequestMapGetSize
- * @returns {number} size of the map
- * @example Radio.request("Map", "getSize")
- */
-
-/**
- * @event Core#RadioTriggerMapAddControl
- * @param {Object} control Control to be added to map.
- * @example Radio.trigger("Map", "addControl", control)
- */
-
-/**
- * @event Core#RadioTriggerMapSetGFIParams
- * @param {Object} control Control to be added to map.
- * @example Radio.trigger("Map", "addControl", control)
- */
-
-/**
- * @event Core#RadioTriggerMapAddOverlay
- * @param {ol/overlay} overlay Overlay to be added to map.
- * @example Radio.trigger("Map", "addOverlay", overlay)
- */
-
-/**
- * @event Core#RadioTriggerMapRemoveOverlay
- * @param {ol/overlay} overlay Overlay to be removed from map.
- * @example Radio.trigger("Map", "removeOverlay", overlay)
- */
-
-/**
- * @event Core#RadioTriggerMapRemoveControl
- * @param {*} mapControl Control to be removed from map.
- * @example Radio.trigger("Map", "removeControl", mapControl)
- */
-
-/**
- * @event Core#RadioTriggerMapZoomToExtent
- */
-
-/**
- * @event Core#RadioTriggerMapRender
- */
-
-/**
- * @event Core#RadioTriggerMapIsReady
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestMapGetLayers
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestMapGetWGS84MapSizeBBOX
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestMapGetFeaturesAtPixel
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapCameraChanged
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapBeforeChange
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestMapGetMap3d
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestMapGetFeatures3dAtPosition
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapAddLayerOnTop
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapRemoveLayer
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapRemoveLoadingLayer
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapAddLoadingLayer
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapSetBBox
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapZoomToFilteredFeatures
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapUnregisterListener
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapSetShadowTime
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestMapClickedWindowPosition
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestMapRegisterListener
- * @description todo
- */
-
-/**
- * @event Core#MapChangeVectorLayer
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerMapRegisterListener
- * @param {String | Object} event Event to be registered
- * @param {Function} callback - The Callback Function
- * @param {Object} context -
- * @example Radio.trigger("Map", "RegisterListener", event, callback, context)
- */
-
-/**
- * @event Core#RadioTriggerMapAddInteraction
- * @description Adds an interaction to the map (e.g. draw)
- * @param {Object} interaction Interaction to be added to map.
- * @example Radio.trigger("Map", "addInteraction", interaction)
- */
-
-/**
- * @event Core#RadioTriggerMapRemoveInteraction
- * @description Removes an interaction from the map (e.g. draw)
- * @param {Object} interaction Interaction to be removed from the map.
- * @example Radio.trigger("Map", "removeInteraction", interaction)
- */
-
-/**
- * @event Core#RadioTriggerMapUpdateSize
- * @description Event fires if map size is updated
- * @param {Object} caller todo!
- * @example Radio.trigger("Map", "updateSize")
- */
-
-/**
- * @event Core#RadioTriggerMapRegisterListenerMovenend
- * @example Radio.trigger("Map", "registerListener", "moveend")
- */
-
-/**
- * @event Core#RadioRequestMapIsMap3d
- * @description Event that gets fired when the map is in "3D" mode
- * @example Radio.request("Map", "isMap3d")
- */
-
-/**
- * @event Core#RadioTriggerMapActivateMap3d
- * @description Event that gets fired when the map is activated to "3D" mode
- * @example Radio.trigger("Map", "activateMap3d")
- */
-
-/**
- * @event Core#RadioTriggerMapDeactivateMap3d
- * @description Event that gets fired when the map is deactivated from "3D" mode
- * @example Radio.trigger("Map", "deactivateMap3d")
- */
-
-/**
- * @event Core#RadioTriggerSetShadowTime
- * @description Sets the time of the shadows in 3D mode
- * @param {Cesium.JulianDate} Date to set
- * @example Radio.trigger("Map", "setShadowTime", julianDate);
- */
-
-/**
- * @event Core#RadioRequestIsMap3d
- * @description Event that gets the state of map mode (2D or 3D)
- * @example Radio.request("Map", "isMap3d");
- */
-
-/**
- * @event Core#RadioRequestGetMap3d
- * @description Event that gets the map3D as an object
- * @example Radio.request("Map", "getMap3d");
- */
-
-/**
- * @event Core#RadioTriggerMapSetCameraParameter
- * @description Triggers to set the cesium camera position
- * @param {object} cameraParameter viewpoint for ol.cesium
- * @example Radio.trigger("Map", "setCameraParameter", cameraParameter);
- */
-
 /** -------------------- MAP VIEW -------------------- */
 
 /**
@@ -737,10 +433,10 @@
  */
 
 /**
- * @event Core#RadioRequestMapViewGetResoByScale
+ * @event Core#RadioRequestMapViewGetResolutionByScale
  * @param {String} scale Options of mapview status
  * @description Event that gets the resolution depending on the map scale
- * @example Radio.trigger("MapView", "getResoByScale", scale)
+ * @example Radio.trigger("MapView", "getResolutionByScale", scale)
  */
 
 /**
@@ -754,11 +450,6 @@
  * @event Core#RadioTriggerMapViewSetScale
  * @description Event that sets the scale of the map view
  * @example Radio.trigger("MapView", "setScale", model)
- */
-
-/**
- * @event Core#RadioTriggerMapViewSetConstrainedResolution
- * @description Event that sets the constrained resolution of the map view
  */
 
 /**
@@ -825,36 +516,6 @@
  * @event Core#RadioTriggerMapViewChangedZoomLevel
  * @description todo
  */
-
-/** -------------------- LAYER INFORMATION -------------------- */
-
-/**
- * @event LayerInformation#RadioTriggerLayerInformationAdd
- * @param {Object} options Options of mapview status
- * @example Radio.trigger("LayerInformation", "add", options)
- */
-
-/**
- * @event LayerInformation#RadioTriggerLayerInformationSync
- * @description todo
- */
-
-/**
- * @event LayerInformation#RadioTriggerLayerInformationRemoveView
- * @description todo
- */
-
-/**
- * @event LayerInformation#RadioTriggerSetIsVisibleToFalse
- * @description todo
- */
-
-/**
- * @event LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
- * @description Unhighlight the icon in the layertree for layerinformation
- * @example Radio.trigger("LayerInformation", "unhighlightLayerInfomationIcon")
- */
-
 
 /** -------------------- OBLIQUE MAP-------------------- */
 
@@ -976,9 +637,9 @@
  */
 
 /**
- * @event Core.ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
- * @description See {@link List#setIsSelectedOnChildLayers}
- * @example Radio.trigger("ModelList", "setIsSelectedOnChildLayers", model)
+ * @event Core.ModelList#RadioTriggerModelListSetIsSelectedOnChildModels
+ * @description See {@link List#setIsSelectedOnChildModels}
+ * @example Radio.trigger("ModelList", "setIsSelectedOnChildModels", model)
  */
 
 /**
@@ -1186,7 +847,7 @@
  * @event Searchbar#RadioTriggerSearchbarPushHits
  * @description trigger transfer of search hits as a list
  * @param {String} sListname Name of list
- * @param {Object[]} aHitListArray an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType, interiorGeometry
+ * @param {Object[]} aHitListArray an array of object{id, name, type} with optional values: coordinate, icon, geom, adress, locationFinder, metaName, osm, marker, geometryType
  * @example Radio.trigger("Searchbar", "pushHits", "hitList", aHitListArray);
  */
 
@@ -1349,12 +1010,6 @@
  */
 
 /**
- * @event Core#RadioRequestGetConfig
- * @example Radio.request("Util", "getConfig")
- * @description Request config path
- */
-
-/**
  * @event Core#RadioRequestUtilGetUiStyle
  * @description returns the ignoredKeys
  * @returns {string} - Style of the ui. Possible values are "DEFAULT" or "TABLE"
@@ -1435,19 +1090,6 @@
  * @example Radio.request("Util", "sort", type, values, first, second);
  */
 
-/**
- * @event Core#RadioRequestUtilGetConfig
- * @description Retrives the config data
- * @returns {Object} - config data
- * @example Radio.request("Util", "getConfig");
- */
-
-/**
- * @event Core#RadioRequestUtilConvertArrayOfObjectsToCsv
- * @description todo
- * @returns {*} - todod
- * @example Radio.request("Util", "convertArrayOfObjectsToCsv");
- */
 
 /**
  * @event Core#RadioRequestUtilGetMasterPortalVersionNumber
@@ -1484,42 +1126,32 @@
  */
 
 /**
- * @event Core#RadioTriggerUtilSetUiStyle
+ * @event Core#RadioRequestUtilSetUiStyle
  * @description sets the ui style
  * @example Radio.request("Util", "setUiStyle");
  */
 
 /**
- * @event Core#RadioTriggerUtilPick
+ * @event Core#RadioRequestUtilPick
  * @description Return a copy of the object, filtered to only have values for the whitelisted keys (or array of valid keys).
  * @example Radio.request("Util", "pick");
  */
 
 /**
- * @event Core#RadioTriggerUtilOmit
+ * @event Core#RadioRequestUtilOmit
  * @description Returns a copy of the object, filtered to omit the keys specified (or array of blacklisted keys).
  * @example Radio.request("Util", "omit");
  */
 
+/**
+ * @event Core#RadioTriggerUtilRefreshTree
+ * @description Calls the treeType specific function to rerender the tree.
+ * @example Radio.trigger("Util", "refreshTree")
+ */
 
 /**
  * @event Core#changeIsViewMobile
  * @description todo
- */
-
-/** -------------------- GRAPH -------------------- */
-
-/**
- * @event Tools.Graph#RadioTriggerGraphCreateGraph
- * @description starts the generating of a graphic
- * @param {Object} graphConfig contains the options for the graphic
- * @example Radio.trigger("Graph", "createGraph", graphconfig);
- */
-
-/**
- * @event Tools.Graph#RadioRequestGraphGetGraphParams
- * @description Returns the current graph params.
- * @example Radio.request("Graph", "getGraphParams");
  */
 
 /** -------------------- GFILIST -------------------- */
@@ -1530,26 +1162,6 @@
  * @example Radio.trigger("gfiList", "redraw", );
  */
 
-/** -------------------- QUICKHELP -------------------- */
-
-/**
- * @event QuickHelp#RadioTriggerQuickHelpShowWindowHelp
- * @description is triggered by QuickHelp
- * @param {String} topic topic for quickHelp to show
- * @example Radio.trigger("QuickHelp", "showWindowHelp", topic);
- */
-
-/**
- * @event QuickHelp#RadioRequestQuickHelpIsSet
- * @description Returns isSet value
- * @example Radio.request("QuickHelp", "isSet");
- */
-
-/**
- * @event QuickHelp#render
- * @description Triggered when the QuickHelp View has to render.
- * @example this.trigger("render")
- */
 /** -------------------- WINDOW -------------------- */
 
 /**
@@ -1898,98 +1510,6 @@
  */
 
 
-/** -------------------- ParametricURL -------------------- */
-
-/**
- * @event Core#RadioRequestParametricURLGetHighlightFeature
- * @returns {Object} featureToHighlight Feature to highlight
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetCenter
- * @description todo
- */
-
- /**
-  * @event Core#RadioRequestParametricURLGetFeatureViaURL
-  * @returns {Object[]} Returns the features given by the user via the URL.
-  */
-
-/**
- * @event Core#RadioRequestParametricURLGetProjectionFromUrl
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomLevel
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomToExtent
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetResult
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetLayerParams
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetIsInitOpen
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetInitString
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomToGeometry
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetStyle
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetFilter
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetZoomToFeatureIds
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetBrwId
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetBrwLayerName
- * @description todo
- */
-
-/**
- * @event Core#RadioRequestParametricURLGetMarkerFromUrl
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerParametricURLUpdateQueryStringParam
- * @description todo
- */
-
 /**
  * @event Core#RadioTriggerParametricURLReady
  * @description todo
@@ -2298,18 +1818,6 @@
  */
 
 
-/** -------------------- TOOLS.LAYERSLIDER -------------------- */
-
-/**
- * @event Tools.LayerSlider#changeIsActive
- * @description Event fired when layer slider model changes its attribute "isActive".
- */
-
- /**
- * @event Tools.LayerSlider#changeActiveLayer
- * @description Event fired when layer slider model changes its attribute "activeLayer".
- */
-
 /** -------------------- TOOLS.DRAW -------------------- */
 
 /**
@@ -2387,18 +1895,6 @@
  * @description Triggers if the languages has changed
  * @param {String} lng the new language to use
  * @example Radio.trigger("i18next", "languageChanged", lng);
- */
-
-/** -------------------- ZOOMTOGEOMETRY -------------------- */
-
-/**
- * @event ZoomToGeometry#RadioTriggerZoomToGeometryZoomToGeometry
- * @description Zooms the map to a geometry from wfs.
- */
-
- /**
- * @event ZoomToGeometry#RadioTriggerZoomToGeometrySetIsRender
- * @description Todo
  */
 
  /** -------------------- TOOLS.PARCELSEARCH -------------------- */

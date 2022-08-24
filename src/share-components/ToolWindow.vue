@@ -14,30 +14,47 @@ export default {
             type: Number,
             default: -1,
             required: false
+        },
+        focusToCloseIcon: {
+            type: Boolean,
+            default: false,
+            required: false
         }
     },
     computed: {
         /**
          * Calculates initial width of sidebar or window.
+         * Returns nothing if no number is set so that it can be overwritten
          * @returns {String}    Width style in px
          */
         initialToolWidth () {
             let pixelWidth = parseFloat(this.initialWidth, 10);
 
             if (pixelWidth < 0 || isNaN(pixelWidth)) {
-                return "auto";
+                return "";
             }
 
             if (pixelWidth <= 1) {
                 pixelWidth = this.width * window.innerWidth;
             }
 
-            return Math.floor(pixelWidth) + "px";
+            return "width: " + Math.floor(pixelWidth) + "px";
+        }
+    },
+    created () {
+        if (this.focusToCloseIcon) {
+            this.$nextTick(() => {
+                if (this.$refs["close-icon"]) {
+                    this.$refs["close-icon"].focus();
+                }
+            });
         }
     },
     methods: {
-        close () {
-            this.$emit("close");
+        close (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.$emit("close");
+            }
         }
     }
 };
@@ -46,27 +63,32 @@ export default {
 <template>
     <div
         class="tool-window-vue"
-        :style="{width: initialToolWidth}"
+        :style="{initialToolWidth}"
     >
         <div class="tool-window-heading">
             <slot name="leftOfTitle" />
 
             <BasicDragHandle
-                targetSel=".tool-window-vue"
+                target-sel=".tool-window-vue"
                 class="heading-element flex-grow"
             >
-                <p class="tool-window-heading-title">
+                <h2 class="tool-window-heading-title">
                     <slot name="title" />
-                </p>
+                </h2>
             </BasicDragHandle>
 
             <slot name="rightOfTitle" />
 
             <div class="heading-element">
                 <span
-                    class="glyphicon glyphicon-remove"
+                    ref="close-icon"
+                    tabindex="0"
+                    class="bootstrap-icon"
                     @click="close($event)"
-                />
+                    @keydown="close($event)"
+                >
+                    <i class="bi-x-lg" />
+                </span>
             </div>
         </div>
 
@@ -78,22 +100,20 @@ export default {
             v-for="hPos in ['tl', 'tr', 'br', 'bl']"
             :id="'basic-resize-handle-' + hPos"
             :key="hPos"
-            :hPos="hPos"
-            targetSel=".tool-window-vue"
-            :minW="200"
-            :minH="100"
+            :h-pos="hPos"
+            target-sel=".tool-window-vue"
+            :min-w="200"
+            :min-h="100"
         />
     </div>
 </template>
 
-<style lang="less" scoped>
-
-    @color_1: rgb(85, 85, 85);
-    @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-    @background_color_1: rgb(255, 255, 255);
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
+    @import "~variables";
 
     .tool-window-vue {
-        background-color: @background_color_1;
+        background-color: $white;
         display: block;
         position: absolute;
         padding:0;
@@ -101,8 +121,6 @@ export default {
         right: 20px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         z-index: 999;
-        max-height:72vh;
-        overflow: auto;
         min-width: 280px;
 
         .basic-resize-handle {
@@ -110,23 +128,23 @@ export default {
             width:6px;
             height:6px;
         }
-        #basic-resize-handle-tl { top:0px; left:0px; }
-        #basic-resize-handle-tr { top:0px; right:0px;}
-        #basic-resize-handle-br { bottom:0px; right:0px;}
-        #basic-resize-handle-bl { bottom:0px; left:0px;}
+        #basic-resize-handle-tl { top: 0; left: 0; }
+        #basic-resize-handle-tr { top: 0; right: 0;}
+        #basic-resize-handle-br { bottom: 0; right: 0;}
+        #basic-resize-handle-bl { bottom: 0; left: 0;}
     }
 
     .tool-window-heading{
-        padding: 12px 10px 12px 10px;
-        border-bottom: 1px solid rgb(229, 229, 229);
-        font-family: @font_family_1;
+        padding: 5px 5px 5px 5px;
+        border-bottom: 1px solid $light_grey;
+        font-family: $font_family_accent;
         display:flex;
         flex-direction:row;
         width:100%;
 
         .heading-element {
             white-space: nowrap;
-            color: @color_1;
+            color: $dark_grey;
             font-size: 14px;
             padding: 6px;
 
@@ -134,17 +152,32 @@ export default {
                 flex-grow:99;
                 overflow: hidden;
             }
-
-            > span {
-                &.glyphicon-minus { top: 3px; }
+            .bootstrap-icon {
+                padding: 5px;
+                &:focus {
+                    @include primary_action_focus;
+                }
                 &:hover {
-                    &:not(.win-icon) { opacity: 0.7; cursor: pointer;}
+                    @include primary_action_hover;
+                }
+            }
+
+            > h2 {
+                @include tool-headings-h2();
+
+                &.glyphicon-minus { top: 3px; }
+
+                &:hover {
+                    &:not(.win-icon) {
+                        @include primary_action_hover;
+                    }
                 }
             }
         }
     }
 
     .tool-window-heading-title {
+        padding-top: 7px;
         margin:0;
         overflow:hidden;
         white-space: nowrap;
@@ -154,8 +187,9 @@ export default {
         position: relative;
         height: calc(100% - 58px);
         width: 100%;
+        max-height:72vh;
         -webkit-overflow-scrolling: touch;
-        background-color: @background_color_1;
+        background-color: $white;
         overflow: auto;
     }
 </style>

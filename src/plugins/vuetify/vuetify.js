@@ -24,7 +24,7 @@ export async function instantiateVuetify () {
         return vuetify.default;
     }
     catch (e) {
-        console.error(`Vuetify kann nicht vom Pfad ${Config.vuetify} geladen werden. Bitte überprüfen Sie den angegebenen Pfad in der config.js und versuchen Sie es erneut.`, e);
+        console.error(`Vuetify cannot be loaded from path ${Config.vuetify}. Please check the path set in the portal's config.js and try again.`, e);
         return undefined;
     }
 }

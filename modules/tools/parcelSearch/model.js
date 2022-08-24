@@ -24,7 +24,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         parcelDenominatorNumber: "0", // default Flurstücksnenner,
         createReport: false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
         parcelFound: false, // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
-        glyphicon: "glyphicon-search",
+        icon: "bi-search",
         // translations
         searchText: "",
         generateReportText: "",
@@ -67,7 +67,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * @property {String} parcelDenominatorNumber="0" todo
      * @property {Boolean} createReport=false todo
      * @property {Boolean} parcelFound=false todo
-     * @property {String} glyphicon="glyphicon-search" todo
+     * @property {String} icon="bi-search" todo
      * @property {String} searchText="", filled with "Suchen"- translated
      * @property {String} generateReportText="", filled with "Bericht erzeugen"- translated
      * @property {String} parcelNumberText="", filled with "Flurstücksnummer"- translated
@@ -85,6 +85,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * @fires Core#RadioTriggerMapRegisterListener
      */
     initialize: function () {
+        console.warn("The tool 'parcelSearch' is deprecated in 3.0.0. Please use 'wfsSearch' instead.");
         this.superInitialize();
         this.changeLang(i18next.language);
 
@@ -168,7 +169,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
 
         Object.entries(obj).forEach(([key, value]) => {
             Object.assign(districts, Radio.request("Util", "toObject", [key], [value.id]));
-            if (value && value.hasOwnProperty("flur") && Array.isArray(value.flur) && value.flur.length > 0) {
+            if (value && value?.flur && Array.isArray(value.flur) && value.flur.length > 0) {
                 Object.assign(cadastralDistricts, Radio.request("Util", "toObject", [value.id], [value.flur]));
             }
         });

@@ -1,4 +1,5 @@
-const {isBasic, is2D} = require("./settings");
+const {isBasic, is2D} = require("./settings"),
+    {initDriver, quitDriver} = require("./library/driver");
 
 /**
  * Description of the parameter set forwarded to each test suite. Each test suite may decide in itself
@@ -10,7 +11,7 @@ const {isBasic, is2D} = require("./settings");
  * @property {String} config key that defines which config the Masterportal should run on
  * @property {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
  * @property {String} browsername string indicating which browser is in use
- * @property {Object} capability containes browserstack capability
+ * @property {Object} capability containes saucelabs capability
  */
 
 /**
@@ -25,7 +26,7 @@ const {isBasic, is2D} = require("./settings");
  * @param {String} resolution in format AxB with A, B being integers
  * @param {String} config key that defines which config the Masterportal should run on
  * @param {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
- * @param {Object} capability containes browserstack capability
+ * @param {Object} capability containes saucelabs capability
  * @returns {void}
  */
 function tests (builder, url, browsername, resolution, config, mode, capability) {
@@ -42,29 +43,36 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
             return;
         }
 
-        /*
-        * TODO Check/Fix/Implement and re-activate tests one by one. Each running
-        * test shall then be PR'd back to dev to avoid tests and dev diverging again.
-        */
+        before(async function () {
+            await initDriver(builder, url, resolution);
+        });
+
+        after(async function () {
+            await quitDriver();
+        });
+
+        afterEach(async function () {
+            if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+            }
+        });
         const suites = [
-                // modules/controls
+            // src/modules/controls
                 require("../../src/modules/controls/attributions/tests/end2end/Attributions.e2e.js"),
                 require("../../src/modules/controls/backForward/tests/end2end/BackForward.e2e.js"),
                 // TODO - uncommented Button3D because the pipeline takes too long
                 // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
-                require("./tests/modules/controls/ButtonOblique.js"),
+                // require("./tests/modules/controls/ButtonOblique.js"),
                 require("../../src/modules/controls/freeze/tests/end2end/Freeze.e2e.js"),
                 require("../../src/modules/controls/fullScreen/tests/end2end/FullScreen.e2e.js"),
-                require("./tests/modules/controls/Orientation.js"),
+                require("../../src/modules/controls/orientation/tests/end2end/Orientation.e2e.js"),
                 require("../../src/modules/controls/overviewMap/tests/end2end/OverviewMap.e2e.js"),
                 require("../../src/modules/controls/totalView/tests/end2end/TotalView.e2e.js"),
-                require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
-
-                // modules/core
-                require("./tests/modules/core/ParametricUrl.js"),
+                require("../../src/modules/controls/zoom/tests/end2end/Zoom.e2e.js"),
 
                 // modules/menu
+                require("./tests/modules/menu/MainNav.js"),
                 require("./tests/modules/menu/Layers.js"),
 
                 // modules/searchbar
@@ -72,17 +80,28 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 require("./tests/modules/searchbar/ElasticSearch.js"),
 
                 // modules/tools
+                require("../../src/modules/tools/scaleSwitcher/tests/end2end/ScaleSwitcher.e2e.js"),
                 require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
+                require("../../src/modules/tools/layerSlider/tests/end2end/LayerSlider.e2e.js"),
                 // require("./tests/modules/tools/PopulationRequest_HH.js"),
-                require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
                 require("./tests/modules/tools/ExtendedFilter.js"),
-                require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
-                // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
-                require("./tests/modules/Legend.js"),
                 require("./tests/modules/tools/List.js"),
+                require("../../src/modules/tools/coordToolkit/tests/end2end/CoordToolkit.e2e.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
                 require("./tests/modules/tools/ParcelSearch.js"),
-                // require("./tests/modules/tools/SearchByCoord.js"),
+
+                // src/modules/tools/gfi
+                require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
+                // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
+
+                // src/modules/legend
+                require("../../src/modules/legend/tests/end2end/Legend.e2e.js"),
+
+                // src/modules/quickHelp
+                require("../../src/modules/quickHelp/tests/end2end/QuickHelp.e2e.js"),
+
+                // src/utils
+                require("../../src/utils/tests/end2end/parametricUrl/ParametricUrl.e2e.js"),
 
                 // non-module tests
                 require("../../src/tests/end2end/Pan.e2e.js"),
@@ -92,8 +111,13 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
         for (const suite of suites) {
             this.retries(2);
+
             suite(e2eTestParams);
         }
+
+        it("run all end2end tests", async function () {
+            // do nothing
+        });
     });
 }
 

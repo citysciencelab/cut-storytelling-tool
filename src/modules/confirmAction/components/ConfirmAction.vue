@@ -1,13 +1,13 @@
 <script>
 
-import Modal from "../../../share-components/modals/Modal.vue";
-import {mapGetters, mapActions} from "vuex";
+import ModalItem from "../../../share-components/modals/components/ModalItem.vue";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
     name: "ConfirmAction",
 
     components: {
-        Modal
+        ModalItem
     },
 
     computed: {
@@ -41,7 +41,7 @@ export default {
 
 <template>
     <div>
-        <Modal
+        <ModalItem
             :show-modal="showTheModal"
             :force-click-to-close="currentConfirmAction.forceClickToClose"
             @modalHid="onModalHid"
@@ -55,35 +55,34 @@ export default {
                 <p
                     id="confirmation-textContent"
                     v-html="currentConfirmAction.textContent"
-                >
-                </p>
+                />
                 <div id="confirmation-button-container">
                     <button
                         id="modal-button-left"
-                        class="btn btn-lgv-grey"
+                        class="btn btn-secondary"
                         @click="actionConfirmedCallback"
                     >
                         {{ $t(currentConfirmAction.confirmCaption) }}
                     </button>
                     <button
                         id="modal-button-right"
-                        class="btn btn-lgv-grey"
+                        class="btn btn-secondary"
                         @click="actionDeniedCallback"
                     >
                         {{ $t(currentConfirmAction.denyCaption) }}
                     </button>
                 </div>
             </div>
-        </Modal>
+        </ModalItem>
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 
     h3 {
         border:none;
-        color: @secondary_contrast;
+        color: $secondary_contrast;
         font-size:14px;
         font-weight:bold;
         letter-spacing:initial;

@@ -8,6 +8,7 @@ import PolygonStyle from "../../../../../../../../modules/vectorStyle/polygonSty
 import Feature from "ol/Feature.js";
 import {Circle} from "ol/geom.js";
 import sinon from "sinon";
+import Icon from "ol/style/Icon";
 
 const localVue = createLocalVue();
 
@@ -111,6 +112,10 @@ describe("src/modules/controls/orientation/components/PoiOrientation.vue", () =>
         });
     });
 
+    after(() => {
+        sinon.restore();
+    });
+
     describe("Render Component", function () {
         it("renders the Poi Orientation component", () => {
             expect(wrapper.find("#surrounding_vectorfeatures").exists()).to.be.true;
@@ -140,10 +145,10 @@ describe("src/modules/controls/orientation/components/PoiOrientation.vue", () =>
     });
 
     describe("SVG Functions", function () {
-        it("createPolygonSVG should return an SVG", function () {
+        it("createPolygonGraphic should return an SVG", function () {
             const style = new PolygonStyle();
 
-            expect(wrapper.vm.createPolygonSVG(style)).to.be.an("string").to.equal("<svg height='35' width='35'><polygon points='5,5 30,5 30,30 5,30' style='fill:#0ac864;fill-opacity:0.5;stroke:#000000;stroke-opacity:1;stroke-width:1;'/></svg>");
+            expect(wrapper.vm.createPolygonGraphic(style)).to.be.an("string").to.equal("<svg height='35' width='35'><polygon points='5,5 30,5 30,30 5,30' style='fill:#0ac864;fill-opacity:0.5;stroke:#000000;stroke-opacity:1;stroke-width:1;'/></svg>");
         });
         it("createLineSVG should return an SVG", function () {
             const style = new LinestringStyle();
@@ -154,6 +159,33 @@ describe("src/modules/controls/orientation/components/PoiOrientation.vue", () =>
             const style = new PointStyle();
 
             expect(wrapper.vm.createCircleSVG(style)).to.be.an("string").to.equal("<svg height='35' width='35'><circle cx='17.5' cy='17.5' r='15' stroke='#000000' stroke-opacity='1' stroke-width='2' fill='#0099ff' fill-opacity='1'/></svg>");
+        });
+    });
+
+    describe("getImgPath", () => {
+        let request;
+
+        beforeEach(() => {
+            request = sinon.spy(() => ({
+                id: "createStyle",
+                createStyle: () => sinon.spy({
+                    id: "featureStyle",
+                    getImage: () => new Icon({
+                        src: "test.image"
+                    })
+                })
+            }));
+            sinon.stub(Radio, "request").callsFake(request);
+        });
+
+        it("should return an image path for an icon style", () => {
+            const feat = {
+                styleId: "123"
+            };
+
+            expect(wrapper.vm.getImgPath(feat)).to.equals("test.image");
+            expect(request.calledOnce).to.be.true;
+            expect(request.firstCall.args).to.deep.equals(["StyleList", "returnModelById", "123"]);
         });
     });
 });

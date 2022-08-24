@@ -4,7 +4,7 @@
 
 This is the file referred to by the *config.js* as `restConf`. It is read on Masterportal start-up and kept in memory. Modules may then refer to the web service definitions in it.
 
-The file defines all web services that do not belong to OGC services like WMS and WFS; that is, all services not requested for visually representing data. See our **[master restConf file](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/src/master/rest-services-internet.json)** for an example.
+The file defines all web services that do not belong to OGC services like WMS and WFS; that is, all services not requested for visually representing data. See our **[master restConf file](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/portal/basic/resources/rest-services-internet.json)** for an example.
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
@@ -46,6 +46,25 @@ In some scenarios different URLs are required, depending on whether requests are
     "typ" : "URL"
   }
 ]
+```
+## Print services
+
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|id|yes|String||Unique `rest-services.json` entry ID|`"1"`|
+|name|yes|String||Service name|`"MapFishPrintService"`|
+|typ|yes|String||Service type|`"Print"`|
+|url|yes|String||Service URL|`"https://printbase.de/printfolder/"` or `"https://printbase.de/printfolder/print/"`|
+
+
+```json
+{
+    "id" : "mapfish_internet",
+    "name" : "MapFishPrintService",
+    "typ": "Print",
+    "url": "https://printbase.de/printfolder/"
+
+}
 ```
 
 ## virtualcityPLANNER Service

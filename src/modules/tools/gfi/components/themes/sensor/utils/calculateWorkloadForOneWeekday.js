@@ -3,15 +3,15 @@ import * as moment from "moment";
 /**
  * Calculates the workload for the current hour.
  * Time calculations in milliseconds.
- * @param  {Object[]} [dataByActualTimeStep=[]] Within an hour.
  * @param  {String} actualState the status of the last observation.
  * @param  {Number} actualStateAsNumber The state as number 0 or 1.
  * @param  {String} actualTimeStep The start time.
  * @param  {String} nextTimeStep the end time.
  * @param  {String} targetResult The result to draw.
+ * @param  {Object[]} [dataByActualTimeStep=[]] Within an hour.
  * @returns {Number} The workload.
  */
-export function calculateOneHour (dataByActualTimeStep = [], actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult) {
+export function calculateOneHour (actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult, dataByActualTimeStep = []) {
     const endTime = moment(nextTimeStep).toDate().getTime();
 
     let betweenRes = "",
@@ -21,12 +21,12 @@ export function calculateOneHour (dataByActualTimeStep = [], actualState, actual
         actualPhenomenonTime = moment(actualTimeStep).toDate().getTime();
 
     dataByActualTimeStep.forEach(data => {
-        const state = data.hasOwnProperty("result") ? data.result : currentState;
+        const state = data?.result || currentState;
         let phenomenonTime,
             res;
 
         if (state !== currentState) {
-            phenomenonTime = data.hasOwnProperty("phenomenonTime") ? moment(data.phenomenonTime).toDate().getTime() : "";
+            phenomenonTime = data?.phenomenonTime ? moment(data.phenomenonTime).toDate().getTime() : "";
 
             res = (phenomenonTime - actualPhenomenonTime) * currentStateAsNumber;
             timeDiff = timeDiff + res;
@@ -59,7 +59,7 @@ export function filterDataByActualTimeStep (dayData, actualTimeStep, nextTimeSte
     }
 
     return dayData.filter(data => {
-        const dataToCheck = data.hasOwnProperty("phenomenonTime") ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
+        const dataToCheck = data?.phenomenonTime ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
 
         return dataToCheck >= actualTimeStep && dataToCheck < nextTimeStep;
     });
@@ -74,10 +74,10 @@ export function filterDataByActualTimeStep (dayData, actualTimeStep, nextTimeSte
  */
 export function calculateWorkloadforOneDay (emptyDay, dayData, targetResult) {
     const dataFromDay = dayData || [],
-        startDate = dataFromDay.length > 0 && dataFromDay[0].hasOwnProperty("phenomenonTime") ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
+        startDate = dataFromDay.length > 0 && dataFromDay[0]?.phenomenonTime ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
         day = emptyDay || {};
 
-    let actualState = dataFromDay.length > 0 && dataFromDay[0].hasOwnProperty("result") ? dataFromDay[0].result : "",
+    let actualState = dataFromDay.length > 0 && dataFromDay[0]?.result ? dataFromDay[0].result : "",
         actualStateAsNumber = targetResult === actualState ? 1 : 0;
 
     Object.keys(day).forEach(key => {
@@ -94,7 +94,7 @@ export function calculateWorkloadforOneDay (emptyDay, dayData, targetResult) {
             day[i] = actualStateAsNumber;
         }
         else {
-            day[i] = calculateOneHour(dataByActualTimeStep, actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult);
+            day[i] = calculateOneHour(actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult, dataByActualTimeStep);
             actualState = dataByActualTimeStep[dataByActualTimeStep.length - 1].result;
             actualStateAsNumber = targetResult === actualState ? 1 : 0;
         }
@@ -121,11 +121,11 @@ export function createInitialDayPerHour () {
 /**
  * Calculates the workload for every day.
  * The workload is divided into 24 hours.
- * @param {Object} [processedHistoricalDataByWeekday=[]] Historical data sorted by weekday.
  * @param {String} targetResult Result to draw.
+ * @param {Object} [processedHistoricalDataByWeekday=[]] Historical data sorted by weekday.
  * @returns {Object[]} The workload for one weekday.
  */
-export function calculateWorkloadForOneWeekday (processedHistoricalDataByWeekday = [], targetResult) {
+export function calculateWorkloadForOneWeekday (targetResult, processedHistoricalDataByWeekday = []) {
     const allData = [];
 
     processedHistoricalDataByWeekday.forEach(dayData => {

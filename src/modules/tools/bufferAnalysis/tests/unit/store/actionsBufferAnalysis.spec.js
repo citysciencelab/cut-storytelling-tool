@@ -14,7 +14,19 @@ import {
 } from "ol/geom";
 
 describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () => {
-    let commit, dispatch, rootGetters, state, tick;
+    let commit, dispatch, rootGetters, rootState, state, tick;
+
+    before(() => {
+        mapCollection.clear();
+        const map = {
+            id: "ol",
+            mode: "2D",
+            addLayer: sinon.spy(),
+            removeLayer: sinon.spy()
+        };
+
+        mapCollection.addMap(map, "2D");
+    });
 
     beforeEach(() => {
         tick = () => {
@@ -24,7 +36,23 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
         };
         commit = sinon.spy();
         dispatch = sinon.stub().resolves(true);
-        rootGetters = sinon.stub();
+        rootGetters = {
+            "Maps/mode": "2D"
+        };
+        rootState = {
+            Maps: {
+                mode: "2D"
+            },
+            urlParams: {
+                "Tools/bufferAnalysis/active": true,
+                initvalues: [
+                    "{\"applySelectedSourceLayer\":\"1711\"",
+                    "\"applyBufferRadius\":\"1010\"",
+                    "\"setResultType\":0",
+                    "\"applySelectedTargetLayer\":\"2128\"}"
+                ]
+            }
+        };
         state = {...stateBufferAnalysis};
     });
 
@@ -135,23 +163,21 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
     });
     describe("showBuffer", () => {
         it("calls commit and addLayer once each", async () => {
-            rootGetters["Map/map"] = {addLayer: sinon.spy()};
             state.selectedSourceLayer = {...createLayersArray(1)[0], get: ()=> ({getFeatures: ()=>[], setOpacity: () => ({})})};
             actions.showBuffer({commit, getters: state, dispatch, rootGetters});
 
             expect(commit.calledOnce).to.be.true;
-            expect(rootGetters["Map/map"].addLayer.callCount).to.equal(1);
+            expect(mapCollection.getMap(rootGetters["Maps/mode"]).addLayer.callCount).to.equal(1);
         });
     });
     describe("removeGeneratedLayers", () => {
         it("calls commit four times and removeLayer twice", async () => {
-            rootGetters["Map/map"] = {removeLayer: sinon.spy()};
             state.resultLayer = createLayersArray(1)[0];
             state.bufferLayer = createLayersArray(1)[0];
-            actions.removeGeneratedLayers({commit, getters: state, rootGetters});
+            actions.removeGeneratedLayers({commit, rootState, getters: state});
 
             expect(commit.callCount).to.equal(4);
-            expect(rootGetters["Map/map"].removeLayer.calledTwice).to.be.true;
+            expect(mapCollection.getMap(rootGetters["Maps/mode"]).removeLayer.calledTwice).to.be.true;
         });
     });
     describe("resetModule", () => {
@@ -160,6 +186,23 @@ describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () =
 
             expect(dispatch.callCount).to.equal(3);
             expect(commit.calledTwice).to.be.true;
+        });
+    });
+    describe("applyValuesFromSavedUrlBuffer", () => {
+        it("applies the values from a saved buffer analysis url", () => {
+            state.selectOptions = [{name: "Krankenhäuser", id: "1711"}, {name: "Verkehrskamers", id: "2128"}];
+            actions.applyValuesFromSavedUrlBuffer({rootState, dispatch, commit, state});
+
+            expect(dispatch.firstCall.args[0]).to.equal("applySelectedSourceLayer");
+            expect(dispatch.firstCall.args[1]).to.eql({name: "Krankenhäuser", id: "1711"});
+            expect(dispatch.secondCall.args[0]).to.equal("applyBufferRadius");
+            expect(dispatch.secondCall.args[1]).to.equal("1010");
+            expect(dispatch.thirdCall.args[0]).to.equal("applySelectedTargetLayer");
+            expect(dispatch.thirdCall.args[1]).to.eql({name: "Verkehrskamers", id: "2128"});
+            expect(commit.firstCall.args[0]).to.equal("setInputBufferRadius");
+            expect(commit.firstCall.args[1]).to.equal("1010");
+            expect(commit.secondCall.args[0]).to.equal("setResultType");
+            expect(commit.secondCall.args[1]).to.equal("0");
         });
     });
 });

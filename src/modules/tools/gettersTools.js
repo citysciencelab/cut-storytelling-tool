@@ -20,6 +20,14 @@ const getters = {
      */
     getConfiguredToolNames: state => {
         return state.configuredTools.map(tool => tool.component.name);
+    },
+    /**
+     * Gets the keys of all configured tools.
+     * @param {Object} state state of the tools.
+     * @returns {String[]} All keys of configured tools
+     */
+    getConfiguredToolKeys: state => {
+        return state.configuredTools.map(tool => tool.key);
     }
 };
 

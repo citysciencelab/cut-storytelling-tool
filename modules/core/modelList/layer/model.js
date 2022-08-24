@@ -13,7 +13,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         layerInfoClicked: false,
         singleBaselayer: false,
         legend: true,
-        maxScale: "1000000",
+        maxScale: "1000000000",
         minScale: "0",
         selectionIDX: 0,
         showSettings: true,
@@ -79,8 +79,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
-     * @fires Core#RadioRequestMapViewGetResoByScale
-     * @fires LayerInformation#RadioTriggerLayerInformationAdd
+     * @fires Core#RadioRequestMapViewGetResolutionByScale
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires LegendComponent:RadioTriggerLegendComponentUpdateLegend
      * @listens Layer#changeIsSelected
@@ -94,6 +93,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     initialize: function () {
         const portalConfig = Radio.request("Parser", "getPortalConfig");
+
+        this.get("channel").on({
+            "prepareLayerObject": function (layer) {
+                if (layer) {
+                    layer.prepareLayerObject();
+                }
+            }
+        });
 
         // prevents the use of the isSecured parameter for layers other than WMS and WFS
         if (this.get("typ") !== "WMS" && this.get("typ") !== "WFS" && this.get("isSecured") === true) {
@@ -112,7 +119,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
             this.prepareLayerObject();
 
-            // Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
             this.setIsVisibleInMap(this.get("isSelected"));
             this.setIsRemovable(Radio.request("Parser", "getPortalConfig").layersRemovable);
             this.toggleWindowsInterval();
@@ -195,12 +201,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     featuresLoaded: function (features) {
-        const highlightFeature = Radio.request("ParametricURL", "getHighlightFeature");
-
         Radio.trigger("VectorLayer", "featuresLoaded", this.get("id"), features);
-        if (highlightFeature) {
-            store.dispatch("Map/highlightFeature", {type: "viaLayerIdAndFeatureId", layerIdAndFeatureId: highlightFeature});
-        }
     },
 
     /**
@@ -345,7 +346,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             });
         }
         else if (
-            (this.get("typ") === "WFS" || this.get("typ") === "GeoJSON" || this.get("typ") === "VectorBase")
+            (this.get("typ") === "WFS" || this.get("typ") === "GeoJSON")
             && Radio.request("Parser", "getTreeType") === "light"
         ) {
             this.listenToOnce(this, {
@@ -357,11 +358,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         }
 
         this.listenTo(channel, {
-            "updateLayerInfo": function (name) {
-                if (this.get("name") === name && this.get("layerInfoChecked") === true) {
-                    this.showLayerInformation();
-                }
-            },
             "setLayerInfoChecked": function (layerInfoChecked) {
                 this.setLayerInfoChecked(layerInfoChecked);
             },
@@ -384,7 +380,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         this.listenTo(this, {
             "change:isVisibleInMap": function () {
                 // triggert das Ein- und Ausschalten von Layern
-                Radio.trigger("ClickCounter", "layerVisibleChanged");
                 Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"), this);
                 this.toggleWindowsInterval();
                 this.toggleAttributionsInterval();
@@ -434,12 +429,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
     /**
      * Sets visible min and max resolution on layer.
-     * @fires Core#RadioRequestMapViewGetResoByScale
+     * @fires Core#RadioRequestMapViewGetResolutionByScale
      * @returns {void}
      */
     getResolutions: function () {
-        const resoByMaxScale = Radio.request("MapView", "getResoByScale", this.get("maxScale"), "max"),
-            resoByMinScale = Radio.request("MapView", "getResoByScale", this.get("minScale"), "min");
+        const resoByMaxScale = Radio.request("MapView", "getResolutionByScale", this.get("maxScale"), "max"),
+            resoByMinScale = Radio.request("MapView", "getResolutionByScale", this.get("minScale"), "min");
 
         this.setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
         this.setMinResolution(resoByMinScale);
@@ -450,10 +445,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     incTransparency: function () {
-        const transparency = parseInt(this.get("transparency"), 10);
+        const transparency = parseInt(this.get("transparency"), 10),
+            incTransparency = transparency + 10;
 
-        if (transparency <= 90) {
-            this.setTransparency(transparency + 10);
+        if (incTransparency <= 100) {
+            this.setTransparency(incTransparency);
+        }
+        else {
+            this.setTransparency(100);
         }
     },
 
@@ -462,36 +461,42 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     decTransparency: function () {
-        const transparency = parseInt(this.get("transparency"), 10);
+        const transparency = parseInt(this.get("transparency"), 10),
+            decTransparency = transparency - 10;
 
-        if (transparency >= 10) {
-            this.setTransparency(transparency - 10);
+        if (decTransparency >= 0) {
+            this.setTransparency(decTransparency);
+        }
+        else {
+            this.setTransparency(0);
         }
     },
 
     /**
      * Toggles the attribute isSelected.
-     * If the layer is a baselayer, the other selected baselayers are deselected.
+     * If configured and the layer is a baseLayer, the other selected baseLayers are deselected.
      *
-     * @return {void}
+     * @returns {void}
      */
     toggleIsSelected: function () {
-        const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
+        const id = this.get("id"),
+            layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
             singleBaselayer = this.get("singleBaselayer") && this.get("parentId") === "Baselayer";
 
-        if (this.get("isSelected") === true) {
-            this.setIsSelected(false);
-        }
-        else {
-            // This only works for treeType Custom, otherwise the parentId is not set on the layer
+        this.setIsSelected(!this.get("isSelected"));
+
+        if (this.get("isSelected")) {
+            // This only works for treeType 'custom', otherwise the parentId is not set on the layer
             if (singleBaselayer) {
                 layerGroup.forEach(layer => {
-                    layer.setIsSelected(false);
-                    // This makes sure that the Oblique Layer, if present in the layerlist, is not selectable if switching between baselayers
-                    layer.checkForScale(Radio.request("MapView", "getOptions"));
+                    // folders parentId is baselayer too, but they have not a function checkForScale
+                    if (layer.get("id") !== id && typeof layer.checkForScale === "function") {
+                        layer.setIsSelected(false);
+                        // This makes sure that the Oblique Layer, if present in the layerList, is not selectable if switching between baseLayers
+                        layer.checkForScale(Radio.request("MapView", "getOptions"));
+                    }
                 });
             }
-            this.setIsSelected(true);
         }
     },
 
@@ -598,7 +603,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
     /**
      * Initiates the presentation of layer information.
-     * @fires LayerInformation#event:RadioTriggerLayerInformationAdd
      * @returns {void}
      */
     showLayerInformation: function () {
@@ -607,18 +611,19 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             layerMetaId = null;
 
         if (this.get("datasets") && Array.isArray(this.get("datasets")) && this.get("datasets")[0] !== null && typeof this.get("datasets")[0] === "object") {
-            cswUrl = this.get("datasets")[0].hasOwnProperty("csw_url") ? this.get("datasets")[0].csw_url : null;
-            showDocUrl = this.get("datasets")[0].hasOwnProperty("show_doc_url") ? this.get("datasets")[0].show_doc_url : null;
-            layerMetaId = this.get("datasets")[0].hasOwnProperty("md_id") ? this.get("datasets")[0].md_id : null;
+            cswUrl = this.get("datasets")[0]?.csw_url ? this.get("datasets")[0].csw_url : null;
+            showDocUrl = this.get("datasets")[0]?.show_doc_url ? this.get("datasets")[0].show_doc_url : null;
+            layerMetaId = this.get("datasets")[0]?.md_id ? this.get("datasets")[0].md_id : null;
         }
         const metaID = [],
             name = this.get("name");
 
         metaID.push(layerMetaId);
 
-        Radio.trigger("LayerInformation", "add", {
+        store.dispatch("LayerInformation/layerInfo", {
             "id": this.get("id"),
-            "metaID": metaID,
+            "metaID": layerMetaId,
+            "metaIdArray": metaID,
             "layername": name,
             "url": this.get("url"),
             "typ": this.get("typ"),
@@ -627,7 +632,13 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "urlIsVisible": this.get("urlIsVisible")
         });
 
-        if (this.createLegend && {}.toString.call(this.createLegend) === "[object Function]") {
+        store.dispatch("LayerInformation/activate", true);
+        store.dispatch("LayerInformation/additionalSingleLayerInfo");
+        store.dispatch("LayerInformation/setMetadataURL", layerMetaId);
+        store.dispatch("Legend/setLayerIdForLayerInfo", this.get("id"));
+        store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
+
+        if (this.createLegend && typeof this.createLegend === "function") {
             this.createLegend();
         }
         this.setLayerInfoChecked(true);

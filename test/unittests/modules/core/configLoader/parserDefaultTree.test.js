@@ -3,7 +3,7 @@ import testServices from "../../../resources/testServices.json";
 import Util from "@modules/core/util.js";
 
 // import Collection from "@modules/core/rawLayerList.js";
-// import {initializeLayerList} from "masterportalAPI/src/rawLayerList";
+// import {initializeLayerList} from "@masterportal/masterportalapi/src/rawLayerList";
 import {expect} from "chai";
 
 describe("core/configLoader/parserDefaultTree", function () {
@@ -24,16 +24,6 @@ describe("core/configLoader/parserDefaultTree", function () {
 
         return model;
     }
-
-    describe("the \"select all\" checkbox", function () {
-        it("should be visible if global-isFolderSelectable is true", function () {
-            expect(Radio.request("Util", "findWhereJs", getDefaultModel({isFolderSelectable: true}).get("itemList"), {"name": "testFolder"}).isFolderSelectable).to.be.equal(true);
-
-        });
-        it("should be hidden if global-isFolderSelectable is false", function () {
-            expect(Radio.request("Util", "findWhereJs", getDefaultModel({isFolderSelectable: false}).get("itemList"), {"name": "testFolder"}).isFolderSelectable).to.be.equal(false);
-        });
-    });
 
     describe("the number of folders within the test data", function () {
         it("should be one", function () {

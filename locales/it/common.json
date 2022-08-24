@@ -1,12 +1,26 @@
 {
     "masterPortalVersion": "Masterportal V. {{masterPortalVersionNumber}}",
+    "general": {
+        "opened": "Aperto",
+        "cancelled": "Annullato",
+        "error": "Errore",
+        "success": "Successo"
+    },
     "button": {
         "back": "Indietro",
         "download": "Scarica",
         "search": "Cerca",
         "close": "Chiudi",
         "minimize": "Riduci",
-        "confirm": "Verifica"
+        "confirm": "Verifica",
+        "edit": "Modificare",
+        "delete": "Eliminare",
+        "save": "Salva",
+        "cancel": "Annulla",
+        "open": "Aprire",
+        "load": "Carico",
+        "reset": "Ripristina",
+        "stop": "Fermare"
     },
     "colors": {
         "blue": "Blu",
@@ -33,6 +47,7 @@
             "parcelSearch": "Ricerca parcella catastale",
             "print": "Stampa mappa",
             "measure": "Misura distanza / area",
+            "coordToolkit": "Coordinate",
             "coord": "Richiedi coordinate",
             "supplyCoord": "Richiedi coordinate",
             "searchByCoord": "Ricerca di coordinate",
@@ -50,7 +65,8 @@
             "wfsTransaction": "Strumento WFS-T",
             "scaleSwitcher": "Cambia scala",
             "selectFeatures": "Seleziona",
-            "styleVt": "Style VT"
+            "styleVt": "Style Vector Tile Layers",
+            "wfsSearch": "Ricerca WFS"
         },
         "contact": "Contatti",
         "info": "Informazioni"
@@ -93,8 +109,7 @@
             }
           },
           "parametricURL": {
-            "alertZoomToGeometry": "La chiamata parametrizzata del portale è andata male!<br>Si prega di assicurarsi che tutti i parametri siano stati inseriti correttamente.",
-            "alertWrongLayerIds": "<strong>La chiamata parametrizzata è errata!</strong> I LAYERID nelle posizioni: <b>{{wrongIdsPositionsConcat}}</b> non essistono e vengono ignorate!"
+            "alertWrongLayerIds": "<strong>La chiamata parametrizzata è errata!</strong> </br>I <b>layerIds</b> nelle posizioni: {{wrongIdsPositionsConcat}} non essistono e vengono ignorate!"
           }
         },
         "alerting": {
@@ -116,9 +131,13 @@
             "languageTitle": "Si prega di selezionare una lingua",
             "de": "Deutsch",
             "en": "English",
+            "es": "Español",
             "it": "Italiano",
+            "platt": "Platt",
             "pt": "Português",
-            "es": "Español"
+            "ru": "Русский",
+            "tr": "Türkçe",
+            "ua": "Українська"
         },
         "cswParser": {
             "noMetadataMessage": "Metadati non disponibili.",
@@ -171,11 +190,12 @@
                 "geometryNotSupported": "FeatureViaURL: Il tipo di geometria {{geometryType}}} dichiarata nella configurazione per il layer {{layerId}} non è supportato.",
                 "layerNotFound": "FeatureViaURL: Non è stato possibile trovare alcun layer con l'ID {{layerId}}.",
                 "noLayers": "FeatureViaURL: Nella configurazione non è stato definito alcun layer per i feature trasferiti.",
-                "noNameDefined": "FeatureViaURL: Nella configurazione non è stato specificato un nome per layer {{layerId}}."
+                "noNameDefined": "FeatureViaURL: Nella configurazione non è stato specificato un nome per layer {{layerId}}.",
+                "defaultTreeNotSupported": "FeatureViaURL è supportato solo per Treetype custom o light."
             }
         },
         "quickHelp": {
-            "titleTag": "Apri guida",
+            "titleTag": "Apri/chiudi guida",
             "search": {
                 "title": "Guida - Cerca",
                 "generalInfo": "Generale",
@@ -220,7 +240,6 @@
                 "errorMessage": "Il servizio specificato non ha potuto essere caricato. Si prega di assicurarsi che l'URL sia stato specificato correttamente.<br><br>Se il problema si verifica ancora, si prega di contattare il gestore del servizio con la seguente nota:<br><strong>CORS-Header deve essere obbligatoriamente impostata per il servizio. Questo è raccomandato nel capitolo 4.7.1. da <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a></strong>",
                 "errorHttpsMessage": "Il WMS che avete richiesto utilizza HTTP. Il Masterportal può integrare WMS solo utilizzando HTTPS (SSL).",
                 "placeholder": "Inserire qui l'URL del WMS.",
-                "textExample": "Esempio: https://geodienste.hamburg.de/HH_WMS_Fahrradrouten",
                 "textLoadLayer": "Carica",
                 "ifInExtent": "I geodati forniti tramite il WMS sono al di fuori dell'area visualizzabile. WMS non aggiunto.",
                 "checkVersion": "Aggiungere WMS è possibile solo se la versione del WMS esterno è uguale o superiore a 1.3.0."
@@ -247,6 +266,7 @@
                 "titlePlaceholder": "Mio titolo",
                 "layoutLabel": "Layout",
                 "formatLabel": "Formato",
+                "dpiLabel": "DPI",
                 "scaleLabel": "Scala di stampa",
                 "withLegendLabel": "Con legenda",
                 "printLabel": "Stampa",
@@ -297,7 +317,7 @@
                 "more": "Scaria di più",
                 "detailsOfSelected": "Dettagli del elemento selezionato",
                 "alert": "Il tentativo di mostrare la funzione selezionata è fallito perché non ha una geometria.",
-                "key": "{{shownFeatures.x}} di {{shownFeatures.y}} elementi scaricati"
+                "key": "{{shownFeatures}} di {{featureCount}} elementi scaricati"
             },
             "layerSlider": {
                 "displayLayers": "Visualizzazione di vari layer.",
@@ -306,16 +326,7 @@
                 "serviceOne": "Servizio 1",
                 "serviceTwo": "Servizio 2",
                 "serviceThree": "Servizio 3",
-                "key": "La configurazione del tool <b>{{{alertMessage.x}}</b> errata: <b>sliderType</b> \"{{alertMessage.y}\" non implementata!"
-            },
-            "filter": {
-                "result": "Risultato",
-                "results": "Risultati",
-                "zoomOnResults": "Zoom al risultato",
-                "filter": "-Filtro",
-                "yourSelection": "La vostra selezione: ",
-                "noFilterOptionSelected": "Nessuna opzione di filtro selezionata",
-                "deleteAll":"Cancella tutto"
+                "serviceFour": "Servizio 4"
             },
             "pendler": {
                 "animation": {
@@ -359,17 +370,20 @@
                 "moreInfo": "Ulteriori informazioni",
                 "lessInfo": "Meno informazioni",
                 "exportAsPdf": "Esporta come PDF",
+                "removeFromList": "Rimuovere dalla lista",
                 "noFeatures": {
-                    "nothingSelected": "Non ci sono {{oggetti}} selezionati per la lista di confronto.",
+                    "nothingSelected": "Non ci sono {{objects}} selezionati per la lista di confronto.",
                     "objectName": "Oggetti",
-                    "info": "Cliccare su un oggetto nella mappa. Si apre una finestra con le rispettive informazioni. Nell'angolo in alto a destra c'è il simbolo di una stella {{iconEmptyStar}}. Cliccare su questa icona per aggiungere l'oggetto alla lista di confronto. L'icona della stella diventerà gialla {{iconYellowStar}}}. Cliccando nuovamente sull'icona a forma di stella, la voce viene rimossa dalla lista di confronto."
+                    "info": "Cliccare su un oggetto nella mappa. Si apre una finestra con le rispettive informazioni. Nell'angolo in alto a destra c'è il simbolo di una stella {{iconEmptyStar}}. Cliccare su questa icona per aggiungere l'oggetto alla lista di confronto. L'icona della stella diventerà gialla {{iconYellowStar}}. Cliccando nuovamente sull'icona a forma di stella, la voce viene rimossa dalla lista di confronto."
                 },
                 "feedback": {
-                    "added": "{{object}} è stato aggiunto alla lista di confronto",
-                    "notAdded": "{{object}} non è stato aggiunto alla lista di confronto",
+                    "added": "La funzione è stata aggiunta all'elenco di confronto",
+                    "addedWithName": "{{currentFeatureName}} è stata aggiunta all'elenco di confronto",
+                    "notAdded": "Non è stato possibile aggiungere la funzione all'elenco di confronto",
+                    "notAddedWithName": "Non è stato possibile aggiungere {{currentFeatureName}} all'elenco di confronto",
                     "limitReached": "Raggiunto il numero massimo di oggetti nella lista di confronto.",
                     "removeObjects": "Rimuovere almeno un oggetto prima di procedere.",
-                    "gotoComparisonlist": "Vai alla lista di confronto"
+                    "goToComparisonlist": "Vai alla lista di confronto"
                 }
             },
             "saveSelection": {
@@ -402,18 +416,18 @@
                 "title": "Importa file"
             },
             "parcelSearch": {
-                "wrongConfig": "Configurazione non valida o incompleta",
-                "districtsLoadFailed": "I quartieri del governo non potevano essere caricati",
-                "wrongConfigParcelsearch": "La configurazione della ricerca dei pacchi non è corretta. Si prega di contattare il supporto.",
-                "parcelSearchImpossible": "Interrogazione attualmente impossibile!",
-                "tryAgainLater": "Si prega di provare più tardi.",
-                "parcelNotFound": "Nessun pacco trovato con il numero {{flstNr}}.",
-                "district": "Quartiere",
-                "choose": "seleziona quartiere",
-                "parcelNumber": "Numero del pacco",
-                "plot": "Trama",
-                "parcelNumberPlaceholder": "Inserire numero",
-                "generateReport": "Genera rapporto"
+              "wrongConfig": "Configurazione non valida o incompleta",
+              "districtsLoadFailed": "I quartieri del governo non potevano essere caricati",
+              "wrongConfigParcelsearch": "La configurazione della ricerca dei pacchi non è corretta. Si prega di contattare il supporto.",
+              "parcelSearchImpossible": "Interrogazione attualmente impossibile!",
+              "tryAgainLater": "Si prega di provare più tardi.",
+              "parcelNotFound": "Nessun pacco trovato con il numero {{flstNr}}.",
+              "district": "Quartiere",
+              "choose": "seleziona quartiere",
+              "parcelNumber": "Numero del pacco",
+              "plot": "Trama",
+              "parcelNumberPlaceholder": "Inserire numero",
+              "generateReport": "Genera rapporto"
             },
             "selectFeatures": {
               "zoomToFeature": "Zoom su questa voce",
@@ -430,6 +444,26 @@
                 "cartesian": {
                     "eastingLabel": "Longitudine",
                     "northingLabel": "Latitudine"
+                }
+            },
+            "coordToolkit": {
+                "title": "Richiedi coordinate",
+                "supply": "Richiedi coordinate",
+                "search": "Ricerca di coordinate",
+                "searchBtn": "Cerca",
+                "coordSystemField": "Sistema di riferimento",
+                "hdms": {
+                    "eastingLabel": "Latitudine",
+                    "northingLabel": "Longitudine"
+                },
+                "cartesian": {
+                    "eastingLabel": "Longitudine",
+                    "northingLabel": "Latitudine"
+                },
+                "exampleAcronym": "Es.",
+                "errorMsg": {
+                    "noCoord": "Si prega di inserire {{valueKey}} completo.",
+                    "noMatch": "L'input per {{valueKey}} non è corretto! Esempio: "
                 }
             },
             "gfi": {
@@ -473,22 +507,6 @@
                       }
                     }
                 }
-            },
-            "graph": {
-              "localeFormat": {
-                "decimal": "\",\"",
-                "thousands": "\".\"",
-                "grouping": ["3"],
-                "currency": ["€", ""],
-                "dateTime": "\"%a %b %e %X %Y\"",
-                "date": "\"%d/%m/%Y\"",
-                "time": "\"%H:%M:%S\"",
-                "periods": ["AM", "PM"],
-                "days": ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"],
-                "shortDays": ["do", "lu", "ma", "me", "gi", "ve", "sa"],
-                "months": ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
-                "shortMonths": ["gen", "feb", "mar", "apr", "mag", "gui", "lug", "ago", "set", "ott", "nov", "dic"]
-              }
             },
             "searchByCoord": {
                 "exampleAcronym": "Es.",
@@ -572,6 +590,22 @@
             },
             "scaleSwitcher": {
                 "label": "Scala"
+            },
+            "wfsSearch": {
+                "noResults": "Non sono stati trovati risultati per i tuoi criteri di ricerca. Si prega di riprovare.",
+                "optionsPlaceholder": "Per favore, scegli un'opzione!",
+                "resetButton": "Azzerare",
+                "searchButton": "Cerca",
+                "resultListTitle": "Risultati della ricerca:",
+                "instancesSelectLabel": "Selezione dell'istanza",
+                "showResults": "Mostra i risultati",
+                "searchError": "Errore durante la ricerca delle caratteristiche: {{error}}.",
+                "userHelp": {
+                    "and": "e",
+                    "or": "o",
+                    "label": "Informazioni sui risultati della ricerca",
+                    "text": "I risultati della ricerca soddisfano le condizioni (clausole) {{userHelp}}."
+                }
             }
         },
         "controls": {
@@ -670,7 +704,8 @@
                 "address": "indirizzo",
                 "location": "comune",
                 "subject": "dati specialistici",
-                "topic": "oggetto"
+                "topic": "oggetto",
+                "general": "oggetto"
             },
             "specialWFS": {
                 "ongoing": "in corso",
@@ -696,14 +731,16 @@
                 "getGeometryTypeFromWFSFetchfailedMessage": "Dettagli: Un servizio richiesto non risponde."
             }
         },
+        "wmsTime": {
+            "layerSwiper": {
+              "title": "Stratificatore"
+            }
+        },
         "legend": {
             "name": "Legenda",
             "linkToPdf": "Vai all legenda esterna (PDF)",
             "noLegendForLayerInfo": "Legenda non disponibile",
             "toggleCollapseAll": "Mostra / nascondi tutte le legende"
-        },
-        "zoomToGeometry": {
-          "alertNoFoundFeature" : "Nessun oggetto è stato trovato! Si prega di controllare i parametri di ingresso."
         },
         "util": {
             "copyToClipboard": {
@@ -735,6 +772,11 @@
             "to":" a",
             "incorrectEntry": "Inserimento errato, inserire un numero intero!",
             "outOfRangeErrorMessage": "Il valore di input deve rientrare nell'intervallo di validità {{minValueSlider}} e {{maxValueSlider}}!"
+        }
+    },
+    "share-components": {
+        "list": {
+            "zoomToResult": "Zoom sul risultato"
         }
     }
 }

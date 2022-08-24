@@ -1,11 +1,10 @@
 <script>
-import {Select, DragBox} from "ol/interaction";
-import {platformModifierKeyOnly} from "ol/events/condition";
+import {DragBox, Select} from "ol/interaction";
+import {never, platformModifierKeyOnly} from "ol/events/condition";
 import VectorSource from "ol/source/Vector.js";
-import {never} from "ol/events/condition";
 
-import Tool from "../../../../modules/tools/Tool.vue";
-import {mapGetters, mapMutations, mapActions} from "vuex";
+import ToolTemplate from "../../../../modules/tools/ToolTemplate.vue";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersSelectFeatures";
 import mutations from "../store/mutationsSelectFeatures";
 
@@ -16,9 +15,10 @@ import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneN
 export default {
     name: "SelectFeatures",
     components: {
-        Tool
+        ToolTemplate
     },
     computed: {
+        ...mapGetters(["ignoredKeys"]),
         ...mapGetters("Tools/SelectFeatures", Object.keys(getters))
     },
     watch: {
@@ -38,10 +38,11 @@ export default {
     },
     methods: {
         ...mapMutations("Tools/SelectFeatures", Object.keys(mutations)),
-        ...mapActions("Map", {
+        ...mapActions("Maps", {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
+        ...mapActions("Tools/SelectFeatures", ["highlightFeature"]),
         isEmailAddress,
         isPhoneNumber,
         getPhoneNumberAsWebLink,
@@ -104,8 +105,7 @@ export default {
         setFeaturesFromDrag: function () {
             const extent = this.dragBoxInteraction.getGeometry().getExtent();
 
-            Radio
-                .request("Map", "getLayers")
+            mapCollection.getMap("2D").getLayers()
                 .getArray()
                 .filter(layer => layer.get("visible") && layer.get("source") instanceof VectorSource)
                 .forEach(
@@ -149,7 +149,8 @@ export default {
                 properties: this.translateGFI(
                     item.getProperties(),
                     layer.get("gfiAttributes")
-                )
+                ),
+                layerId: layer.get("id")
             });
         },
 
@@ -163,9 +164,14 @@ export default {
 
             // makes links in result list clickable and adds <br/>s
             Object.entries(properties).forEach(([key, propValue]) => {
-                if (this.isValidKey(key) && this.isValidValue(propValue) && propValue.indexOf("|") > -1) {
+                let propertyValue = propValue;
+
+                if (Array.isArray(propValue)) {
+                    propertyValue = propValue.join("|");
+                }
+                if (this.isValidKey(key) && this.isValidValue(propertyValue) && propertyValue.indexOf("|") > -1) {
                     resultProperties[key] = "";
-                    propValue.split("|").forEach(function (arrayItemValue) {
+                    propertyValue.split("|").forEach(function (arrayItemValue) {
                         if (isUrl(arrayItemValue)) {
                             resultProperties[key] += "<a href=" + arrayItemValue + " target=\"_blank\">" + arrayItemValue + "</a><br/>";
                         }
@@ -174,8 +180,8 @@ export default {
                         }
                     });
                 }
-                else if (this.isValidKey(key) && this.isValidValue(propValue) && isUrl(propValue)) {
-                    resultProperties[key] = "<a href=" + propValue + " target=\"_blank\">" + propValue + "</a>";
+                else if (this.isValidKey(key) && this.isValidValue(propertyValue) && isUrl(propertyValue)) {
+                    resultProperties[key] = "<a href=" + propertyValue + " target=\"_blank\">" + propertyValue + "</a>";
                 }
             });
 
@@ -252,9 +258,7 @@ export default {
          * @returns {Boolean} key is valid (i.e. not a member of ignoredKeys)
          */
         isValidKey: function (key) {
-            const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
-
-            return ignoredKeys.indexOf(key.toUpperCase()) === -1;
+            return this.ignoredKeys.indexOf(key.toUpperCase()) === -1;
         },
 
         /**
@@ -290,9 +294,10 @@ export default {
          */
         featureZoom: function (event) {
             const featureIndex = event.currentTarget.id.split("-")[0],
-                {item} = this.selectedFeaturesWithRenderInformation[featureIndex];
+                selected = this.selectedFeaturesWithRenderInformation[featureIndex];
 
-            Radio.request("Map", "getMap").getView().fit(item.getGeometry());
+            mapCollection.getMap(this.$store.state.Maps.mode).getView().fit(selected.item.getGeometry());
+            this.highlightFeature({featureId: selected.item, layerId: selected.layerId});
         },
 
         /**
@@ -313,16 +318,17 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="translate('common:menu.tools.selectFeatures')"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
+        :focus-to-close-icon="true"
         class="selectFeatures"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="selectFeatures"
@@ -335,6 +341,7 @@ export default {
                 </div>
                 <div
                     v-else
+                    ref="select-features-tables"
                     class="select-features-tables"
                 >
                     <template
@@ -368,11 +375,10 @@ export default {
                                         <a :href="getPhoneNumberAsWebLink(property[1])">{{ property[1] }}</a>
                                     </td>
                                     <td
-                                        v-else-if="property[1].includes('<br') || property[1].includes('<a')"
+                                        v-else-if="property[1] && (property[1].includes('<br') || property[1].includes('<a'))"
                                         class="featureValue"
                                         v-html="property[1]"
-                                    >
-                                    </td>
+                                    />
                                     <td
                                         v-else
                                         class="featureValue"
@@ -400,21 +406,21 @@ export default {
                         <hr
                             v-if="index !== selectedFeaturesWithRenderInformation.length - 1"
                             :key="'h' + index"
-                        />
+                        >
                     </template>
                 </div>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
-<style type="less" scoped>
+<style type="scss" scoped>
 .selectFeatures {
     max-width:600px;
     max-height:745px;
 }
 .select-features-tables p {
-    margin: 8px 0px;
+    margin: 8px 0;
 }
 td.featureName {
     width:30%;

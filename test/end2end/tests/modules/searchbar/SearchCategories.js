@@ -1,9 +1,9 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {getCenter, setCenter, getResolution, setResolution, hasVectorLayerLength, hasVectorLayerStyle} = require("../../../library/scripts"),
-    {isMaster} = require("../../../settings"),
+    {isMaster, isChrome} = require("../../../settings"),
     {By, until} = webdriver;
 
 /**
@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function SearchCategories ({builder, url, resolution, capability}) {
+async function SearchCategories ({builder, browsername, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
@@ -23,16 +23,17 @@ async function SearchCategories ({builder, url, resolution, capability}) {
 
             /**
              * Clears search bar (if necessary), re-enters search word, opens category view.
+             * @param {String} [searchKey=searchString] String that is searched for.
              * @returns {void}
              */
-            async function reopenCategories () {
+            async function reopenCategories (searchKey = searchString) {
                 if (await clear.isDisplayed()) {
                     await clear.click();
                 }
                 await driver.executeScript(setResolution, initialResolution);
                 await driver.executeScript(setCenter, initialCenter);
 
-                await searchInput.sendKeys(searchString);
+                await searchInput.sendKeys(searchKey);
                 await driver.wait(until.elementIsVisible(searchList));
                 /* clicking this element may do nothing (especially in Firefox) when
                 * searches are still running; to circumvent this issue, the element
@@ -52,14 +53,18 @@ async function SearchCategories ({builder, url, resolution, capability}) {
              * @param {boolean} params.movesCenter if true, checks if center point moved (assuming it was set to initialCenter beforehand)
              * @param {boolean} params.changesResolution if true, checks if resolution changed (assuming it was set to initialResolution beforehand)
              * @param {boolean} [params.categoryName=idPart] if set, will be used to search for the category label; else, idPart is used
+             * @param {String} params.searchKey String that is searched for.
              * @param {boolean} params.idPart part of the id for hits sufficient for identifying it
              * @returns {void}
              */
-            async function selectAndVerifyFirstHit ({setsMarker, showsPolygon, movesCenter, changesResolution, categoryName, idPart}) {
-                const categorySelector = By.xpath(`//li[contains(@class,'type')][contains(.,'${categoryName || idPart}')]`),
-                    categoryOpenSelector = By.xpath(`//li[contains(@class,'type')][contains(@class,'open')][contains(.,'${categoryName || idPart}')]`),
+            async function selectAndVerifyFirstHit ({setsMarker, showsPolygon, movesCenter, changesResolution, categoryName, idPart, searchKey}) {
+                const categorySelector = By.xpath(`//li[contains(@class,'type')][contains(text(),'${categoryName || idPart}')]`),
+                    categoryOpenSelector = By.xpath(`//li[contains(@class,'type')][contains(@class,'open')][contains(text(),'${categoryName || idPart}')]`),
                     entrySelector = By.xpath(`//li[contains(@id,'${idPart}')][contains(@class,'hit')]`);
-                let marker = null;
+                let marker = null,
+                    elList = null,
+                    lastElement = null;
+
 
                 if (setsMarker) {
                     marker = "markerPoint";
@@ -68,10 +73,10 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     marker = "markerPolygon";
                 }
 
-                await reopenCategories();
+                await reopenCategories(searchKey);
 
                 await driver.wait(until.elementLocated(categorySelector), 12000);
-                await driver.wait(until.elementIsVisible(await driver.findElement(categorySelector)));
+                await driver.wait(until.elementIsVisible(await driver.findElement(categorySelector)), 12000);
 
                 /** sometimes needs another click to really open; retry after 100ms if it didn't work */
                 do {
@@ -79,8 +84,11 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     await driver.wait(new Promise(r => setTimeout(r, 100)));
                 } while ((await driver.findElements(categoryOpenSelector)).length === 0);
 
-                await driver.wait(until.elementIsVisible(await driver.findElement(entrySelector)), 12000);
-                await reclickUntilNotStale(driver, entrySelector);
+                elList = await driver.findElements(entrySelector);
+                lastElement = elList[elList.length - 1];
+
+                await driver.wait(until.elementIsVisible(await lastElement), 12000);
+                await lastElement.click();
 
                 if (movesCenter) {
                     await driver.wait(async () => initialCenter !== await driver.executeScript(getCenter), 12000);
@@ -98,7 +106,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
                 await init();
             });
 
@@ -112,7 +120,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 await driver.wait(until.elementLocated(searchInputSelector));
                 searchInput = await driver.findElement(searchInputSelector);
                 searchList = await driver.findElement(By.css("#searchInputUL"));
-                clear = await driver.findElement(By.css("#searchbar span.form-control-feedback"));
+                clear = await driver.findElement(By.css("#searchbar span.x-icon"));
                 initialCenter = await driver.executeScript(getCenter);
                 initialResolution = await driver.executeScript(getResolution);
             }
@@ -123,28 +131,33 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                     await init();
                 }
             });
 
             it("searches show some results in a dropdown", async function () {
-                await searchInput.sendKeys(searchString);
+                await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
+                if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") === "") {
+                    await searchInput.sendKeys(searchString);
+                }
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#searchInputUL"))));
                 expect(await driver.findElements(By.css("#searchInputUL > li.hit"))).to.have.length(5);
                 expect(await driver.findElements(By.css("#searchInputUL > li.results"))).to.have.length(1);
             });
 
-            it("provides all results aggregated by categories, including sum of hits per category", async function () {
-                await (await driver.findElement(By.css("#searchInputUL > li.results"))).click();
+            (isChrome(browsername) ? it : it.skip)("provides all results aggregated by categories, including sum of hits per category", async function () {
+                if (await (await driver.findElement(By.id("searchInput"))).getAttribute("value") === "") {
+                    await searchInput.sendKeys(searchString);
+                }
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#searchInputUL > li.list-group-item"))), 5000);
+                await (await driver.findElement(By.css("#searchInputUL > li.list-group-item"))).click();
                 expect(await driver.findElements(By.css("#searchInputUL > li.list-group-item.type > span.badge"))).to.not.equals(0);
             });
 
@@ -162,12 +175,13 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 })).to.be.true;
             });
 
-            it("category 'B-Plan' shows results; on click, zooms to the place and marks it with polygon", async function () {
+            it("category 'im Verfahren' shows results; on click, zooms to the place and marks it with polygon", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: false,
                     showsPolygon: true,
                     movesCenter: true,
-                    idPart: "B-Plan"
+                    idPart: "im Verfahren",
+                    searchKey: "Heim"
                 });
 
                 expect(await driver.executeScript(hasVectorLayerStyle, "markerPolygon", {
@@ -192,7 +206,8 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     showsPolygon: false,
                     movesCenter: true,
                     changesResolution: true,
-                    idPart: "Straße"
+                    idPart: "Straße",
+                    searchKey: "repel"
                 });
             });
 
@@ -202,8 +217,16 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     showsPolygon: false,
                     movesCenter: true,
                     changesResolution: true,
-                    idPart: "Stadtteil"
+                    idPart: "Stadtteil",
+                    searchKey: "Altona"
                 });
+            });
+
+            it("remove searchbar input", async function () {
+                await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
+                await (await driver.findElement(By.css("#searchInput"))).clear();
+
+                expect(await (await driver.findElement(By.id("searchInput"))).getAttribute("value")).to.equals("");
             });
         });
     }

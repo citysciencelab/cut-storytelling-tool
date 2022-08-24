@@ -1,5 +1,6 @@
 import axios from "axios";
 import convertJsonToPost from "../../../../utils/convertJsonToPost.js";
+import LoaderOverlay from "../../../../utils/loaderOverlay";
 
 /**
  * Show the loader after the dispatch of an e-mail has been started.
@@ -8,7 +9,7 @@ import convertJsonToPost from "../../../../utils/convertJsonToPost.js";
  * @return {void}
  */
 function onSendStart () {
-    Radio.trigger("Util", "showLoader");
+    LoaderOverlay.show();
 }
 
 /**
@@ -19,7 +20,7 @@ function onSendStart () {
  * @return {void}
  */
 function onSendComplete () {
-    Radio.trigger("Util", "hideLoader");
+    LoaderOverlay.hide();
 }
 
 /**
@@ -36,13 +37,13 @@ function httpClient (url, data, onSuccess, onError) {
 
     axios.post(url, convertJsonToPost(data))
         .then(response => {
-            if (response.status === 200 && response.data.success) {
-                onSuccess();
-            }
-            else {
+            if (response.status !== 200 || Object.prototype.hasOwnProperty.call(response.data, "success") && response.data.success === false) {
                 console.error(`An error occurred sending an email. Server response: ${response.data.message}`);
                 console.error(response);
                 onError();
+            }
+            else {
+                onSuccess();
             }
         })
         .catch(err => {

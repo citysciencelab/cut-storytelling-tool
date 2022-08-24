@@ -7,7 +7,7 @@ Wir wollen ein Tool schreiben, über welches man den Kartenmaßstab steuern kann
 Darüber hinaus soll unser Tool auf Änderungen des Kartenmaßstabes reagieren und den entsprechend aktuellen Maßstab im Drop-Down-Menu anzeigen.
 
 ### Neues Tool anlegen
-In das Verzeichnis "modules -> tools" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen sollte ersichtlich sein, um was für ein Tool es sich dabei handelt - z.B. "scale". Die für dieses Tool benötigten Dateien anlegen. In der View (view.js) wird auf Interaktion mit dem Nutzer reagiert und das Tool neu gerendert. Dazu wird das Template (template.html) benötigt, welches den Bauplan des Tools enthält. Im Model (model.js) werden die Daten und deren Logik vorgehalten. Stylingparameter werden in der style.less konfiguriert.
+In das Verzeichnis "modules -> tools" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen sollte ersichtlich sein, um was für ein Tool es sich dabei handelt - z.B. "scale". Die für dieses Tool benötigten Dateien anlegen. In der View (view.js) wird auf Interaktion mit dem Nutzer reagiert und das Tool neu gerendert. Dazu wird das Template (template.html) benötigt, welches den Bauplan des Tools enthält. Im Model (model.js) werden die Daten und deren Logik vorgehalten. Stylingparameter werden in der style.scss konfiguriert.
 ```
 -  modules
    | -> tools
@@ -56,7 +56,7 @@ import ScaleView from "../modules/tools/scale/view";
 Datei *modules/tools/scale/template.html* öffnen, Template coden und mit Bootstrap Klassen versehen
 ```html
 <!DOCTYPE html>
-<select class="form-control input-sm">
+<select class="form-select form-select-sm">
   <option>1</option>
   <option>2</option>
   <option>3</option>
@@ -115,25 +115,25 @@ export default ScaleView;
 Jede View bekommt automatisch ein top level DOM Element (this.el) zugewiesen.
 Standardeinstellung für das DOM Element ist ein *div* Tag. In diesem Fall zeichnet sich beim rendern ein *div* an den Body. Dieser *div* ist befüllt mit dem Inhalt des *templates*.
 
-### less Regeln definieren
-Datei *modules/tools/scale/style.less* öffnen und folgenden Code eingeben.
+### scss Regeln definieren
+Datei *modules/tools/scale/style.scss* öffnen und folgenden Code eingeben.
 ```css
 .scale-switcher {
     border: 2px solid red;
 }
 
-Damit es keine Probleme mit less Regeln anderer Module/Tools gibt, wird über eine definierte Klasse "scale-switcher" gestylt.
+Damit es keine Probleme mit scss Regeln anderer Module/Tools gibt, wird über eine definierte Klasse "scale-switcher" gestylt.
 ```
 
 ### Model erstellen und zurückgeben
-Datei *modules/tools/scale/model.js* öffnen und Model definieren. Das Model erbt vom der Elternklasse *Tool* das im Core *moduels/core/modelList/tool/model.js* definiert ist. Über den Aufruf der Funktion *superInitialize* wird der Listener, der die Aktivierung der Tools regelt, von der Elternklasse übernommen. Dem Parameter defaults werden alle Attribute mit einem Default-Wert eingetragen, die in diesem Model konfiguriert werden können (z.B. ein Glyphicon). Dort wird auch das Attribute "renderToWindow" auf true gestezt, damit sich der Scale-Switcher im vererbten Fenster zeichnet.
+Datei *modules/tools/scale/model.js* öffnen und Model definieren. Das Model erbt vom der Elternklasse *Tool* das im Core *moduels/core/modelList/tool/model.js* definiert ist. Über den Aufruf der Funktion *superInitialize* wird der Listener, der die Aktivierung der Tools regelt, von der Elternklasse übernommen. Dem Parameter defaults werden alle Attribute mit einem Default-Wert eingetragen, die in diesem Model konfiguriert werden können (z.B. ein Bootstrap Icon). Dort wird auch das Attribute "renderToWindow" auf true gestezt, damit sich der Scale-Switcher im vererbten Fenster zeichnet.
 ```js
 
 import Tool from "../../core/modelList/tool/model";
 
 const ScaleModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
-        glyphicon: "glyphicon-resize-full",
+        icon: "bi-arrows-angle-expand",
         renderToWindow: true
     }),
     // wird aufgerufen wenn das Model erstellt wird
@@ -168,7 +168,7 @@ Dazu werden Default-Werte eingetragen.
 
 const ScaleModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
-        glyphicon: "glyphicon-resize-full",
+        icon: "bi-arrows-angle-expand",
         renderToWindow: true,
         scales: "",
         currentScale: ""
@@ -263,7 +263,7 @@ Im Tag "select" wird die Klasse "scale-switcher" definiert.
 
 ```html
 <!DOCTYPE html>
-<select class="form-control input-sm scale-switcher">
+<select class="form-select form-select-sm scale-switcher">
   <% _.each(scales, function (scale) { %>
     <% if (scale === currentScale) { %>
         <option selected><%= scale %></option>
@@ -283,7 +283,7 @@ const ScaleView = Backbone.View.extend({
     ...,
     events: {
         // DOM Change Event führt this.setCurrentScale aus
-        "change .form-control": "setCurrentScale"
+        "change .form-select": "setCurrentScale"
     },
     initialize: function () {...},
     template: _.template(ScaleTemplate),
@@ -372,12 +372,12 @@ Um das Tool in einem Portal zu verwenden, muss dies in der config.json konfiguri
       "tools":
       {
         "name": "Werkzeuge",
-        "glyphicon": "glyphicon-wrench",
+        "icon": "bi-tools",
         "children": {
           "scale":
           {
             "name": "Scale Switcher",
-            "glyphicon": "glyphicon-resize-full"
+            "icon": "bi-arrows-angle-expand"
           },
           ... // weitere Tools
         }

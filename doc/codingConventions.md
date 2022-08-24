@@ -18,7 +18,7 @@ All the following rules must hold.
 
 #### A.1 Linter and functionality
 
-* A.1.1 The code works on Internet Explorer 11+, Chrome, and Firefox.
+* A.1.1 The code works on Edge, Chrome, and Firefox.
 * A.1.2 The code works on the mobile view of the browsers mentioned in A.1.1.
 * A.1.3 The linter is active.
 * A.1.4 The linter detects no errors.
@@ -33,7 +33,7 @@ All the following rules must hold.
 * A.2.2 No methods of *Underscore.js* are in use, except for calls to `_.template()`.
 * A.2.3 No redundant packages are installed.
 * A.2.4 JQuery is only to be used in combination with Backbone.js.
-* A.2.5 The addition of packages/libraries has to be agreed on by the *LGV* team. At least 3 libs need to be evaluated before decisions can be made. Use a form from **[library evalutaion](./library evaluation/)** and add to PR. 
+* A.2.5 The addition of packages/libraries has to be agreed on by the *LGV* team. At least 3 libs need to be evaluated before decisions can be made. Use a form from **[library evalutaion](./library evaluation/)** and add to PR.
 
 ---
 
@@ -43,7 +43,7 @@ All the following rules must hold.
 * A.3.2 Names for variables, functions, folders, and files are in English and speaking.
 * A.3.3 Comments are written in English.
 * A.3.4 A function's block comment always describes its use.
-* A.3.5 Styles are written in the `.less` dialect.
+* A.3.5 Styles are written in the `.scss` dialect.
 * A.3.6 No use of `important!` in styles.
 * A.3.7 Modules and components must only influence behavior and style of their own and child elements.
 * A.3.8 No style changes may happen via JavaScript.
@@ -112,7 +112,7 @@ src
 |   |-- index.js
 |   |-- mutations.js
 |   |-- state.js
-|   |-- test
+|   |-- tests
 |
 |-- modules
 |   |-- exampleModule
@@ -148,7 +148,7 @@ src
 |   |   |-- exampleControl
 |   |   |   |-- components
 |   |   |   |-- store
-|   |   |   |-- test
+|   |   |   |-- tests
 |   |
 |   |-- tools
 |   |   |-- actionsTool.js
@@ -157,12 +157,12 @@ src
 |   |   |-- exampleTool
 |   |   |   |-- components
 |   |   |   |-- store
-|   |   |   |-- test
+|   |   |   |-- tests
 |   |
 |-- share-components
 |   |-- exampleShareComponent.vue
 |
-|-- test
+|-- tests
 |   |--end2end
 |   |   |--exampleGlobalTest.e2e.js
 |
@@ -223,7 +223,7 @@ The code is written as readable and understandable as possible. The goal is not 
 * B.5.1 Use `scoped` within the style tag whenever possible.
 * B.5.2 Avoid usage of the `!important` keyword.
 * B.5.3 Avoid setting `width` and `height` to absolute values, as this hinders designing responsively.
-* B.5.4 The global less file `variables.less` contains all variables required by *BootstrapV3* and the Masterportal. All theming variables (fonts, colors, ...) are maintained here. The file `variables.less` must only contain variables, mixins, and functions. Adding CSS rules would result in a repetition per import, bloating the CSS size. The `variables.less` is imported to a component's style tag by using the `import` command.
+* B.5.4 The global scss file `variables.scss` contains all variables required by *BootstrapV5* and the Masterportal. All theming variables (fonts, colors, ...) are maintained here. The file `variables.scss` must only contain variables, mixins, and functions. Adding CSS rules would result in a repetition per import, bloating the CSS size. The `variables.scss` is imported to a component's style tag by using the `import` command.
 
 ---
 

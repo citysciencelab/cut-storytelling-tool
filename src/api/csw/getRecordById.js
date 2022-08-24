@@ -1,7 +1,8 @@
 import axios from "axios";
 import * as moment from "moment";
-import xml2json from "../xml2json";
+import xml2json from "../utils/xml2json";
 import getNestedValues from "../../utils/getNestedValues";
+import handleAxiosError from "../utils/handleAxiosError.js";
 
 /**
  * Handles the GetRecordById request.
@@ -25,7 +26,7 @@ export function getRecordById (url, metadataId, outputSchema = "http://www.isotc
     })
         .then(response => xml2json(response.request.responseXML))
         .then(json => getMetadata(json))
-        .catch(error => errorHandling(error));
+        .catch(error => handleAxiosError(error, "getRecordById"));
 }
 
 /**
@@ -157,13 +158,10 @@ function parseDownloadLinks (json) {
                     // location (address) for on-line access
                     link: resource?.linkage?.URL.getValue(),
                     // name of the online resource
-                    linkName: resource?.name?.CharacterString.getValue() || resource?.linkage?.URL.getValue()
+                    linkName: resource?.name?.CharacterString.getValue() || resource?.description?.CharacterString.getValue() || resource?.linkage?.URL.getValue()
                 });
             }
         });
-    }
-    else {
-        console.error(`parseDownloadLinks: ${transferOptions} has to be an object (not null).`);
     }
 
     return downloadResources.length > 0 ? downloadResources : null;
@@ -209,32 +207,4 @@ function parseContactByRole (json, role) {
     }
 
     return dateValue;
-}
-
-/**
- * handles an axios error
- * @param {Object} error the axios error
- * @returns {void}
- * @see {@link https://github.com/axios/axios#handling-errors}
- */
-function errorHandling (error) {
-    let errorMessage = "";
-
-    if (error.response) {
-        console.error(error.response.data);
-        console.error(error.response.status);
-        console.error(error.response.headers);
-        errorMessage = "The request was made and the server responded with a status code that falls out of the range of 2xx.";
-    }
-    else if (error.request) {
-        // `error.request` is an instance of XMLHttpRequest
-        console.error(error.request);
-        errorMessage = "The request was made but no response was received.";
-    }
-    else {
-        console.error("Error", error.message);
-        errorMessage = "Something happened in setting up the request that triggered an Error.";
-    }
-    console.error("getRecordById: " + errorMessage);
-    console.warn(error.config);
 }

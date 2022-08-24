@@ -22,7 +22,7 @@ export function addIndex (historicalData) {
     const data = historicalData === undefined ? [] : historicalData;
 
     data.forEach(loadingPointData => {
-        const loading = loadingPointData.hasOwnProperty("Observations") ? loadingPointData.Observations : [];
+        const loading = loadingPointData?.Observations ? loadingPointData.Observations : [];
 
         loading.forEach((obs, index) => {
             obs.index = index;
@@ -47,7 +47,7 @@ export function processHistoricalDataByWeekdays (historicalObservations, startDa
         historicalDataWithIndex = addIndex(historicalObservations);
 
     historicalDataWithIndex.forEach(historicalData => {
-        const observations = historicalData.hasOwnProperty("Observations") ? historicalData.Observations : [],
+        const observations = historicalData?.Observations ? historicalData.Observations : [],
             lastObservation = observations[observations.length - 1];
         let booleanLoop = true,
             actualDay = today,

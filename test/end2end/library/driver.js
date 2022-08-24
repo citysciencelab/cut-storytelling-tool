@@ -1,5 +1,6 @@
 const {until, By} = require("selenium-webdriver"),
-    {basicAuth, getResolution, isInitalLoadingFinished} = require("./scripts");
+    {isInitalLoadingFinished} = require("./scripts");
+let lastDriver;
 
 /**
  * Activates 3D mode for opened Masterportal.
@@ -47,9 +48,6 @@ async function loadUrl (driver, url, mode) {
         doLoadUrl(driver, url);
     });
 
-    // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
-    await driver.wait(async () => await driver.executeScript(getResolution) !== null, 90000);
-
     // prepare 3D resp. OB mode for tests - 2D mode is initial mode, nothing to do
     if (mode === "3D") {
         await prepare3D(driver);
@@ -69,21 +67,21 @@ async function doLoadUrl (driver, url) {
     /* eslint-disable no-process-env */
     const testService = process.env.npm_config_testservice;
 
-    await driver.get(url);
-
     if (url.indexOf("localhost") === -1) {
 
-        if (testService === "browserstack") {
-            driver.executeScript(basicAuth("lgv", "test"));
-        }
-        else {
+        if (testService === "saucelabs") {
             const firstPart = url.substring(0, 8),
                 secondPart = url.substring(8),
                 urlWithBasicAuth = firstPart + "lgv:test@" + secondPart;
 
             await driver.get(urlWithBasicAuth);
+            await driver.findElements(By.css(".loader-is-initially-loading"));
+            await driver.wait(until.elementIsNotVisible(driver.findElement(By.css(".loader-is-initially-loading"))), 10000);
         }
 
+    }
+    else {
+        await driver.get(url);
     }
 }
 
@@ -116,17 +114,44 @@ async function getUnnavigatedDriver (builder, resolution) {
  * @param {String} url to get
  * @param {String} resolution formatted as "AxB" with A, B integers
  * @param {String} mode additional instance preparation before tests can be executed
+ * @param {Boolean} [load=true] if true, then load url
  * @returns {selenium.webdriver.Driver} driver instance
  */
-async function initDriver (builder, url, resolution, mode) {
+async function initDriver (builder, url, resolution, mode, load = true) {
     const driver = await getUnnavigatedDriver(builder, resolution);
 
-    await loadUrl(driver, url, mode);
-    return driver;
+    if (load) {
+        await loadUrl(driver, url, mode);
+    }
+
+    lastDriver = driver;
+
+    return lastDriver;
 }
 
+/**
+ * Quits the driver
+ * @returns {void}
+ */
+async function quitDriver () {
+    if (lastDriver) {
+        await lastDriver.quit();
+    }
+}
+
+/**
+ * Gets the driver
+ * @returns {selenium.webdriver.Driver} driver instance
+ */
+async function getDriver () {
+    return lastDriver;
+}
+
+
 module.exports = {
+    getDriver,
     getUnnavigatedDriver,
     initDriver,
-    loadUrl
+    loadUrl,
+    quitDriver
 };

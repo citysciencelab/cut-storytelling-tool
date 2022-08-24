@@ -1,7 +1,7 @@
 export default {
     id: "legend",
     name: "Legende",
-    glyphicon: "glyphicon-book",
+    icon: "bi-lightbulb",
     showLegend: false,
     legends: [],
     layerIdForLayerInfo: "",

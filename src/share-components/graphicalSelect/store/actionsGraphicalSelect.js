@@ -53,7 +53,7 @@ const actions = {
      * @returns {void}
      */
     showTooltipOverlay: function ({state, rootState}) {
-        const coords = rootState.Map.mouseCoord,
+        const coords = rootState.Maps.mouseCoordinate,
             tooltipOverlay = state.tooltipOverlay,
             currentValue = state.currentValue;
 
@@ -80,13 +80,12 @@ const actions = {
      */
     toggleOverlay: function (context, payload) {
         if (payload.type === "Circle") {
-            Radio.trigger("Map", "addOverlay", payload.overlayCircle);
-            Radio.trigger("Map", "addOverlay", payload.overlayTool);
+            mapCollection.getMap("2D").addOverlay(payload.overlayCircle);
         }
         else {
-            Radio.trigger("Map", "removeOverlay", payload.overlayCircle);
-            Radio.trigger("Map", "addOverlay", payload.overlayTool);
+            mapCollection.getMap("2D").removeOverlay(payload.overlayCircle);
         }
+        mapCollection.getMap("2D").addOverlay(payload.overlayTool);
     },
 
     /**

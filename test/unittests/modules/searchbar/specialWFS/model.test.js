@@ -5,7 +5,8 @@ import {expect} from "chai";
 describe("modules/searchbar/specialWFS", function () {
     let model = {},
         multiPolygonFeaturesWithInteriorPolygons,
-        multiPolygonFeaturesWithoutInteriorPolygons;
+        multiPolygonFeaturesWithoutInteriorPolygons,
+        multiPolygonFeaturesWithAndWithoutInteriorPolygons;
     const config = {
         "minChars": 5,
         "maxFeatures": 1,
@@ -55,6 +56,7 @@ describe("modules/searchbar/specialWFS", function () {
 
         multiPolygonFeaturesWithInteriorPolygons = utilModel.getDescribeFeatureTypeResponse("resources/testFeaturesBplanMultiPolygonWithInteriorPolygon.xml");
         multiPolygonFeaturesWithoutInteriorPolygons = utilModel.getDescribeFeatureTypeResponse("resources/testFeaturesBplanMultiPolygonWithoutInteriorPolygon.xml");
+        multiPolygonFeaturesWithAndWithoutInteriorPolygons = utilModel.getDescribeFeatureTypeResponse("resources/testFeaturesBplanMultiPolygonWithAndWithoutInteriorPolygon.xml");
         model = new Model(config);
     });
 
@@ -105,36 +107,37 @@ describe("modules/searchbar/specialWFS", function () {
     });
 
     describe("getInteriorAndExteriorPolygonMembers", function () {
-        it("should return an array with two arrays. First one with coordiantes, second one with indices", function () {
+        it("should return an array with coordiantes of an polygon with holes.", function () {
             const elements = Array.from(multiPolygonFeaturesWithInteriorPolygons.getElementsByTagNameNS("*", "polygonMember")),
                 expectedResult = [
                     [
                         [
-                            "560313.401", "5934298.407",
-                            "560294.587", "5934301.811",
-                            "560285.063", "5934303.535",
-                            "560271.224", "5934294.941",
-                            "560268.175", "5934295.831",
-                            "560258.461", "5934229.981"
-                        ],
-                        [
-                            "561016.997", "5933835.861",
-                            "561017.451", "5933843.541",
-                            "561061.576", "5933841.794"
-                        ],
-                        [
-                            "561099.048", "5933643.820",
-                            "561099.267", "5933651.168",
-                            "561323.539", "5933598.007",
-                            "561323.352", "5933600.283"
+                            [
+                                "560313.401", "5934298.407",
+                                "560294.587", "5934301.811",
+                                "560285.063", "5934303.535",
+                                "560271.224", "5934294.941",
+                                "560268.175", "5934295.831",
+                                "560258.461", "5934229.981"
+                            ],
+                            [
+                                "561016.997", "5933835.861",
+                                "561017.451", "5933843.541",
+                                "561061.576", "5933841.794"
+                            ],
+                            [
+                                "561099.048", "5933643.820",
+                                "561099.267", "5933651.168",
+                                "561323.539", "5933598.007",
+                                "561323.352", "5933600.283"
+                            ]
                         ]
-                    ],
-                    [1, 2]
+                    ]
                 ];
 
             expect(model.getInteriorAndExteriorPolygonMembers(elements)).to.deep.equal(expectedResult);
         });
-        it("should return an array with two arrays. First one with, second one without content", function () {
+        it("should return an array with coordinates of a normal MultiPolygon", function () {
             const elements = Array.from(multiPolygonFeaturesWithoutInteriorPolygons.getElementsByTagNameNS("*", "polygonMember")),
                 expectedResult = [
                     [
@@ -146,23 +149,60 @@ describe("modules/searchbar/specialWFS", function () {
                             "560268.175", "5934295.831",
                             "560258.461", "5934229.981"
                         ]
-                    ],
-                    []
+                    ]
                 ];
 
             expect(model.getInteriorAndExteriorPolygonMembers(elements)).to.deep.equal(expectedResult);
         });
-        it("should return two empty arrays within an array", function () {
-            expect(model.getInteriorAndExteriorPolygonMembers([])).to.deep.equal([[], []]);
+        it("should return an array with two arrays. One with coordiantes of an polygon with holes and the other with coordinates of a normal MultiPolygon.", function () {
+            const elements = Array.from(multiPolygonFeaturesWithAndWithoutInteriorPolygons.getElementsByTagNameNS("*", "polygonMember")),
+                expectedResult = [
+                    [
+                        [
+                            [
+                                "560313.401", "5934298.407",
+                                "560294.587", "5934301.811",
+                                "560285.063", "5934303.535",
+                                "560271.224", "5934294.941",
+                                "560268.175", "5934295.831",
+                                "560258.461", "5934229.981"
+                            ],
+                            [
+                                "561016.997", "5933835.861",
+                                "561017.451", "5933843.541",
+                                "561061.576", "5933841.794"
+                            ],
+                            [
+                                "561099.048", "5933643.820",
+                                "561099.267", "5933651.168",
+                                "561323.539", "5933598.007",
+                                "561323.352", "5933600.283"
+                            ]
+                        ],
+                        [
+                            "560313.401", "5934298.407",
+                            "560294.587", "5934301.811",
+                            "560285.063", "5934303.535",
+                            "560271.224", "5934294.941",
+                            "560268.175", "5934295.831",
+                            "560258.461", "5934229.981"
+                        ]
+                    ]
+                ];
+
+            expect(model.getInteriorAndExteriorPolygonMembers(elements)).to.deep.equal(expectedResult);
         });
-        it("should return two empty arrays within an array", function () {
-            expect(model.getInteriorAndExteriorPolygonMembers("")).to.deep.equal([[], []]);
+        it("should return an empty array within an array", function () {
+            expect(model.getInteriorAndExteriorPolygonMembers([])).to.deep.equal([[]]);
         });
-        it("should return two empty arrays within an array", function () {
-            expect(model.getInteriorAndExteriorPolygonMembers(false)).to.deep.equal([[], []]);
+        it("should return an empty array within an array", function () {
+            expect(model.getInteriorAndExteriorPolygonMembers("")).to.deep.equal([[]]);
         });
-        it("should return two empty arrays within an array", function () {
-            expect(model.getInteriorAndExteriorPolygonMembers(NaN)).to.deep.equal([[], []]);
+        it("should return an empty array within an array", function () {
+            expect(model.getInteriorAndExteriorPolygonMembers(false)).to.deep.equal([[]]);
+        });
+        it("should return an empty array within an array", function () {
+            expect(model.getInteriorAndExteriorPolygonMembers(NaN)).to.deep.equal([[]]);
         });
 
 

@@ -1,4 +1,5 @@
 import actions from "../app-store/actions"; // https://stackoverflow.com/questions/40487627/can-i-call-commit-from-one-of-mutations-in-vuex-store
+import {setValuesToState} from "../utils/parametricUrl/stateModifier";
 
 // The objects deprecatedParamsConfigJson and deprecatedParamsConfigJs store the current respectively new parameters and the related deprecated parameters.
 // The key describes the current parameter or more precisely the path to the new/current path.
@@ -54,6 +55,15 @@ export default {
         state.configJs = actions.checkWhereDeprecated(deprecatedParamsConfigJs, config);
     },
     /**
+     * Sets rest services configuration.
+     * @param {Object} state store state
+     * @param {Object} config rest-services.json
+     * @returns {void}
+     */
+    setRestConf (state, config) {
+        state.restConf = config;
+    },
+    /**
      * Sets mobile flag.
      * @param {Object} state store state
      * @param {Boolean} mobile whether browser resolution indicates mobile device
@@ -70,5 +80,26 @@ export default {
      */
     setI18Nextinitialized (state, isInitialized) {
         state.i18NextInitialized = isInitialized;
+    },
+    /**
+     * Sets the url params at state and produces desired reaction.
+     * @param {Object} state vuex state
+     * @param {URLSearchParams} params an instance of URLSearchParams
+     * @returns {void}
+     */
+    setUrlParams (state, params) {
+        setValuesToState(state, params);
+    },
+    /**
+     * Adds the entry's key and value to the state parameter urlParams.
+     * @param {Object} state vuex state
+     * @param {URLSearchParams} entry key and value of the entry to add
+     * @returns {void}
+     */
+    addUrlParams (state, entry) {
+        const paramsCopy = {...state.urlParams};
+
+        paramsCopy[entry.key] = entry.value;
+        state.urlParams = paramsCopy;
     }
 };

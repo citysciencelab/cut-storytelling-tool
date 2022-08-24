@@ -1,0 +1,149 @@
+@import "~variables";
+
+.datepicker-container {
+    input {
+        width: 100%;
+    }
+}
+
+.datepicker-inline, .datepicker-dropdown {
+    background-color: $white;
+    border-radius: 12px;
+    border-radius: 0;
+    .datepicker-days {
+        padding: 4px;
+        .table-condensed {
+            width: 100%;
+            thead {
+                tr {
+                    border-radius: 0;
+                    background: none;
+                    .datepicker-switch {
+                        cursor: default;
+                        font-size: 15px;
+                        &:hover {
+                            background: none;
+                        }
+                    }
+                    color: $primary;
+                    .next, .prev {
+                        color: $dark_grey;
+                        &:hover {
+                            opacity: 0.8;
+                            background-color: $primary;
+                            color: $white;
+                            border-radius: 0;
+                        }
+                    }
+                }
+            }
+            tbody tr {
+                &.week {
+                    &:hover {
+                        outline: 2px solid $primary;
+                    }
+                }
+                &.week-active {
+                    &:hover {
+                        outline: 0;
+                    }
+                    border-radius: 0;
+                    background-color: $primary;
+                    color: $white;
+                    td {
+                        background-image: none;
+                        color: $white;
+                        &:hover {
+                            &:not(.disabled) {
+                                background-color: $white;
+                                color: $primary;
+                            }
+                        }
+                        &.cw {
+                            color: $white;
+                        }
+                    }
+                }
+                td {
+                    border-radius: 0;
+                    background: none;
+                    color: $dark_grey;
+                    &:hover {
+                        opacity: 0.8;
+                        background-color: $primary;
+                        color: $white;
+                    }
+                    &.today {
+                        border: 2px solid $primary;
+                    }
+                    &.active {
+                        border-radius: 0;
+                        background-color: $primary;
+                        color: $white;
+                    }
+                    &.disabled {
+                        color: $light_grey;
+                    }
+                    &.cw {
+                        color: $primary;
+                    }
+                    &.holiday {
+                        font-weight: bold;
+                        &:not(.disabled) {
+                            color: $black;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .datepicker-years {
+        .table-condensed {
+            width: 100%;
+            thead {
+                tr {
+                    border-radius: 0;
+                    background: none;
+                    .datepicker-switch {
+                        cursor: default;
+                        font-size: 15px;
+                        &:hover {
+                            background: none;
+                        }
+                    }
+                    color: $primary;
+                    .next, .prev {
+                        color: $dark_grey;
+                        &:hover {
+                            opacity: 0.8;
+                            background-color: $primary;
+                            color: $white;
+                            border-radius: 0;
+                        }
+                    }
+                }
+            }
+            tbody tr td span {
+                border-radius: 0;
+                background: none;
+                color: $dark_grey;
+                &:hover {
+                    color: $primary;
+                    outline: 2px solid $primary;
+                }
+                &.active {
+                    background: $primary;
+                    color: $white;
+                    outline: none;
+                }
+                &.disabled {
+                    color: $light_grey;
+                    &:hover {
+                        background: none;
+                        outline: none;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,205 @@
+/*
+ * This file contains and imports scss variables.
+ * It is also used to override default styling to design custom styles.
+ *
+ * ⚠️ This file must not contain any css rules. It is imported in many places,
+ * and css rules in this file would result in a copy of all of the rules per import.
+ */
+
+// Wait til 5.2.0 to get better map overrides
+// https://github.com/twbs/bootstrap/pull/34942
+// https://github.com/twbs/bootstrap-rubygem/issues/141
+@import "../node_modules/bootstrap/scss/functions";
+
+/*
+ * Masterportal Default Style (Override of Bootstrap)
+ */
+
+// Options
+//
+// Quickly modify global styling by enabling or disabling optional features.
+
+$enable-caret:                false;
+$enable-rounded:              false;
+$enable-shadows:              true;
+
+// Links
+//
+// Style anchor elements.
+
+$link-color: #337ab7;
+$link-decoration: none;
+
+// Typography
+//
+// Font, line-height, and color for body text, headings, and more.
+// In the case of Masterportal, the base size is 16 px, the browser's default, as we do set a base font but not in the html tag.
+// We set the base variable to 12px. This is the base that Bootstrap uses internally to calculate sizes (such as $font-size-sm)
+
+$font-size-base: .75rem;
+
+// Buttons + Forms
+//
+// Shared variables that are reassigned to `$input-` and `$btn-` specific variables.
+
+$input-btn-font-size: $font-size-base * 0.875;
+
+// Forms
+
+// $input-font-size: $input-btn-font-size;
+
+// Navs
+
+$nav-link-padding-y: 0.9375rem;
+
+// Navbar
+
+$navbar-padding-y: 0;
+
+$navbar-nav-link-padding-x: 0.9375rem;
+
+$navbar-toggler-padding-x: .625rem;
+$navbar-toggler-focus-width: 0;
+
+// Dropdowns
+//
+// Dropdown menu container and contents.
+
+$dropdown-spacer: 0;
+
+// List group
+
+$list-group-disabled-bg:  #eeeeee;
+
+
+$border-radius-base: 0;
+$border-radius-large: 0;
+$border-radius-small: 0;
+$badge-border-radius: 10px;
+$font-family-sans-serif: MasterPortalFont, Arial, sans-serif;
+$icon-font-path: "fonts/";
+
+$bootstrap-icons-font-src: url("../node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2?a74547b2f0863226942ff8ded57db345") format("woff2"),
+url("../node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2?a74547b2f0863226942ff8ded57db345") format("woff") !default;
+
+// Colors
+
+/* light_grey
+ * Used for backgrounds and light elements that are not necessarily primary.
+ * Elements: Buttons and button-like elements, borders, backgrounds
+ */
+$light_grey: #E3E3E3;
+$light_grey_hover: lighten($light_grey, 5%);
+$light_grey_focus: lighten($light_grey, 15%);
+$light_grey_active: darken($light_grey, 10%);
+$light_grey_contrast: #ffffff;
+$light_grey_inactive: darken($light_grey, 20%);
+$light_grey_inactive_contrast: #424242;
+$light_grey_outline: #050505;
+
+/* PRIMARY: The primary buttons blue
+* Used for primary buttons like start a search, print etc.
+*/
+$dark_blue: #003063;
+$primary: $dark_blue;
+$white: #ffffff;
+$black: #000;
+$light_red: #E10019;
+$dark_grey: #424242;
+$light_blue: #00437A;
+
+$navbar-light-color: $dark_grey;
+
+/* SECONDARY: Navigation & secondary buttons/elements
+ * Used for the nav bar, its children, and going back and forth within elements.
+ * Elements: Navigation bars and togglers, overall content.
+ * Examples: NavBar, open/close tool, layer list, cancel Buttons ...
+ */
+$secondary: $light_grey;
+$secondary_table_style: #F2F2F2;  // background for table view style
+$secondary_hover: $light_blue;
+$secondary_focus: $light_blue;
+$secondary_focus_contrast: #F3F3F3;
+$secondary_active_drop: rgba(227, 227, 227, 0.5);
+$secondary_contrast: #333333;
+$secondary_icon_button: #525252;
+$secondary_selected: rgb(184, 89, 0);  
+
+/* ACCENT: Action
+ * Action color for certain special accents
+ * Examples: fileImport, routing or Quickhelp
+ */
+$accent: $light_blue;
+$accent_hover: #3177b1;
+$accent_focus: #204d74;
+$accent_active: #204d74;
+$accent_disabled: #7aa9d0;
+$accent_contrast: #ffffff;
+
+
+/* NOTIFICATION COLOURS
+ * Notification colours can and should be used directly from Bootstrap 3.
+ * Keywords: success, warning, danger, info
+ * note: for the geo-online Masterportal these are usually not needed and should be discussed before using.
+ */
+ $danger: $light_red;
+
+/* ICON SIZES */
+$icon_length: 2.25rem;
+$icon_length_small: 1.5rem;
+$icon_length_menu: 0; // TODO figure out correct value before usage
+$icon_length_list: 0; // TODO figure out correct value before usage
+
+/* FONT STYLES */
+$font_family_default: "MasterPortalFont", "Arial", sans-serif;
+$font_family_narrow: "MasterPortalFont", "Arial Narrow", Arial, sans-serif;
+$font_family_accent: "MasterPortalFont Bold", "Arial Narrow Bold", Arial, sans-serif;
+
+/* NOTE we use bootstrap font-sizes and only add font-sizes if really necessary 
+ * bootstrap sizes:
+ * $font-size-base = 12px (see this file)
+ * $font-size-sm = 10.5px (based on 12px base font size)
+ * $font-size-lg = 15px (based on 12px base font size)
+ * for different base-size the font sizes will be different as well, see variables.md
+ */
+$font_size_huge: 1rem; //16px should be replaced by font-size-lg
+$font_size_big: 14px;
+$font_size_default: 12px;
+$font_size_small_custom: 11px;
+$font_size_tiny: 10px;
+
+/* tool sizes */
+$content_upper_space: 2.5rem;
+$content_section_space: 2rem;
+$content_space: 1rem;
+// Padding used for the Tool windows
+$padding: 1.25rem;
+
+/* other */
+$shadow: rgba(0, 0, 0, 0.176);
+$shadow_overlay: rgba(0, 0, 0, 0.4);
+$tool_box_shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+
+
+/*
+ * Customer Style. In this place, all previously mentioned variables may be overwritten
+ * to achieve a different look and feel from the default Masterportal design.
+ *
+ * Please note that the theme is currently under development and only used in some parts of the
+ * application - changes will have limited effects.
+ */
+
+// ... $brand-primary: #000;
+
+/*
+ * Imports from Bootstrap
+ */
+ @import "../node_modules/bootstrap/scss/variables";
+ @import "../node_modules/bootstrap/scss/mixins";
+
+// Add old default theme color to color map
+$custom-colors: (
+  "default": $gray-400
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
