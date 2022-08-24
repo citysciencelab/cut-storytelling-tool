@@ -1,6 +1,6 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
-import Tool from "../../../modules/core/modelList/tool/model";
+import ToolTemplate from "../../../src/modules/tools/ToolTemplate.vue";
 import StoryCreator from "./storyCreator/StoryCreator.vue";
 import StoryPlayer from "./storyPlayer/StoryPlayer.vue";
 import actions from "../store/actionsStoryTellingTool";
@@ -11,7 +11,7 @@ import * as constants from "../store/constantsStoryTellingTool";
 export default {
     name: "StoryTellingTool",
     components: {
-        Tool,
+        ToolTemplate,
         StoryCreator,
         StoryPlayer
     },
@@ -167,7 +167,7 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
         :icon="glyphicon"
         :active="active"
@@ -185,10 +185,9 @@ export default {
                     @change="onChangeStoryTellingMode"
                     id="tool-storyTellingTool-modeSelection"
                 >
-
-                    <v-flex v-for="option in modeOptions"  :key="option.title">
+                    <v-flex v-for="option in modeOptions" :key="option.title">
                         <v-item v-slot="{ active, toggle }" >
-                            <v-card  :disabled="option.disabled" class="my-4">
+                            <v-card :disabled="option.disabled" class="my-4">
                                 <v-img v-if="option.title == 'Story starten'"
                                     src="https://raw.githubusercontent.com/herzogrh/faircare-verkehr/main/assets/img/stroller-1.jpg"
                                     height="200px"
@@ -226,7 +225,7 @@ export default {
                 />
             </v-app>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
 <style lang="scss" scoped>
@@ -263,7 +262,6 @@ $main-pink: #f2b1b7;
 $main-mint: #73c1a9;
 $main-blue: #8ea0d2;
 $white: #FFFFFF;
-
 
 .custom-table-row {
     margin-right: -15px;
@@ -353,7 +351,7 @@ $white: #FFFFFF;
     border: 2px solid #73c1a9;
 }
 
-#table-nav-layers-panel-toggler{
+#table-nav-layers-panel-toggler {
     background-color: #bbf0de;
 }
 
