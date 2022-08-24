@@ -14,10 +14,7 @@
 @import "./mixins.scss";
 
 // 3. Include remainder of required Bootstrap stylesheets
-@import "~bootstrap/scss/maps";
 @import "~bootstrap-icons/font/bootstrap-icons";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/root";
 
 .bootstrap-icon {
     position: relative;

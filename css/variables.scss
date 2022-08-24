@@ -192,14 +192,15 @@ $tool_box_shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
 // ... $brand-primary: #000;
 
 /*
- * Imports from Bootstrap
- */
- @import "../node_modules/bootstrap/scss/variables";
- @import "../node_modules/bootstrap/scss/mixins";
-
+* Imports from Bootstrap
+*/
+@import "../node_modules/bootstrap/scss/variables";
 // Add old default theme color to color map
 $custom-colors: (
   "default": $gray-400
 );
-
 $theme-colors: map-merge($theme-colors, $custom-colors);
+
+
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
