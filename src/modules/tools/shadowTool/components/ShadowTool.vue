@@ -1,12 +1,13 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import getComponent from "../../../../utils/getComponent";
-import ToolTemplate from "../../ToolTemplate.vue";
 import getters from "../store/gettersShadowTool";
 import mutations from "../store/mutationsShadowTool";
-import actions from "../store/actionsShadowTool";
+import getComponent from "../../../../utils/getComponent";
+import ToolTemplate from "../../ToolTemplate.vue";
 import SliderInput from "./SliderInput.vue";
 import ToggleCheckbox from "../../../../share-components/toggleCheckbox/components/ToggleCheckbox.vue";
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 import moment from "moment";
 
 export default {
@@ -14,26 +15,25 @@ export default {
     components: {
         ToolTemplate,
         SliderInput,
-        ToggleCheckbox
+        ToggleCheckbox,
+        DatePicker
     },
     data () {
         return {
-            currentDate: moment().format("YYYY-MM-DD"),
-            currentTime: moment().format("HH:mm"),
             currentYear: moment().format("YYYY"),
             currentMonth: moment().format("MM"),
             currentDay: moment().format("DD"),
             currentHour: moment().hour(),
             currentMinute: moment().minute(),
-            year: null,
-            month: null,
             date: moment().format("YYYY-MM-DD"),
             showDate: moment().format("YYYY-MM-DD"),
             showTime: moment().format("HH:mm"),
             displayedShadowTime: null,
             timeSliderValue: 0,
             dateSliderValue: 0,
-            shadowActive: false
+            shadowActivated: this.isShadowEnabled,
+            pickDates: null,
+            pickDateFormat: "DD.MM.YYYY"
         };
     },
     computed: {
@@ -52,10 +52,13 @@ export default {
                 if (value) {
                     this.setActive(value);
                     this.createDate();
+                    if (this.isShadowEnabled) {
+                        document.getElementById("control").style.display = "block";
+                    }
                 }
             });
         },
-        shadowActive (value) {
+        shadowActivated (value) {
             if (!value) {
                 document.getElementById("control").style.display = "none";
             }
@@ -73,7 +76,7 @@ export default {
     },
     methods: {
         ...mapMutations("Tools/ShadowTool", Object.keys(mutations)),
-        ...mapActions("Tools/ShadowTool", Object.keys(actions)),
+        ...mapActions("Tools/ShadowTool", ["updateCesiumTime", "updateShadow"]),
 
         close () {
             this.setActive(false);
@@ -85,12 +88,16 @@ export default {
             }
             this.toggleShadow(false);
         },
+        /**
+         * Prepares the dates for picker, slider and display
+         * @returns {void}
+         */
         createDate () {
             const year = this.shadowTime.year ? this.shadowTime.year : this.currentYear,
-                checkedMonth = this.shadowTime.month.length === 1 ? "0" + this.shadowTime.month : this.shadowTime.month,
-                checkedDay = this.shadowTime.day.length === 1 ? "0" + this.shadowTime.day : this.shadowTime.day,
-                checkedHour = this.shadowTime.hour.length === 1 ? "0" + this.shadowTime.hour : this.shadowTime.hour,
-                checkedMinute = this.shadowTime.minute.length === 1 ? "0" + this.shadowTime.minute : this.shadowTime.minute,
+                checkedMonth = this.shadowTime?.month?.length === 1 ? "0" + this.shadowTime.month : this.shadowTime.month,
+                checkedDay = this.shadowTime?.day?.length === 1 ? "0" + this.shadowTime.day : this.shadowTime.day,
+                checkedHour = this.shadowTime?.hour?.length === 1 ? "0" + this.shadowTime.hour : this.shadowTime.hour,
+                checkedMinute = this.shadowTime?.minute?.length === 1 ? "0" + this.shadowTime.minute : this.shadowTime.minute,
                 month = this.shadowTime.month ? checkedMonth : this.currentMonth,
                 day = this.shadowTime.day ? checkedDay : this.currentDay,
                 hour = this.shadowTime.hour ? checkedHour : this.currentHour,
@@ -99,38 +106,39 @@ export default {
                 showTime = [hour, minute].join(":");
 
 
-            this.date = showDate;
-            this.checkDateFormat();
             this.showTime = showTime;
-
-            if (document.getElementById("datePicker")) {
-                document.getElementById("datePicker").value = showDate;
+            if (this.$refs.datePicker) {
+                this.pickDates = new Date(showDate);
             }
 
-            this.syncDateSlider();
-            this.initTimeSlider(hour, minute);
-            this.updateShadow();
-        },
-        syncDateSlider () {
-            const date = new Date(document.getElementById("datePicker").value);
+            this.date = showDate;
+            this.checkDateFormat();
 
-            if (document.getElementById("datePicker")) {
-                this.date = document.getElementById("datePicker").value;
+            this.dateSliderValue = moment(this.date).dayOfYear();
+            this.initTimeSlider(hour, minute);
+            this.updateShadowTime();
+        },
+        /**
+         * Sync function for the date slider
+         * @param {Object} pickDate - date from the date picker
+         * @returns {void}
+         */
+        syncDateSlider (pickDate) {
+            const date = moment(pickDate).format("YYYY-MM-DD");
+
+            if (this.$refs.datePicker) {
+                this.date = date;
                 this.checkDateFormat();
-                this.updateShadow();
+                this.updateShadowTime();
                 this.dateSliderValue = moment(date).dayOfYear();
             }
         },
-        checkDateFormat () {
-            const dates = this.date.split("-");
-
-            if (this.currentLocale === "de" || this.currentLocale === "platt") {
-                this.showDate = [dates[2], dates[1], dates[0]].join("-");
-            }
-            else {
-                this.showDate = [dates[1], dates[2], dates[0]].join("-");
-            }
-        },
+        /**
+         * Inition of the time slider
+         * @param {String} hour - current hour
+         * @param {String} minute - current minute
+         * @returns {void}
+         */
         initTimeSlider (hour, minute) {
             let initMinuteValue;
 
@@ -145,69 +153,71 @@ export default {
             this.syncTimeSlider(initMinuteValue);
 
         },
+        /**
+         * Sync function for the time slider
+         * @param {Number} minuteValue - date from the date picker
+         * @returns {void}
+         */
         syncTimeSlider (minuteValue) {
             const timeSliderValue = minuteValue,
                 hours = Math.floor(timeSliderValue / 60),
                 minutes = (timeSliderValue % 60).toString(),
-                minutesDisplay = minutes.length === 1 ? "0" + minutes : minutes;
+                minutesDisplay = minutes?.length === 1 ? "0" + minutes : minutes;
 
             this.timeSliderValue = minuteValue;
             this.showTime = hours + ":" + minutesDisplay;
-            this.updateShadow();
+            this.updateShadowTime();
         },
+        /**
+         * Sync function for the date picker
+         * @param {Number} totalDaysInYear - day number of the year
+         * @returns {void}
+         */
         syncDatePicker (totalDaysInYear) {
             const startDate = new Date(Number(this.currentYear), 0),
                 calculateDate = new Date(startDate.setDate(Number(totalDaysInYear))), // initialize a date in `year-01-01`
                 formatCalculateDate = moment(calculateDate).format("YYYY-MM-DD");
 
-            if (document.getElementById("datePicker")) {
+            if (this.$refs.datePicker) {
                 this.date = formatCalculateDate;
+                this.pickDates = new Date(formatCalculateDate);
                 this.checkDateFormat();
                 this.dateSliderValue = totalDaysInYear;
-                document.getElementById("datePicker").value = this.date;
             }
-            this.updateShadow();
-        },
-        toggleShadow (visible) {
-            const scene = mapCollection.getMap("3D").getCesiumScene();
-
-            this.shadowActive = visible;
-
-            if (scene) {
-                if (visible) {
-                    if (!scene.sun) {
-                        scene.sun = new Cesium.Sun();
-                    }
-                    scene.globe.shadows = Cesium.ShadowMode.RECEIVE_ONLY;
-                    scene.globe.enableLighting = visible;
-                    scene.shadowMap.enabled = visible;
-                }
-                else {
-                    scene.shadowMap.enabled = visible;
-                }
-            }
+            this.updateShadowTime();
         },
         /**
-     * Combines the given timestamps for time and date together
-     * @param   {timestamp} time timestamp with time
-     * @param   {timestamp} date timestamd with date
-     * @returns {timestamp} timestamp the combined timestamp
-     */
-        updateShadow () {
-            this.displayedShadowTime = new Date(this.date + " " + this.showTime + ":00");
-            this.setCesiumTime(this.displayedShadowTime.getTime());
-        },
-        /**
-         * Trigger new date to map3D
-         * @param {timestamp} datetime new Time
-         * @fires Core#RadioTriggerMapSetShadowTime
+         * Adapts date formats to EN or DE
          * @returns {void}
          */
-        setCesiumTime (datetime) {
+        checkDateFormat () {
+            if (this.currentLocale === "de" || this.currentLocale === "platt") {
+                this.showDate = moment(this.date).format("DD-MM-YYYY");
+                this.pickDateFormat = "DD.MM.YYYY";
 
-            if (typeof Cesium !== "undefined") {
-                mapCollection.getMap("3D").time = Cesium.JulianDate.fromDate(moment(datetime).toDate());
             }
+            else {
+                this.showDate = moment(this.date).format("MM-DD-YYYY");
+                this.pickDateFormat = "MM.DD.YYYY";
+            }
+        },
+        /**
+         * Toggles the shadow
+         * @param {Boolean} visible - shadow active
+         * @returns {void}
+         */
+        toggleShadow (visible) {
+            this.shadowActivated = visible;
+            this.updateShadow(visible);
+
+        },
+        /**
+         * Combines the given timestamps for time and date together and updates the Cesium time
+         * @returns {void}
+         */
+        updateShadowTime () {
+            this.displayedShadowTime = new Date(this.date + " " + this.showTime + ":00");
+            this.updateCesiumTime(this.displayedShadowTime.getTime());
         }
     }
 };
@@ -249,11 +259,22 @@ export default {
                     >
                         {{ $t('common:modules.tools.shadow.pickDate') }}
                     </label>
-                    <input
-                        id="datePicker"
-                        type="date"
-                        @change="syncDateSlider"
+                    <div
+                        id="dateSelector"
                     >
+                        <DatePicker
+                            id="datePicker"
+                            ref="datePicker"
+                            v-model="pickDates"
+                            type="date"
+                            :format="pickDateFormat"
+                            :clearable="false"
+                            :show-week-number="true"
+                            title-format="pickDateFormat"
+                            :lang="$t('common:libraries.vue2-datepicker.lang', {returnObjects: true})"
+                            @change="syncDateSlider($event)"
+                        />
+                    </div>
                 </div>
                 <SliderInput
                     id="dateSlider"
@@ -285,6 +306,11 @@ export default {
 <style lang="scss" scoped>
     @import "~variables";
 
+#dateSelector {
+    .mx-input {
+        border-radius: 0px;
+    }
+}
 #control {
 display: none
 }
