@@ -348,7 +348,7 @@ export default {
         /**
          * Handles the active strategy.
          * @param {Number|Number[]} snippetId the snippet Id(s)
-         * @param {Boolean|undefined} reset true if filtering should reset the layer (fuzzy logic)
+         * @param {Boolean|undefined} [reset=undefined] true if filtering should reset the layer (fuzzy logic)
          * @returns {void}
          */
         handleActiveStrategy (snippetId, reset = undefined) {
@@ -935,13 +935,14 @@ export default {
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :disabled="disabled"
+                    :display="snippet.display"
                     :info="snippet.info"
                     :format="snippet.format"
                     :filter-id="layerConfig.filterId"
                     :is-parent="isParentSnippet(snippet.snippetId)"
                     :title="getTitle(snippet, layerConfig.layerId)"
-                    :max-value="snippet.maxValue"
-                    :min-value="snippet.minValue"
+                    :sub-titles="snippet.subTitles"
+                    :value="snippet.value"
                     :operator="snippet.operator"
                     :prechecked="snippet.prechecked"
                     :fixed-rules="fixedRules"

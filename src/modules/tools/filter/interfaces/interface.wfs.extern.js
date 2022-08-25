@@ -364,7 +364,6 @@ export default class InterfaceWfsExtern {
 
         axiosObject.get(url, {params})
             .then(response => {
-                Backbone.responseXML = response?.request?.responseXML;
                 this.parseResponseUniqueValues(service?.typename, attrName, response?.request?.responseXML, list => {
                     if (typeof onsuccess === "function") {
                         onsuccess(list);
@@ -640,6 +639,10 @@ export default class InterfaceWfsExtern {
         const args = [];
 
         rules.forEach(rule => {
+            if (rule?.format && !this.isIso8601(rule?.format) && this.isRangeOperator(rule?.operator)) {
+                console.error("Time-related snippets (`date` and `dateRange`) can only be operated in `external` mode or as a fixed rule (`visible`: `false`) if their counterpart at the WFS service is in a correct time format (ISO8601: `YYYY-MM-DD`). Current format is `" + rule?.format + "`.");
+                return;
+            }
             args.push(this.getRuleFilter(
                 rule?.attrName,
                 rule?.operator,
@@ -671,6 +674,18 @@ export default class InterfaceWfsExtern {
     getRuleFilter (attrName, operator, value, logicalHandler) {
         if (Array.isArray(value)) {
             if (this.isRangeOperator(operator)) {
+                if (Array.isArray(attrName)) {
+                    if (this.isBetweenOperator(operator)) {
+                        return andFilter(
+                            logicalHandler(attrName[0], value[0], value[1]),
+                            logicalHandler(attrName[1], value[0], value[1])
+                        );
+                    }
+                    return orFilter(
+                        logicalHandler(attrName[0], value[0], value[1]),
+                        logicalHandler(attrName[1], value[0], value[1])
+                    );
+                }
                 return logicalHandler(attrName, value[0], value[1]);
             }
             return this.getOrFilter(attrName, value, logicalHandler);
@@ -705,12 +720,28 @@ export default class InterfaceWfsExtern {
         return format === "YYYY-MM-DD";
     }
     /**
-     * Retruns true if the given operator is used only for range operations (e.g. slider).
+     * Returns true if the given operator is used only for range operations (e.g. slider).
      * @param {String} operator the operator to check
      * @returns {Boolean} true it the given operator is used only for range operations, false if not
      */
     isRangeOperator (operator) {
+        return this.isBetweenOperator(operator) || this.isIntersectsOperator(operator);
+    }
+    /**
+     * Returns true if the given operator is BETWEEN.
+     * @param {String} operator the operator to check
+     * @returns {Boolean} true if the given operator is BETWEEN.
+     */
+    isBetweenOperator (operator) {
         return operator === "BETWEEN";
+    }
+    /**
+     * Returns true if the given operator is INTERSECTS.
+     * @param {String} operator the operator to check
+     * @returns {Boolean} true if the given operator is INTERSECTS.
+     */
+    isIntersectsOperator (operator) {
+        return operator === "INTERSECTS";
     }
     /**
      * Returns a function to get the ol filter functions for the given operator.

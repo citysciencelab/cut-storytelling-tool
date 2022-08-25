@@ -21,6 +21,7 @@
 - Filter:
     - Added an option to activate a csv download button for filtered data.
     - wmsRefId is also for type array implemented so that multiple wms Layers can be activated or deactivated.
+    - Added a slider for dateRange.
 - Draw-Tool:
     - A new checkbox has been added to the Draw tool that can be used to hide and retrieve the drawing.
     - New Flag `addIconsOfActiveLayers`. Set to `true` to be able to select the icons and symbols of all WFS layers activated in the topic tree as additional symbols besides the icons configured under `drawSymbolSettings`.
