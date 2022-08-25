@@ -20,7 +20,7 @@ describe("src/modules/tools/contact/components/ShadowTool.vue", () => {
             menu: {
                 tools: {
                     children: {
-                        shadowTool:
+                        shadow:
                         {
                             "name": "translate#common:menu.shadow",
                             "icon": "bi-lamp-fill",
@@ -41,7 +41,7 @@ describe("src/modules/tools/contact/components/ShadowTool.vue", () => {
                 Tools: {
                     namespaced: true,
                     modules: {
-                        ShadowTool: Module
+                        Shadow: Module
                     }
                 },
                 Language: {
@@ -58,7 +58,7 @@ describe("src/modules/tools/contact/components/ShadowTool.vue", () => {
             }
         });
 
-        store.commit("Tools/ShadowTool/setActive", true);
+        store.commit("Tools/Shadow/setActive", true);
     });
 
     afterEach(() => {

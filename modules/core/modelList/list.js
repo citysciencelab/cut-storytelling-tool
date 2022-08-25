@@ -237,9 +237,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
             }
-           /*  else if (attrs.id === "shadow") {
-                return new Shadow(attrs, options);
-            } */
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(Object.assign(attrs, Object.prototype.hasOwnProperty.call(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);
             }

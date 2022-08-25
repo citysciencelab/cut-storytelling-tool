@@ -166,10 +166,6 @@ async function loadApp () {
 
     Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
-           /*  case "shadow": {
-                new ShadowView({model: tool});
-                break;
-            } */
             case "parcelSearch": {
                 new ParcelSearchView({model: tool});
                 break;

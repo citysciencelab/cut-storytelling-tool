@@ -14,7 +14,7 @@
  */
 const state = {
     active: false,
-    id: "shadowTool",
+    id: "shadow",
     name: "common:menu.shadow",
     icon: "bi-lamp-fill",
     renderToWindow: true,
