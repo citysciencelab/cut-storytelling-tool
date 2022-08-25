@@ -53,7 +53,7 @@ export default {
                     this.setActive(value);
                     this.createDate();
                     if (this.isShadowEnabled) {
-                        document.getElementById("control").style.display = "block";
+                        this.toggleShadow(true);
                     }
                 }
             });
