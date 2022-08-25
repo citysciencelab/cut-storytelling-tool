@@ -39,10 +39,10 @@
             "glyphicon": "glyphicon-book",
             "active": true
           },
-          "storyCreationTool": {
-            "name": "translate#additional:modules.tools.storyCreationTool.title",
-            "glyphicon": "glyphicon-text-size",
-            "active": true
+          "mobilityDataDraw": {
+            "name": "translate#additional:modules.tools.mobilityDataDraw.title",
+            "glyphicon": "glyphicon-user",
+            "active": false
           },
           "gfi": {
             "name": "translate#common:menu.tools.getInfos",
@@ -64,11 +64,11 @@
       "button3d": false,
       "toggleMenu": true,
       "fullScreen": false,
-      "zoom": true,
+      "zoom": false,
       "orientation": false,
       "mousePosition": false,
       "attributions": false,
-      "buttonOblique": true
+      "buttonOblique": false
     },
     "singleBaselayer": true
   },
@@ -91,6 +91,7 @@
           "visibility": true,
           "isVisibleInTree": false,
           "legend": false
+
         }
       ]
     },
@@ -692,6 +693,15 @@
           "urlIsVisible": true,
           "legend": true,
           "transparency": 40
+        },
+        {
+          "id": "127",
+          "clusterDistance": 50,
+          "name": "Eingegebene Mobilitätsdaten",
+          "url": "http://localhost:8080/aggregated",
+          "typ": "GeoJSON",
+          "datasets": [],
+          "urlIsVisible": true
         }
       ]
     }

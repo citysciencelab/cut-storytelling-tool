@@ -281,12 +281,11 @@ $white: #FFFFFF;
 
 }
 
-
 .table-nav-main{
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
     background-color: white;
-    width: 550px;
+    width: 500px;
     height: 60px;
     padding: 10px;
 }
@@ -296,8 +295,6 @@ $white: #FFFFFF;
     background-color: white;
     margin-left: -125px;
     margin-top: 10px;
-
-
 }
 
 .table-tools-menu {
@@ -306,7 +303,6 @@ $white: #FFFFFF;
     border: 2px solid #8ea0d2;
     left: -100px;
     bottom: 50px;
-
 }
 
 .table-tool {
@@ -319,7 +315,6 @@ $white: #FFFFFF;
     background-color: fade($main-blue , 20%);
 }
 
-
 #table-searchForm input#searchInput.form-control {
     font-family: "Arial", sans-serif;
     font-size: 12px;
@@ -331,14 +326,27 @@ $white: #FFFFFF;
     font-size: 12px;
 }
 
+#table-nav #searchbar {
+    flex-grow: unset;
+    top: -13px;
+
+    @media (min-width: 768px) {
+        margin-top: 0 !important;
+    }
+}
+
+
 #searchInputUL {
     background-color: white;
+}
+
+#table-tools, #table-category-list {
+    display: none;
 }
 
 .table-tools:hover {
     background-color: #cddcf2;
 }
-
 
 .icon-burgermenu_alt.collapsed::before {
     color: #73c1a9;
@@ -363,7 +371,6 @@ $white: #FFFFFF;
     background-color: #f4dadf;
 }
 
-
 .icon-burgermenu_alt #table-nav-layers-panel-toggler {
     background-color: #73c1a9;
     border-radius: 8px;
@@ -375,7 +382,6 @@ $white: #FFFFFF;
 
 #table-nav-layers-panel .layer-settings-activated {
     background-color: rgba(115, 193, 169, 0.1);
-
 }
 
 .icon-tools::before {
@@ -407,12 +413,10 @@ $white: #FFFFFF;
 .legend-title-table, ui-draggable-handle {
     background-color: $main-mint !important;
     border-bottom: 0px !important;
-
 }
 
 .legend-window-table .legend-content, .panel, .panel-default {
     background-color: $white !important;
-
 }
 
 .panel-heading, .layer-title {
