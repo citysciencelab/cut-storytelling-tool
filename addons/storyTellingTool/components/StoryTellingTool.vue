@@ -410,13 +410,48 @@ $white: #FFFFFF;
     background-color: $main-blue !important;
 }
 
-.legend-title-table, ui-draggable-handle {
-    background-color: $main-mint !important;
-    border-bottom: 0px !important;
+
+// Working layout for the legend should be provided by masterportal.css (currently not - recheck)
+
+.legend-window-table[data-v-3b5a1b75] {
+    box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
 }
 
-.legend-window-table .legend-content, .panel, .panel-default {
+.legend-title-table {
+    background-color: $main-mint !important;
+    border-bottom: 0 !important;
+    padding-bottom: 3px !important;
+}
+
+#legend .legend-title-table div {
+    position: absolute;
+    top: 0;
+    right: 3px;
+    padding-top: 10px;
+}
+
+.d-lg-inline-block {
+    @media (min-width: 992px) {
+        display: none !important;
+    }
+}
+
+.legend-window-table .legend-content,
+.panel, .panel-default,
+.legend-window-table .legend-content .card,
+#legend .legend-content .layer-title {
     background-color: $white !important;
+}
+
+#legend .legend-content .layer {
+    margin: 0 !important;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+#legend .legend-content {
+    overflow: unset !important;
+    margin-top: 0 !important;
 }
 
 .panel-heading, .layer-title {

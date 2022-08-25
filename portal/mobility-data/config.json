@@ -54,9 +54,8 @@
       },
       "legend": {
         "name": "common:modules.legend.name",
-        "glyphicon": "glyphicon-book",
         "showCollapseAllButton": true,
-        "showLegend": false
+        "showLegend": true
       }
     },
     "controls": {
