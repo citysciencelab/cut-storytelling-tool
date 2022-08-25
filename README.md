@@ -7,7 +7,7 @@
 
 The Storytelling Tool is a master portal add-on that can be used to add text, photos and images to geo-referenced data sets. In this way, the usually very technical and purely data-based representations can be supplemented with information and more descriptive representations. The data shown is contextualized and complex relationships become easier to understand. Users click their way through a story step by step.
 
-The current version of the repository includes an example from the real-life experiment 'Mobilities of care'. Topics such as the mobility behavior of unpaid care workers can thus be communicated and located more easily.
+The current version of the repository includes an example from the real-life experiment 'Mobilities of care'. Topics such as the mobility behavior of unpaid care workers can thus be communicated and located more easily. This is available under the portal configuration called '/mobility-data/'.
 
 
 https://user-images.githubusercontent.com/36763878/161025746-b8ac51be-a687-4e63-8bcf-b1da01334ead.mp4
