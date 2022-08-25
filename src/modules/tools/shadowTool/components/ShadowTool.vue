@@ -37,7 +37,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Tools/ShadowTool", Object.keys(getters)),
+        ...mapGetters("Tools/Shadow", Object.keys(getters)),
         ...mapGetters("Language", ["layerIds", "currentLocale"])
     },
     watch: {
@@ -75,8 +75,8 @@ export default {
         this.$on("close", this.close);
     },
     methods: {
-        ...mapMutations("Tools/ShadowTool", Object.keys(mutations)),
-        ...mapActions("Tools/ShadowTool", ["updateCesiumTime", "updateShadow"]),
+        ...mapMutations("Tools/Shadow", Object.keys(mutations)),
+        ...mapActions("Tools/Shadow", ["updateCesiumTime", "updateShadow"]),
 
         close () {
             this.setActive(false);

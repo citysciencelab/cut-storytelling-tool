@@ -12,7 +12,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
         renderToWindow: true,
         resizableWindow: false,
         supportedIn3d: ["supplyCoord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "parcelSearch", "coordToolkit"],
-        supportedOnlyIn3d: ["shadow", "shadowTool"],
+        supportedOnlyIn3d: ["shadow"],
         supportedInOblique: ["contact"],
         supportedOnlyInOblique: [],
         toolsToRenderInSidebar: ["filter"],
