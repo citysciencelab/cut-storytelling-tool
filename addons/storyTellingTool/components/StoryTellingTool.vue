@@ -260,6 +260,7 @@ export default {
 //Colors
 $main-pink: #f2b1b7;
 $main-mint: #73c1a9;
+$scnd-mint: rgba(115, 193, 169, 0.2);
 $main-blue: #8ea0d2;
 $white: #FFFFFF;
 
@@ -438,9 +439,12 @@ $white: #FFFFFF;
 
 .legend-window-table .legend-content,
 .panel, .panel-default,
-.legend-window-table .legend-content .card,
-#legend .legend-content .layer-title {
+.legend-window-table .legend-content .card {
     background-color: $white !important;
+}
+
+#legend .legend-content .layer-title {
+    background-color: $scnd-mint !important;
 }
 
 #legend .legend-content .layer {
