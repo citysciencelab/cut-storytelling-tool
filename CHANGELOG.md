@@ -6,20 +6,6 @@
 ## Known Issues
 
 ---
-## v2.24.1 - 2022-08-19
-### Added
-- The following NPM packages are added:
-
-    - dependencies:
-
-        - "vue2-datepicker"
-### Changed
-- Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
-
-### Fixed
-- Fix sensor layer extent-display issues caused by url parameter usage.
-
----
 
 ## Unreleased - in development
 ### __Breaking Changes__
@@ -101,7 +87,20 @@ The following NPM package is removed:
 - Issue #813: Fix various WMS-T bugs and styling.
 
 ---
+## v2.24.1 - 2022-08-19
+### Added
+- The following NPM packages are added:
 
+    - dependencies:
+
+        - "vue2-datepicker"
+### Changed
+- Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
+
+### Fixed
+- Fix sensor layer extent-display issues caused by url parameter usage.
+
+---
 ## v2.24.0 - 2022-08-03
 ### Added
 - PortalFooter:
