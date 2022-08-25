@@ -14,7 +14,7 @@
  * @property {String} coordinatesEastingField label of the easting field
  * @property {String} coordinatesNorthingField label of the northing field
  * @property {String} name displayed as title (config-param)
- * @property {String} glyphicon icon next to title (config-param)
+ * @property {String} icon icon next to title (config-param)
  * @property {Boolean} renderToWindow if true, tool is rendered in a window, else in sidebar (config-param)
  * @property {Boolean} resizableWindow if true, window is resizable (config-param)
  * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
@@ -35,8 +35,8 @@ const state = {
     coordinatesNorthingField: "",
 
     // defaults for config.json parameters
-    name: "common:menu.tools.coord",
-    glyphicon: "glyphicon-screenshot",
+    name: "common:menu.tools.supplyCoord",
+    icon: "bi-bullseye",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,

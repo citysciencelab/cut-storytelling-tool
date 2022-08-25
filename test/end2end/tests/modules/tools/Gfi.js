@@ -73,9 +73,9 @@ async function GfiTests ({builder, url, resolution, capability}) {
 
                 // open layer
                 await topic.click();
-                await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
-                await (await driver.findElement(By.xpath("//*[contains(@id,'InfrastrukturBauenundWohnen')]/*[contains(@class,'glyphicon')]"))).click();
-                await (await driver.findElement(By.xpath("//*[contains(@id,'BebauungsplneHamburg')]/*[contains(@class,'glyphicon-unchecked')]"))).click();
+                await (await driver.findElement(By.css(".Overlayer > .bootstrap-icon"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'InfrastrukturBauenundWohnen')]/*[contains(@class,'bootstrap-icon')]"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'BebauungsplneHamburg')]/*[contains(@class,'bi-square')]"))).click();
                 await topic.click();
 
                 await clickFeature(driver, [554521.38, 5932738.29]);
@@ -106,8 +106,8 @@ async function GfiTests ({builder, url, resolution, capability}) {
         if (isDefault(url)) {
             it("default tree traffic camera layer displays gfi including video element", async function () {
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
-                await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
-                await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]"))).click();
+                await (await driver.findElement(By.css(".Overlayer > .bootstrap-icon"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'bootstrap-icon')]"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Verkehrskameras Hamburg')]"))).click();
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 
@@ -166,16 +166,13 @@ async function GfiTests ({builder, url, resolution, capability}) {
         if (isDefault(url)) {
             it("default tree bicycle count layer shows gfi with info page initially open", async function () {
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
-                await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
-                await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]"))).click();
+                await (await driver.findElement(By.css(".Overlayer > .bootstrap-icon"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'bootstrap-icon')]"))).click();
                 await (await driver.findElement(By.xpath("//ul[@id='tree']//span[contains(text(),'Dauerzählstellen (Rad) Hamburg')]"))).click();
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 
                 await clickFeature(driver, [566800.6939276252, 5934968.732616884]);
 
-                // theme continuousCountingBike is active
-                await driver.wait(until.elementLocated(By.css("div.continuousCountingBike")));
-                expect(await driver.findElement(By.css("div.continuousCountingBike"))).to.exist;
                 // pill "Info" is initially opened
                 expect(await driver.findElement(By.css("ul.nav.nav-pills li:first-child.tab-toggle.active"))).to.exist;
 
@@ -220,12 +217,12 @@ async function GfiTests ({builder, url, resolution, capability}) {
                 await driver.executeScript(zoomIn);
 
                 // close KiTa/KH layer
-                await (await driver.findElement(By.css(".layer-item:nth-child(1) > .layer-item > .glyphicon"))).click();
+                await (await driver.findElement(By.css(".layer-item:nth-child(1) > .layer-item > .bootstrap-icon"))).click();
                 // open hvv stop layer
-                await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
-                await (await driver.findElement(By.xpath("//*[contains(@id,'EisenbahnwesenPersonenbefrderung')]/*[contains(@class,'glyphicon')]"))).click();
-                await (await driver.findElement(By.xpath("//*[contains(@id,'HamburgerVerkehrsverbundHVV')]/*[contains(@class,'glyphicon-plus-sign')]"))).click();
-                await (await driver.findElement(By.css(".layer:nth-child(15) > .layer-item > .glyphicon"))).click();
+                await (await driver.findElement(By.css(".Overlayer > .bootstrap-icon"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'EisenbahnwesenPersonenbefrderung')]/*[contains(@class,'bootstrap-icon')]"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'HamburgerVerkehrsverbundHVV')]/*[contains(@class,'bi-plus-circle-fill')]"))).click();
+                await (await driver.findElement(By.css(".layer:nth-child(15) > .layer-item > .bootstrap-icon"))).click();
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 
                 do {
@@ -247,9 +244,9 @@ async function GfiTests ({builder, url, resolution, capability}) {
                 /*
                 NOTE this is to open a gfi from scratch - in current setup, a gfi window is already open
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
-                await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
-                await driver.wait(until.elementLocated(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]")));
-                await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]"))).click();
+                await (await driver.findElement(By.css(".Overlayer > .bootstrap-icon"))).click();
+                await driver.wait(until.elementLocated(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'bootstrap-icon')]")));
+                await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'bootstrap-icon')]"))).click();
                 await (await driver.findElement(By.xpath("//ul[@id='tree']//span[contains(text(),'Dauerzählstellen (Rad) Hamburg')]"))).click();
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 

@@ -1,9 +1,14 @@
 import axios from "axios";
-import EntitiesLayer from "../../core/modelList/layer/entities";
-import Tileset from "../../core/modelList/layer/tileset";
+import EntitiesLayer from "../../../src/core/layers/entities";
+import TileSetLayer from "../../../src/core/layers/tileset";
 import {parseFlightOptions} from "./flight";
 import StaticImageLayer from "../../core/modelList/layer/staticImage";
+import store from "../../../src/app-store";
 
+/**
+ * ATTENTION! This tool is not tested and may not work anymore, since tileset-layer was refactored (Issue BG-1843).
+ * Last Version with backbone tileset-layer is masterportal v2.18.0.
+ */
 const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     defaults: Object.assign({}, Backbone.Model.defaults, {
         id: null,
@@ -28,7 +33,6 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
      * @property {Array} flights - list of planning flights
      * @listens Core#RadioTriggerMapChange
      * @fires Core#RadioRequestMapIsMap3d
-     * @fires Core#RadioTriggerMapActivateMap3d
      * @fires Core#RadioTriggerMapSetCameraParameter
      */
     initialize () {
@@ -78,7 +82,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
                                 const data = response.data;
 
                                 if (data.staticRepresentation && data.staticRepresentation.threeDim) {
-                                    const tileset = new Tileset({
+                                    const tileset = new TileSetLayer({
                                         url: `${this.get("url")}/${data.staticRepresentation.threeDim}`
                                     });
 
@@ -124,12 +128,11 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
      * activates the planning project and jumps to the default Viewpoint
      * @returns {Promise} promise which returns when the planning has been loaded and activated
      * @fires Core#RadioRequestMapIsMap3d
-     * @fires Core#RadioTriggerMapActivateMap3d
      * @fires Core#RadioTriggerMapSetCameraParameter
      */
     activate () {
         if (!Radio.request("Map", "isMap3d")) {
-            Radio.trigger("Map", "activateMap3d");
+            store.dispatch("Maps/activateMap3D");
         }
         return this.initializePlanning().then(() => {
             if (this.defaultViewpoint) {

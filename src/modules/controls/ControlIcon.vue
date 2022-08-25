@@ -6,7 +6,7 @@
 export default {
     name: "ControlIcon",
     props: {
-        /** Name of the glyphicon, with or without prefix 'glyphicon-' */
+        /** Name of the bootstrap icon, with or without prefix 'bi-' */
         iconName: {
             type: String,
             required: true
@@ -34,10 +34,10 @@ export default {
     },
     computed: {
         /**
-         * @returns {String} glyphicon name with added prefix 'glyphicon-' if it was missing
+         * @returns {String} icon name with added prefix 'bi-' if it was missing
          */
-        glyphiconClass () {
-            return this.iconName.startsWith("glyphicon-") ? this.iconName : `glyphicon-${this.iconName}`;
+        iconClass () {
+            return this.iconName.startsWith("bi-") ? this.iconName : `bi-${this.iconName}`;
         }
     }
 };
@@ -47,18 +47,21 @@ export default {
     <button
         type="button"
         :tabindex="disabled ? '-1' : '0'"
-        :class="['control-icon', 'glyphicon', glyphiconClass, inline ? 'inline' : 'standalone']"
+        :class="['control-icon', 'bootstrap-icon', inline ? 'inline' : 'standalone']"
         :title="title"
         :disabled="disabled"
         @click.stop="onClick"
         @keyup.space.stop.prevent="onClick"
     >
         <!-- children should usually be placed absolutely in relation to ControlIcon -->
+        <i
+            :class="iconClass"
+        />
         <slot />
     </button>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 
     .standalone {
@@ -67,11 +70,11 @@ export default {
         top: auto;
         margin: 5px;
 
-        font-size: calc(@icon_length - 0.35 * @icon_length);
-        height: @icon_length;
-        width: @icon_length;
+        font-size: calc(#{$icon_length} - 0.35 * #{$icon_length});
+        height: $icon_length;
+        width: $icon_length;
 
-        box-shadow: 0 6px 12px @shadow;
+        box-shadow: 0 6px 12px $shadow;
     }
 
     .inline {
@@ -79,61 +82,54 @@ export default {
         text-align: center;
         top: auto;
 
-        font-size: calc(@icon_length_small - 0.35 * @icon_length_small);
-        width: @icon_length_small;
-        height: @icon_length_small;
+        font-size: calc(#{$icon_length_small} - 0.35 * #{$icon_length_small});
+        width: $icon_length_small;
+        height: $icon_length_small;
     }
 
     .control-icon {
-        background-color: @primary;
-        color: @primary_contrast;
+        background-color: $primary;
+        color: $white;
 
         pointer-events: all;
         cursor: pointer;
         border: 0;
 
         /* position icon in center of button */
-        &::before {
+        > i {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            // adjust line-height to use same height as ::before Element
+            line-height: 0;
         }
 
         /* pseudo-class state effects */
         &:hover {
-            background-color: @primary_hover;
+            background-color: lighten($primary, 10%);;
         }
         &:focus {
-            background-color: @primary_focus;
-            outline: 1px solid @primary_outline;
+            background-color: lighten($primary, 15%);
+            outline: 1px solid lighten($primary, 15%);
         }
         &:active {
-            background-color: @primary_active;
+            background-color: lighten($primary, 5%);
         }
 
         &:disabled {
-            background-color: @primary_inactive;
-            color: @primary_inactive_contrast;
+            background-color: $light-grey;
+            color: $dark_grey;
             cursor: default;
         }
     }
-
-    /* corrections for glyphicons that don't exactly center */
-    .glyphicon-plus::before {
-        margin-top: -1px;
-        margin-left: 1px;
+    .bi-plus-icon {
+        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z' stroke='white'/%3e%3c/svg%3e");
+        height: 28px;
     }
-    .glyphicon-minus::before {
-        margin-left: -1px;
-        margin-top: -1px;
+    .bi-minus-icon {
+        content: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-dash-lg' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z' stroke='white' stroke-width='1'/%3e%3c/svg%3e");
+        height: 28px;
     }
-    .glyphicon-forward::before {
-        margin-left: 2px;
-        margin-top: -1px;
-    }
-    .glyphicon-fast-backward::before {
-        margin-top: -1px;
-    }
-    /* TODO: Since every glyphicon is supported via config, rules for every glyphicon should exist here */
+    /* TODO: Since every bootstrap-icon is supported via config, rules for every bootstrap-icon should exist here */
 </style>

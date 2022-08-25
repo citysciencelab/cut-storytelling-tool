@@ -1,0 +1,70 @@
+@import "~variables";
+
+/*------------------------Menubar--------------------------------------*/
+.navbar {
+    min-height: 50px;
+    font-family: $font_family_accent;
+    border: 0;
+    position: relative;
+    margin-bottom: 0;
+    display: none;
+    background: $white;
+}
+
+.navbar .navbar-nav > li > a {
+    color: $dark_grey;
+    padding-top: 14px;
+}
+.dropdown-menu {
+    padding: 0;
+}
+#tools {
+    .bootstrap-icon {
+        font-size: 1rem;
+    }
+}
+#root {
+    >.dropdown {
+        color: $dark_grey;
+        font-size: 14px;
+    }
+    .dropdown {
+        border-right: 1px solid $light_grey;
+    }
+    .active {
+        background-color: rgba(227, 227, 227, 0.5);
+    }
+    padding-left: 0;
+}
+.navbar-collapse {
+    padding:0;
+    &.in {
+        position: absolute;
+        top: 50px;
+        z-index: 999;
+        width: 100%;
+        max-height: 66vh;
+        left: 0; 
+    }
+}
+@media (min-width: 768px) {
+    .navbar {
+        .container-fluid {
+            padding-left: 0;
+        }
+    }
+}
+@media (max-width: 767px) {
+    .navbar {
+        .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+    .navbar-collapse {
+        &.in {
+            max-height: inherit;
+            z-index: 1000;
+        }
+    }
+}

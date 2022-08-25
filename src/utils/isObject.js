@@ -1,7 +1,8 @@
 /**
  * Checks if the passed parameter is an object.
- * @param {*} value - paramter to check
- * @returns {Boolean} true if value is an ojbect ohterwise false
+ *
+ * @param {*} value parameter to check.
+ * @returns {Boolean} true if the value is an object; false otherwise.
  */
 export default function isObject (value) {
     return Object.prototype.toString.call(value) === "[object Object]";

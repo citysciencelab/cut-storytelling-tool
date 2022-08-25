@@ -79,9 +79,11 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
             format: model.format ? model.format : "dd.mm.yyyy",
             autoclose: model.autoclose ? model.autoclose : false,
             weekStart: model.weekStart ? model.weekStart : 1,
+            orientation: model.orientation ? model.orientation : "bottom",
             type: this.get("type"),
             todayHighlight: model.todayHighlight ? model.todayHighlight : false,
-            language: this.currentLng ? this.currentLng : i18next.language
+            language: this.currentLng ? this.currentLng : i18next.language,
+            beforeShowDay: model.beforeShowDay ? model.beforeShowDay : undefined
         }));
     },
 

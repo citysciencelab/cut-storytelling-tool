@@ -1,3 +1,5 @@
+import {getValueFromObjectByPath} from "../../src/utils/getValueFromObjectByPath.js";
+
 const StyleModel = Backbone.Model.extend(/** @lends StyleModel.prototype */{
     /**
      * @description Class to maintain some methods.
@@ -32,12 +34,16 @@ const StyleModel = Backbone.Model.extend(/** @lends StyleModel.prototype */{
     * @returns {void}
     */
     overwriteStyling: function (styles) {
-        let key;
+        // check if styles object is defined
+        // if not, use defaults instead
+        if (styles) {
+            let key;
 
-        for (key in styles) {
-            const value = styles[key];
+            for (key in styles) {
+                const value = styles[key];
 
-            this.set(key, value);
+                this.set(key, value);
+            }
         }
     },
     /**
@@ -51,31 +57,13 @@ const StyleModel = Backbone.Model.extend(/** @lends StyleModel.prototype */{
         let value = field;
 
         if (isPath) {
-            value = this.getValueFromPath(featureProperties, value);
+            value = getValueFromObjectByPath(featureProperties, value);
+            if (typeof value === "undefined") {
+                value = "undefined";
+            }
         }
         else {
-            value = featureProperties && featureProperties.hasOwnProperty(field) ? featureProperties[field] : "undefined";
-        }
-        return value;
-    },
-
-    /**
-     * Returns the value from the given path.
-     * @param {Object} featureProperties Feature properties.
-     * @param {String} path Field as object path.
-     * @returns {*} - Value from given path.
-     */
-    getValueFromPath: function (featureProperties, path) {
-        const pathParts = path.substring(1).split(".");
-        let property = featureProperties,
-            value = "undefined";
-
-        pathParts.forEach(part => {
-            property = property ? property[part] : undefined;
-        });
-
-        if (property) {
-            value = property;
+            value = Object.prototype.hasOwnProperty.call(featureProperties, field) ? featureProperties[field] : "undefined";
         }
         return value;
     }

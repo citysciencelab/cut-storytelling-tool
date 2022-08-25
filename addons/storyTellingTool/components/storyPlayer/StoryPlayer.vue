@@ -178,7 +178,8 @@ export default {
 
             // Updates the map center
             if (this.currentStep.centerCoordinate) {
-                const mapView = this.map().getView();
+                const map = Radio.request("Map", "getMap"),
+                    mapView = typeof map?.getView === "function" ? map.getView() : undefined;
 
                 mapView.animate({
                     center: this.currentStep.centerCoordinate,
@@ -323,7 +324,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #tool-storyTellingTool-player {
     display: grid;
     grid-template-rows: 1fr auto;

@@ -5,8 +5,11 @@ const symbol = {
     },
     /**
      * @property {Boolean} active Current status of the Tool.
+     * @property {Boolean} drawLayerVisible Shows/hides the draw layer and enables/disables the tools of the draw tool.
      * @property {Object} addFeatureListener Listens to the the event "addFeature" which is fired after a feature has been added to the map.
-     * @property {String} currentInteraction The current interaction. Could be either "draw", "modify" or "delete"
+     * @property {Boolean} addIconsOfActiveLayers If activated and possible, all symbols found in layers are added to the iconList.
+     * @property {String} currentInteraction The current interaction. Could be either "draw", "modify", "delete" or "none"
+     * @property {String} formerInteraction The former interaction. Could be either "draw", "modify", "delete" or "none"
      * @property {Object[]} deactivatedDrawInteractions Array of draw interactions which are deactivated in the process of the tool. Can be used to reactivate them from another point.
      * @property {Boolean} deactivateGFI If set to true, the activation of the tool deactivates the GFI tool.
      * @property {String} download.dataString Data that will be written to the file for the Download.
@@ -24,7 +27,7 @@ const symbol = {
      * @property {String[]} filterList.drawTypes The drawTypes to be filtered.
      * @property {String} filterList.name The name of the corresponding filter.
      * @property {Boolean} freeHand Distinction between a freeHand line drawing or a static one.
-     * @property {String} glyphicon Glyphicon used in the header of the window.
+     * @property {String} icon Icon used in the header of the window.
      * @property {Object[]} iconList List of icons used for the point draw interaction.
      * @property {String} id Internal Identifier for the Tool.
      * @property {Integer} idCounter Amount of features drawn.
@@ -36,6 +39,7 @@ const symbol = {
      * @property {String} outerBorderColor The color of the border of the dropdown menu for the selection of the outer radius of a circle.
      * @property {Number} pointSize The size of the point.
      * @property {Number[]} redoArray Array of the IDs of features removed through the undo button.
+     * @property {Number[]} undoArray Array of the IDs of features to be removed through the undo button.
      * @property {Boolean} renderToWindow Decides whether the Tool should be displayed as a window or as a sidebar.
      * @property {Boolean} resizableWindow Determines whether the Tool window can be resized.
      * @property {module:ol/interaction/Select} selectInteraction The select interaction of the draw tool.
@@ -86,11 +90,16 @@ const symbol = {
      * @property {String} writeTextSettings.font The font used for the text interaction.
      * @property {String[]} writeTextSettings.color The color of the drawn feature represented as an array.
      * @property {Number} writeTextSettings.opacity The opacity of the color of the drawn features. NOTE: The values of the transparencySettings are opacity values.
+     * @property {Number} initialWidth Size of the sidebar when opening.
+     * @property {Number} initialWidthMobile Mobile size of the sidebar when opening.
      */
     state = {
         active: false,
+        drawLayerVisible: true,
         addFeatureListener: {},
+        addIconsOfActiveLayers: false,
         currentInteraction: "draw",
+        formerInteraction: "",
         deactivatedDrawInteractions: [],
         deactivateGFI: true,
         download: {
@@ -113,7 +122,7 @@ const symbol = {
         fId: 0,
         filterList: null,
         freeHand: false,
-        glyphicon: "glyphicon-pencil",
+        icon: "bi-pencil-fill",
         iconList: [
             symbol,
             {
@@ -132,6 +141,7 @@ const symbol = {
         outerBorderColor: "",
         pointSize: 16,
         redoArray: [],
+        undoArray: [],
         renderToWindow: false,
         resizableWindow: true,
         selectInteraction: null,
@@ -202,7 +212,9 @@ const symbol = {
             font: "Arial",
             color: [55, 126, 184, 1],
             opacity: 1
-        }
+        },
+        initialWidth: 500,
+        initialWidthMobile: 300
     };
 
 export default state;

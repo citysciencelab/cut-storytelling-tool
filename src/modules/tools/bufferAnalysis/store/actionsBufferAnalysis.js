@@ -46,7 +46,9 @@ const actions = {
             vectorSource = new VectorSource(),
             bufferLayer = new VectorLayer({
                 id: "buffer_layer",
-                source: vectorSource
+                source: vectorSource,
+                alwaysOnTop: true,
+                zIndex: 10
             });
 
         commit("setBufferLayer", bufferLayer);
@@ -62,7 +64,7 @@ const actions = {
             newFeature.set("originFeature", feature);
             vectorSource.addFeature(newFeature);
         });
-        rootGetters["Map/map"].addLayer(bufferLayer);
+        mapCollection.getMap(rootGetters["Maps/mode"]).addLayer(bufferLayer);
     },
     /**
      * Removes generated result layer and buffer layer
@@ -70,10 +72,10 @@ const actions = {
      *
      * @return {void}
      */
-    removeGeneratedLayers ({commit, rootGetters, getters: {resultLayer, bufferLayer}}) {
-        rootGetters["Map/map"].removeLayer(resultLayer);
+    removeGeneratedLayers ({commit, rootState, getters: {resultLayer, bufferLayer}}) {
+        mapCollection.getMap(rootState.Maps.mode).removeLayer(resultLayer);
         commit("setResultLayer", {});
-        rootGetters["Map/map"].removeLayer(bufferLayer);
+        mapCollection.getMap(rootState.Maps.mode).removeLayer(bufferLayer);
         commit("setBufferLayer", {});
         commit("setIntersections", []);
         commit("setResultFeatures", []);
@@ -89,10 +91,12 @@ const actions = {
 
         if (selectedSourceLayer) {
             selectedSourceLayer.get("layer").setOpacity(1);
+            selectedSourceLayer.setIsSelected(false);
         }
 
         if (selectedTargetLayer) {
             selectedTargetLayer.get("layer").setOpacity(1);
+            selectedTargetLayer.setIsSelected(false);
         }
         dispatch("applySelectedSourceLayer", null);
         dispatch("applySelectedTargetLayer", null);
@@ -221,14 +225,15 @@ const actions = {
                 resultLayer = new VectorLayer({
                     id: "result_layer",
                     source: vectorSource,
-                    style: selectedTargetLayer.get("style")
+                    style: selectedTargetLayer.get("style"),
+                    alwaysOnTop: true
                 });
 
             commit("setResultLayer", resultLayer);
 
             vectorSource.addFeatures(resultFeatures);
             resultLayer.set("gfiAttributes", gfiAttributes);
-            rootGetters["Map/map"].addLayer(resultLayer);
+            mapCollection.getMap(rootGetters["Maps/mode"]).addLayer(resultLayer);
         }
         const targetOlLayer = selectedTargetLayer.get("layer"),
             sourceOlLayer = selectedSourceLayer.get("layer");
@@ -267,18 +272,40 @@ const actions = {
      */
     async areLayerFeaturesLoaded ({commit, rootGetters}, layerId) {
         await new Promise(resolve => {
-            if (rootGetters["Map/loadedLayers"].find(id => id === layerId)) {
+            if (rootGetters["Maps/loadedLayers"].find(id => id === layerId)) {
                 resolve();
             }
             const channel = Radio.channel("VectorLayer");
 
             channel.on({"featuresLoaded": id => {
-                commit("Map/addLoadedLayerId", id, {root: true});
+                commit("Maps/addLoadedLayerId", id, {root: true});
                 if (id === layerId) {
                     resolve();
                 }
             }});
         });
+    },
+    /**
+     * Applies values from previous saved buffer analysis
+     * that was copied into the URL.
+     * @return {void}
+     */
+    applyValuesFromSavedUrlBuffer ({rootState, state, dispatch, commit}) {
+        if (rootState.urlParams["Tools/bufferAnalysis/active"]) {
+            const extractedParams = rootState.urlParams.initvalues.map((element) => {
+                    return element.replace(/\\"/g, "\"").split(":")[1].replaceAll("\"", "").replaceAll("}", "");
+                }),
+                selectedSourceLayerFromUrl = state.selectOptions.find(layer => layer.id === extractedParams[0]),
+                bufferRadiusFromUrl = extractedParams[1],
+                resultTypeFromUrl = extractedParams[2],
+                selectedTargetLayerFromUrl = state.selectOptions.find(layer => layer.id === extractedParams[3]);
+
+            dispatch("applySelectedSourceLayer", selectedSourceLayerFromUrl);
+            commit("setInputBufferRadius", bufferRadiusFromUrl);
+            dispatch("applyBufferRadius", bufferRadiusFromUrl);
+            commit("setResultType", resultTypeFromUrl);
+            dispatch("applySelectedTargetLayer", selectedTargetLayerFromUrl);
+        }
     }
 };
 

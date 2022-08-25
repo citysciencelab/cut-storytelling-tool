@@ -1,6 +1,7 @@
 import Backbone from "backbone";
 import ModelList from "../modelList/list";
-import {getLayerList} from "masterportalAPI/src/rawLayerList";
+import {getLayerList} from "@masterportal/masterportalapi/src/rawLayerList";
+import store from "../../../src/app-store/index";
 
 const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     defaults: {
@@ -68,7 +69,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      * @fires Core.ModelList#RadioTriggerModelListShowModelInTree
      * @fires Core.ModelList#RadioTriggerModelListRefreshLightTree
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      */
     initialize: function () {
         const channel = Radio.channel("Parser");
@@ -94,7 +94,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             },
             "getInitVisibBaselayer": this.getInitVisibBaselayer,
             "getOriginId": function (layerId) {
-                if (this.get("extendedLayerIdAssoc").hasOwnProperty(layerId)) {
+                if (Object.prototype.hasOwnProperty.call(this.get("extendedLayerIdAssoc"), layerId)) {
                     return this.get("extendedLayerIdAssoc")[layerId];
                 }
                 return layerId;
@@ -116,16 +116,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
         this.listenTo(this, {
             "change:category": function () {
-                const modelList = Radio.request("ModelList", "getCollection"),
-                    modelListToRemove = modelList.filter(function (model) {
-                        // Alle Fachdaten Layer
-                        return model.get("type") === "layer" && model.get("parentId") !== "Baselayer";
-                    });
-
-                modelListToRemove.forEach(model => {
-                    model.setIsSelected(false);
-                });
-                modelList.remove(modelListToRemove);
                 this.setItemList([]);
                 this.addTreeMenuItems();
                 this.parseTree(getLayerList());
@@ -136,12 +126,13 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         });
 
         this.listenTo(Radio.channel("Util"), {
-            "isViewMobileChanged": function (isViewMobile) {
-                this.addOrRemove3DFolder(this.get("treeType"), isViewMobile, this.get("overlayer_3d"));
+            "isViewMobileChanged": () => {
+                this.addOrRemoveFolder("3d_daten", "common:tree.subjectData3D", this.get("overlayer_3d"));
+                this.addOrRemoveFolder("TimeLayer", "common:tree.subjectDataTime", this.get("overlayer_time"));
             }
         });
 
-        this.parseMenu(this.get("portalConfig").menu, "root");
+        this.parseMenu("root", this.get("portalConfig").menu);
         this.parseControls(this.get("portalConfig").controls);
         this.parseSearchBar(this.get("portalConfig").searchBar);
 
@@ -151,30 +142,31 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         });
 
         if (this.get("treeType") === "light") {
-            this.parseTree(this.get("overlayer"), "tree", 0);
-            this.parseTree(this.get("baselayer"), "tree", 0);
+            this.parseTree(this.get("overlayer"), "tree", 0, false);
+            this.parseTree(this.get("overlayer_time"), "tree", 0, false);
+            this.parseTree(this.get("baselayer"), "tree", 0, true);
         }
         else if (this.get("treeType") === "custom") {
-            this.addTreeMenuItems("custom", this.get("overlayer_3d"));
+            this.addTreeMenuItems();
             this.parseTree(this.get("baselayer"), "Baselayer", 0);
             this.parseTree(this.get("overlayer"), "Overlayer", 0);
             this.parseTree(this.get("overlayer_3d"), "3d_daten", 0);
+            this.parseTree(this.get("overlayer_time"), "TimeLayer", 0);
         }
         else {
-            this.addTreeMenuItems(this.get("treeType"));
-            this.parseTree(getLayerList(), this.get("overlayer_3d") ? this.get("overlayer_3d") : null);
+            this.addTreeMenuItems();
+            this.parseTree(getLayerList(), this.get("overlayer_3d"), this.get("overlayer_time"));
         }
         this.createModelList();
     },
 
     /**
      * Parsed the menu entries (everything except the contents of the tree)
-     * @param {Object} [items={}] Single levels of the menu bar, e.g. contact, legend, tools and tree
      * @param {String} parentId indicates to whom the items will be added
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
+     * @param {Object} [items={}] Single levels of the menu bar, e.g. contact, legend, tools and tree
      * @return {void}
      */
-    parseMenu: function (items = {}, parentId) {
+    parseMenu: function (parentId, items = {}) {
         Object.entries(items).forEach(itemX => {
             const value = itemX[1],
                 key = itemX[0];
@@ -183,19 +175,19 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 ansicht,
                 downloadItem;
 
-            if (value.hasOwnProperty("children") || key === "tree") {
+            if (value?.children || key === "tree") {
                 item = {
                     type: "folder",
                     parentId: parentId,
                     id: key,
                     treeType: this.get("treeType"),
-                    quickHelp: Radio.request("QuickHelp", "isSet")
+                    quickHelp: store.getters["QuickHelp/isSet"]
                 };
 
                 // Attribute aus der config.json werden von item geerbt
                 Object.assign(item, value);
                 this.addItem(item);
-                this.parseMenu(value.children, key);
+                this.parseMenu(key, value.children);
             }
             else if (key.search("staticlinks") !== -1) {
                 value.forEach(staticlink => {
@@ -204,7 +196,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     this.addItem(toolitem);
                 });
             }
-            else if (value.hasOwnProperty("type") && value.type === "viewpoint") {
+            else if (value?.type && value.type === "viewpoint") {
                 ansicht = Object.assign(value, {parentId: parentId, id: Radio.request("Util", "uniqueId", key + "_")});
                 this.addItem(ansicht);
             }
@@ -212,7 +204,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 toolitem = Object.assign(value, {type: "tool", parentId: parentId, id: key});
 
                 // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
-                if (!toolitem.hasOwnProperty("onlyDesktop")) {
+                if (!toolitem?.onlyDesktop) {
                     // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
                     if (this.get("onlyDesktopTools").indexOf(toolitem.id) !== -1) {
                         toolitem = Object.assign(toolitem, {onlyDesktop: true});
@@ -232,11 +224,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 }
                 /**
                  * @deprecated Due to refactorment, legend is no longer considered a tool.
-                 * Item for legend MUST NOT be added.
+                 * Item for legend MUST be added to replace it in LegendMenue.vue for respecting order of menu-entries in config.json
                  */
-                if (toolitem.id !== "legend") {
-                    this.addItem(toolitem);
-                }
+                this.addItem(toolitem);
             }
         }, this);
     },
@@ -321,28 +311,38 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {Boolean} isExpanded - if true, folder will be expanded
      * @param {String} i18nKey - key for the name to translate
      * @param {Boolean} [invertLayerOrder=false] inverts the order the layers when added to the map on folder click
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
+     * @param {Boolean} [isFolderSelectable=false] flag if folder is selectable or not
      * @returns {void}
      */
-    addFolder: function (name, id, parentId, level, isExpanded, i18nKey, invertLayerOrder = false) {
-        const folder = {
-            type: "folder",
-            name: i18nKey ? i18next.t(i18nKey) : name,
-            i18nextTranslate: i18nKey ? function (setter) {
-                if (typeof setter === "function" && i18next.exists(i18nKey)) {
-                    setter("name", i18next.t(i18nKey));
-                }
-            } : null,
-            glyphicon: "glyphicon-plus-sign",
-            id: id,
-            parentId: parentId,
-            isExpanded: isExpanded ? isExpanded : false,
-            level: level,
-            quickHelp: Radio.request("QuickHelp", "isSet"),
-            invertLayerOrder
-        };
+    addFolder: function (name, id, parentId, level, isExpanded, i18nKey, invertLayerOrder = false, isFolderSelectable = false) {
+        const itemList = this.get("itemList"),
+            folder = {
+                type: "folder",
+                name: i18nKey ? i18next.t(i18nKey) : name,
+                i18nextTranslate: i18nKey ? function (setter) {
+                    if (typeof setter === "function" && i18next.exists(i18nKey)) {
+                        setter("name", i18next.t(i18nKey));
+                    }
+                } : null,
+                icon: "bi-plus-circle-fill",
+                id: id,
+                parentId: parentId,
+                isExpanded: isExpanded ? isExpanded : false,
+                level: level,
+                quickHelp: store.getters["QuickHelp/isSet"],
+                invertLayerOrder,
+                isFolderSelectable
+            };
+        let folderExists = false;
 
-        this.addItem(folder);
+        itemList.forEach(element => {
+            if (element.id === id) {
+                folderExists = true;
+            }
+        });
+        if (!folderExists) {
+            this.addItem(folder);
+        }
     },
 
     /**
@@ -354,35 +354,42 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {*} layers - todo
      * @param {*} url - todo
      * @param {*} version - todo
+     * @param {boolean} [transparent = true] Whether the given layer is transparent.
+     * @param {boolean} [isSelected = false] Whether the given layer is selected .
+     * @param {(boolean/object)} [time = false] If set to `true` or an object, the configured Layer is expected to be a WMS-T.
      * @returns {void}
      */
-    addLayer: function (name, id, parentId, level, layers, url, version) {
+    addLayer: function (name, id, parentId, level, layers, url, version, {transparent = true, isSelected = false, time = false,
+        styles = "", legendURL = "", gfiAttributes = "showAll", featureCount = 3}) {
         const layer = {
+            id,
+            name,
+            parentId,
+            level,
+            layers,
+            url,
+            version,
+            transparent,
+            isSelected,
+            time,
+            styles,
+            legendURL,
+            gfiAttributes,
+            featureCount,
             cache: false,
             datasets: [],
-            featureCount: 3,
             format: "image/png",
-            gfiAttributes: "showAll",
             gutter: "0",
-            id: id,
             isBaseLayer: false,
             layerAttribution: "nicht vorhanden",
-            layers: layers,
-            legendURL: "",
-            level: level,
             maxScale: "2500000",
             minScale: "0",
-            name: name,
-            parentId: parentId,
             singleTile: false,
             supported: ["2D", "3D"],
             tilesize: "512",
-            transparent: true,
             typ: "WMS",
             type: "layer",
-            url: url,
-            urlIsVsible: true,
-            version: version
+            urlIsVisible: true
         };
 
         this.addItem(layer);
@@ -441,9 +448,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {String} [parentId] Id for the correct position of the layer in the layertree.
      * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
      * @param {(String | Object)} [gfiAttributes="ignore"] Attributes to be shown when clicking on the feature using the GFI tool.
+     * @param {Object} [opts] additional options to append to the model on initialization
      * @returns {void}
      */
-    addVectorLayer: function (name, id, features, parentId, styleId, gfiAttributes = "ignore") {
+    addVectorLayer: function (name, id, features, parentId, styleId, gfiAttributes = "ignore", opts = {}) {
         const layer = {
             type: "layer",
             name: name,
@@ -461,7 +469,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isSelected: true,
             cache: false,
             datasets: [],
-            urlIsVisible: false
+            urlIsVisible: false,
+            ...opts
         };
 
         if (styleId !== undefined) {
@@ -485,36 +494,34 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addGdiLayer: function (hit) {
-        const treeType = this.get("treeType");
-        let level = 0,
-            layerTreeId,
-            parentId = "tree",
-            gdiLayer = {
-                cache: false,
-                featureCount: "3",
-                format: "image/png",
-                gutter: "0",
-                isChildLayer: false,
-                isSelected: true,
-                isVisibleInTree: true,
-                layerAttribution: "nicht vorhanden",
-                legendURL: "",
-                maxScale: "2500000",
-                minScale: "0",
-                singleTile: false,
-                tilesize: "512",
-                transparency: 0,
-                transparent: true,
-                typ: "WMS",
-                type: "layer",
-                urlIsVsible: true
-            };
+        if (hit?.source) {
+            const treeType = this.get("treeType");
+            let level = 0,
+                parentId = "tree",
+                gdiLayer = Object.assign({
+                    cache: false,
+                    featureCount: "3",
+                    format: "image/png",
+                    gfiAttributes: "showAll",
+                    gfiTheme: "default",
+                    gutter: "0",
+                    isChildLayer: false,
+                    isSelected: true,
+                    isVisibleInTree: true,
+                    layerAttribution: "nicht vorhanden",
+                    legendURL: "",
+                    maxScale: "2500000",
+                    minScale: "0",
+                    singleTile: false,
+                    tilesize: "512",
+                    transparency: 0,
+                    transparent: true,
+                    typ: "WMS",
+                    type: "layer",
+                    urlIsVsible: true
+                }, hit.source);
 
-        if (hit.source) {
-            // check if layer is already in layer tree
-            layerTreeId = this.getItemByAttributes({id: hit.source.id});
-            if (!layerTreeId) {
-
+            if (!this.getItemByAttributes({id: hit.source.id})) {
                 if (treeType === "custom") {
                     // create folder and add it as "Externe Fachdaten"
                     parentId = "extthema";
@@ -528,19 +535,32 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                         this.addFolder("Fachthema", parentId, "ExternalLayer", 1, false, "common:tree.subjectData");
                     }
                 }
+                if (treeType === "default") {
+                    let category,
+                        parent = null;
+
+                    if (this.get("category") === "Opendata") {
+                        category = hit.source.datasets[0].kategorie_opendata[0];
+                    }
+                    else if (this.get("category") === "Inspire") {
+                        category = hit.source.datasets[0].kategorie_inspire[0];
+                    }
+                    else if (this.get("category") === "Behörde") {
+                        category = hit.source.datasets[0].kategorie_organisation;
+                    }
+                    parent = this.getItemByAttributes({name: category});
+                    if (parent) {
+                        parentId = parent.id;
+                    }
+                    level = 1;
+                }
+
                 gdiLayer = Object.assign(gdiLayer, {
-                    name: hit.source.name,
-                    id: hit.source.id,
                     parentId: parentId,
                     level: level,
-                    layers: hit.source.layers,
-                    url: hit.source.url,
-                    version: hit.source.version,
-                    gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
-                    gfiTheme: hit.source.gfiTheme ? hit.source.gfiTheme : "default",
-                    datasets: hit.source.datasets,
                     isJustAdded: true
                 });
+
                 this.addItemAtTop(gdiLayer);
                 Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.source.id});
             }
@@ -551,7 +571,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             }
         }
         else {
-            console.error("Es konnte kein Eintrag für Layer " + hit.source.id + " in ElasticSearch gefunden werden.");
+            console.error("No entry could be found for layer " + hit.source.id + " in ElasticSearch.");
         }
     },
 
@@ -635,27 +655,30 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * regulates the folder structure of the theme tree taking into account the map mode
-     * @param {String} treeType - type of topic tree
-     * @fires Core#RadioRequestUtilIsViewMobile
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
-    addTreeMenuItems: function (treeType) {
-        const menu = this.get("portalConfig").hasOwnProperty("menu") ? this.get("portalConfig").menu : undefined,
-            tree = menu !== undefined && menu.hasOwnProperty("tree") ? menu.tree : undefined,
-            isAlwaysExpandedList = tree !== undefined && tree.hasOwnProperty("isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
-            isMobile = Radio.request("Util", "isViewMobile"),
+    addTreeMenuItems: function () {
+        const menu = this.get("portalConfig")?.menu ? this.get("portalConfig").menu : undefined,
+            tree = menu !== undefined && menu?.tree ? menu.tree : undefined,
+            isAlwaysExpandedList = tree !== undefined && tree?.isAlwaysExpanded ? tree.isAlwaysExpanded : [],
             baseLayers = this.get("baselayer"),
             overLayers = this.get("overlayer"),
-            overLayers3d = this.get("overlayer_3d"),
-            baseLayersName = baseLayers && baseLayers.hasOwnProperty("name") ? baseLayers.name : null,
-            overLayersName = overLayers && overLayers.hasOwnProperty("name") ? overLayers.name : null,
-            overLayers3DName = overLayers3d && overLayers3d.hasOwnProperty("name") ? overLayers3d.name : null,
-            isQuickHelpSet = Radio.request("QuickHelp", "isSet"),
+            baseLayersName = baseLayers?.name ? baseLayers.name : null,
+            overLayersName = overLayers?.name ? overLayers.name : null,
             baseLayersDefaultKey = "common:tree.backgroundMaps",
             overLayersDefaultKey = "common:tree.subjectData";
         let baseLayerI18nextTranslate = null,
-            overLayerI18nextTranslate = null;
+            overLayerI18nextTranslate = null,
+            isQuickHelpSet = store.getters["QuickHelp/isSet"];
+
+        // @deprecated in the next major-release!
+        if (this.get("portalConfig")?.menu?.tree?.quickHelp === true || this.get("portalConfig")?.menu?.tree?.quickHelp === false) {
+            console.warn("The attribute 'Portalconfig.tree.quickHelp' is deprecated in the next major-release. Please use 'Portalconfig.quickHelp.configs.tree'!");
+            isQuickHelpSet = this.get("portalConfig").menu.tree.quickHelp;
+        }
+        if (this.get("portalConfig")?.quickHelp?.configs?.tree !== undefined) {
+            isQuickHelpSet = this.get("portalConfig").quickHelp.configs.tree;
+        }
 
         if (!baseLayersName && !baseLayers.i18nextTranslate) {
             // no name and no translation-function found: provide translation of default key
@@ -677,7 +700,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             type: "folder",
             name: baseLayersName ? baseLayersName : i18next.t(baseLayersDefaultKey),
             i18nextTranslate: baseLayers.i18nextTranslate ? baseLayers.i18nextTranslate : baseLayerI18nextTranslate,
-            glyphicon: "glyphicon-plus-sign",
+            icon: "bi-plus-circle-fill",
             id: "Baselayer",
             parentId: "tree",
             isInThemen: true,
@@ -687,13 +710,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             quickHelp: isQuickHelpSet
         });
 
-        this.addOrRemove3DFolder(treeType, isMobile, overLayers3d, overLayers3DName);
-
         this.addItem({
             type: "folder",
             name: overLayersName ? overLayersName : i18next.t(overLayersDefaultKey),
             i18nextTranslate: overLayers.i18nextTranslate ? overLayers.i18nextTranslate : overLayerI18nextTranslate,
-            glyphicon: "glyphicon-plus-sign",
+            icon: "bi-plus-circle-fill",
             id: "Overlayer",
             parentId: "tree",
             isInThemen: true,
@@ -702,6 +723,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             level: 0,
             quickHelp: isQuickHelpSet
         });
+
+        this.addOrRemoveFolder("3d_daten", "common:tree.subjectData3D", this.get("overlayer_3d"));
+        this.addOrRemoveFolder("TimeLayer", "common:tree.subjectDataTime", this.get("overlayer_time"));
+
         this.addItem({
             type: "folder",
             name: i18next.t("common:tree.selectedTopics"),
@@ -710,10 +735,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     setter("name", i18next.t("common:tree.selectedTopics"));
                 }
             },
-            glyphicon: "glyphicon-plus-sign",
+            icon: "bi-plus-circle-fill",
             id: "SelectedLayer",
             parentId: "tree",
-            isLeafFolder: true,
             isInThemen: true,
             isInitiallyExpanded: true,
             isAlwaysExpanded: isAlwaysExpandedList.includes("SelectedLayer"),
@@ -723,63 +747,76 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * adds or removes a folder for 3d data to topic tree considering the map mode
-     * @param {String} treeType type of tree
-     * @param {boolean} isMobile vsible map mode from portal
-     * @param {object} overLayer3d contains layer fro 3d mode
-     * @param {String} overLayers3DName name of the layer
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
+     * Adds or removes a folder for 3d data or WMS-T for the topic tree considering the type of the tree.
+     *
+     * @param {String} id Id of the folder which should be added or removed.
+     * @param {String} defaultTranslationKey Default translation key for the given folder.
+     * @param {Object} overLayer Contains the layers for either the 3D Mode or WMS-T.
      * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
+     * @fires Core#RadioRequestUtilIsViewMobile
      * @returns {void}
      */
-    addOrRemove3DFolder: function (treeType, isMobile, overLayer3d, overLayers3DName) {
-        const id3d = "3d_daten";
+    addOrRemoveFolder: function (id, defaultTranslationKey, overLayer) {
+        // The folder for the 3D data is disabled on mobile whereas the other folders (e.g. TimeLayers) are enabled
+        const enabled = id === "3d_daten" ? !Radio.request("Util", "isViewMobile") : true;
 
-        if (!isMobile && (treeType === "default" || overLayer3d !== undefined)) {
-            const defaultKey = "common:tree.subjectData3D";
-            let i18nextTranslate = null;
+        if (enabled && overLayer !== undefined) {
+            const name = overLayer?.name ? overLayer.name : null;
 
-            if (!overLayers3DName && !overLayer3d.i18nextTranslate) {
-                // no name and no translation-function found: provide translation of default key
-                i18nextTranslate = function (setter) {
-                    if (typeof setter === "function" && i18next.exists(defaultKey)) {
-                        setter("name", i18next.t(defaultKey));
-                    }
-                };
-            }
             this.addItemByPosition({
                 type: "folder",
-                name: overLayers3DName ? overLayers3DName : i18next.t(defaultKey),
-                i18nextTranslate: overLayer3d.i18nextTranslate ? overLayer3d.i18nextTranslate : i18nextTranslate,
-                id: id3d,
+                name: name ? name : i18next.t(defaultTranslationKey),
+                i18nextTranslate: (setter) => {
+                    if (typeof setter === "function") {
+                        if (name) {
+                            setter("name", i18next.exists(name) ? i18next.t(name) : name);
+                        }
+                        else if (i18next.exists(defaultTranslationKey)) {
+                            setter("name", i18next.t(defaultTranslationKey));
+                        }
+                    }
+                },
+                id,
                 parentId: "tree",
                 isInThemen: true,
                 isInitiallyExpanded: false,
                 level: 0,
-                quickHelp: Radio.request("QuickHelp", "isSet")
-            }, this.postionFor3DFolder(this.get("itemList")));
+                quickHelp: store.getters["QuickHelp/isSet"]
+            }, this.postionForFolder(this.getPreviousFolderName(id)));
         }
         else {
-            this.removeItem(id3d);
-            Radio.trigger("ModelList", "removeModelsById", id3d);
+            this.removeItem(id);
+            Radio.trigger("ModelList", "removeModelsById", id);
         }
     },
 
     /**
-     * get the position where the 3d folder has to be inserted in the itemlist
-     * @param {array} itemList - contains the items
-     * @returns {number} postion for 3d folder
+     * Receive the position where a folder has to be inserted in the itemList.
+     *
+     * @param {String} previousFolderName Name of the previous folder in the tree
+     * @returns {Number} Position for the folder after the folder with the given name.
      */
-    postionFor3DFolder: function (itemList) {
-        let position = itemList.length + 1;
+    postionForFolder: function (previousFolderName) {
+        const itemList = this.get("itemList"),
+            index = itemList.findIndex(item => item.name === previousFolderName);
 
-        itemList.forEach((item, index) => {
-            if (item.name === "Hintergrundkarten") {
-                position = index + 1;
-            }
-        });
-
-        return position;
+        return index > -1 ? index + 1 : itemList.length + 1;
+    },
+    /**
+     * Returns the folder that should be before the folder with the id.
+     *
+     * @param {String} id Id of the folder that should be added.
+     * @returns {String} Name of the previous folder in the tree.
+     */
+    getPreviousFolderName (id) {
+        switch (id) {
+            case "3d_daten":
+                return "Hintergrundkarten";
+            case "TimeLayer":
+                return "Fachdaten";
+            default:
+                return "Fachdaten";
+        }
     },
 
     /**
@@ -844,7 +881,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     getItemsByMetaID: function (metaID) {
         const layers = this.get("itemList").filter(function (item) {
             if (item.type === "layer") {
-                if (item.datasets.length > 0) {
+                if (item.datasets && item.datasets.length > 0) {
                     return item.datasets[0].md_id === metaID;
                 }
             }

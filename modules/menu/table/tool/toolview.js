@@ -28,7 +28,9 @@ const ToolView = Backbone.View.extend({
     render: function () {
         const attr = this.model.toJSON();
 
-        $("#table-tools-menu").append(this.$el.html(this.template(attr)));
+        if (attr?.id !== "legend") {
+            $("#table-tools-menu").append(this.$el.html(this.template(attr)));
+        }
 
         return this;
     },
@@ -40,19 +42,14 @@ const ToolView = Backbone.View.extend({
         return this;
     },
     checkItem: function () {
-        if (this.model.get("name") === "legend") {
-            Radio.trigger("Legend", "toggleLegendWin");
+        if (!this.model.collection) {
+            // addons are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the addon.
+            // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
+            this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
         }
-        else {
-            if (!this.model.collection) {
-                // addons are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the addon.
-                // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
-                this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
-            }
-            Radio.trigger("ModelList", "setActiveToolsToFalse", this.model);
-            this.model.setIsActive(true);
-            store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
-        }
+        Radio.trigger("ModelList", "setActiveToolsToFalse", this.model);
+        this.model.setIsActive(true);
+        store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
     },
     /**
      * @todo Write the documentation.

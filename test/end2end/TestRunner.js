@@ -4,24 +4,23 @@ require("./fixes");
 const webdriver = require("selenium-webdriver"),
     webdriverProxy = require("selenium-webdriver/proxy"),
     webdriverChrome = require("selenium-webdriver/chrome"),
+    webdriverEdge = require("selenium-webdriver/edge"),
     path = require("path"),
-    http = require("http"),
     tests = require(path.resolve(__dirname, "./tests.js")),
     {
         getCapabilities,
         capabilities,
         resolutions,
+        resolutionsMacOS,
         configs,
         modes
     } = require("./settings"),
     /* eslint-disable no-process-env */
-    // contains "browserstack" or "saucelabs"
+    // contains saucelabs"
     testService = process.env.npm_config_testservice,
-    browser = process.env.browser || "firefox,chrome",
+    browser = process.env.browser || "firefox,chrome,edge",
     url = process.env.url || "https://localhost:9001/",
     urlPart = process.env.urlPart.replace(/\\/g, "") || "portal/",
-    // proxy for browserstack
-    proxy = process.env.proxy || "",
     // proxy for local testing
     localHttpProxy = process.env.http_proxy,
     localHttpsProxy = process.env.https_proxy,
@@ -43,22 +42,16 @@ function cleanProxyUrl (proxyUrl) {
 
 /**
  * Adds proxy to builder for local testing.
- * @param {string} currentBrowser name of current browser
- * @param {object} builder given builder
+ * @param {String} currentBrowser name of current browser
+ * @param {Object} builder given builder
  * @returns {void}
  */
 function setLocalProxy (currentBrowser, builder) {
     if (currentBrowser === "chrome") {
-        let options = new webdriverChrome.Options();
-
-        options = options.addArguments(`--proxy-server=${localHttpProxy}`);
-        options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
-        options = options.addArguments("--ignore-certificate-errors");
-        options = options.addArguments("--ignore-ssl-errors");
-        if (testService === undefined) {
-            options = options.addArguments("--no-sandbox");
-        }
-        builder.setChromeOptions(options);
+        setLocalProxyChrome(builder);
+    }
+    else if (currentBrowser === "edge") {
+        setLocalProxyEdge(builder);
     }
     else {
         builder.setProxy(
@@ -69,6 +62,46 @@ function setLocalProxy (currentBrowser, builder) {
             })
         );
     }
+}
+
+/**
+ * Adds proxy to builder for local testing in chrome browser.
+ * @param {Object} builder given builder
+ * @returns {void}
+ */
+function setLocalProxyChrome (builder) {
+    let options = new webdriverChrome.Options();
+
+    options = options.addArguments(`--proxy-server=${localHttpProxy}`);
+    options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
+    options = options.addArguments("--ignore-certificate-errors");
+    options = options.addArguments("--ignore-ssl-errors");
+
+    if (testService === undefined) {
+        options = options.addArguments("--no-sandbox");
+    }
+
+    builder.setChromeOptions(options);
+}
+
+/**
+ * Adds proxy to builder for local testing in MicrosoftEdge browser.
+ * @param {Object} builder given builder
+ * @returns {void}
+ */
+function setLocalProxyEdge (builder) {
+    let options = new webdriverEdge.Options();
+
+    options = options.addArguments(`--proxy-server=${localHttpProxy}`);
+    options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
+    options = options.addArguments("--ignore-certificate-errors");
+    options = options.addArguments("--ignore-ssl-errors");
+
+    if (testService === undefined) {
+        options = options.addArguments("--no-sandbox");
+    }
+
+    builder.setEdgeOptions(options);
 }
 
 /**
@@ -101,7 +134,7 @@ function runTests (browsers) {
                     if (localHttpProxy || localHttpsProxy) {
                         setLocalProxy(currentBrowser, builder);
                     }
-
+                    console.warn(completeUrl);
                     resolutions.forEach(resolution => {
                         tests(builder, completeUrl, currentBrowser, resolution, config, mode, null);
                     });
@@ -117,9 +150,10 @@ function runTests (browsers) {
                     }
 
                     caps.forEach(capability => {
-                        const builder = createBuilder(testService, capability, build);
+                        const builder = createBuilder(testService, capability, build),
+                            usedresolutions = capability.browserName === "safari" ? resolutionsMacOS : resolutions;
 
-                        resolutions.forEach(resolution => {
+                        usedresolutions.forEach(resolution => {
                             tests(builder, completeUrl, capability.browserName, resolution, config, mode, capability);
                         });
                     });
@@ -131,8 +165,8 @@ function runTests (browsers) {
 
 /**
  * Creates a webdriver.Builder for the given testService.
- * @param {String} testServiceName "browserstack" or "saucelabs"
- * @param {Object} capability browserstack or saucelabs configurations.
+ * @param {String} testServiceName "saucelabs"
+ * @param {Object} capability saucelabs configurations.
  * @param {String} buildName name of the build
  * @returns {Object} the webdriver.Builder
  */
@@ -140,13 +174,7 @@ function createBuilder (testServiceName, capability, buildName) {
 
     const builder = new webdriver.Builder();
 
-    if (testServiceName === "browserstack") {
-        builder.usingHttpAgent(new http.Agent({keepAlive: true}));
-        builder.usingServer("http://hub-cloud.browserstack.com/wd/hub").
-            usingWebDriverProxy(proxy);
-        capability.build = buildName;
-    }
-    else {
+    if (testServiceName === "saucelabs") {
         builder.usingServer("https://ondemand.eu-central-1.saucelabs.com/wd/hub");
         capability["sauce:options"].build = buildName;
     }

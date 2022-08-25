@@ -1,0 +1,60 @@
+/*
+ * This file contains scss mixins.
+ *
+ * ⚠️ This file must not contain any css rules. It is imported in many places,
+ * and css rules in this file would result in a copy of all of the rules per import.
+ */
+
+@import "./variables.scss";
+
+/* focus styling for actions like menu-entries, buttons, icons, etc */
+@mixin primary_action_focus {
+    outline: 2px solid $accent_focus;
+    outline: 2px auto  Highlight;
+    outline: 2px auto -webkit-focus-ring-color;
+    outline-offset: -1px;
+}
+
+/* hover styling for actions like menu-entries, buttons, icons, etc */
+@mixin primary_action_hover {
+    opacity: 1;
+    &.btn-select, &:active, &.active, &:checked, &::selection, &.show, &[aria-expanded="true"] {
+        background-color: $primary;
+        border-radius: .25rem;
+    }
+    background-color: lighten($primary, 10%);
+    color: $light_grey_contrast;
+    cursor: pointer;
+}
+
+@mixin active-pill($vertical-padding, $horizontal-padding) {
+    .nav-pills {
+        & > li > a {
+            padding: $vertical-padding $horizontal-padding;
+        }
+        & > li.active > a {
+            color: $secondary_focus_contrast;
+            background-color: $secondary_focus;
+        }
+    }
+}
+
+/* Titles */
+@mixin tool-headings-h2() {
+    color: #333333;
+    white-space: nowrap;
+    font-size: 14px;
+    padding: 10px;
+    display: block;
+    margin: 0 10px 0 0;
+    font-weight: normal;
+    line-height: 17px;
+    box-sizing: border-box;
+    cursor: move;
+    font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+    --initialToolWidth: auto;
+    --initialToolWidthMobile: auto;
+    text-align: left;
+    font-style: normal;
+    text-transform: none;
+}

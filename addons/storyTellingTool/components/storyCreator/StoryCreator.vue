@@ -85,7 +85,7 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .tool-storyTellingTool-creator-preview {
     display: grid;
     grid-template-rows: auto 1fr;

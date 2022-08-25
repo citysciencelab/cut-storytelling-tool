@@ -1,7 +1,7 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import actions from "../store/actionsStyleVT";
 import getters from "../store/gettersStyleVT";
 import mutations from "../store/mutationsStyleVT";
@@ -9,7 +9,7 @@ import mutations from "../store/mutationsStyleVT";
 export default {
     name: "StyleVT",
     components: {
-        Tool
+        ToolTemplate
     },
     computed: {
         ...mapGetters("Tools/StyleVT", Object.keys(getters))
@@ -23,6 +23,9 @@ export default {
          */
         active (active) {
             this.setActive({active});
+            if (active) {
+                this.setFocusToFirstControl();
+            }
         }
     },
     created () {
@@ -38,6 +41,18 @@ export default {
     methods: {
         ...mapMutations("Tools/StyleVT", Object.keys(mutations)),
         ...mapActions("Tools/StyleVT", Object.keys(actions)),
+
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["tool-styleVT-selectedLayerField"]) {
+                    this.$refs["tool-styleVT-selectedLayerField"].focus();
+                }
+            });
+        },
         close () {
             this.setActive({active: false});
 
@@ -53,16 +68,16 @@ export default {
 </script>
 
 <template>
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
-        :initialWidth="initialWidth"
+        :deactivate-gfi="deactivateGFI"
+        :initial-width="initialWidth"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <p
                 v-if="vectorTileLayerList.length === 0"
                 id="tool-styleVT-noStyleableLayers"
@@ -76,20 +91,21 @@ export default {
                     class="form-horizontal"
                     role="form"
                 >
-                    <div class="form-group form-group-sm col-md-12 col-sm-12">
+                    <div class="form-group form-group-sm col-md-12">
                         <label
                             for="tool-styleVT-selectedLayerField"
-                            class="range-label"
+                            class="range-label mb-1"
                         >
                             {{ $t("common:modules.tools.styleVT.theme") }}
                         </label>
                         <select
                             id="tool-styleVT-selectedLayerField"
-                            class="form-control input-sm"
+                            ref="tool-styleVT-selectedLayerField"
+                            class="form-select form-select-sm"
                             @change="setLayerModelById($event.target.value)"
                         >
                             <option
-                                class="pull-left"
+                                class="float-start"
                                 value=""
                                 selected
                             >
@@ -98,7 +114,7 @@ export default {
                             <option
                                 v-for="vectorTileLayer in vectorTileLayerList"
                                 :key="vectorTileLayer.id"
-                                class="pull-left"
+                                class="float-start"
                                 :value="vectorTileLayer.id"
                                 :selected="selectedLayerId(vectorTileLayer.id)"
                             >
@@ -108,7 +124,7 @@ export default {
                     </div>
                     <div
                         v-if="layerModel"
-                        class="form-group form-group-sm col-md-12 col-sm-12"
+                        class="form-group form-group-sm col-md-12"
                     >
                         <label
                             for="tool-styleVT-selectedStyleField"
@@ -118,13 +134,13 @@ export default {
                         </label>
                         <select
                             id="tool-styleVT-selectedStyleField"
-                            class="form-control input-sm"
+                            class="form-select form-select-sm"
                             @change="triggerStyleUpdate($event.target.value)"
                         >
                             <option
                                 v-for="vtStyle in layerModel.get('vtStyles')"
                                 :key="vtStyle.id"
-                                class="pull-left"
+                                class="float-start"
                                 :value="vtStyle.id"
                                 :selected="selectedStyle(vtStyle.id)"
                             >
@@ -135,9 +151,9 @@ export default {
                 </form>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @import "~variables";
 </style>

@@ -7,6 +7,16 @@ let center,
 
 const {memorize, forward, backward} = mutations,
     mockMapZeroState = {
+        getCenter: () => [0, 0],
+        getZoom: () => 0,
+        setCenter: c => {
+            center = c;
+        },
+        setZoom: z => {
+            zoom = z;
+        }
+    },
+    mockMapGetViewZeroState = {
         getView: () => ({
             getCenter: () => [0, 0],
             getZoom: () => 0,
@@ -19,16 +29,14 @@ const {memorize, forward, backward} = mutations,
         })
     },
     mockMapOneState = {
-        getView: () => ({
-            getCenter: () => [1, 1],
-            getZoom: () => 1,
-            setCenter: c => {
-                center = c;
-            },
-            setZoom: z => {
-                zoom = z;
-            }
-        })
+        getCenter: () => [1, 1],
+        getZoom: () => 1,
+        setCenter: c => {
+            center = c;
+        },
+        setZoom: z => {
+            zoom = z;
+        }
     },
     zeroMemory = {
         center: [0, 0],
@@ -38,6 +46,7 @@ const {memorize, forward, backward} = mutations,
         center: [1, 1],
         zoom: 1
     };
+
 
 describe("src/modules/controls/backForward/store/mutationsBackForward.js", () => {
     describe("memorize", () => {
@@ -156,7 +165,7 @@ describe("src/modules/controls/backForward/store/mutationsBackForward.js", () =>
             center = null;
             zoom = null;
 
-            forward(state, mockMapZeroState);
+            forward(state, mockMapGetViewZeroState);
 
             expect(center).to.eql([5, 5]);
             expect(zoom).to.equal(5);
@@ -211,7 +220,7 @@ describe("src/modules/controls/backForward/store/mutationsBackForward.js", () =>
             center = null;
             zoom = null;
 
-            backward(state, mockMapZeroState);
+            backward(state, mockMapGetViewZeroState);
 
             expect(center).to.eql([2, 2]);
             expect(zoom).to.equal(2);

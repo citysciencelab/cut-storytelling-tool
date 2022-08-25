@@ -6,7 +6,10 @@ describe("menu/desktop/folder/viewTree", function () {
 
     before(function () {
         const fakeModel = {
-            get: function () {
+            get: function (attrib) {
+                if (attrib === "parentId") {
+                    return null;
+                }
                 return true;
             },
             getIsVisibleInTree: function () {
@@ -19,6 +22,8 @@ describe("menu/desktop/folder/viewTree", function () {
 
             isFolderSelectable: false,
             isSecured: false,
+            id: "123",
+            parentId: "tree",
 
             setIsFolderSelectable: function (value) {
                 this.isFolderSelectable = value;
@@ -27,11 +32,12 @@ describe("menu/desktop/folder/viewTree", function () {
             toJSON: function () {
                 return {
                     "isFolderSelectable": this.isFolderSelectable,
-                    "isLeafFolder": true,
                     "isSelected": false,
                     "name": "testFolder",
                     "showAllTopicsText": "test",
-                    "isSecured": false
+                    "isSecured": false,
+                    "id": "123",
+                    "parentId": "tree"
                 };
             },
 

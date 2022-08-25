@@ -19,11 +19,11 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["controlsConfig", "mobile", "isSimpleStyle"]),
-        ...mapGetters("Map", ["prettyMouseCoord"]),
+        ...mapGetters(["controlsConfig", "mobile", "uiStyle"]),
+        ...mapGetters("Maps", ["prettyMouseCoord"]),
         // MousePosition is the only control that needs to do this itself since it's not a ControlBar child
         show () {
-            return !this.mobile && this.controlsConfig?.mousePosition && !this.isSimpleStyle;
+            return !this.mobile && this.controlsConfig?.mousePosition && this.uiStyle !== "SIMPLE";
         }
     },
     methods: {
@@ -42,13 +42,20 @@ export default {
     <div
         v-if="show"
         :class="['mouse-position', open ? 'open' : 'closed']"
+        tabindex="0"
+        :title="$t('modules.footer.mouse')"
+        :aria-label="$t('modules.footer.mouse')"
     >
         <span
+            tabindex="0"
+            :title="$t('modules.footer.mouse')"
+            :aria-label="$t('modules.footer.mouse')"
             :class="['mouse-position-span', open ? 'open' : 'closed']"
         >
             {{ prettyMouseCoord || $t(`common:modules.controls.mousePosition.hint`) }}
         </span>
         <ControlIcon
+            id="hide-mouse-position"
             :icon-name="`chevron-${open ? 'left' : 'right'}`"
             :title="$t(`common:modules.controls.mousePosition.${open ? 'hide' : 'show'}MousePosition`)"
             :on-click="toggleOpen"
@@ -57,18 +64,18 @@ export default {
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 
     .mouse-position {
         display: flex;
         flex-direction: row;
 
-        background-color: @primary;
-        color: @primary_contrast;
-        font-size: @font_size_small;
-        line-height: @icon_length_small;
-        min-height: @icon_length_small;
+        background-color: $primary;
+        color: $white;
+        font-size: $font_size_small_custom;
+        line-height: $icon_length_small;
+        min-height: $icon_length_small;
 
         transition: 1s ease-out;
         /* hack to prevent text from jumping during animation */
@@ -76,12 +83,18 @@ export default {
 
         &.closed {
             /* using translateX to prevent multiline flicker on width transformation */
-            transform: translateX(calc(-100% + @icon_length_small));
+            transform: translateX(calc(-100% + #{$icon_length_small}));
         }
 
         .mouse-position-span {
             padding: 0 8px;
-            border-right: 1px solid @primary_contrast;
+            border-right: 1px solid $light_grey_contrast;
+            color: $white;
+            min-width: 150px;
+        }
+
+        #hide-mouse-position{
+            color: $white;
         }
     }
 </style>

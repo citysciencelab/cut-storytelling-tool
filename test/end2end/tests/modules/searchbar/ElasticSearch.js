@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../library/driver"),
     {isLayerVisible} = require("../../../library/scripts"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isCustom, isMaster} = require("../../../settings"),
@@ -14,9 +14,10 @@ const webdriver = require("selenium-webdriver"),
 async function ElasticSearch ({builder, url, resolution, capability}) {
     describe("Elastic Search", function () {
         const searchInputSelector = By.css("#searchInput"),
-            searchString = "xys",
-            layerName = "high performance area",
-            layerId = "7134";
+            searchString = "xxx",
+            layerName = "Positivnetz Feldversuch LangLKW",
+            layerId = "676";
+
         let driver, searchInput;
 
         before(async function () {
@@ -25,7 +26,7 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
-            driver = await initDriver(builder, url, resolution);
+            driver = await getDriver();
             await driver.wait(until.elementLocated(searchInputSelector), 5000);
             searchInput = await driver.findElement(searchInputSelector);
         });
@@ -36,13 +37,11 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                     logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
-            await driver.quit();
         });
 
         afterEach(async function () {
             if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                await driver.quit();
+                await quitDriver();
                 driver = await initDriver(builder, url, resolution);
                 await driver.wait(until.elementLocated(searchInputSelector), 5000);
                 searchInput = await driver.findElement(searchInputSelector);
@@ -50,20 +49,23 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
         });
 
         if (isMaster(url) || isCustom(url)) {
-            it(`search for '${searchString}' shows 'Fachthema'-suffixed result in a dropdown that can be clicked`, async function () {
-                const topicSelector = By.xpath("//small[@class='list-group-item-theme'][text()='Fachthema']");
+            it(`search for '${searchString}' shows 'Thema (externe Fachdaten)'-suffixed result in a dropdown that can be clicked`, async function () {
 
                 await searchInput.sendKeys(searchString);
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#searchInputUL"))));
-                await driver.wait(until.elementLocated(topicSelector), 800);
+                if (isMaster(url)) {
+                    const topicSelector = By.xpath("//span[@class='list-group-item-theme'][contains(.,'Thema (externe Fachdaten)')]");
+
+                    await driver.wait(until.elementLocated(topicSelector), 7000);
+                }
             });
         }
 
         if (isMaster(url)) {
             const treeSelector = By.xpath("//ul[@id='tree']"),
                 listEntrySelector = By.xpath(`//li[@id='${layerId}']`),
-                checkboxSelector = By.xpath(`//ul[@id='tree']//li//span[text()='${layerName}'][..//span[contains(@class,'glyphicon-check')]]`);
+                checkboxSelector = By.xpath(`//ul[@id='tree']//li//span[text()='${layerName}'][..//span//i[contains(@class,'bi-check2-square')]]`);
 
             it("renders the chosen layer", async function () {
                 do {
@@ -83,8 +85,8 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
         if (isCustom(url)) {
             const listEntrySelector = By.xpath(`//li[@id='${layerId}']`),
                 treeSelector = By.xpath("//ul[@id='tree']"),
-                checkboxSelector = By.xpath(`//ul[@id='tree']//ul[@id='ExternalLayer']/li//span[contains(text(),'${layerName}')][..//span[contains(@class,'glyphicon-check')]]`),
-                selectedLayerGlyphSelector = By.css(".SelectedLayer .glyphicon-plus-sign"),
+                checkboxSelector = By.xpath(`//ul[@id='tree']//ul[@id='ExternalLayer']/li//span[contains(text(),'${layerName}')][..//span//i[contains(@class,'bi-check2-square')]]`),
+                selectedLayerGlyphSelector = By.css(".SelectedLayer .bi-plus-circle-fill"),
                 selectedLayerFirstEntrySelector = By.css("#SelectedLayer .layer-item:nth-child(1) .layer-item .title");
 
             it("renders the chosen layer", async function () {
@@ -114,6 +116,15 @@ async function ElasticSearch ({builder, url, resolution, capability}) {
                 await (await driver.findElement(selectedLayerGlyphSelector)).click();
                 await driver.wait(until.elementLocated(selectedLayerFirstEntrySelector), 5000);
                 expect(await (await driver.findElement(selectedLayerFirstEntrySelector)).getText()).to.contain(layerName);
+            });
+        }
+
+        if (isMaster(url) || isCustom(url)) {
+            it("remove searchbar input", async function () {
+                await driver.wait(until.elementLocated(By.id("searchInput")), 12000);
+                await (await driver.findElement(By.css("#searchInput"))).clear();
+
+                expect(await (await driver.findElement(By.id("searchInput"))).getAttribute("value")).to.equals("");
             });
         }
     });

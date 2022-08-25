@@ -97,7 +97,7 @@ To translate a config.json value, the value itself must be formatted correctly. 
         "menu": {
             "example": {
                 "name": "translate#common:foo.bar.exampleMenuTitle",
-                "glyphicon": "glyphicon-list",
+                "icon": "bi-list-ul",
                 "isInitOpen": false
             }
         }
@@ -157,11 +157,11 @@ Tools (de: "Werkzeuge") can be translated similarly to tools. This includes the 
 {
     "tools": {
         "name": "Tools",
-        "glyphicon": "glyphicon-wrench",
+        "icon": "bi-tools",
         "children": {
             "draw": {
                 "name": "translate#common:foo.bar.exampleMenuTitle",
-                "glyphicon": "glyphicon-pencil"
+                "icon": "bi-pencil-fill"
             },
         }
     }
@@ -204,7 +204,7 @@ A translation is implemented this way:
 i18next.t("additional:modules.tools.example.title"),
 ```
 
-[See this for an example.](https://bitbucket.org/geowerkstatt-hamburg/addons/src/master/populationRequest/)
+[See this for an example.](https://bitbucket.org/geowerkstatt-hamburg/addons/src/dev/populationRequest/)
 
 ## Interesting i18nxt translation functions
 
@@ -312,7 +312,7 @@ ExampleTemplate
 <template lang="html">
     <Tool
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
     >
 </template>
 ```

@@ -8,8 +8,9 @@ import FolderTemplate from "text-loader!./templateTree.html";
 
 const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype */{
     events: {
-        "click .title, .glyphicon-minus-sign, .glyphicon-plus-sign": "toggleIsExpanded",
-        "click .selectall": "toggleIsSelected"
+        "click .title, .minimize-icon, .maximize-icon": "toggleIsExpanded",
+        "click .selectall": "toggleIsSelected",
+        "keydown": "toggleKeyAction"
     },
     /**
      * @class FolderViewTree
@@ -21,7 +22,7 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
      * @listens FolderViewTree#isVisibleInTree
      * @fires FolderViewTree#toggleIsExpanded
      * @fires FolderViewTree#toggleIsSelected
-     * @fires ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
+     * @fires ModelList#RadioTriggerModelListSetIsSelectedOnChildModels
      */
     initialize: function () {
         // prevents the theme tree to close due to Bootstrap
@@ -38,7 +39,7 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
         this.render();
     },
     tagName: "li",
-    className: "themen-folder",
+    className: "themen-folder list-group-item",
     id: "",
     template: _.template(FolderTemplate),
 
@@ -92,6 +93,46 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
     },
 
     /**
+     * Handles all keyboard events, e.g. for open/close the folder or selecting the whole component.
+     * @param {Event} event - the event instance
+     * @returns {void}
+     */
+    toggleKeyAction: function (event) {
+        if (event.which === 32 || event.which === 13) {
+            if (this.model.get("isFolderSelectable")) {
+                this.toggleIsSelected();
+            }
+            else {
+                this.toggleIsExpanded();
+            }
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        else if (event.which === 37) {
+            this.model.setIsExpanded(false);
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        else if (event.which === 39) {
+            this.model.setIsExpanded(true);
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    },
+
+    /**
+     * Sets the focus to the <a> element of this component.
+     * @returns {void}
+     */
+    setFocus: function () {
+        const htmlAElement = document.querySelector("#\\" + this.model.get("id") + "> div>a");
+
+        if (htmlAElement) {
+            htmlAElement.focus();
+        }
+    },
+
+    /**
      * Rerenders the data to DOM.
      * @return {void}
      */
@@ -99,6 +140,7 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
         const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
+        this.setFocus();
     },
     /**
      * Toogle Expanded
@@ -109,12 +151,12 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
     },
     /**
      * Toggle Selected
-     * @fires ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
+     * @fires ModelList#RadioTriggerModelListSetIsSelectedOnChildModels
      * @return {void}
      */
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
-        Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model);
+        Radio.trigger("ModelList", "setIsSelectedOnChildModels", this.model);
         this.model.setIsExpanded(true);
     },
     /**

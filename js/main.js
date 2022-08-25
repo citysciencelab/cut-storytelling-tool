@@ -5,7 +5,7 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import {fetch} from "./layerList";
-import "../css/bootstrap.less";
+import "../css/bootstrap.scss";
 // CSS-Handling: Importieren von Css damit Webpack das verarbeitet.
 import "../css/style.css";
 import HttpApi from "i18next-http-backend";
@@ -20,6 +20,11 @@ let strippedLocation = null,
 
 // wenn Config.js nicht in der index.html als Script-Tag eingebunden ist, muss sie zunächst zugefügt und geladen werden
 if (!("Config" in window)) {
+
+    // temporary solution for portals that didn't have loaded Cesium in index.html until lazy loading is implemented
+    if (typeof Cesium === "undefined") {
+        global.Cesium = null;
+    }
 
     // Pfad zur Config.js bei ParametricUrl
     if (window.location.search !== "") {
@@ -148,10 +153,10 @@ function initLanguage (portalLanguageConfig) {
             // lng overrides language detection - so shall not be set (!)
             // lng: portalLanguage.fallbackLanguage,
             fallbackLng: portalLanguage.fallbackLanguage,
-            whitelist: Object.keys(portalLanguage.languages),
+            supportedLngs: Object.keys(portalLanguage.languages),
 
-            // to allow en-US when only en is on the whitelist - nonExplicitWhitelist must be set to true
-            nonExplicitWhitelist: true,
+            // to allow en-US when only en is on the supportedLngs - nonExplicitSupportedLngs must be set to true
+            nonExplicitSupportedLngs: true,
             // to not look into a folder like /locals/en-US/... when en-US is detected, use load: "languageOnly" to avoid using Country-Code in path
             load: "languageOnly",
 
@@ -213,8 +218,8 @@ function initLanguage (portalLanguageConfig) {
 }
 
 
-// Less-Handling: Importieren von allen less-Files im modules-Ordner
-context = require.context("../modules/", true, /.+\.less?$/);
+// SCSS-Handling: Importieren von allen scss-Files im modules-Ordner
+context = require.context("../modules/", true, /.+\.scss?$/);
 
 context.keys().forEach(context);
 

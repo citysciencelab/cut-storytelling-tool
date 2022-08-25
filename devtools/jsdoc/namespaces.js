@@ -94,11 +94,6 @@
  */
 
 /**
- * @namespace Cookie
- * @description Popup to inform user about cookies.
- */
-
-/**
  * @namespace MapMarker
  * @memberof Core
  * @description MapMarker
@@ -116,7 +111,7 @@
 
 /**
  * @namespace QuickHelp
- * @description fooBar
+ * @description The QuickHelp module.
  */
 
 /**
@@ -289,6 +284,12 @@
  */
 
 /**
+ * @namespace Komoot
+ * @memberof Searchbar
+ * @description Configures Komoot Photon search
+ */
+
+/**
  * @namespace LocationFinder
  * @memberof Searchbar
  * @description Configures LocationFinder search
@@ -456,30 +457,6 @@
  */
 
 /**
- * @namespace Pendler
- * @memberof Tools
- * @description Animation of commuter movements.
- */
-
-/**
- * @namespace Animation
- * @memberof Tools.Pendler
- * @description Animation of commuter movements.
- */
-
-/**
- * @namespace Core
- * @memberof Tools.Pendler
- * @description Core of commuter movements.
- */
-
-/**
- * @namespace Lines
- * @memberof Tools.Pendler
- * @description foobar
- */
-
-/**
  * @namespace Print
  * @memberof Tools
  * @description Printing module
@@ -559,16 +536,6 @@
  */
 
 /**
- * @namespace ZoomToFeature
- * @description Zooms to a given feature.
- */
-
-/**
- * @namespace ZoomToGeometry
- * @description Zooms to a given geometry.
- */
-
-/**
  * @namespace Alerting
  * @description Alerting system that responds to given events.
  * Used to have same alert all over the portal.
@@ -577,12 +544,6 @@
 /**
  * @namespace App
  * @description Loads core and instances all modules that have to be loaded, due to portal config
- */
-
-/**
- * @namespace ClickCounter
- * @description This functionality registers user click behaviour and updates the url of an created iframe
- * used for Verkehrsportal.
  */
 
 /**
@@ -665,11 +626,6 @@
 /**
  * @namespace HighlightFeature
  * @description Highlight a specified vector feature.
- */
-
-/**
- * @namespace LayerInformation
- * @description Shows the layer-information in a popup on the map.
  */
 
 /**

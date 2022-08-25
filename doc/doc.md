@@ -21,7 +21,7 @@ These files describe central information to be used by multiple portals:
 These files define the distinguishing features of an instance:
 
 * **[config.js](config.js.md)**: Configuration of paths to further configuration files and services
-* **[config.json](config.json.md)**: Configuration of portal appearance and available contents
+* **[config.json](config.json.md)**: Configuration of portal appearance and available contents (If the bitbucket site isn´t displayed correctly please use this link: **[alternative config.json documentation](https://www.masterportal.org/files/masterportal/html-doku/doc/latest/config.json.html)**)
 
 The following figure schematically demonstrates the ensemble of files. Please mind that the files **index.html**, **[config.js](config.js.md)**, and **[config.json](config.json.md)** must be placed in the same path.
 

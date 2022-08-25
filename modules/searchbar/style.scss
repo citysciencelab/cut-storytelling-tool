@@ -1,0 +1,430 @@
+@import "../../css/variables.scss";
+
+/*----------------------------------Table Template------------------------------------------------------------*/
+#searchInput {
+    &::placeholder {
+        font-weight: bold;
+        font-size: 12px;
+        color:  $dark_grey;
+        opacity: 1;
+    }
+    &:-ms-input-placeholder {
+        font-weight: bold;
+        font-size: 13px;
+    }
+    box-shadow: none;
+    font-size: 12px;
+    padding-right: 32.5px;
+    &::-ms-clear {
+        display: none;
+    }
+    &+span {
+        position: absolute;
+        right: 50px;
+        top: 0;
+        bottom: 0;
+        z-index: 3;
+        color: $dark_grey;
+        display: none;
+        align-items: center; // necessary after display: inline-flex is set dynamically
+        pointer-events: all;
+        cursor: pointer;
+    }
+}
+#searchInputLi {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#searchForm {
+    >.input-group {
+        width: 100%;
+    }
+}
+#autoCompleteBody {
+    border-top: 0 none;
+    display: none;
+    position: relative;
+    overflow: visible;
+    width: 100%;
+}
+.btn-deleteSearch {
+    border-left-width: 0;
+    border-right-width: 1px;
+    color: $dark_grey;
+    border-color: $light_grey;
+    &:hover {
+        background-color: $white;
+    }
+    >.bootstrap-icon > .bi-x-lg {
+        font-size: 12px;
+    }
+}
+.dropdown-menu-search {
+    background-clip: padding-box;
+    background-color: $white;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    float: left;
+    font-size: 12px;
+    list-style: outside none none;
+    margin: 2px 0 0;
+    min-width: 200px;
+    max-width: 480px;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: auto;
+    z-index: 1001;
+    padding: 0;
+    .bootstrap-icon {
+        color: $dark_grey;
+        padding-right: 12px;
+        padding-left: 3px;
+        font-size: 17px;
+    }
+    img {
+        width: 25px;
+        padding-right: 10px;
+        margin-bottom: 4px;
+    }
+    .list-group-item-theme {
+        font-style: italic;
+        padding-left: 10px;
+    }
+    li.type {
+        background: $white;
+    }
+    li {
+        &:hover {
+            cursor: pointer;
+            opacity: 1;
+            background-color: $accent_hover;
+            span, small {
+                color: $white;
+            }
+        }
+    }
+}
+.btn-search {
+    >.bootstrap-icon > .bi-search {
+        font-size: 13px;
+    }
+    &:hover {
+        background-color: $accent_hover;
+        color: $light_grey_contrast;
+    }
+}
+
+.btn-search-question {
+    border: 0;
+    background: 0;
+    padding: 0;
+    margin: 0;
+    >.bootstrap-icon {
+        color: $secondary_icon_button;
+        padding: 5px 5px 3px 5px;
+        font-size: 20px;
+        &:hover {
+            background-color: $accent_hover;
+            color: $accent_contrast;
+        }
+    }
+    >.bootstrap-icon.quickhelp-is-shown {
+        color: $light_blue;
+        &:hover {
+            background-color: $accent_hover;
+            color: $accent_contrast;
+        }
+    }
+}
+
+.results {
+    background-color: $primary;
+    font-size: 12px;
+    text-align: right;
+    padding: 6px;
+    border-top-width: 2px;
+    color: $white;
+    >div {
+        >.bootstrap-icon {
+            color: $white;
+            font-size: 16px;
+            vertical-align: middle;
+            padding-top: 1px;
+        }
+    }
+}
+li.results {
+    &:hover {
+        opacity: 0.6;
+        background-color: $primary;
+    }
+}
+#searchInputUL {
+    div{
+        opacity: 1;
+        border-radius: 0;
+    }
+    .selected {
+        background: $light_blue;
+        color: $white;
+        #searchInputLi {
+            color: $white;
+        }
+    }
+    .line-break { 
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        hyphens: auto;
+    } 
+
+    .list-group-item {
+
+            .bootstrap-icon {
+                float:left;
+            }
+            .list-group-item-theme {
+                float: right;
+            }
+            .list-group-item-name {
+                display: inline-block;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                // has to be normal so the line break works
+                white-space: normal;
+                max-width: 70%;
+                clear: both;
+            }
+            p {
+                padding-top: 10px;
+            }
+
+            > .badge {
+                background-color: $dark_grey;
+                border-radius: 10px;
+                font-size: 12px;
+            }
+
+        }
+
+}
+#table-searchForm {
+    button.btn.btn-outline-default.btn-table-search {
+        background-color: $white;
+        border-radius: 12px;
+        border-color: $white;
+        height: 40px;
+        width: 40px;
+        padding: 6px 12px 1px 5px;
+        margin: 0 5px 5px 5px;
+    }
+    .btn-table-search {
+        >.icon-search {
+            font-size: 24px;
+        }
+        &:hover {
+            background-color: $light_grey;
+        }
+    }
+    >.input-group {
+        width: 100%;
+        .icon-cross2{
+            margin: 13px 7px 0 0;
+        }
+        .icon-cross2:before{
+            width: 50px;
+            height: 40px;
+            left: -16px;
+            top: -12px;
+            padding-top: 14px;
+        }
+    }
+    .dropdown-menu-search {
+        background-clip: padding-box;
+        background-color: $white;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        float: left;
+        font-size: 13px;
+        list-style: outside none none;
+        margin: 2px 0 0;
+        min-width: 200px;
+        position: absolute;
+        bottom: 100%;
+        z-index: 1001;
+        padding: 0;
+        top: auto;
+        .bootstrap-icon {
+            color: $dark_grey;
+            padding-right: 12px;
+            padding-left: 3px;
+            padding-top: 5px;
+            font-size: 17px;
+        }
+        img {
+            width: 25px;
+            padding-right: 10px;
+            margin-bottom: 4px;
+        }
+        small {
+            color: $dark_grey;
+            padding-left: 10px;
+        }
+        li.type {
+            background: $light_grey;
+        }
+        .list-group-item {
+            font-size: 17px;
+            color: $dark_grey;
+            background-color: $secondary_table_style;
+            #searchInputLi {
+                font-size: 17px;
+            }
+
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 480px;
+
+            .list-group-item-name {
+                max-width: 75%;
+            }
+
+        }
+        li {
+            &:hover {
+                cursor: pointer;
+                opacity: 1;
+                background-color: $light_grey;
+            }
+        }
+        >.list-group-item:first-child {
+            border-top-right-radius: 12px;
+            border-top-left-radius: 12px;
+        }
+        >div:nth-last-child(3), >.list-group-item:nth-last-child(even):not(.open):last-of-type {
+            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+    }
+    li.results {
+        border-bottom-right-radius: 12px;
+        border-bottom-left-radius: 12px;
+        &:hover {
+            opacity: 1;
+            background-color: $light_grey;
+        }
+    }
+    #searchInputUL {
+        border-radius: 12px;
+        margin-bottom: 15px;
+        margin-right: -3px;
+        background-color: $light_grey;
+    }
+    #searchInputUL div::-webkit-scrollbar {
+        width: 20px;
+    }
+    #searchInputUL div::-webkit-scrollbar-thumb {
+        background-color: $primary;
+        border: 6px solid transparent;
+        border-radius: 12px;
+        background-clip: content-box;
+        min-height: 30px;
+    }
+    #searchInputUL div::-webkit-scrollbar-track {
+        border: 6px solid #f50b0b00;
+        border-radius: 12px;
+        background-clip: content-box;
+        background-color: $light_grey;
+    }
+    #searchInput {
+        margin: 1px 0 7px 0;
+        height: 40px;
+        border-radius: 12px;
+    }
+    input#searchInput.form-control {
+        font-size: 22px;
+    }
+    input#searchInput {
+        &::placeholder {
+            font-size: 22px;
+            opacity: 0.7;
+        }
+        &:-ms-input-placeholder {
+            font-size: 22px;
+            opacity: 0.7;
+        }
+    }
+}
+#table-nav {
+    #searchbar {
+        position: relative;
+        top: -9px;
+        padding-right: 0;
+        flex-grow: 1;
+        display: block !important;
+    }
+}
+input#searchInput.form-control {
+    &:focus {
+        border-color: $primary;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+    }
+}
+@media (max-width: 767px) {
+    #searchbar {
+        margin-top: 8px;
+        margin-bottom: 8px;
+        border: 0;
+        padding: 0;
+        margin-left: 15px;
+    }
+    #searchForm {
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+    #searchInput {
+        min-width: 200px;
+        &+span {
+            font-size: 14px;
+        }
+    }
+    #searchInputUL {
+        min-width: 200px;
+    }
+}
+@media (min-width: 768px) {
+    #searchbar {
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    #searchInput {
+        max-width: 350px;
+    }
+    #searchInputUL {
+        min-width: 300px;
+    }
+}
+    .search-funnel {
+        position: absolute;
+        width: 360px;
+        height: 15px;
+        margin-left: 65px;
+        background-image: radial-gradient(circle at 0 100%, transparent 15px, $light_grey 15px);
+    }
+    .search-right-funnel-corner {
+        position:absolute;
+        right: 40px;
+        height: 15px;
+        width: 30px;
+        background-image: radial-gradient(circle at 100% 100%, transparent 15px, $light_grey 15px);
+    }

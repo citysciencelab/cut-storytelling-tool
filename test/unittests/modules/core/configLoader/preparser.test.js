@@ -4,7 +4,12 @@ import Preparser from "@modules/core/configLoader/preparser.js";
 describe("core/configLoader/preparser", function () {
     let preparser;
 
-    before(function () {
+    before(() => {
+        i18next.init({
+            lng: "cimode",
+            debug: false
+        });
+
         preparser = new Preparser(null, {url: Config.portalConf});
     });
 

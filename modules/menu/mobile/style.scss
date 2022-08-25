@@ -1,0 +1,73 @@
+@import "~variables";
+
+/*staticlink*/
+.mobile {
+    max-height: 66vh;
+    overflow-y: auto;
+    span.title {
+        font-size: 14px;
+        padding-left: 6px;
+        vertical-align: text-bottom;
+    }
+    span.bootstrap-icon {
+        font-size: 18px;
+        padding: 5px;
+    }
+    >.list-group-item {
+        padding: 12px 5px;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+    }
+}
+.selected-layer-item {
+    span.title {
+        vertical-align: sub;
+    }
+}
+.item-settings {
+    margin-top: 10px;
+    border-top: 1px solid $light_grey;
+    padding-top: 8px;
+    >.form-inline {
+        >.form-group {
+            >label {
+                font-size: 12px;
+                padding-right: 10px;
+            }
+            >select {
+                width: auto;
+                display: inline-block;
+            }
+        }
+    }
+    >.layer-info-item {
+        >.bootstrap-icon {
+            padding: 5px;
+        }
+    }
+    >.layer-sort-item {
+        >.bootstrap-icon {
+            padding: 5px;
+        }
+        margin-right: 10px;
+    }
+    >.remove-layer {
+        margin-right: 10px;
+    }
+}
+.list-group-item {
+    >.layer-info-item {
+        >.rotate {
+            transform: rotate(0deg);
+            transition: .5s;
+        }
+        >.rotate-back {
+            transform: rotate(-180deg);
+            transition: .5s;
+        }
+    }
+    a {
+        color: $black;
+    }
+}

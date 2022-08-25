@@ -1,0 +1,184 @@
+@import "../../../css/mixins.scss";
+@import "~variables";
+
+.wfst-module {
+    .record-button {
+        float: left;
+        width: 68px;
+        height: 70px;
+        text-align: center;
+        margin: 0 5px;
+        padding: 6px 6px;
+    }
+
+    .record-label {
+        word-break: normal;
+        word-wrap: normal;
+        white-space: normal;
+        font-size: 12px;
+
+    }
+
+    .record-button > .bootstrap-icon {
+        font-size: 15px;
+    }
+
+    .record-active {
+        color: $white;
+        background-color: $secondary_focus;
+        border-color: $light_blue;
+    }
+
+    .record-active:hover {
+        color: $white;
+        background-color: $light_blue;
+        border-color: $primary;
+    }
+
+    .record-button > .bootstrap-icon > .bi-play-fill, .record-button > .bootstrap-icon > .bi-dash-lg {
+        transform: rotate(45deg);
+    }
+
+    .record-form {
+        padding-top: 10px;
+        padding-right: 15px;
+        max-height: 450px;
+        overflow: auto;
+        min-width: 310px;
+    }
+
+    .form-control-sm, .form-select-sm {
+        height: 25px !important;
+        margin-top: 0 !important;
+    }
+
+    .input-xs {
+        height: 14px !important;
+        margin-top: 8px !important;
+    }
+
+    .form-group.form-group-sm {
+        margin-bottom: 5px;
+    }
+
+    .form-group.form-group-sm.layerSelect {
+        margin-bottom: 5px;
+        width: 400px;
+    }
+
+    .form-control.form-control-sm.input {
+        padding: 2px 5px;
+        height: 23px !important;
+    }
+
+    #wfst-module-recordButton-cancel {
+        width: 360px;
+        height: 40px;
+        text-align: center;
+        margin: 0 5px;
+        padding: 6px 6px;
+    }
+
+    td {
+        padding: 2px;
+        width: auto;
+    }
+
+    .input {
+        height: 25px;
+    }
+
+    .input.mandatory {
+        border: 1px solid $light_red;
+    }
+
+    .col-form-label.mandatory::after {
+        content: " *";
+        color: $light_red;
+    }
+
+    .info-sign > .bi-info-circle-fill {
+        opacity: 0.8;
+        font-size: 16px;
+        padding: 5px;
+        color: $secondary_contrast;
+        &:focus {
+            @include primary_action_focus;
+        }
+        &:hover {
+            @include primary_action_hover;
+        }
+    }
+
+    #wfst-module-infoText {
+        display: none;
+        font-size: 12px;
+        padding: 5px 0;
+    }
+
+    .warning-text {
+        color: $light_red;
+        width: 211px;
+    }
+
+
+    .input-group-sm .input-group-text {
+        font-size: 11px; 
+    }
+
+    .datepicker {
+        display: inline-table;
+        background-color: $white;
+        border-radius: 12px;
+        .datepicker-days {
+            .table-condensed {
+                width: 100%;
+                thead {
+                    tr {
+                        border-radius: 0;
+                        background: none;
+                        .datepicker-switch {
+                            cursor: default;
+                            font-size: 15px;
+                            &:hover {
+                                background: none;							
+                            }
+                        }
+                        color: $primary;
+                        .next, .prev {
+                            color: $dark_grey;
+                            &:hover {
+                                opacity: 0.8;
+                                background-color: $primary;
+                                color: $white;
+                                border-radius: 0;
+                            }
+                        }
+                    }
+                }
+                tbody {
+                    tr {
+                        td {
+                            border-radius: 0;
+                            background: none;
+                            color: $dark_grey;
+                            &:hover {
+                                opacity: 0.8;
+                                background-color: $primary;
+                                color: $white;
+                            }
+                            &.today {
+                                border: 2px solid $primary;
+                            }
+                            &.active {
+                                border-radius: 0;
+                                background-color: $primary;
+                                color: $white;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

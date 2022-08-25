@@ -16,24 +16,29 @@ describe("src/modules/controls/backForward/components/BackForward.vue", () => {
         center,
         counter;
 
-    const mockMap = {
-        on: (signal, mem) => {
-            memorize = mem;
-        },
-        un: () => { /* doesn't matter for test*/ },
-        getView: () => ({
-            getCenter: () => [counter++, counter++],
-            getZoom: () => counter++,
-            setCenter: c => {
-                center = c;
-            },
-            setZoom: z => {
-                zoom = z;
-            }
-        })
-    };
 
     beforeEach(() => {
+        const map = {
+            id: "ol",
+            mode: "2D",
+            on: (signal, mem) => {
+                memorize = mem;
+            },
+            un: () => { /* doesn't matter for test*/ },
+            getView: () => {
+                return {
+                    getCenter: () => [counter++, counter++],
+                    getZoom: () => counter++,
+                    setCenter: c => {
+                        center = c;
+                    },
+                    setZoom: z => {
+                        zoom = z;
+                    }
+                };
+            }
+        };
+
         memorize = null;
         zoom = null;
         center = null;
@@ -47,14 +52,16 @@ describe("src/modules/controls/backForward/components/BackForward.vue", () => {
                         backForward: BackForwardModule
                     }
                 },
-                Map: {
+                Maps: {
                     namespaced: true,
                     getters: {
-                        map: () => mockMap
+                        mode: () => "2D"
                     }
                 }
             }
         });
+        mapCollection.clear();
+        mapCollection.addMap(map, "2D");
     });
 
     it("renders the forward/backward buttons", () => {

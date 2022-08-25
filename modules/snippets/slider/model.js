@@ -16,7 +16,9 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         // translations:
         incorrectEntry: "",
         from: "",
-        to: ""
+        to: "",
+        attrNameUntil: "",
+        format: ""
     }),
 
     /**
@@ -61,6 +63,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
             }
         });
     },
+
     /**
      * change language - sets default values for the language
      * @param {String} lng - new language to be set
@@ -76,9 +79,9 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
     },
 
     /**
-     * Add minValueModel and maxValueModel to valuesCollection
-     * @param {number} min min
-     * @param {number} max max
+     * adds minValueModel and maxValueModel to the valuesCollection
+     * @param {Number} min the min value
+     * @param {Number} max the max value
      * @returns {void}
      */
     addValueModels: function (min, max) {
@@ -87,6 +90,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
                 attr: this.get("name"),
                 displayName: this.get("displayName") + this.get("from"),
                 value: min,
+                displayValue: moment(min).format(this.get("format")),
                 type: this.get("type"),
                 isMin: true
             }),
@@ -94,6 +98,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
                 attr: this.get("name"),
                 displayName: this.get("displayName") + this.get("to"),
                 value: max,
+                displayValue: moment(max).format(this.get("format")),
                 type: this.get("type"),
                 isMin: false
             })
@@ -103,7 +108,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
     /**
      * Update the internal valuesCollection and triggers event to adjust the DOM element
      * triggers also the valueChanged event on snippetCollection in queryModel
-     * @param  {number | array} snippetValues - depending on slider type
+     * @param  {Number|Number[]} snippetValues depending on slider type
      * @returns {void}
      */
     updateValues: function (snippetValues) {
@@ -121,7 +126,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
     /**
      * Update the internal valuesCollection silently and triggers event to adjust the DOM element
-     * @param  {number | array} snippetValues - depending on slider type
+     * @param  {Number|Number[]} snippetValues depending on slider type
      * @returns {void}
      */
     updateValuesSilently: function (snippetValues) {
@@ -139,20 +144,22 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
     /**
      * Returns an object with the slider name and its values
-     * @return {object} - contains the selected values
+     * @return {Object} the object with necessary params
      */
     getSelectedValues: function () {
         return {
             attrName: this.get("name"),
             type: this.get("type"),
-            values: this.get("valuesCollection").pluck("value")
+            values: this.get("valuesCollection").pluck("value"),
+            attrNameUntil: this.get("attrNameUntil") ? this.get("attrNameUntil") : false,
+            format: this.get("format") ? this.get("format") : false
         };
     },
 
     /**
      * Parse strings into numbers if necessary
-     * @param  {string[]} [valueList=[]] valueList
-     * @return {number[]} parsedValueList
+     * @param  {String[]} [valueList=[]] valueList
+     * @return {Number[]} parsedValueList
      */
     parseValues: function (valueList = []) {
         const parsedValueList = [];
@@ -172,8 +179,8 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
     /**
      * Change the values by input from inputfields. Render change if enter is pressed
      * @fires Util#RadioRequestUtilSort
-     * @param {number} minValue - input value min
-     * @param {number} maxValue - input value max
+     * @param {Number} minValue - input value min
+     * @param {Number} maxValue - input value max
      * @returns {void}
      */
     changeValuesByText: function (minValue, maxValue) {
@@ -210,7 +217,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
     /**
      * Converts number to integer or decimal by type.
-     * @param {number} inputValue - input value
+     * @param {Number} inputValue - input value
      * @param {String} type - input type
      * @returns {void} value
     */
@@ -232,9 +239,9 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
     /**
     * Check if value is valid parameter or set value to initValue
-    * @param {number} value - input value
-    * @param {number} otherValue - value that be set if param value NaN
-    * @returns {number} val
+    * @param {Number} value - input value
+    * @param {Number} otherValue - value that be set if param value NaN
+    * @returns {Number} val
     */
     checkInvalidInput: function (value, otherValue) {
         let val = value;
@@ -262,13 +269,17 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
     /**
      * Returns a parsed string of the given value according to the slider type.
      * Only used with editableValueBox=true.
-     * @param   {number} value Value to be parsed
-     * @returns {string} text Beautified text of the value according to it's type.
+     * @param {Number} value Value to be parsed
+     * @param {String} [format=false] the format to use for moment
+     * @returns {String} text Beautified text of the value according to it's type.
      */
-    getValueText: function (value) {
+    getValueText: function (value, format = false) {
         const type = this.get("type");
 
-        if (type === "time") {
+        if (format) {
+            return moment(value).format(format);
+        }
+        else if (type === "time") {
             return moment(value).format("HH:mm");
         }
         else if (type === "date") {
@@ -279,10 +290,10 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
     /**
      * Checks whether all values lies within a specified range.
-     * @param {number[]} [values=[]] - Values to be checked.
-     * @param {number} [min=0] - Min value in range.
-     * @param {number} [max=99999] - Max value in range.
-     * @returns {boolean} isInrange - Are all values in range.
+     * @param {Number[]} [values=[]] - Values to be checked.
+     * @param {Number} [min=0] - Min value in range.
+     * @param {Number} [max=99999] - Max value in range.
+     * @returns {Boolean} isInrange - Are all values in range.
      */
     checkAreAllValuesInRange: function (values = [], min = 0, max = 99999) {
         let allValuesInRange = true;
@@ -298,7 +309,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
     /**
      * Setter for defaultWidth.
-     * @param {number} value - The default width.
+     * @param {Number} value - The default width.
      * @returns {void}
      */
     setDefaultWidth: function (value) {
