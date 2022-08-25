@@ -237,6 +237,8 @@ export default {
                 <label
                     class="form-label"
                     for="tool-shadow-checkbox"
+                    @click="toggleShadow(!shadowActivated)"
+                    @keydown.enter="toggleShadow(!shadowActivated)"
                 >
                     {{ $t('common:modules.tools.shadow.shadowDisplay') }}
                 </label>
