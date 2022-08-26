@@ -6,7 +6,7 @@ import source from "../../../utils/measureSource";
 
 const {deleteFeatures} = actions;
 
-describe("tools/measure/store/actionsMeasure", function () {
+describe("src/modules/tools/measure/store/actionsMeasure", function () {
     let state, commit, rootGetters, clear;
 
     beforeEach(() => {
@@ -17,11 +17,6 @@ describe("tools/measure/store/actionsMeasure", function () {
             }
         };
         commit = sinon.spy();
-        rootGetters = {
-            "Map/map": {
-                removeOverlay: sinon.spy()
-            }
-        };
         clear = sinon.spy();
         sinon.stub(source, "clear").callsFake(clear);
     });
@@ -30,19 +25,19 @@ describe("tools/measure/store/actionsMeasure", function () {
 
     describe("deleteFeatures", function () {
         it("aborts drawing", function () {
-            deleteFeatures({state, commit, rootGetters});
+            deleteFeatures({state, commit});
 
             expect(state.interaction.abortDrawing.calledOnce).to.be.true;
         });
 
         it("calls all unlisteners", function () {
-            deleteFeatures({state, commit, rootGetters});
+            deleteFeatures({state, commit});
 
             expect(state.unlisteners[0].calledOnce).to.be.true;
         });
 
         it("clears the source", function () {
-            deleteFeatures({state, commit, rootGetters});
+            deleteFeatures({state, commit});
 
             expect(clear.calledOnce).to.be.true;
         });

@@ -1,6 +1,7 @@
 import "../model";
-import {transformFromMapProjection as mpapiTransformToMapProjection, getProjection as mpapiGetProjection} from "masterportalAPI/src/crs";
+import {transformFromMapProjection as mpapiTransformToMapProjection, getProjection as mpapiGetProjection} from "@masterportal/masterportalapi/src/crs";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
+import store from "../../../src/app-store";
 
 const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel.prototype */{
     defaults: {
@@ -60,15 +61,14 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
                 this.setServiceUrl(service.get("url"));
             }
 
-            if (Radio.request("ParametricURL", "getInitString")) {
-                this.search(Radio.request("ParametricURL", "getInitString"));
+            if (store.state.urlParams && store.state.urlParams["Search/query"]) {
+                this.search(store.state.urlParams && store.state.urlParams["Search/query"]);
             }
 
             if (this.get("incrementalSearch")) {
                 activators.search = this.search;
             }
             this.listenTo(Radio.channel("Searchbar"), activators);
-
         }
         else {
             this.showError({
@@ -141,7 +141,7 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
         const crs = "EPSG:" + data.sref;
 
         // Test for sucess-status of service
-        if (!(data.hasOwnProperty("ok") && data.ok)) {
+        if (!data?.ok) {
             let statusText = i18next.t("common:modules.searchbar.locationFinder.serverError");
 
             if (data.info) {
@@ -183,10 +183,14 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
                     }
 
                     if (typeof classDefinition.icon === "string") {
-                        hit.glyphicon = classDefinition.icon;
+                        hit.icon = classDefinition.icon;
                     }
                     else {
-                        hit.glyphicon = "glyphicon-road";
+                        hit.icon = "bi-signpost-2-fill";
+                    }
+
+                    if (classDefinition.zoomLevel) {
+                        hit.zoomLevel = classDefinition.zoomLevel;
                     }
 
                     if (classDefinition.zoom === "bbox") {
@@ -202,7 +206,7 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
                     }
                 }
                 else {
-                    hit.glyphicon = "glyphicon-road";
+                    hit.icon = "bi-signpost-2-fill";
                     hit.coordinate = this.transformToMapProjection(Radio.request("Map", "getMap"), crs, [parseFloat(locationFinderResult.cx), parseFloat(locationFinderResult.cy)]);
                 }
 

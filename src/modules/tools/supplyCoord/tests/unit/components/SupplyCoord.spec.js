@@ -2,7 +2,7 @@ import Vuex from "vuex";
 import {expect} from "chai";
 import sinon from "sinon";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import * as crs from "masterportalAPI/src/crs";
+import * as crs from "@masterportal/masterportalapi/src/crs";
 import SupplyCoordComponent from "../../../components/SupplyCoord.vue";
 import SupplyCoord from "../../../store/indexSupplyCoord";
 
@@ -21,7 +21,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
     const mockMapGetters = {
             map: () => sinon.stub(),
             projection: () => sinon.stub(),
-            mouseCoord: () => sinon.stub()
+            mouseCoordinate: () => sinon.stub()
         },
         mockMapMarkerActions = {
             removePointMarker: sinon.stub()
@@ -30,7 +30,9 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
             addPointerMoveHandler: sinon.stub(),
             removePointerMoveHandler: sinon.stub(),
             removeInteraction: sinon.stub(),
-            addInteraction: sinon.stub()
+            addInteraction: sinon.stub(),
+            unregisterListener: sinon.stub(),
+            registerListener: sinon.stub()
         },
         mockMapMutations = {
         },
@@ -41,8 +43,8 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
                         children: {
                             coord:
                             {
-                                "name": "translate#common:menu.tools.coord",
-                                "glyphicon": "glyphicon-screenshot"
+                                "name": "translate#common:menu.tools.supplyCoord",
+                                "icon": "bi-bullseye"
                             }
                         }
                     }
@@ -62,7 +64,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
                         SupplyCoord
                     }
                 },
-                Map: {
+                Maps: {
                     namespaced: true,
                     getters: mockMapGetters,
                     mutations: mockMapMutations,
@@ -108,7 +110,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
 
         selected = options.filter(o => o.attributes().selected === "true");
         expect(selected.length).to.equal(1);
-        expect(selected.at(0).attributes().value).to.equal("EPSG:25832");
+        expect(selected.at(0).attributes().value).to.equal("http://www.opengis.net/gml/srs/epsg.xml#25832");
     });
     describe("SupplyCoord.vue methods", () => {
         it("close sets active to false", async () => {
@@ -121,7 +123,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
             expect(wrapper.find("#supply-coord").exists()).to.be.false;
         });
         it("method selectionChanged sets currentSelection", () => {
-            const value = "EPSG:25832",
+            const value = "http://www.opengis.net/gml/srs/epsg.xml#25832",
                 event = {
                     target: {
                         value: value
@@ -169,6 +171,21 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
             expect(ret).to.be.equals("modules.tools.supplyCoord.cartesian.key");
         });
     });
+
+    it("sets focus to first input control", async () => {
+        const elem = document.createElement("div");
+
+        if (document.body) {
+            document.body.appendChild(elem);
+        }
+        wrapper = shallowMount(SupplyCoordComponent, {store, localVue, attachTo: elem});
+
+        wrapper.vm.setFocusToFirstControl();
+
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find("#coordSystemField").element).to.equal(document.activeElement);
+    });
+
     describe("SupplyCoord.vue watcher", () => {
         it("watch to active shall create/remove PointerMove interaction", async () => {
             wrapper = shallowMount(SupplyCoordComponent, {store, localVue});

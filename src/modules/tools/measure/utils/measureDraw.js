@@ -2,6 +2,8 @@ import {Draw} from "ol/interaction.js";
 import style from "./measureStyle";
 import source from "./measureSource";
 
+let styleIdCounter = 0;
+
 /**
  * @param {module:ol/geom/GeometryType} type geometry type to create when drawing
  * @param {function} addFeature callback for features to put into store
@@ -46,6 +48,7 @@ function makeDraw (type, addFeature, setIsDrawing, setFeatureId, setTooltipCoord
     draw.on("drawend", function () {
         sketch.getGeometry().un("change", listener);
         sketch.set("isBeingDrawn", false);
+        sketch.set("styleId", `__measureStyle_draw_${styleIdCounter++}`);
         sketch = null;
         listener = null;
         setIsDrawing(false);

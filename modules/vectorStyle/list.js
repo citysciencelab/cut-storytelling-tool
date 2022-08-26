@@ -13,7 +13,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         return new StyleModel(attrs, options);
     },
     url: function () {
-        if (!Config.hasOwnProperty("styleConf") || Config.styleConf === "") {
+        if (!Object.prototype.hasOwnProperty.call(Config, "styleConf") || Config.styleConf === "") {
             return "keine Style JSON";
         }
         return Config.styleConf;
@@ -40,7 +40,11 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
             "getDefaultStyle": this.model.getDefaultStyle
         }, this);
 
-        if (Config.hasOwnProperty("styleConf") && Config.styleConf !== "") {
+        channel.on({
+            "addToStyleList": jsonStyles => this.addToStyleList(jsonStyles)
+        }, this);
+
+        if (Object.prototype.hasOwnProperty.call(Config, "styleConf") && Config.styleConf !== "") {
             this.fetchStyles(Config.styleConf);
         }
     },
@@ -113,11 +117,16 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         dataWithDefaultValue.push({styleId: "default", rules: [{style: {}}]});
         dataWithDefaultValue.push(this.getMapmarkerPointDefaultStyle());
         dataWithDefaultValue.push(this.getMapmarkerPolygonDefaultStyle());
+        dataWithDefaultValue.push(this.getHighlightFeaturesPointDefaultStyle());
+        dataWithDefaultValue.push(this.getHighlightFeaturesPolygonDefaultStyle());
+        dataWithDefaultValue.push(this.getHighlightFeaturesLineDefaultStyle());
 
         styleIds.push(this.getStyleIdsFromLayers(layers));
-        styleIds.push(this.getStyleIdForZoomToFeature());
         styleIds.push(this.getStyleIdForMapMarkerPoint());
         styleIds.push(this.getStyleIdForMapMarkerPolygon());
+        styleIds.push(this.getStyleIdForHighlightFeaturesPoint());
+        styleIds.push(this.getStyleIdForHighlightFeaturesPolygon());
+        styleIds.push(this.getStyleIdForHighlightFeaturesLine());
         styleIds.push(this.getStyleIdsFromTools(tools));
         styleIds.push(this.getFeatureViaURLStyles());
 
@@ -154,14 +163,14 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
 
         if (layers) {
             layers.forEach(layer => {
-                if (layer.typ === "WFS" || layer.typ === "GeoJSON" || layer.typ === "SensorThings" || layer.typ === "TileSet3D") {
-                    if (layer.hasOwnProperty("styleId")) {
+                if (layer.typ === "WFS" || layer.typ === "GeoJSON" || layer.typ === "SensorThings" || layer.typ === "TileSet3D" || layer.typ === "OAF") {
+                    if (layer?.styleId) {
                         styleIds.push(layer.styleId);
                     }
                 }
                 else if (layer.typ === "GROUP") {
                     layer.children.forEach(child => {
-                        if (child.hasOwnProperty("styleId")) {
+                        if (child?.styleId) {
                             styleIds.push(child.styleId);
                         }
                     });
@@ -181,7 +190,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
 
         if (tools) {
             tools.forEach(tool => {
-                if (tool.hasOwnProperty("styleId")) {
+                if (tool?.styleId) {
                     if (Array.isArray(tool.styleId)) {
                         tool.styleId.forEach(styleIdInArray => {
                             if (styleIdInArray instanceof Object) {
@@ -200,20 +209,6 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         }
         return styleIds;
     },
-
-    /**
-     * Gets styleId from config for zoomToFeature
-     * @returns {String} - Style id
-     */
-    getStyleIdForZoomToFeature: function () {
-        let styleId;
-
-        if (Config && Config.hasOwnProperty("zoomToFeature") && Config.zoomToFeature.hasOwnProperty("styleId")) {
-            styleId = Config.zoomToFeature.styleId;
-        }
-        return styleId;
-    },
-
     /**
      * Gets the default style for mapmarker as point.
      * @returns {Object} The default style for mapMarker point Style.
@@ -238,12 +233,68 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
     },
 
     /**
+     * Gets the default style for highlightFeatures as point.
+     * @returns {Object} The default style for highlightFeatures point Style.
+     */
+    getHighlightFeaturesPointDefaultStyle: function () {
+        return {
+            styleId: "defaultHighlightFeaturesPoint",
+            rules: [{
+                style:
+                {
+                    type: "circle",
+                    circleFillColor: [255, 255, 0, 0.9],
+                    circleRadius: 8
+                }
+            }]
+        };
+    },
+
+    /**
      * Gets the default style for mapmarker as polygon.
      * @returns {Object} The default style for mapMarker polygon Style.
      */
     getMapmarkerPolygonDefaultStyle: function () {
         return {
             styleId: "defaultMapMarkerPolygon",
+            rules: [{
+                style:
+                {
+                    polygonStrokeColor: [8, 119, 95, 1],
+                    polygonStrokeWidth: 4,
+                    polygonFillColor: [8, 119, 95, 0.3],
+                    polygonStrokeDash: [8]
+                }
+            }]
+        };
+    },
+
+    /**
+     * Gets the default style for highlightFeatures as polygon.
+     * @returns {Object} The default style for highlightFeatures polygon Style.
+     */
+    getHighlightFeaturesPolygonDefaultStyle: function () {
+        return {
+            styleId: "defaultHighlightFeaturesPolygon",
+            rules: [{
+                style:
+                {
+                    polygonStrokeColor: [8, 119, 95, 1],
+                    polygonStrokeWidth: 4,
+                    polygonFillColor: [8, 119, 95, 0.3],
+                    polygonStrokeDash: [8]
+                }
+            }]
+        };
+    },
+
+    /**
+     * Gets the default style for highlightFeatures as line.
+     * @returns {Object} The default style for highlightFeatures line Style.
+     */
+    getHighlightFeaturesLineDefaultStyle: function () {
+        return {
+            styleId: "defaultHighlightFeaturesLine",
             rules: [{
                 style:
                 {
@@ -270,6 +321,38 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
     },
 
     /**
+     * gets style id from HighlightFeatures
+     * @returns {String} - Style id of highlightFeatures.
+     */
+    getStyleIdForHighlightFeaturesPoint: function () {
+        let styleId;
+
+        if (store.getters["HighlightFeatures/pointStyleId"]) {
+            styleId = store.getters["HighlightFeatures/pointStyleId"];
+        }
+        else {
+            styleId = "defaultHighlightFeaturesPoint";
+        }
+        return styleId;
+    },
+
+    /**
+     * gets style id from HighlightFeatures
+     * @returns {String} - Style id of highlightFeatures.
+     */
+    getStyleIdForHighlightFeaturesLine: function () {
+        let styleId;
+
+        if (store.getters["HighlightFeatures/lineStyleId"]) {
+            styleId = store.getters["HighlightFeatures/lineStyleId"];
+        }
+        else {
+            styleId = "defaultHighlightFeaturesLine";
+        }
+        return styleId;
+    },
+
+    /**
      * gets style id from MapMarker
      * @returns {String} - Style id of mapMarker.
      */
@@ -280,6 +363,41 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
             styleId = store.getters["MapMarker/polygonStyleId"];
         }
         return styleId;
+    },
+
+    /**
+     * gets style id from HighlightFeatures
+     * @returns {String} - Style id of highlightFeatures.
+     */
+    getStyleIdForHighlightFeaturesPolygon: function () {
+        let styleId;
+
+        if (store.getters["HighlightFeatures/polygonStyleId"]) {
+            styleId = store.getters["HighlightFeatures/polygonStyleId"];
+        }
+        else {
+            styleId = "defaultHighlightFeaturesPolygon";
+        }
+        return styleId;
+    },
+
+    /**
+     * adds a style to the style list
+     * @param {Array} jsonStyles Array of styles
+     * @returns  {void}
+     */
+    addToStyleList: function (jsonStyles) {
+        const attrs = {
+                add: true,
+                colletion: this,
+                merge: false,
+                remove: false
+            },
+            styles = jsonStyles;
+
+        styles.forEach(style => {
+            this.add(new StyleModel(style, attrs));
+        });
     }
 });
 

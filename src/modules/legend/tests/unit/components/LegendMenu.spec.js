@@ -16,7 +16,7 @@ describe("LegendMenu.vue", () => {
                 menu: {
                     legend: {
                         name: "common:modules.legend.name",
-                        glyphicon: "glyphicon-book",
+                        icon: "bi-lightbulb",
                         showCollapseAllButton: true
                     }
                 }

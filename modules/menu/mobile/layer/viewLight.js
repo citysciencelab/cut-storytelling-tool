@@ -7,13 +7,14 @@ import axios from "axios";
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
         "click .layer-item": "preToggleIsSelected",
-        "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
+        "click .layer-info-item > .info-icon": "showLayerInformation",
         "click .selected-layer-item > div": "toggleIsVisibleInMap",
-        "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
-        "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
-        "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
+        "click .layer-info-item > .settings-icon": "toggleIsSettingVisible",
+        "click .layer-info-item > .switch-icon": "toggleIsSettingVisible",
+        "click .layer-sort-item > .up-icon": "moveModelUp",
+        "click .layer-sort-item > .down-icon": "moveModelDown",
         "change select": "setTransparency",
-        "click .glyphicon-tint": "openStyleWMS",
+        "click .style-icon": "openStyleWMS",
         "click .remove-layer": "removeLayer"
     },
 
@@ -34,6 +35,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
+        const channel = Radio.channel("Menu");
+
         checkChildrenDatasets(this.model);
         this.listenTo(this.model, {
             "change:isSelected change:isVisibleInMap": this.render,
@@ -41,6 +44,12 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             "change:isVisibleInTree": this.removeIfNotVisible,
             "change:isOutOfRange": this.toggleColor
         });
+        channel.on({
+            "renderSetting": this.renderSetting,
+            "rerender": this.render,
+            "change:isOutOfRange": this.toggleColor,
+            "change:isVisibleInTree": this.removeIfNotVisible
+        }, this);
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleByMapMode
         });
@@ -64,14 +73,18 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     toggleColor: function (model, value) {
+        // adaption to not backbone layers
+        if (this.model.get("id") !== model.get("id")) {
+            return;
+        }
         if (model.has("minScale") === true) {
             if (value === true) {
-                const statusCheckbox = this.$el.find(".glyphicon.glyphicon-unchecked").length;
+                const statusCheckbox = this.$el.find(".bootstrap-icon > .bi-square").length;
 
                 this.$el.addClass("disabled");
                 this.$el.find("*").css("pointer-events", "none");
                 if (statusCheckbox === 0) {
-                    this.$el.find("div.pull-left").css("pointer-events", "auto");
+                    this.$el.find("div.float-start").css("pointer-events", "auto");
                 }
             }
             else {
@@ -97,13 +110,18 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
 
     /**
      * Draws the settings (transparency, metainfo, ...)
+     * @param {String} layerId The layer id.
      * @returns {void}
      */
-    renderSetting: function () {
+    renderSetting: function (layerId) {
         const attr = this.model.toJSON();
 
-        // Animation Zahnrad
-        this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+        // Animation cog
+        if (layerId === attr.id) {
+            this.$(".bi-gear").parent(".bootstrap-icon").toggleClass("rotate rotate-back");
+        }
+        this.$(".switch-icon").toggleClass("rotate rotate-back");
+        this.$(".switch-icon").children("i").toggleClass("bi-dash-lg bi-plus-lg");
         // Slide-Animation templateSetting
         if (this.model.get("isSettingVisible") === false) {
             this.$el.find(".item-settings").slideUp("slow", function () {
@@ -204,7 +222,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     showLayerInformation: function () {
         this.model.showLayerInformation();
         // Navigation wird geschlossen
-        $("div.collapse.navbar-collapse").removeClass("in");
+        $("div.collapse.navbar-collapse").removeClass("show");
     },
 
     /**
@@ -257,7 +275,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     openStyleWMS: function () {
         Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        $(".navbar-collapse").removeClass("in");
+        $(".navbar-collapse").removeClass("show");
     },
 
     /**

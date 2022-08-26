@@ -399,6 +399,7 @@ export default {
 </script>
 
 <template>
+    <!-- eslint-disable-next-line vuejs-accessibility/mouse-events-have-key-events -->
     <div
         class="basic-resize-handle"
         :class="[
@@ -412,6 +413,12 @@ export default {
     >
         <slot />
     </div>
+    <!--
+        The resize handle does not yet support keyboard interaction. Hence, it is
+        commented out for now.
+        NOTE Keyboard support may be implemented by making the element tabbable
+        and offering resizing by using the arrow buttons.
+    -->
 </template>
 
 <style scoped>

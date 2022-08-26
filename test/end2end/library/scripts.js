@@ -274,7 +274,7 @@ function doesLayerWithFeaturesExist () {
             }
 
             // if no feature at coordinate or feature does not have matching set image, it's not the right feature
-            if (!feature || (image && feature.getStyle().getImage().iconImage_.src_ !== image)) {
+            if (!feature || (image && feature.getStyle() && feature.getStyle().getImage().iconImage_.src_ !== image)) {
                 return;
             }
         }
@@ -320,7 +320,7 @@ function areRegExpsInMeasureLayer () {
     const texts = Backbone.Radio.request("Map", "getMap")
             .getLayers()
             .getArray()
-            .filter(l => l.get("name") === "measure_layer")[0]
+            .filter(l => l.get("name") === "measureLayer")[0]
             .getSource()
             .getFeatures()
             .map(f => f.getStyle())
@@ -347,14 +347,14 @@ function areRegExpsInMeasureLayer () {
 }
 
 /**
- * Returns the etxts contained in styles of measure_layer.
+ * Returns the etxts contained in styles of measureLayer.
  * @returns {string} the texts
  */
 function getMeasureLayersTexts () {
     const texts = Backbone.Radio.request("Map", "getMap")
         .getLayers()
         .getArray()
-        .filter(l => l.get("name") === "measure_layer")[0]
+        .filter(l => l.get("name") === "measureLayer")[0]
         .getSource()
         .getFeatures()
         .map(f => f.getStyle())
@@ -392,15 +392,7 @@ function getCoordinatesOfXthFeatureInLayer () {
 function isInitalLoadingFinished () {
     return typeof window.INITIAL_LOADING === "boolean" && window.INITIAL_LOADING === false;
 }
-/**
- * Executes a basic auth on browserstack.
- * @param {String} userName for login
- * @param {String} password for login
- * @returns {String} the execution script
- */
-function basicAuth (userName, password) {
-    return "browserstack_executor: {\"action\": \"sendBasicAuth\", \"arguments\": {\"username\":\"" + userName + "\", \"password\": \"" + password + "\", \"timeout\": \"30000\"}}";
-}
+
 /**
  * @param {HTMLElement} img image to check
  * @returns {boolean} true if image loaded */
@@ -429,6 +421,39 @@ function isFullscreen () {
  */
 function getCenter () {
     return Backbone.Radio.request("MapView", "getCenter");
+}
+/**
+ * @returns {ol/coordinate~Coordinate} the extent
+ */
+function getExtent () {
+    return Backbone.Radio.request("MapView", "getCurrentExtent");
+}
+/**
+ * @returns {Number} heading in 3D mode
+ */
+function get3DHeading () {
+    return Backbone.Radio.request("Map", "getMap3d").getCamera().getHeading();
+}
+/**
+ * @returns {Number} tilt in 3D mode
+ */
+function get3DTilt () {
+    return Backbone.Radio.request("Map", "getMap3d").getCamera().getTilt();
+}
+/**
+ * @returns {Number} altitude in 3D mode
+ */
+function get3DAltitude () {
+    return Backbone.Radio.request("Map", "getMap3d").getCamera().getAltitude();
+}
+
+/**
+ * @returns {String} The scale of the map.
+ */
+function getScale () {
+    const options = Backbone.Radio.request("MapView", "getOptions");
+
+    return options ? options.scale : null;
 }
 
 /**
@@ -505,7 +530,7 @@ function zoomOut () {
  * @returns {void}
  */
 function setResolution () {
-    Backbone.Radio.trigger("MapView", "setConstrainedResolution", arguments[0], 0);
+    Backbone.Radio.trigger("MapView", "setResolution", arguments[0]);
 }
 
 /**
@@ -518,6 +543,18 @@ function getOrderedLayerIds () {
         .request("Map", "getMap")
         .getLayers()
         .getArray()
+        .sort((layer1, layer2) => {
+            const a = layer1.get("zIndex"),
+                b = layer2.get("zIndex");
+
+            if (a < b) {
+                return -1;
+            }
+            if (a > b) {
+                return 1;
+            }
+            return 0;
+        })
         .map(layer => {
             if (layer.get("id")) {
                 // if id available, use it
@@ -531,7 +568,7 @@ function getOrderedLayerIds () {
             return false;
         })
         .filter(id => id) // sort out functional layers, e.g. mapMarker layer
-        .filter(id => !["12883", "12884", "13032", "zoom_to_feature_layer", "measure_layer", "import_draw_layer"].includes(id)) // sort out e.g. oblique layer not initially visible
+        .filter(id => !["12883", "12884", "13032", "157", "46", "measureLayer", "importDrawLayer"].includes(id)) // sort out e.g. 3D-, oblique-, static image- layer not initially visible
         .map(id => Array.isArray(id) ? id[0] : id) // MP always uses first id as representant
         .map(id => String(parseInt(id, 10))) // e.g. "1933geofox_stations" should only be 1933 for comparison
         .reverse(); // layers are returned in "inverted" order (last is first in tree)
@@ -544,7 +581,9 @@ module.exports = {
     areAllLayersHidden,
     areRegExpsInMeasureLayer,
     areAllFeaturesOfLayerVisible,
-    basicAuth,
+    get3DHeading,
+    get3DTilt,
+    get3DAltitude,
     getMarkerPointCoord,
     getMeasureLayersTexts,
     isFullscreen,
@@ -561,7 +600,9 @@ module.exports = {
     areLayersOrdered,
     doesLayerWithFeaturesExist,
     getCenter,
+    getExtent,
     getResolution,
+    getScale,
     getTilt,
     getHeading,
     getDirection,

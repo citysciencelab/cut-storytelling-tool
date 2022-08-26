@@ -1,5 +1,6 @@
 import Parser from "./parser";
-import {getLayerWhere, getLayerList} from "masterportalAPI/src/rawLayerList";
+import {getLayerWhere, getLayerList} from "@masterportal/masterportalapi/src/rawLayerList";
+import store from "../../../src/app-store/index";
 
 const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
     /**
@@ -10,7 +11,6 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesWhere
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesList
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      */
     defaults: Object.assign({}, Parser.prototype.defaults, {}),
 
@@ -20,19 +20,19 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * The object from config.json and services.json are merged by id.
      *
      * @param  {Object} [object={}] - Baselayer | Overlayer | Folder
-     * @param  {string} parentId Id of parent item.
-     * @param  {Number} level Level of recursion. Equals to level in layertree.
+     * @param  {String} [parentId=""] Id of parent item.
+     * @param  {Number} [level=0] Level of recursion. Equals to level in layertree.
+     * @param  {Boolean} [isAbaseLayer=false] Objects are of type BaseLayer (only relevant for treeType= "light")
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesWhere
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesList
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
-     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
-    parseTree: function (object = {}, parentId, level) {
-        const isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree"),
+    parseTree: function (object = {}, parentId = "", level = 0, isAbaseLayer = false) {
+        const isBaseLayer = isAbaseLayer || Boolean(parentId === "Baselayer" || this.isAncestorBaseLayer(parentId)),
             treeType = Radio.request("Parser", "getTreeType");
 
-        if (object.hasOwnProperty("Layer")) {
+        if (object?.Layer) {
             object.Layer.forEach(layer => {
                 let objFromRawList,
                     objsFromRawList,
@@ -59,7 +59,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     // DIPAS -> if the layer type "StaticImage" is transferred, the system does not break off but continues to work with the new ImageURL.
                     // Is required for the use of an individually oiled picture.
                     if (objFromRawList === null) {
-                        if (layerExtended.hasOwnProperty("url")) { // Wenn LayerID nicht definiert, dann Abbruch
+                        if (layerExtended?.url) { // Wenn LayerID nicht definiert, dann Abbruch
                             objFromRawList = layerExtended;
                         }
                         else {
@@ -71,14 +71,14 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
 
                 // For Single-Layer (ol.layer.Layer)
                 // For example: {id: "5181", visible: false}
-                else if (!layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
+                else if (!layerExtended?.children && typeof layerExtended.id === "string") {
                     objFromRawList = getLayerWhere({id: layerExtended.id});
 
                     // DIPAS -> There is an object not in the ServicesJSON, but it has a url, the layer is still transferred without a services entry
                     // DIPAS -> if the layer type "StaticImage" is transferred, the system does not break off but continues to work with the new ImageURL.
                     // Is required for the use of an individually oiled picture.
                     if (objFromRawList === null) {
-                        if (layerExtended.hasOwnProperty("url")) { // Wenn LayerID nicht definiert, dann Abbruch
+                        if (layerExtended?.url) { // Wenn LayerID nicht definiert, dann Abbruch
                             objFromRawList = layerExtended;
                         }
                         else {
@@ -90,7 +90,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 // For Single-Layer (ol.layer.Layer) with more layers (FNP, LAPRO, Geobasisdaten (farbig), etc.)
                 // For Example: {id: ["550","551","552",...,"559"], visible: false}
                 else if (Array.isArray(layerExtended.id) && typeof layerExtended.id[0] === "string") {
-                    objsFromRawList = getLayerList();
+                    objsFromRawList = this.getRawLayerList();
                     mergedObjsFromRawList = this.mergeObjectsByIds(layerExtended.id, objsFromRawList);
 
                     if (mergedObjsFromRawList === null) { // Wenn Layer nicht definiert, dann Abbruch
@@ -100,7 +100,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 }
                 // For Group-Layer (ol.layer.Group)
                 // For Example: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
-                else if (layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
+                else if (layerExtended?.children && typeof layerExtended.id === "string") {
                     layerExtended.children = layerExtended.children.map(childLayer => {
                         objFromRawList = null;
                         if (childLayer.styles && childLayer.styles[0]) {
@@ -127,7 +127,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
 
                 // HVV :(
 
-                if (layerExtended.hasOwnProperty("styles") && layerExtended.styles.length >= 1) {
+                if (layerExtended?.styles && layerExtended.styles.length >= 1) {
                     layerExtended.styles.forEach((style, index) => {
                         let subItem = Object.assign({
                             id: layerExtended.id + style,
@@ -161,9 +161,8 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 }
             });
         }
-        if (object.hasOwnProperty("Ordner")) {
+        if (object?.Ordner) {
             object.Ordner.forEach(folder => {
-                const isLeafFolder = !folder.hasOwnProperty("Ordner");
                 let isFolderSelectable;
 
                 // Visiblity of SelectAll-Box. Use item property first, if not defined use global setting.
@@ -183,19 +182,45 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     parentId: parentId,
                     name: folder.Titel,
                     id: folder.id,
-                    isLeafFolder: isLeafFolder,
                     isFolderSelectable: isFolderSelectable,
                     level: level,
-                    glyphicon: "glyphicon-plus-sign",
+                    icon: "bi-plus-circle-fill",
                     isVisibleInTree: this.getIsVisibleInTree(level, "folder", true, treeType),
                     isInThemen: true,
-                    quickHelp: Radio.request("QuickHelp", "isSet"),
+                    quickHelp: store.getters["QuickHelp/isSet"],
                     invertLayerOrder: folder.invertLayerOrder
                 });
                 // rekursiver Aufruf
                 this.parseTree(folder, folder.id, level + 1);
             });
         }
+    },
+
+    /**
+     * Returns true, if the parent or grandparent has the parentId 'Baselayer'.
+     * @param {String} parentId id of the parent
+     * @returns {Boolean} true, if one of the next 2 ancestors has the parentId 'Baselayer'
+     */
+    isAncestorBaseLayer: function (parentId) {
+        const parent = Radio.request("Parser", "getItemByAttributes", {id: parentId});
+
+        if (parent) {
+            if (parent.parentId === "Baselayer") {
+                return true;
+            }
+
+            const grandParent = Radio.request("Parser", "getItemByAttributes", {id: parent.parentId});
+
+            if (grandParent && grandParent.parentId === "Baselayer") {
+                return true;
+            }
+
+        }
+        return false;
+    },
+
+    getRawLayerList: function () {
+        return getLayerList();
     },
 
     /**

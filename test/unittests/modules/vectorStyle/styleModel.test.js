@@ -201,11 +201,25 @@ describe("vectorStyleModel", function () {
                     "polygonStrokeColor": [100, 100, 100, 1]
                 }
             }
+        ],
+        rulesWithOneEntry = [
+            {
+                "conditions": {
+                    "sequence": [0, 0],
+                    "properties": {
+                        "@Datastreams.0.Observations.0.result": [81, 101]}},
+                "style": {
+                    "lineStrokeColor": [37, 52, 148, 1],
+                    "lineStrokeDash": [20, 20, 5, 2000],
+                    "lineStrokeDashOffset": 20,
+                    "lineStrokeWidth": 5,
+                    "labelField": ""}}
         ];
 
     let styleModel,
         utilModel,
         xmlDescribeFeatureType,
+        xmlDescribefeatureType_nrw,
         jsonObjects;
 
 
@@ -213,6 +227,7 @@ describe("vectorStyleModel", function () {
         styleModel = new Model();
         utilModel = new Util();
         xmlDescribeFeatureType = utilModel.getDescribeFeatureTypeResponse("resources/testDescribeFeatureTypeResponse.xml");
+        xmlDescribefeatureType_nrw = utilModel.getDescribeFeatureTypeResponse("resources/testDescribeFeatureTypeResonse_nrw.xml");
         jsonObjects = geojsonReader.readFeatures(jsonFeatures);
     });
 
@@ -264,6 +279,9 @@ describe("vectorStyleModel", function () {
         it("should return ol style with correct settings", function () {
             expect(styleModel.getGeometryStyle(jsonObjects[0], rules, false)).to.be.an.instanceof(Style);
             expect(styleModel.getGeometryStyle(jsonObjects[0], rules, false).getImage().getStroke().getColor()).to.be.an("array").to.include.ordered.members([255, 0, 0, 1]);
+        });
+        it("should return default style if no rule is found", function () {
+            expect(styleModel.getGeometryStyle(jsonObjects[0], [], false).getImage().getFill().getColor()).to.be.an("array").to.include.ordered.members([0, 153, 255, 1]);
         });
     });
 
@@ -318,6 +336,14 @@ describe("vectorStyleModel", function () {
             expect(styleModel.getMultiGeometryStyle("GeometryCollection", jsonObjects[6], rules, false)[0].getImage().getStroke()).to.be.an.instanceof(Stroke);
             expect(styleModel.getMultiGeometryStyle("GeometryCollection", jsonObjects[6], rules, false)[0].getImage().getStroke().getColor()).to.be.an("array").to.include.ordered.members([255, 0, 0, 1]);
             expect(styleModel.getMultiGeometryStyle("GeometryCollection", jsonObjects[6], rules, false)[1].getStroke()).to.be.an.instanceof(Stroke);
+        });
+        it("features with more geometries than rules (rules: 1, geometries: 2) should have only style for the amount of rules - styleMultiGeomOnlyWithRule=true", function () {
+            styleModel.set("styleMultiGeomOnlyWithRule", true);
+            expect(styleModel.getMultiGeometryStyle("MultiLineString", jsonObjects[4], rulesWithOneEntry, false)).to.be.an("array").to.have.lengthOf(1);
+        });
+        it("features with more geometries than rules (rules: 1, geometries: 2) should have style for all geometries - styleMultiGeomOnlyWithRule=false", function () {
+            styleModel.set("styleMultiGeomOnlyWithRule", false);
+            expect(styleModel.getMultiGeometryStyle("MultiLineString", jsonObjects[4], rulesWithOneEntry, false)).to.be.an("array").to.have.lengthOf(2);
         });
     });
 
@@ -401,6 +427,14 @@ describe("vectorStyleModel", function () {
             expect(styleModel.checkProperty(jsonObjects[0].getProperties(), "id", [0])).to.be.false;
             expect(styleModel.checkProperty(jsonObjects[0].getProperties(), "id", [0, 1, 2])).to.be.false;
         });
+        it("should return true for a clustered feature", function () {
+            const clusterFeatureProperties = {
+                features: [jsonObjects[0]],
+                geometry: jsonObjects[0].getGeometry()
+            };
+
+            expect(styleModel.checkProperty(clusterFeatureProperties, "id", "test1")).to.be.true;
+        });
     });
 
     describe("getReferenceValue", function () {
@@ -415,15 +449,6 @@ describe("vectorStyleModel", function () {
         });
         it("should return array of reference values in object path", function () {
             expect(styleModel.getReferenceValue(jsonObjects[0].getProperties(), ["@min", "@max"])).to.be.an("array").to.include.ordered.members([10, 100]);
-        });
-    });
-
-    describe("getFeatureValue", function () {
-        it("should return plain feature property", function () {
-            expect(styleModel.getFeatureValue(jsonObjects[0].getProperties(), "id")).to.equal("test1");
-        });
-        it("should return feature property in object path", function () {
-            expect(styleModel.getFeatureValue(jsonObjects[0].getProperties(), "@id")).to.equal("test1");
         });
     });
 
@@ -448,6 +473,12 @@ describe("vectorStyleModel", function () {
     describe("compareValues", function () {
         it("should return true if values are the same", function () {
             expect(styleModel.compareValues("test", "test")).to.be.true;
+        });
+        it("should return true if boolean values are same", function () {
+            expect(styleModel.compareValues(true, true)).to.be.true;
+        });
+        it("should return false if boolean values are different", function () {
+            expect(styleModel.compareValues(true, false)).to.be.false;
         });
         it("should return true if values are the same but of different type", function () {
             expect(styleModel.compareValues("20", 20)).to.be.true;
@@ -482,14 +513,14 @@ describe("vectorStyleModel", function () {
         });
     });
 
-    describe("isObjectPath", function () {
-        it("should return true if value is an object path", function () {
-            expect(styleModel.isObjectPath("@id")).to.be.true;
+    describe("getValueWithoutComma", function () {
+        it("should return original value", function () {
+            expect(styleModel.getValueWithoutComma("22")).to.equal("22");
+            expect(styleModel.getValueWithoutComma("test")).to.equal("test");
         });
-        it("should return false if value is not an object path", function () {
-            expect(styleModel.isObjectPath(123)).to.be.false;
-            expect(styleModel.isObjectPath("123")).to.be.false;
-            expect(styleModel.isObjectPath("foo@id")).to.be.false;
+        it("should return the value without comma", function () {
+            expect(styleModel.getValueWithoutComma("22,6")).to.equal(22.6);
+            expect(styleModel.getValueWithoutComma("22,667")).to.equal(22.667);
         });
     });
 
@@ -509,24 +540,41 @@ describe("vectorStyleModel", function () {
     });
 
     describe("getSubelementsFromXML", function () {
-        const featureType = "staatliche_schulen";
+        const featureType = "staatliche_schulen",
+            featureType_nrw = "SWD01_P";
 
         it("should return an Array with elements", function () {
-            expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, featureType)).to.be.an("array");
+            expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, featureType)).to.be.an("array").to.have.lengthOf(63);
+            expect(styleModel.getSubelementsFromXML(xmlDescribefeatureType_nrw, featureType_nrw)).to.be.an("array").to.have.lengthOf(10);
+        });
+        it("featureType with namespace -> should return an Array with elements", function () {
+            expect(styleModel.getSubelementsFromXML(xmlDescribefeatureType_nrw, "tfis:" + featureType_nrw)).to.be.an("array").to.have.lengthOf(10);
         });
         it("should return an empty Array", function () {
             expect(styleModel.getSubelementsFromXML(undefined, featureType)).to.be.an("array").to.be.empty;
         });
         it("should return an empty Array", function () {
             expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, undefined)).to.be.an("array").to.be.empty;
+            expect(styleModel.getSubelementsFromXML(xmlDescribefeatureType_nrw, undefined)).to.be.an("array").to.be.empty;
         });
     });
     describe("getTypeAttributesFromSubelements", function () {
+        const featureType = "staatliche_schulen",
+            featureType_nrw = "SWD01_P";
         let subElements;
 
-        it("should return an Array with element Point", function () {
-            subElements = styleModel.getSubelementsFromXML(xmlDescribeFeatureType, "staatliche_schulen");
+        it("should return an Array with element Point or with Point, Polygon and Linestring", function () {
+            subElements = styleModel.getSubelementsFromXML(xmlDescribeFeatureType, featureType);
+            expect(subElements).to.be.an("array").to.have.lengthOf(63);
             expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").to.include("Point");
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").not.to.include("Polygon");
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").not.to.include("LineString");
+
+            subElements = styleModel.getSubelementsFromXML(xmlDescribefeatureType_nrw, featureType_nrw);
+            expect(subElements).to.be.an("array").to.have.lengthOf(10);
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").to.include("Point");
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").to.include("Polygon");
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").to.include("LineString");
         });
         it("should return an empty Array", function () {
             expect(styleModel.getTypeAttributesFromSubelements(undefined)).to.be.an("array").to.be.empty;

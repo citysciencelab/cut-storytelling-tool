@@ -5,7 +5,7 @@ import importedState from "../../../store/stateFileImport";
 import rawSources from "../../resources/rawSources.js";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
-import * as crs from "masterportalAPI/src/crs";
+import * as crs from "@masterportal/masterportalapi/src/crs";
 
 const
     {importKML} = actions,
@@ -44,7 +44,7 @@ describe("src/modules/tools/fileImport/store/actionsFileImport.js", () => {
                     category: i18next.t("common:modules.alerting.categories.info"),
                     content: i18next.t("common:modules.tools.fileImport.alertingMessages.success", {filename: payload.filename})},
                 dispatch: true
-            }], {}, done);
+            }], {}, done, {"Maps/projectionCode": "EPSG:25832"});
         });
 
         it("preset \"auto\", correct kml file, wrong filename", done => {
@@ -95,7 +95,7 @@ describe("src/modules/tools/fileImport/store/actionsFileImport.js", () => {
                     category: i18next.t("common:modules.alerting.categories.info"),
                     content: i18next.t("common:modules.tools.fileImport.alertingMessages.success", {filename: payload.filename})},
                 dispatch: true
-            }], {}, done);
+            }], {}, done, {"Maps/projectionCode": "EPSG:25832"});
         });
 
         it("preset \"auto\", correct geojson file, correct filename", done => {
@@ -107,7 +107,7 @@ describe("src/modules/tools/fileImport/store/actionsFileImport.js", () => {
                     category: i18next.t("common:modules.alerting.categories.info"),
                     content: i18next.t("common:modules.tools.fileImport.alertingMessages.success", {filename: payload.filename})},
                 dispatch: true
-            }], {}, done);
+            }], {}, done, {"Maps/projectionCode": "EPSG:25832"});
         });
 
         it("preset \"gpx\", correct kml file, correct filename", done => {

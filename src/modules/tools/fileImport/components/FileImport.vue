@@ -1,14 +1,14 @@
 <script>
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import getComponent from "../../../../utils/getComponent";
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersFileImport";
 import mutations from "../store/mutationsFileImport";
 
 export default {
     name: "FileImport",
     components: {
-        Tool
+        ToolTemplate
     },
     data () {
         return {
@@ -33,15 +33,41 @@ export default {
 
         console: () => console
     },
+    watch: {
+        /**
+         * Listens to the active property change.
+         * @param {Boolean} isActive Value deciding whether the tool gets activated or deactivated.
+         * @returns {void}
+         */
+        active (isActive) {
+            if (isActive) {
+                this.setFocusToFirstControl();
+            }
+        }
+    },
     created () {
         this.$on("close", this.close);
     },
     methods: {
         ...mapActions("Tools/FileImport", [
             "importKML",
+            "importGeoJSON",
             "setSelectedFiletype"
         ]),
+        ...mapActions("Maps", ["addNewLayerIfNotExists"]),
         ...mapMutations("Tools/FileImport", Object.keys(mutations)),
+
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["upload-label"]) {
+                    this.$refs["upload-label"].focus();
+                }
+            });
+        },
         onDZDragenter () {
             this.dzIsDropHovering = true;
         },
@@ -66,17 +92,29 @@ export default {
             }
         },
         addFile (files) {
-            files.forEach(file => {
+            Array.from(files).forEach(file => {
                 const reader = new FileReader();
 
-                reader.onload = f => {
-                    const vectorLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+                reader.onload = async f => {
+                    const vectorLayer = await this.addNewLayerIfNotExists("importDrawLayer"),
+                        fileNameSplit = file.name.split("."),
+                        fileExtension = fileNameSplit.length > 0 ? fileNameSplit[fileNameSplit.length - 1].toLowerCase() : "";
 
-                    this.importKML({raw: f.target.result, layer: vectorLayer, filename: file.name});
+                    if (fileExtension === "geojson" || fileExtension === "json") {
+                        this.importGeoJSON({raw: f.target.result, layer: vectorLayer, filename: file.name});
+                    }
+                    else {
+                        this.importKML({raw: f.target.result, layer: vectorLayer, filename: file.name});
+                    }
                 };
 
                 reader.readAsText(file);
             });
+        },
+        triggerClickOnFileInput (event) {
+            if (event.which === 32 || event.which === 13) {
+                this.$refs["upload-input-file"].click();
+            }
         },
         close () {
             this.setActive(false);
@@ -110,16 +148,16 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
-        :initialWidth="300"
+        :deactivate-gfi="deactivateGFI"
+        :initial-width="300"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="tool-file-import"
@@ -127,13 +165,11 @@ export default {
                 <p
                     class="cta"
                     v-html="$t('modules.tools.fileImport.captions.introInfo')"
-                >
-                </p>
+                />
                 <p
                     class="cta"
                     v-html="$t('modules.tools.fileImport.captions.introFormats')"
-                >
-                </p>
+                />
                 <div
                     class="vh-center-outer-wrapper drop-area-fake"
                     :class="dropZoneAdditionalClass"
@@ -148,6 +184,7 @@ export default {
                         </p>
                     </div>
 
+                    <!-- eslint-disable-next-line vuejs-accessibility/mouse-events-have-key-events -->
                     <div
                         class="drop-area"
                         @drop.prevent="onDrop"
@@ -157,14 +194,26 @@ export default {
                         @mouseenter="onDZMouseenter"
                         @mouseleave="onDZMouseleave"
                     />
+                    <!--
+                        The previous element does not provide a @focusin or @focus reaction as would
+                        be considered correct by the linting rule set. Since it's a drop-area for file
+                        dropping by mouse, the concept does not apply. Keyboard users may use the
+                        matching input fields.
+                    -->
                 </div>
 
                 <div>
-                    <label class="upload-button-wrapper">
+                    <label
+                        ref="upload-label"
+                        class="upload-button-wrapper"
+                        tabindex="0"
+                        @keydown="triggerClickOnFileInput"
+                    >
                         <input
+                            ref="upload-input-file"
                             type="file"
                             @change="onInputChange"
-                        />
+                        >
                         {{ $t("modules.tools.fileImport.captions.browse") }}
                     </label>
                 </div>
@@ -172,10 +221,13 @@ export default {
                 <div v-if="importedFileNames.length > 0">
                     <div class="h-seperator" />
                     <p class="cta">
-                        <label class="successfullyImportedLabel">
+                        <label
+                            class="successfullyImportedLabel"
+                            for="succesfully-imported-files"
+                        >
                             {{ $t("modules.tools.fileImport.successfullyImportedLabel") }}
                         </label>
-                        <ul>
+                        <ul id="succesfully-imported-files">
                             <li
                                 v-for="(filename, index) in importedFileNames"
                                 :key="index"
@@ -188,24 +240,24 @@ export default {
                     <p
                         class="cta introDrawTool"
                         v-html="$t('modules.tools.fileImport.captions.introDrawTool')"
-                    >
-                    </p>
+                    />
                     <div>
                         <label class="upload-button-wrapper">
                             <input
                                 type="button"
                                 @click="openDrawTool"
-                            />
+                            >
                             {{ $t("modules.tools.fileImport.captions.drawTool") }}
                         </label>
                     </div>
                 </div>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
     @import "~variables";
 
     .h-seperator {
@@ -221,18 +273,19 @@ export default {
     }
 
     .upload-button-wrapper {
-        border: 2px solid #DDDDDD;
-        background-color:#FFFFFF;
+        color: $white;
+        background-color: $secondary_focus;
         display: block;
         text-align:center;
         padding: 8px 12px;
         cursor: pointer;
         margin:12px 0 0 0;
-        font-size: @font_size_big;
-        transition: background 0.25s;
-
+        font-size: $font_size_big;
+        &:focus {
+            @include primary_action_focus;
+        }
         &:hover {
-            background-color:#EEEEEE;
+            @include primary_action_hover;
         }
     }
 
@@ -240,18 +293,18 @@ export default {
         margin-bottom:12px;
     }
     .drop-area-fake {
-        background-color: #FFFFFF;
+        background-color: $white;
         border-radius: 12px;
-        border: 2px dashed @accent_disabled;
+        border: 2px dashed $accent;
         padding:24px;
         transition: background 0.25s, border-color 0.25s;
 
         &.dzReady {
-            background-color:@accent_hover;
+            background-color:$accent_hover;
             border-color:transparent;
 
             p.caption {
-                color:#FFFFFF;
+                color: $white;
             }
         }
 
@@ -259,9 +312,9 @@ export default {
             margin:0;
             text-align:center;
             transition: color 0.35s;
-            font-family: @font_family_accent;
-            font-size: @font_size_huge;
-            color: @accent_disabled;
+            font-family: $font_family_accent;
+            font-size: $font_size_huge;
+            color: $accent;
         }
     }
     .drop-area {

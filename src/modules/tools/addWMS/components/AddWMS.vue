@@ -2,17 +2,18 @@
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersAddWMS";
 import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import mutations from "../store/mutationsAddWMS";
 import {WMSCapabilities} from "ol/format.js";
 import {intersects} from "ol/extent";
-import {transform as transformCoord, getProjection} from "masterportalAPI/src/crs";
+import {transform as transformCoord, getProjection} from "@masterportal/masterportalapi/src/crs";
 import axios from "axios";
+import LoaderOverlay from "../../../../utils/loaderOverlay";
 
 export default {
     name: "AddWMS",
     components: {
-        Tool
+        ToolTemplate
     },
     data: function () {
         return {
@@ -25,33 +26,18 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/AddWMS", Object.keys(getters)),
-
-        placeholder () {
-            return i18next.t("common:modules.tools.addWMS.placeholder");
-        },
-
-        textExample () {
-            return i18next.t("common:modules.tools.addWMS.textExample");
-        },
-
-        textLoadLayer () {
-            return i18next.t("common:modules.tools.addWMS.textLoadLayer");
-        },
-
-        errorEmptyUrl () {
-            return i18next.t("common:modules.tools.addWMS.errorEmptyUrl");
-        },
-
-        errorHttpUrl () {
-            return i18next.t("common:modules.tools.addWMS.errorHttpsMessage");
-        },
-
-        errorIfInExtent () {
-            return i18next.t("common:modules.tools.addWMS.ifInExtent");
-        },
-
-        completeMessage () {
-            return i18next.t("common:modules.tools.addWMS.completeMessage");
+        ...mapGetters("Maps", ["projection"])
+    },
+    watch: {
+        /**
+         * Listens to the active property change.
+         * @param {Boolean} isActive Value deciding whether the tool gets activated or deactivated.
+         * @returns {void}
+         */
+        active (isActive) {
+            if (isActive) {
+                this.setFocusToFirstControl();
+            }
         }
     },
     created () {
@@ -65,6 +51,17 @@ export default {
     methods: {
         ...mapMutations("Tools/AddWMS", Object.keys(mutations)),
 
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs.wmsUrl) {
+                    this.$refs.wmsUrl.focus();
+                }
+            });
+        },
         /**
          * Closes this tool window by setting active to false
          * @returns {void}
@@ -109,17 +106,17 @@ export default {
                 return;
             }
             else if (url.includes("http:")) {
-                this.$store.dispatch("Alerting/addSingleAlert", this.errorHttpUrl);
+                this.$store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.addWMS.errorHttpsMessage"));
                 return;
             }
-            Radio.trigger("Util", "showLoader");
+            LoaderOverlay.show();
             axios({
                 timeout: 4000,
                 url: url + "?request=GetCapabilities&service=WMS"
             })
                 .then(response => response.data)
                 .then((data) => {
-                    Radio.trigger("Util", "hideLoader");
+                    LoaderOverlay.hide();
                     try {
                         const parser = new WMSCapabilities(),
                             uniqId = this.getAddWmsUniqueId(),
@@ -139,7 +136,7 @@ export default {
                         }
 
                         if (!checkExtent) {
-                            this.$store.dispatch("Alerting/addSingleAlert", this.errorIfInExtent);
+                            this.$store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.addWMS.ifInExtent"));
                             return;
                         }
 
@@ -157,14 +154,14 @@ export default {
                         });
                         Radio.trigger("ModelList", "closeAllExpandedFolder");
 
-                        this.$store.dispatch("Alerting/addSingleAlert", this.completeMessage);
+                        this.$store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.addWMS.completeMessage"));
 
                     }
                     catch (e) {
                         this.displayErrorMessage();
                     }
                 }, () => {
-                    Radio.trigger("Util", "hideLoader");
+                    LoaderOverlay.hide();
                     this.displayErrorMessage();
                 });
         },
@@ -202,14 +199,14 @@ export default {
          * @return {void}
          */
         parseLayer: function (object, parentId, level) {
-            if (object.hasOwnProperty("Layer")) {
+            if (Object.prototype.hasOwnProperty.call(object, "Layer")) {
                 object.Layer.forEach(layer => {
                     this.parseLayer(layer, this.getParsedTitle(object.Title), level + 1);
                 });
                 Radio.trigger("Parser", "addFolder", object.Title, this.getParsedTitle(object.Title), parentId, level, false, false, object.invertLayerOrder);
             }
             else {
-                Radio.trigger("Parser", "addLayer", object.Title, this.getParsedTitle(object.Title), parentId, level, object.Name, this.wmsUrl, this.version);
+                Radio.trigger("Parser", "addLayer", object.Title, this.getParsedTitle(object.Title), parentId, level, object.Name, this.wmsUrl, this.version, {});
             }
         },
 
@@ -257,15 +254,15 @@ export default {
                     secondLayerExtent = [];
 
                 layer.forEach(singleLayer => {
-                    if (singleLayer.crs === "EPSG:25832") {
+                    if (singleLayer.crs === this.projection.getCode()) {
                         firstLayerExtent = [singleLayer.extent[0], singleLayer.extent[1]];
                         secondLayerExtent = [singleLayer.extent[2], singleLayer.extent[3]];
                     }
                 });
 
                 if (!firstLayerExtent.length && !secondLayerExtent.length) {
-                    firstLayerExtent = transformCoord(layer[0].crs, "EPSG:25832", [layer[0].extent[0], layer[0].extent[1]]);
-                    secondLayerExtent = transformCoord(layer[0].crs, "EPSG:25832", [layer[0].extent[2], layer[0].extent[3]]);
+                    firstLayerExtent = transformCoord(layer[0].crs, this.projection.getCode(), [layer[0].extent[0], layer[0].extent[1]]);
+                    secondLayerExtent = transformCoord(layer[0].crs, this.projection.getCode(), [layer[0].extent[2], layer[0].extent[3]]);
                 }
 
                 layerExtent = [firstLayerExtent[0], firstLayerExtent[1], secondLayerExtent[0], secondLayerExtent[1]];
@@ -309,24 +306,22 @@ export default {
          * @returns {String} parsedTitle - The parsed title
          */
         getParsedTitle: function (title) {
-            const finalTitle = String(title).replace(/\s+/g, "-").replace(/\//g, "-");
-
-            return finalTitle;
+            return String(title).replace(/\s+/g, "-").replace(/\//g, "-");
         }
     }
 };
 </script>
 
 <template>
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="add-wms"
@@ -336,18 +331,17 @@ export default {
                     v-if="invalidUrl"
                     class="addwms_error"
                 >
-                    {{ errorEmptyUrl }}
+                    {{ $t('common:modules.tools.addWMS.errorEmptyUrl') }}
                 </div>
                 <input
                     id="wmsUrl"
+                    ref="wmsUrl"
+                    aria-label="WMS-Url"
                     type="text"
                     class="form-control wmsUrlsChanged"
-                    :placeholder="placeholder"
-                    @keydown="inputUrl"
+                    :placeholder="$t('common:modules.tools.addWMS.placeholder')"
+                    @keydown.enter="inputUrl"
                 >
-                <div class="WMS_example_text">
-                    {{ textExample }}
-                </div>
                 <button
                     id="addWMSButton"
                     type="button"
@@ -357,25 +351,27 @@ export default {
                     <span
                         class=""
                         aria-hidden="true"
-                    >{{ textLoadLayer }}</span>
+                    >{{ $t('common:modules.tools.addWMS.textLoadLayer') }}</span>
                     <span
-                        class="glyphicon glyphicon-ok"
+                        class="bootstrap-icon"
                         aria-hidden="true"
-                    ></span>
+                    >
+                        <i class="bi-check-lg" />
+                    </span>
                 </button>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
     .addWMS {
         min-width: 400px;
     }
     .WMS_example_text {
         margin-top: 10px;
-        color: #777;
+        color: $light_grey;
     }
     #addWMSButton {
         margin-top: 15px;
@@ -383,7 +379,7 @@ export default {
     }
     .addwms_error {
         font-size: 16px;
-        color: #d42132;
+        color: $light_red;
         margin-bottom: 10px;
     }
 </style>

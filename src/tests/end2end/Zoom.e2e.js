@@ -2,8 +2,8 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getResolution, mouseWheelUp, mouseWheelDown} = require("../../../test/end2end/library/scripts"),
     {logTestingCloudUrlToTest} = require("../../../test/end2end/library/utils"),
-    {initDriver} = require("../../../test/end2end/library/driver"),
-    {isMobile} = require("../../../test/end2end/settings"),
+    {initDriver, getDriver, quitDriver} = require("../../../test/end2end/library/driver"),
+    {isMaster, isMobile} = require("../../../test/end2end/settings"),
     {By} = webdriver;
 
 /**
@@ -16,10 +16,10 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ZoomTests ({builder, url, resolution, capability}) {
-    const testIsApplicable = !isMobile(resolution); // no mouse wheel on mobile devices
+    const testIsApplicable = isMaster(url) && !isMobile(resolution); // no mouse wheel on mobile devices
 
     if (testIsApplicable) {
-        describe("Map Zoom with MouseWheel", function () {
+        describe("Map Zoom with MouseWheel", async function () {
             let driver, canvas;
 
             before(async function () {
@@ -28,7 +28,7 @@ async function ZoomTests ({builder, url, resolution, capability}) {
                     capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
-                driver = await initDriver(builder, url, resolution);
+                driver = await getDriver();
                 canvas = await driver.findElement(By.css(".ol-viewport"));
             });
 
@@ -38,13 +38,11 @@ async function ZoomTests ({builder, url, resolution, capability}) {
                         logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
-                await driver.quit();
             });
 
             afterEach(async function () {
                 if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                    await driver.quit();
+                    await quitDriver();
                     driver = await initDriver(builder, url, resolution);
                     canvas = await driver.findElement(By.css(".ol-viewport"));
                 }

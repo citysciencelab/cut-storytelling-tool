@@ -1,6 +1,7 @@
 import {KML} from "ol/format.js";
 import getProjections from "./getProjections";
 import proj4 from "proj4";
+import uniqueId from "./uniqueId";
 
 const projections = getProjections("EPSG:25832", "EPSG:4326", "32"),
     colorOptions = [
@@ -22,8 +23,8 @@ const projections = getProjections("EPSG:25832", "EPSG:4326", "32"),
  * @returns {void}
  */
 function addUniqueStyleId (convertedFeatures) {
-    convertedFeatures.getElementsByTagName("ExtendedData").forEach(extendedData => {
-        extendedData.getElementsByTagName("value")[0].textContent = Radio.request("Util", "uniqueId", "");
+    Array.from(convertedFeatures.getElementsByTagName("ExtendedData")).forEach(extendedData => {
+        extendedData.getElementsByTagName("value")[0].textContent = uniqueId("");
     });
 }
 
@@ -191,7 +192,7 @@ export default async function convertFeaturesToKml (features) {
             style,
             styles;
 
-        if (type === "Point" && feature.values_.drawState.text !== undefined) {
+        if (type === "Point" && feature.values_.drawState && feature.values_.drawState.text !== undefined) {
             // Imported KML with text, can be used as it is
             skip[i] = true;
             textFontSize[i] = feature.values_.drawState.fontSize;
@@ -229,7 +230,7 @@ export default async function convertFeaturesToKml (features) {
 
     addUniqueStyleId(convertedFeatures);
 
-    convertedFeatures.getElementsByTagName("Placemark").forEach((placemark, i) => {
+    Array.from(convertedFeatures.getElementsByTagName("Placemark")).forEach((placemark, i) => {
         if (placemark.getElementsByTagName("Point").length > 0 && skip[i] === false) {
             const style = placemark.getElementsByTagName("Style")[0];
 

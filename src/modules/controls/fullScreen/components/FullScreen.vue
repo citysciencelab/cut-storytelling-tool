@@ -1,4 +1,5 @@
 <script>
+import {mapGetters} from "vuex";
 import ControlIcon from "../../ControlIcon.vue";
 import TableStyleControl from "../../TableStyleControl.vue";
 
@@ -81,8 +82,10 @@ export default {
         };
     },
     computed: {
+        ...mapGetters(["uiStyle"]),
+
         component () {
-            return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
+            return this.uiStyle === "TABLE" ? TableStyleControl : ControlIcon;
         }
     },
     mounted () {
@@ -127,12 +130,12 @@ export default {
         <component
             :is="component"
             :title="$t(`common:modules.controls.fullScreen.${active ? 'disable' : 'enable'}`)"
-            :icon-name="active ? 'resize-small' : 'fullscreen'"
+            :icon-name="active ? 'fullscreen-exit' : 'arrows-fullscreen'"
             :on-click="toggleFullScreen"
         />
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     @import "~variables";
 </style>

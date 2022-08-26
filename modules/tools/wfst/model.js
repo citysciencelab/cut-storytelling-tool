@@ -1301,7 +1301,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     handleMissingFeatureProperties: function (feature, geometry, properties, mode) {
         if (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0) {
             this.get("wfstFields").forEach(function (field) {
-                if (!feature.getProperties().hasOwnProperty(field.field)) {
+                if (!Object.prototype.hasOwnProperty.call(feature.getProperties(), field.field)) {
                     if (mode === "drawProperties" && typeof properties === "object" && properties !== null && Object.entries(properties > 0)) {
                         feature.set(field.field, properties[field.field]);
                     }

@@ -7,12 +7,16 @@
 .env
 .idea
 .vscode
+.history
 /img/*.db
 /jsdoc
+/docHtml
 /nbproject/private/
 styleguide
+.history
 
-!portal/analysetool/readme.txt
+#addons/*
+!addons/readme.txt
 
 bowerupdate.log
 build
@@ -22,6 +26,8 @@ css/bootstrap.css
 css/modules.css
 
 dist
+
+devtools/certificate*
 
 examples*
 
@@ -52,10 +58,3 @@ npm-debug.log
 !/portal/master
 !/portal/masterCustom
 !/portal/masterDefault
-!/portal/data-drawing-tool
-!/portal/mobility-data
-
-# Docker build
-.DS_Store
-audio_files
-postgresdata

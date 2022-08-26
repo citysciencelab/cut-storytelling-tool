@@ -3,13 +3,18 @@ import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
 import ConfirmAction from "../modules/confirmAction/store/indexConfirmAction";
-import Footer from "../modules/footer/store/indexFooter";
+import PortalFooter from "../modules/portalFooter/store/indexPortalFooter";
 import GraphicalSelect from "../share-components/graphicalSelect/store/indexGraphicalSelect";
 import Language from "../modules/language/store/indexLanguage";
-import Title from "../modules/title/store/indexTitle";
-import Map from "../modules/map/store/indexMap";
-import MapMarker from "../modules/mapMarker/store/indexMapMarker";
+import LayerInformation from "../modules/layerInformation/store/indexLayerInformation";
+import LayerSelector from "../modules/layerSelector/store/indexLayerSelector";
 import Legend from "../modules/legend/store/indexLegend";
+import Maps from "../core/maps/store/indexMap";
+import MapMarker from "../modules/mapMarker/store/indexMapMarker";
+import MouseHover from "../modules/mouseHover/store/indexMouseHover";
+import QuickHelp from "../modules/quickHelp/store/indexQuickHelp";
+import PortalTitle from "../modules/portalTitle/store/indexPortalTitle";
+import WmsTime from "../modules/wmsTime/store/indexWmsTime";
 
 import getters from "./getters";
 import mutations from "./mutations";
@@ -19,24 +24,32 @@ import actions from "./actions";
 import controlsModule from "../modules/controls/indexControls";
 import toolsModule from "../modules/tools/indexTools";
 
+import ZoomTo from "../utils/zoomTo/store/indexZoomTo";
+
 import isMobile from "../utils/isMobile";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
-        ConfirmAction,
         Alerting,
-        Footer,
+        ConfirmAction,
+        PortalFooter,
         GraphicalSelect,
         Language,
+        LayerInformation,
+        LayerSelector,
         Legend,
-        Map,
+        Maps,
         MapMarker,
-        Title,
+        MouseHover,
+        QuickHelp,
+        PortalTitle,
+        WmsTime,
         controls: {
             ...controlsModule
         },
+        ZoomTo,
         Tools: {
             ...toolsModule
         }
@@ -55,7 +68,7 @@ export default store;
  * Debounce function
  * @param {Function} callback - The callback form debounce function.
  * @param {Number} wait - Wait before the callback function is called.
- * @returns {void}
+ * @returns {Function} Calls the given callback after the given time.
  */
 function debounce (callback, wait) {
     let timeout;

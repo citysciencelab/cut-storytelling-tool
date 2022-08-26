@@ -5,6 +5,7 @@ import BufferAnalysis from "../../../store/indexBufferAnalysis";
 import {expect} from "chai";
 import sinon from "sinon";
 import {createLayersArray} from "../utils/functions";
+import FakeTimers from "@sinonjs/fake-timers";
 
 const localVue = createLocalVue();
 
@@ -12,31 +13,41 @@ localVue.use(Vuex);
 config.mocks.$t = key => key;
 
 describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () => {
-    const mockMapGetters = {
-            map: () => ({removeLayer: sinon.spy()})
-        },
-        mockConfigJson = {
-            Portalconfig: {
-                menu: {
-                    tools: {
-                        children: {
-                            bufferAnalysis:
+    const mockConfigJson = {
+        Portalconfig: {
+            menu: {
+                tools: {
+                    children: {
+                        bufferAnalysis:
                             {
                                 "name": "translate#common:menu.tools.bufferAnalysis",
-                                "glyphicon": "glyphicon-random"
+                                "icon": "bi-shuffle"
                             }
-                        }
                     }
                 }
             }
+        }
+    };
+    let store, originalCheckIntersection, originalShowBuffer, originalApplyValuesFromSavedUrlBuffer, wrapper;
+
+    before(() => {
+        mapCollection.clear();
+        const map = {
+            id: "ol",
+            mode: "2D",
+            removeLayer: sinon.spy()
         };
-    let store, originalCheckIntersection, originalShowBuffer;
+
+        mapCollection.addMap(map, "2D");
+    });
 
     beforeEach(() => {
         originalCheckIntersection = BufferAnalysis.actions.checkIntersection;
         originalShowBuffer = BufferAnalysis.actions.showBuffer;
+        originalApplyValuesFromSavedUrlBuffer = BufferAnalysis.actions.applyValuesFromSavedUrlBuffer;
         BufferAnalysis.actions.checkIntersection = sinon.spy();
         BufferAnalysis.actions.showBuffer = sinon.spy();
+        BufferAnalysis.actions.applyValuesFromSavedUrlBuffer = sinon.spy();
 
         store = new Vuex.Store({
             namespaces: true,
@@ -46,43 +57,55 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
                     modules: {
                         BufferAnalysis
                     }
-                },
-                Map: {
-                    namespaced: true,
-                    getters: mockMapGetters
                 }
             },
             state: {
-                configJson: mockConfigJson
+                configJson: mockConfigJson,
+                Maps: {
+                    mode: "2D"
+                }
             }
         });
         store.commit("Tools/BufferAnalysis/setActive", true);
     });
 
     afterEach(() => {
+        const map = {
+            id: "ol",
+            mode: "2D",
+            addLayer: sinon.spy(),
+            removeLayer: sinon.spy()
+        };
+
+        mapCollection.clear();
+        mapCollection.addMap(map, "2D");
         BufferAnalysis.actions.checkIntersection = originalCheckIntersection;
         BufferAnalysis.actions.showBuffer = originalShowBuffer;
+        BufferAnalysis.actions.applyValuesFromSavedUrlBuffer = originalApplyValuesFromSavedUrlBuffer;
         store.commit("Tools/BufferAnalysis/setActive", false);
         store.commit("Tools/BufferAnalysis/setSelectOptions", []);
         store.dispatch("Tools/BufferAnalysis/resetModule");
+        if (wrapper) {
+            wrapper.destroy();
+        }
     });
 
     it("renders the bufferAnalysis", () => {
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
 
         expect(wrapper.find("#tool-bufferAnalysis").exists()).to.be.true;
     });
 
     it("do not render the bufferAnalysiss select if not active", () => {
         store.commit("Tools/BufferAnalysis/setActive", false);
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
 
         expect(wrapper.find("#tool-bufferAnalysis").exists()).to.be.false;
     });
 
     it("has initially set nothing to layer-analysis-select-source and layer-analysis-select-target", () => {
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
-            selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
+        const selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
             selectTarget = wrapper.find("#tool-bufferAnalysis-selectTargetInput");
 
         expect(selectSource.element.value).to.equals("");
@@ -90,8 +113,8 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
     });
 
     it("has initially set eight available options to select", async () => {
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
-            layers = createLayersArray(3);
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
+        const layers = createLayersArray(3);
         let options = [];
 
         await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
@@ -102,11 +125,12 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
     });
 
     it("triggers showBuffer action when source layer and buffer radius are set", async () => {
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
-            selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
+        const selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
             range = wrapper.find("#tool-bufferAnalysis-radiusTextInput"),
             layers = createLayersArray(3),
-            clock = sinon.useFakeTimers();
+            clock = FakeTimers.install();
+
 
         let sourceOptions = [];
 
@@ -122,6 +146,20 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
         await wrapper.vm.$nextTick();
         clock.tick(1000);
         expect(BufferAnalysis.actions.showBuffer.calledOnce).to.equal(true);
-        clock.restore();
+        clock.uninstall();
+    });
+
+    it("sets focus to first input control", async () => {
+        const elem = document.createElement("div");
+
+        if (document.body) {
+            document.body.appendChild(elem);
+        }
+        // eslint-disable-next-line one-var
+        wrapper = shallowMount(BufferAnalysisComponent, {store, localVue, attachTo: elem});
+
+        wrapper.vm.setFocusToFirstControl();
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find("#tool-bufferAnalysis-selectSourceInput").element).to.equal(document.activeElement);
     });
 });

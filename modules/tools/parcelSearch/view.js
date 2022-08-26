@@ -69,7 +69,7 @@ const ParcelSearchView = Backbone.View.extend({
             this.$el.empty();
             store.dispatch("MapMarker/removePointMarker");
         }
-
+        this.$el.find("#districtField").trigger("focus");
         return this;
     },
     /*
@@ -79,7 +79,9 @@ const ParcelSearchView = Backbone.View.extend({
         const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
+        this.$el.find("#districtField").trigger("focus");
     },
+
     checkInput: function () {
         if (this.model.get("districtNumber") !== "0" &&
             (this.model.get("cadastralDistrictField") === false || this.model.get("cadastralDistrictNumber") !== "0") &&

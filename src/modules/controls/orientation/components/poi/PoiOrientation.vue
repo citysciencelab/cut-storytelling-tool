@@ -1,17 +1,19 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 import getters from "../../store/gettersOrientation";
 import mutations from "../../store/mutationsOrientation";
 import {extractEventCoordinates} from "../../../../../../src/utils/extractEventCoordinates";
+import Icon from "ol/style/Icon";
+import LoaderOverlay from "../../../../../utils/loaderOverlay";
 
 export default {
     name: "PoiOrientation",
     props: {
         /** id of layer to show in mini-map */
         poiDistances: {
-            type: Array,
+            type: [Boolean, Array],
             required: false,
-            default: null
+            default: () => []
         },
 
         getFeaturesInCircle: {
@@ -36,20 +38,47 @@ export default {
         }
     },
     mounted () {
-        Radio.trigger("Util", "hideLoader");
+        LoaderOverlay.hide();
         this.show();
         this.getFeatures();
         this.initActiveCategory();
+        this.$nextTick(() => {
+            if (this.$refs["close-icon"]) {
+                this.$refs["close-icon"].focus();
+            }
+        });
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),
+        ...mapActions("Maps", ["zoomToExtent"]),
+
+        /**
+         * Callback when close icon has been clicked.
+         * @param {Event} event the dom event
+         * @returns {void}
+         */
+        closeIconTriggered (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.hidePoi();
+            }
+        },
 
         /**
          * Show the modal.
          * @returns {void}
          */
         show () {
-            this.$el.style.display = "block";
+            const el = document.querySelector(".modal"),
+                backdrop = document.querySelector(".modal-backdrop");
+
+            if (el) {
+                el.style.display = "block";
+                el.classList.add("show");
+                el.classList.remove("fade");
+                backdrop.style.display = "block";
+                backdrop.classList.add("show");
+                backdrop.classList.remove("fade");
+            }
         },
 
         /**
@@ -140,26 +169,24 @@ export default {
             const style = Radio.request("StyleList", "returnModelById", feat.styleId);
 
             if (style) {
-                style.getLegendInfos().forEach(legendInfo => {
-                    if (legendInfo.geometryType === "Point") {
-                        const type = legendInfo.styleObject.get("type");
+                const featureStyle = style.createStyle(feat, false);
 
-                        if (type === "icon") {
-                            const featureStyle = style.createStyle(feat, false);
-
-                            imagePath = featureStyle?.getImage()?.getSrc() ? featureStyle?.getImage()?.getSrc() : "";
+                if (featureStyle?.getImage?.() instanceof Icon) {
+                    imagePath = featureStyle.getImage()?.getSrc() ? featureStyle.getImage()?.getSrc() : "";
+                }
+                else {
+                    style.getLegendInfos().forEach(legendInfo => {
+                        if (legendInfo.geometryType === "Point" && legendInfo.styleObject.get("type") === "circle") {
+                            imagePath = this.createCircleSVG(legendInfo.styleObject);
                         }
-                        else if (type === "circle") {
-                            imagePath = this.createCircleSVG(style);
+                        else if (legendInfo.geometryType === "LineString") {
+                            imagePath = this.createLineSVG(legendInfo.styleObject);
                         }
-                    }
-                    else if (legendInfo.geometryType === "LineString") {
-                        imagePath = this.createLineSVG(legendInfo.styleObject);
-                    }
-                    else if (legendInfo.geometryType === "Polygon") {
-                        imagePath = this.createPolygonSVG(legendInfo.styleObject);
-                    }
-                });
+                        else if (legendInfo.geometryType === "Polygon") {
+                            imagePath = this.createPolygonGraphic(legendInfo.styleObject);
+                        }
+                    });
+                }
             }
 
             return imagePath;
@@ -182,10 +209,10 @@ export default {
                 }),
                 extent = feature.getGeometry().getExtent(),
                 coordinate = extractEventCoordinates(extent),
-                resolutions = Radio.request("MapView", "getResolutions"),
+                resolutions = mapCollection.getMapView("2D").getResolutions(),
                 index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
 
-            Radio.trigger("Map", "zoomToExtent", coordinate, {maxZoom: index});
+            this.zoomToExtent({extent: coordinate, options: {maxZoom: index}});
             this.$emit("hide");
         },
 
@@ -244,17 +271,22 @@ export default {
         },
 
         /**
-         * Creating the polygon svg
+         * Creating the polygon graphic
          * @param  {ol/style} style ol style
-         * @return {string} SVG
+         * @return {string} SVG or data URL
          */
-        createPolygonSVG (style) {
+        createPolygonGraphic (style) {
             let svg = "";
-            const fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
+            const fillColor = style.returnColor(style.get("polygonFillColor") || "black", "hex"),
                 strokeColor = style.returnColor(style.get("polygonStrokeColor"), "hex"),
                 strokeWidth = parseInt(style.get("polygonStrokeWidth"), 10),
-                fillOpacity = style.get("polygonFillColor")[3].toString() || 0,
-                strokeOpacity = style.get("polygonStrokeColor")[3].toString() || 0;
+                fillOpacity = style.get("polygonFillColor")?.[3]?.toString() || 0,
+                strokeOpacity = style.get("polygonStrokeColor")[3].toString() || 0,
+                fillHatch = style.get("polygonFillHatch");
+
+            if (fillHatch) {
+                return style.getPolygonFillHatchLegendDataUrl();
+            }
 
             svg += "<svg height='35' width='35'>";
             svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
@@ -291,20 +323,26 @@ export default {
     <div
         id="surrounding_vectorfeatures"
         class="modal fade in poi"
+        @keydown.esc="hidePoi"
     >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <span
-                        class="glyphicon glyphicon-remove"
-                        aria-hidden="true"
-                        data-dismiss="modal"
-                        :title="$t('button.close')"
-                        @click="hidePoi"
-                    ></span>
                     <h4 class="modal-title">
                         {{ $t("common:modules.controls.orientation.titleGeolocatePOI") }}
                     </h4>
+                    <span
+                        ref="close-icon"
+                        class="bootstrap-icon"
+                        tabindex="0"
+                        aria-hidden="true"
+                        data-bs-dismiss="modal"
+                        :title="$t('button.close')"
+                        @click="closeIconTriggered($event)"
+                        @keydown="closeIconTriggered($event)"
+                    >
+                        <i class="bi-x-lg" />
+                    </span>
                 </div>
                 <div>
                     <ul
@@ -314,14 +352,17 @@ export default {
                         <li
                             v-for="(feature, index) in poiFeatures"
                             :key="index"
-                            :class="feature.category === activeCategory ? 'active' : ''"
+                            class="nav-item"
                             @click="changedCategory"
+                            @keydown.enter="changedCategory"
                         >
                             <a
+                                class="nav-link"
+                                :class="feature.category === activeCategory ? 'active' : ''"
                                 :href="'#' + feature.category"
                                 :aria-controls="feature.category"
-                                role="pill"
-                                data-toggle="pill"
+                                role="button"
+                                data-bs-toggle="pill"
                             >{{ feature.category + 'm' }}
                                 <span
                                     class="badge"
@@ -336,7 +377,7 @@ export default {
                             :id="feature.category"
                             :key="'list' + index"
                             role="tabpanel"
-                            :class="['tab-pane fade in', feature.category === activeCategory ? 'active' : '']"
+                            :class="['tab-pane fade show', feature.category === activeCategory ? 'active' : '']"
                         >
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
@@ -348,10 +389,13 @@ export default {
                                             @click="zoomFeature"
                                         >
                                             <td v-if="feat.imgPath.indexOf('</svg>') !== -1">
-                                                <span v-html="feat.imgPath"></span>
+                                                <span v-html="feat.imgPath" />
                                             </td>
                                             <td v-else-if="feat.imgPath.length > 0">
-                                                <img :src="feat.imgPath">
+                                                <img
+                                                    :src="feat.imgPath"
+                                                    :alt="$t('common:modules.controls.orientation.imgAlt')"
+                                                >
                                             </td>
                                             <td>
                                                 <p
@@ -371,16 +415,25 @@ export default {
                 </div>
             </div>
         </div>
+        <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
         <div
-            class="modal-backdrop fade in"
+            class="modal-backdrop fade show"
             @click="hidePoi"
-        ></div>
+        />
+        <!--
+            The previous element does not require a key interaction. It is not focusable,
+            has no semantic meaning, and other methods exist for keyboard users to leave
+            the backdropped modal dialog.
+        -->
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
+    @import "~variables";
+
     .poi {
-        color: rgb(85, 85, 85);
+        color: $dark_grey;
         font-size: 14px;
         .modal-header {
             padding: 0;
@@ -392,18 +445,24 @@ export default {
             text-overflow: ellipsis;
             overflow: hidden;
         }
-        .glyphicon-remove {
+        .bi-x-lg {
             font-size: 16px;
             float: right;
             padding: 12px;
             cursor: pointer;
+            &:focus {
+                @include primary_action_focus;
+            }
         }
         .modal-dialog {
-            z-index: 1041;
+            z-index: 1051;
         }
         .tab-content{
             max-height: 78vH;
             overflow: auto;
+            &:focus {
+                @include primary_action_focus;
+            }
             tbody {
                 >tr {
                     >td {

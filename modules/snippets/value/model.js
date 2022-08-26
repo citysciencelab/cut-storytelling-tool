@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const SnippetValueModel = Backbone.Model.extend({
     defaults: {
         value: "",
@@ -25,7 +27,7 @@ const SnippetValueModel = Backbone.Model.extend({
     setIsSelected: function (value) {
         this.set("isSelected", value);
     },
-    getDisplayString: function () {
+    getDisplayStrings: function () {
         let displayString = "";
 
         switch (this.get("type")) {
@@ -35,6 +37,14 @@ const SnippetValueModel = Backbone.Model.extend({
             }
             case "searchInMapExtent": {
                 displayString = "Kartenausschnitt";
+                break;
+            }
+            case "date": {
+                displayString += (this.get("displayName") ? this.get("displayName") + " " : "") + moment(this.get("value")).format("DD.MM.YYYY");
+                break;
+            }
+            case "integer": {
+                displayString += (this.get("displayName") ? this.get("displayName") + " " : "") + this.get("value");
                 break;
             }
             default: {

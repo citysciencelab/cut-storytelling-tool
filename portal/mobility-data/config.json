@@ -39,6 +39,11 @@
             "glyphicon": "glyphicon-book",
             "active": true
           },
+          "storyCreationTool": {
+            "name": "translate#additional:modules.tools.storyCreationTool.title",
+            "glyphicon": "glyphicon-text-size",
+            "active": true
+          },
           "gfi": {
             "name": "translate#common:menu.tools.getInfos",
             "glyphicon": "glyphicon-info-sign",
@@ -49,9 +54,8 @@
       },
       "legend": {
         "name": "common:modules.legend.name",
-        "glyphicon": "glyphicon-book",
         "showCollapseAllButton": true,
-        "showLegend": false
+        "showLegend": true
       }
     },
     "controls": {
@@ -59,11 +63,11 @@
       "button3d": false,
       "toggleMenu": true,
       "fullScreen": false,
-      "zoom": true,
+      "zoom": false,
       "orientation": false,
       "mousePosition": false,
       "attributions": false,
-      "buttonOblique": true
+      "buttonOblique": false
     },
     "singleBaselayer": true
   },

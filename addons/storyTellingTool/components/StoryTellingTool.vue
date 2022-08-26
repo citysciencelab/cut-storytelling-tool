@@ -1,6 +1,6 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
-import Tool from "../../../src/modules/tools/Tool.vue";
+import ToolTemplate from "../../../src/modules/tools/ToolTemplate.vue";
 import StoryCreator from "./storyCreator/StoryCreator.vue";
 import StoryPlayer from "./storyPlayer/StoryPlayer.vue";
 import actions from "../store/actionsStoryTellingTool";
@@ -11,7 +11,7 @@ import * as constants from "../store/constantsStoryTellingTool";
 export default {
     name: "StoryTellingTool",
     components: {
-        Tool,
+        ToolTemplate,
         StoryCreator,
         StoryPlayer
     },
@@ -167,7 +167,7 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
         :icon="glyphicon"
         :active="active"
@@ -185,10 +185,9 @@ export default {
                     @change="onChangeStoryTellingMode"
                     id="tool-storyTellingTool-modeSelection"
                 >
-
-                    <v-flex v-for="option in modeOptions"  :key="option.title">
+                    <v-flex v-for="option in modeOptions" :key="option.title">
                         <v-item v-slot="{ active, toggle }" >
-                            <v-card  :disabled="option.disabled" class="my-4">
+                            <v-card :disabled="option.disabled" class="my-4">
                                 <v-img v-if="option.title == 'Story starten'"
                                     src="https://raw.githubusercontent.com/herzogrh/faircare-verkehr/main/assets/img/stroller-1.jpg"
                                     height="200px"
@@ -226,10 +225,10 @@ export default {
                 />
             </v-app>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #tool-storyTellingTool {
     background: none;
 
@@ -255,8 +254,15 @@ export default {
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 // Fix masterportal main menu styles for "TABLE" UI Style
+
+//Colors
+$main-pink: #f2b1b7;
+$main-mint: #73c1a9;
+$scnd-mint: rgba(115, 193, 169, 0.2);
+$main-blue: #8ea0d2;
+$white: #FFFFFF;
 
 .custom-table-row {
     margin-right: -15px;
@@ -276,12 +282,11 @@ export default {
 
 }
 
-
 .table-nav-main{
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
     background-color: white;
-    width: 550px;
+    width: 500px;
     height: 60px;
     padding: 10px;
 }
@@ -291,8 +296,6 @@ export default {
     background-color: white;
     margin-left: -125px;
     margin-top: 10px;
-
-
 }
 
 .table-tools-menu {
@@ -301,19 +304,17 @@ export default {
     border: 2px solid #8ea0d2;
     left: -100px;
     bottom: 50px;
-
 }
 
 .table-tool {
-    border: 0px;
+    border: 0;
     padding: 5px;
     border-radius: 5px;
 }
 
 .table-tool:hover {
-    background-color: fade(@main-blue , 20%);
+    background-color: fade($main-blue , 20%);
 }
-
 
 #table-searchForm input#searchInput.form-control {
     font-family: "Arial", sans-serif;
@@ -326,14 +327,27 @@ export default {
     font-size: 12px;
 }
 
+#table-nav #searchbar {
+    flex-grow: unset;
+    top: -13px;
+
+    @media (min-width: 768px) {
+        margin-top: 0 !important;
+    }
+}
+
+
 #searchInputUL {
     background-color: white;
+}
+
+#table-tools, #table-category-list {
+    display: none;
 }
 
 .table-tools:hover {
     background-color: #cddcf2;
 }
-
 
 .icon-burgermenu_alt.collapsed::before {
     color: #73c1a9;
@@ -346,7 +360,7 @@ export default {
     border: 2px solid #73c1a9;
 }
 
-#table-nav-layers-panel-toggler{
+#table-nav-layers-panel-toggler {
     background-color: #bbf0de;
 }
 
@@ -357,7 +371,6 @@ export default {
 #table-searchForm .btn-table-search:hover {
     background-color: #f4dadf;
 }
-
 
 .icon-burgermenu_alt #table-nav-layers-panel-toggler {
     background-color: #73c1a9;
@@ -370,7 +383,6 @@ export default {
 
 #table-nav-layers-panel .layer-settings-activated {
     background-color: rgba(115, 193, 169, 0.1);
-
 }
 
 .icon-tools::before {
@@ -393,37 +405,67 @@ export default {
     color: #f2b1b7
 }
 
-    // New style for the Storytelling tool
+// New style for the Storytelling tool
 
-    //Colors
-    @main-pink: #f2b1b7;
-    @main-mint: #73c1a9;
-    @main-blue: #8ea0d2;
-    @white: #FFFFFF;
+.win-heading, .table-tool-win-all-vue {
+    background-color: $main-blue !important;
+}
 
-    .win-heading, .table-tool-win-all-vue {
-        background-color: @main-blue !important;
+
+// Working layout for the legend should be provided by masterportal.css (currently not - recheck)
+
+.legend-window-table[data-v-3b5a1b75] {
+    box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+}
+
+.legend-title-table {
+    background-color: $main-mint !important;
+    border-bottom: 0 !important;
+    padding-bottom: 3px !important;
+}
+
+#legend .legend-title-table div {
+    position: absolute;
+    top: 0;
+    right: 3px;
+    padding-top: 10px;
+}
+
+.d-lg-inline-block {
+    @media (min-width: 992px) {
+        display: none !important;
     }
+}
 
-    .legend-title-table, ui-draggable-handle {
-        background-color: @main-mint !important;
-        border-bottom: 0px !important;
+.legend-window-table .legend-content,
+.panel, .panel-default,
+.legend-window-table .legend-content .card {
+    background-color: $white !important;
+}
 
-    }
+#legend .legend-content .layer-title {
+    background-color: $scnd-mint !important;
+}
 
-    .legend-window-table .legend-content, .panel, .panel-default {
-        background-color: @white !important;
+#legend .legend-content .layer {
+    margin: 0 !important;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
 
-    }
+#legend .legend-content {
+    overflow: unset !important;
+    margin-top: 0 !important;
+}
 
-    .panel-heading, .layer-title {
-        border-radius: 4px !important;
-        background-color: fade(@main-mint , 20%) !important;
-        border-bottom: 0px !important;
-    }
+.panel-heading, .layer-title {
+    border-radius: 4px !important;
+    background-color: fade($main-mint, 20%) !important;
+    border-bottom: 0px !important;
+}
 
-    .win-body-vue {
-        background-color: @white !important;
-    }
+.win-body-vue {
+    background-color: $white !important;
+}
 
 </style>

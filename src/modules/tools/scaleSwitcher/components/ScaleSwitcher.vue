@@ -1,39 +1,51 @@
 <script>
-import {mapGetters, mapActions, mapMutations} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import getters from "../store/gettersScaleSwitcher";
 import mutations from "../store/mutationsScaleSwitcher";
+
 /**
  * Tool to switch the scale of the map. Listens to changes of the map's scale and sets the scale to this value.
  */
 export default {
     name: "ScaleSwitcher",
     components: {
-        Tool
+        ToolTemplate
     },
     computed: {
         ...mapGetters("Tools/ScaleSwitcher", Object.keys(getters)),
-        ...mapGetters("Map", ["scales"]),
+        ...mapGetters("Maps", ["getView"]),
         scale: {
             get () {
-                return this.$store.state.Map.scale;
+                return this.$store.state.Maps.scale;
             },
             set (value) {
-                this.$store.commit("Map/setScale", value);
+                this.$store.commit("Maps/setScale", value);
             }
         }
     },
-
+    watch: {
+        /**
+         * Listens to the active property change.
+         * @param {Boolean} isActive Value deciding whether the tool gets activated or deactivated.
+         * @returns {void}
+         */
+        active (isActive) {
+            if (isActive) {
+                this.setFocusToFirstControl();
+            }
+        }
+    },
     /**
      * Lifecycle hook: adds a "close"-Listener to close the tool.
      * @returns {void}
      */
     created () {
+        this.scales = this.getView.get("options").map(option => option.scale);
         this.$on("close", this.close);
     },
     methods: {
-        ...mapActions("Map", ["setResolutionByIndex"]),
         ...mapMutations("Tools/ScaleSwitcher", Object.keys(mutations)),
 
         /**
@@ -50,34 +62,52 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["scale-switcher-select"]) {
+                    this.$refs["scale-switcher-select"].focus();
+                }
+            });
+        },
+        setResolutionByIndex (index) {
+            const view = this.getView;
+
+            view.setResolution(view.getResolutions()[index]);
         }
     }
 };
 </script>
 
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
+        :deactivate-gfi="deactivateGFI"
     >
-        <template v-slot:toolBody>
+        <template #toolBody>
             <div
                 v-if="active"
                 id="scale-switcher"
+                class="row"
             >
                 <label
                     for="scale-switcher-select"
-                    class="col-md-5 col-sm-5 control-label"
+                    class="col-md-5 col-form-label"
                 >{{ $t("modules.tools.scaleSwitcher.label") }}</label>
-                <div class="col-md-7 col-sm-7">
+                <div class="col-md-7">
                     <select
                         id="scale-switcher-select"
+                        ref="scale-switcher-select"
                         v-model="scale"
-                        class="font-arial form-control input-sm pull-left"
+                        class="font-arial form-select form-select-sm float-start"
                         @change="setResolutionByIndex($event.target.selectedIndex)"
                     >
                         <option
@@ -85,22 +115,11 @@ export default {
                             :key="i"
                             :value="scaleValue"
                         >
-                            1:{{ scaleValue }}
+                            1 : {{ scaleValue }}
                         </option>
                     </select>
                 </div>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
-
-<style lang="less" scoped>
-    @import "~variables";
-
-    label {
-        margin-top: 7px;
-    }
-    #scale-switcher-select {
-        border: 2px solid @secondary;
-    }
-</style>

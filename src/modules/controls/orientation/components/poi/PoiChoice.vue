@@ -2,6 +2,7 @@
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../../store/gettersOrientation";
 import mutations from "../../store/mutationsOrientation";
+
 export default {
     name: "PoiChoice",
     computed: {
@@ -15,10 +16,25 @@ export default {
     },
     mounted () {
         this.show();
+        this.$nextTick(() => {
+            if (this.$refs["close-icon"]) {
+                this.$refs["close-icon"].focus();
+            }
+        });
     },
     methods: {
         ...mapMutations("controls/orientation", Object.keys(mutations)),
 
+        /**
+         * Callback when close icon has been clicked.
+         * @param {Event} event the dom event
+         * @returns {void}
+         */
+        closeIconTriggered (event) {
+            if (event.type === "click" || event.which === 32 || event.which === 13) {
+                this.hidePoiChoice();
+            }
+        },
         /**
          * Hides the modal.
          * @returns {void}
@@ -32,7 +48,17 @@ export default {
          * @returns {void}
          */
         show () {
-            this.$el.style.display = "block";
+            const el = document.querySelector(".modal"),
+                backdrop = document.querySelector(".modal-backdrop");
+
+            if (el) {
+                el.style.display = "block";
+                el.classList.add("show");
+                el.classList.remove("fade");
+                backdrop.style.display = "block";
+                backdrop.classList.add("show");
+                backdrop.classList.remove("fade");
+            }
         },
 
         /**
@@ -75,17 +101,24 @@ export default {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <span
-                        class="glyphicon glyphicon-remove"
-                        aria-hidden="true"
-                        data-dismiss="modal"
-                        :title="$t('button.close')"
-                        @click="hidePoiChoice"
-                    ></span>
                     <h4 class="modal-title">
-                        <span class="control-icon glyphicon glyphicon-record standalone"></span>
+                        <span class="control-icon bootstrap-icon standalone">
+                            <i class="bi-record-circle" />
+                        </span>
                         {{ $t("common:modules.controls.orientation.titleGeolocatePOI") }}
                     </h4>
+                    <span
+                        ref="close-icon"
+                        class="bootstrap-icon"
+                        tabindex="0"
+                        aria-hidden="true"
+                        data-bs-dismiss="modal"
+                        :title="$t('button.close')"
+                        @click="closeIconTriggered($event)"
+                        @keydown="closeIconTriggered($event)"
+                    >
+                        <i class="bi-x-lg" />
+                    </span>
                 </div>
                 <div class="choice-content">
                     <div class="choice-title">
@@ -105,14 +138,16 @@ export default {
                         >
                         {{ val }}
                     </label>
+                    <hr>
                     <button
-                        class="confirm"
+                        class="confirm btn btn-primary"
+                        tabindex="0"
                         @click="triggerTrack"
                     >
                         {{ $t("common:modules.controls.orientation.poiChoiceConfirmation") }}
                     </button>
                     <button
-                        class="stop"
+                        class="stop btn btn-outline-default"
                         @click="stopPoi"
                     >
                         {{ $t("common:modules.controls.orientation.poiChoiceStop") }}
@@ -120,38 +155,51 @@ export default {
                 </div>
             </div>
         </div>
+        <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
         <div
             class="modal-backdrop fade in"
             @click="hidePoiChoice"
-        ></div>
+        />
+        <!--
+            The previous element does not require a key interaction. It is not focusable,
+            has no semantic meaning, and other methods exist for keyboard users to leave
+            the backdropped modal dialog.
+        -->
     </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+    @import "~/css/mixins.scss";
+    @import "~variables";
+
     .poi-choice {
-        color: rgb(85, 85, 85);
+        color: $dark_grey;
         font-size: 14px;
         .modal-header {
             padding: 0;
+            > .bootstrap-icon {
+                font-size: 16px;
+                padding: 12px;
+                cursor: pointer;
+                &:focus {
+                    @include primary_action_focus;
+                }
+                &:hover {
+                    @include primary_action_hover;
+                }
+            }
         }
         .modal-title {
             padding: 8px;
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            .glyphicon {
-                top: 3px;
+            .bootstrap-icon {
                 margin-right: 5px;
             }
         }
-        .glyphicon-remove {
-            font-size: 16px;
-            float: right;
-            padding: 12px;
-            cursor: pointer;
-        }
         .modal-dialog {
-            z-index: 1041;
+            z-index: 1051;
         }
         .choice-content{
             display: inline-block;

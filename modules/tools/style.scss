@@ -1,0 +1,42 @@
+@import "../../css/mixins.scss";
+@import "variables";
+
+.dropdown-menu {
+    border: 1px solid #ccc;
+    max-height:calc(100vh - 80px);
+    overflow: auto;
+    >li {
+        >a {
+            font-size: 12px;
+            color: $dark_grey;
+            &:focus {
+                opacity: 1.0;
+                @include primary_action_focus;
+            }
+            &:hover {
+                @include primary_action_hover;
+            }
+            >span {
+                padding-right: 8px;
+            }
+        }
+    }
+    >.active {
+        >a.nav-link {
+            background-color: $accent_active;
+            color: $white;
+            &:hover {
+                @include primary_action_hover;
+            }
+        }
+    }
+    >.divider {
+        margin: 6px 0;
+    }
+}
+@media (max-width: 767px) {
+    .dropdown-menu {
+        border-right: 0;
+        border-left: 0;
+    }
+}

@@ -1,21 +1,17 @@
 const Config = {
-    addons: ["populationRequest", "trinkwasser", "verkehrsstaerken", "continuousCountingBike", "dataTable", "trafficCount", "solaratlas"],
+    addons: ["populationRequest", "trinkwasser", "verkehrsstaerken", "dataTable", "trafficCount", "solaratlas"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
-    metadata: {
-        useProxy: [
-            "https://metaver.de/csw"
-        ]
-    },
     tree: {
         orderBy: "opendata",
         saveSelection: true,
-
         layerIDsToIgnore: [
             "1912", "1913", "1914", "1915", "1916", "1917", // UESG
             "2298", // Straßenbaumkataster cache grau
+            "2297", // Straßenbaumkataster cache
             "1791", // nachträgliche Bodenrichtwerte lagetypisch 1964
-            "8713" // Layer Schulinfo
+            "20170", "20171", "20172", "20173", "20174", "20175", "20176", // Einzellayer Lapro, Freiraumverbund
+            "19970", "19971", "20058", "20059" // INSPIRE HH Versorgungswirtschaft Wasser und Abwasser
         ],
         layerIDsToStyle: [
             {
@@ -32,6 +28,7 @@ const Config = {
             }
         ],
         metaIDsToMerge: [
+            "57A1D605-A216-4E42-8F2D-BBCF8BF3ADA9", // WMS Solarpotentialflächen Hamburg
             "4AC1B569-65AA-4FAE-A5FC-E477DFE5D303", // Großraum- und Schwertransport-Routen in Hamburg
             "3EE8938B-FF9E-467B-AAA2-8534BB505580", // Bauschutzbereich § 12 LuftVG Hamburg
             "F691CFB0-D38F-4308-B12F-1671166FF181", // Flurstücke gelb
@@ -52,7 +49,10 @@ const Config = {
             "6A0D8B9D-1BBD-441B-BA5C-6159EE41EE71", // Bodenrichtwerte für Hamburg
             "3233E124-E576-4B5D-978E-164720C4E75F", // MRH Große Verkehrsprojekte
             "24513F73-D928-450C-A334-E30037945729", // 3D Straßenbaumkataster Hamburg
-            "7595A206-F07E-470D-A6C1-2F74F0B0C64E" // 3D Hamburger Hauptkirchen
+            "7595A206-F07E-470D-A6C1-2F74F0B0C64E", // 3D Hamburger Hauptkirchen
+            "47233BC2-8D3F-4D9E-B760-BA153327F0E8", // HWRM-Karten 1.Zyklus Hamburg
+            "BD9B5D2E-B6B8-4857-99A5-306B0411E48B", // Baustellen GeoNetBake Hamburg
+            "4C2CB09B-5F74-4BDF-BE10-3F4DBEF5BB02" // Schadenskarte_1946
         ]
     },
     scaleLine: true,
@@ -95,34 +95,38 @@ const Config = {
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
     styleConf: "https://geodienste.hamburg.de/lgv-config/style_v3.json",
-    isMenubarVisible: true,
     gemarkungen: "https://geodienste.hamburg.de/lgv-config/gemarkung.json",
     obliqueMap: true,
     cesiumParameter: {
-        tileCacheSize: 20,
-        enableLighting: false,
         fog: {
             enabled: true,
             density: 0.0002,
             screenSpaceErrorFactor: 2.0
         },
-        maximumScreenSpaceError: 2,
-        fxaa: false
+        fxaa: false,
+        globe: {
+            enableLighting: true,
+            maximumScreenSpaceError: 2,
+            tileCacheSize: 20
+        }
     },
     startingMap3D: false,
     portalLanguage: {
         enabled: true,
         debug: false,
         languages: {
-            de: "deutsch",
-            en: "englisch",
-            it: "italienisch",
-            pt: "portugiesisch",
-            es: "spanisch"
+            de: "Deutsch",
+            en: "English",
+            es: "Español",
+            it: "Italiano",
+            platt: "Platt",
+            pt: "Português",
+            ru: "Русский",
+            tr: "Türkçe",
+            ua: "Українська"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"],
-        loadPath: "/locales/{{lng}}/{{ns}}.json"
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"]
     }
 };
 

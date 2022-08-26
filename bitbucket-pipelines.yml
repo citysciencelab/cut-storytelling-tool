@@ -1,4 +1,4 @@
-image: node:12.13.1
+image: node:16.16.0
 
 definitions:
   steps:
@@ -12,7 +12,7 @@ definitions:
             - export FTP_USERNAME="$LGV_TEST_FTP_USERNAME"
             - export FTP_PASSWORD="$LGV_TEST_FTP_PASSWORD"
             - export FTP_SOURCE_PATH="dist"
-            - export FTP_TARGET_URL="ftp://test.geoportal-hamburg.de/"
+            - export FTP_TARGET_URL="ftpes://test.geoportal-hamburg.de/"
             - export FTP_GITLOGFILE="testGitLog"
             #replace slashes in branchname with underscores
             - tmp=$BITBUCKET_BRANCH
@@ -29,6 +29,7 @@ definitions:
             - find . -maxdepth 2 -name package.json -execdir npm i \;
             - cd ..;
             - npm install
+            - npm ls
             - npm run buildPortal
             - apt-get update && apt-get install unzip
             # make script executable
@@ -58,20 +59,35 @@ pipelines:
                     - apt-get install -y curl
                     # find all zip folders in dist folder, loop through the results and post the zips to the BB download folder
                     - for zipFilePath in $(find dist -name \*.zip); do
-                        curl -X POST --user "${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"$zipFilePath" -v;
+                        curl -X POST --user "$bbapi_name:$bbapi_key" "https://api.bitbucket.org/2.0/repositories/geowerkstatt-hamburg/masterportal/downloads" --form files=@"$zipFilePath" --verbose;
                       done
-    custom: # Pipelines that are triggered manually
-        End2End-Tests on browserstack:
-            - step: *install-e2e-tests-server-on-test-geoportal
             - step:
-                name: run e2e tests on browserstack url=test.geoportal
+                name: publish docs
+                caches:
+                    - node
+                artifacts:
+                    - docHtml/**
+                script:
+                    - npm install
+                    - npm run buildMdDoc
+                    - apt-get update
+            - step:
+                name: deploy files
                 caches:
                     - node
                 script:
-                    # run e2e tests
-                    - ./devtools/scripts/run_browserstack_local.bash
-                    - export url=https://test.geoportal-hamburg.de
-                    - npm run browsertestOnExternalServer --testservice=browserstack
+                    - apt-get update && apt-get install -y curl wput jq
+                    # Get taglist sorted by date, take the penultimate tag name and remove quotation marks
+                    - lastTag=$(curl --request GET --user "$bbapi_name:$bbapi_key" --url "https://api.bitbucket.org/2.0/repositories/geowerkstatt-hamburg/masterportal/refs/tags?sort=-target.date" --header "Accept:application/json" | jq .values[2].name | tr -d '"')
+                    - echo $lastTag
+                    # create folder to store the last latest files from server
+                    - mkdir $lastTag && cd $lastTag
+                    - wget --user $DOC_USER --password $DOC_PASSWORD --no-parent -r $DOC_URLLatest
+                    - cd ..
+                    # find lastTag and docHtml folder , push the files to the masterportal.org folder
+                    - find $lastTag -type f -exec curl --insecure --user "$DOC_USER:$DOC_PASSWORD" --ftp-create-dirs -T {} "$DOC_URL$lastTag/" --verbose \;
+                    - find docHtml -type f -exec curl --insecure --user "$DOC_USER:$DOC_PASSWORD" --ftp-create-dirs -T {} "$DOC_URLLatest" --verbose \;
+    custom: # Pipelines that are triggered manually
         End2End-Tests on saucelabs:
             - step: *install-e2e-tests-server-on-test-geoportal
             - step:
@@ -82,15 +98,6 @@ pipelines:
                     # run e2e tests
                     - export url=https://test.geoportal-hamburg.de
                     - npm run browsertestOnExternalServer --testservice=saucelabs
-        End2End-Tests on browserstack/ use existing server:
-            - step:
-                name: run e2e tests on browserstack url=test.geoportal_buildname
-                caches:
-                    - node
-                script:
-                    - ./devtools/scripts/run_browserstack_local.bash
-                    - export url=https://test.geoportal-hamburg.de
-                    - npm run browsertestOnExternalServer --testservice=browserstack
         End2End-Tests on saucelabs/ use existing server:
             - step:
                 name: run e2e tests on saucelabs url=test.geoportal_buildname
@@ -99,3 +106,11 @@ pipelines:
                 script:
                     - export url=https://test.geoportal-hamburg.de
                     - npm run browsertestOnExternalServer --testservice=saucelabs
+        npm audit:
+            - step:
+                name: npm audit (security)
+                caches:
+                    - node
+                script:
+                    - npm install
+                    - npm audit --json

@@ -1,5 +1,6 @@
 import CatalogTemplate from "text-loader!./templateCatalog.html";
 import store from "../../../../src/app-store";
+import Dropdown from "bootstrap/js/dist/dropdown";
 
 /**
  * @member CatalogTemplate
@@ -10,23 +11,37 @@ import store from "../../../../src/app-store";
 const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prototype */{
     events: {
         "change select": "setSelection",
-        "click .header > .glyphicon, .header > .control-label": "toggleIsExpanded",
-        "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
-            Radio.trigger("QuickHelp", "showWindowHelp", "tree");
+        "keydown .form-select": function (event) {
+            event.stopPropagation();
         },
-        "click .glyphicon-adjust": "toggleBackground",
+        "click .header > a > .bootstrap-icon, .header > a > .form-label": "toggleIsExpanded",
+        "keydown .header > a": "keyAction",
+
+        "click .Baselayer .catalog_buttons .question-icon": function () {
+            this.openHelp();
+        },
+        "keydown .Baselayer .catalog_buttons .question-icon": function (event) {
+            this.handleKeyboardTriggeredAction(event, "openHelp");
+        },
+
+        "click .background-icon": "toggleBackground",
+        "keydown .background-icon": function (event) {
+            this.handleKeyboardTriggeredAction(event, "toggleBackground");
+        },
+
         "click .rotate-pin": "unfixTree",
+        "keydown .rotate-pin": function (event) {
+            this.handleKeyboardTriggeredAction(event, "unfixTree");
+        },
+
         "click .rotate-pin-back": "fixTree",
-        "click .layer-selection-save": function () {
-            this.model.collection.setActiveToolsToFalse(this.model);
-            this.model.collection.get("saveSelection").setIsActive(true);
-            store.dispatch("Tools/setToolActive", {id: "saveSelection", active: true});
-            // Schließt den Baum
-            $(".nav li:first-child").removeClass("open");
-            // Schließt die Mobile Navigation
-            $(".navbar-collapse").removeClass("in");
-            // Selektiert die URL
-            $(".input-save-url").select();
+        "keydown .rotate-pin-back": function (event) {
+            this.handleKeyboardTriggeredAction(event, "fixTree");
+        },
+
+        "click .layer-selection-save": "saveSelection",
+        "keydown .layer-selection-save": function (event) {
+            this.handleKeyboardTriggeredAction(event, "saveSelection");
         }
     },
 
@@ -43,7 +58,6 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
      * @fires Menu.Desktop.Folder#toggleBackground
      * @fires Menu.Desktop.Folder#unfixTree
      * @fires Menu.Desktop.Folder#fixTree
-     * @fires QuickHelp#RadioTriggerQuickHelpShowWindowHelp
      * @fires Core#RadioTriggerMapViewToggleBackground
      * @fires Core#RadioRequestMapGetMapMode
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
@@ -62,13 +76,13 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
             }
         });
         this.listenTo(this.model, {
-            "change:isExpanded": this.toggleGlyphicon
+            "change:isExpanded": this.toggleIcon
         }, this);
-
         this.$el.on({
             click: function (e) {
                 e.stopPropagation();
-            }});
+            }
+        });
         this.render();
         this.togle3dCatalog(Radio.request("Map", "getMapMode"));
     },
@@ -105,6 +119,81 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     },
 
     /**
+      * Handles all keys for open/close actions of the layer list.
+      * @param {Event} event - the event
+      * @returns {void}
+      */
+    keyAction: function (event) {
+        this.handleKeyboardTriggeredAction(event, "toggleIsExpanded");
+        if (event.which === 37) {
+            this.model.setIsExpanded(false);
+            this.model.toggleCatalogs();
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        else if (event.which === 39) {
+            this.model.setIsExpanded(true);
+            this.model.toggleCatalogs();
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    },
+
+    /**
+     * Executes the given function callback if a execution key has been triggered.
+     * @param {Event} event - the dom event
+     * @param {String} callback - the name of the callback function called on this
+     * @returns {boolean} if the action has been triggered
+     */
+    handleKeyboardTriggeredAction: function (event, callback) {
+        if (event.which === 32 || event.which === 13) {
+            if (typeof this[callback] === "function") {
+                this[callback]();
+            }
+            event.stopPropagation();
+            event.preventDefault();
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * Opens the help window.
+     * @returns {void}
+     */
+    openHelp: function () {
+        if (!store.getters["QuickHelp/active"]) {
+            store.commit("QuickHelp/setQuickHelpKey", "tree");
+            store.commit("QuickHelp/setActive", true);
+        }
+        else {
+            store.commit("QuickHelp/setActive", false);
+        }
+    },
+
+    /**
+     * open dialog to save the layer selection.
+     * @returns {void}
+     */
+    saveSelection: function () {
+        this.model.collection.setActiveToolsToFalse(this.model);
+        this.model.collection.get("saveSelection").setIsActive(true);
+        store.dispatch("Tools/setToolActive", {id: "saveSelection", active: true});
+        // closes the menu tree
+        // Upgrade to BT5, use JS method instead of class removal
+        const dropdown = Dropdown.getInstance(".nav li:first-child > .dropdown-toggle");
+
+        dropdown.hide();
+        $(".dropdown-menu.fixed").removeClass("fixed");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin-back");
+        // closes the mobile menu
+        $(".navbar-collapse").removeClass("show");
+        // selects the url
+        $(".input-save-url").select();
+    },
+
+    /**
      * Toogle Expanded
      * @return {void}
      */
@@ -113,19 +202,19 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     },
 
     /**
-     * Toogle Glyphicon
+     * Toogle Icon
      * @return {void}
      */
-    toggleGlyphicon: function () {
-        const elem = $("ul#" + this.model.get("id")).prev().find(".glyphicon:first");
+    toggleIcon: function () {
+        const elem = $("ul#" + this.model.get("id")).prev().find(".bootstrap-icon:first > i");
 
         if (!this.model.get("isExpanded")) {
-            elem.removeClass("glyphicon-minus-sign");
-            elem.addClass("glyphicon-plus-sign");
+            elem.removeClass("bi-dash-circle-fill");
+            elem.addClass("bi-plus-circle-fill");
         }
         else {
-            elem.removeClass("glyphicon-plus-sign");
-            elem.addClass("glyphicon-minus-sign");
+            elem.removeClass("bi-plus-circle-fill");
+            elem.addClass("bi-dash-circle-fill");
         }
         // Hässlicher IE Bugfix, weil IE 11 mit overflow: auto und remove probleme macht (leerer Katalog wird sehr hoch und bekommt die Höhe -0.01)
         if (!this.model.get("isExpanded")) {
@@ -142,8 +231,8 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
      */
     toggleBackground: function () {
         Radio.trigger("MapView", "toggleBackground");
-        $(".glyphicon-adjust").toggleClass("rotate-adjust");
-        $(".glyphicon-adjust").toggleClass("rotate-adjust-back");
+        $(".background-icon").toggleClass("rotate-adjust");
+        $(".background-icon").toggleClass("rotate-adjust-back");
     },
 
     /**
@@ -167,8 +256,9 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     fixTree: function () {
         $("body").on("click", "#map", this.helpForFixing);
         $("body").on("click", "#searchbar", this.helpForFixing);
-        $(".glyphicon-pushpin").addClass("rotate-pin");
-        $(".glyphicon-pushpin").removeClass("rotate-pin-back");
+        this.$el.parent().addClass("fixed");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin-back");
         this.model.setIsPinned(true);
     },
 
@@ -179,8 +269,9 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     unfixTree: function () {
         $("body").off("click", "#map", this.helpForFixing);
         $("body").off("click", "#searchbar", this.helpForFixing);
-        $(".glyphicon-pushpin").removeClass("rotate-pin");
-        $(".glyphicon-pushpin").addClass("rotate-pin-back");
+        this.$el.parent().removeClass("fixed");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin");
+        $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin-back");
         this.model.setIsPinned(false);
     },
 
@@ -201,6 +292,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     */
     setSelection: function (evt) {
         Radio.trigger("Parser", "setCategory", evt.currentTarget.value);
+        $("." + this.model.get("id") + " select.tabable").trigger("focus");
     }
 });
 

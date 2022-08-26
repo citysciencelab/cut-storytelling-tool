@@ -1,9 +1,9 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {initDriver, getDriver, quitDriver} = require("../../../../../../test/end2end/library/driver"),
     {hasVectorLayerLength} = require("../../../../../../test/end2end/library/scripts"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
-    {isMobile, is3D, isBasic} = require("../../../../../../test/end2end/settings"),
+    {isMobile, is3D, isMaster} = require("../../../../../../test/end2end/settings"),
     {getMeasureLayersTexts, areRegExpsInMeasureLayer} = require("../../../../../../test/end2end/library/scripts"),
     {By} = webdriver;
 
@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function MeasureTests ({builder, url, resolution, mode, capability}) {
-    const testIsApplicable = !isMobile(resolution) && isBasic(url);
+    const testIsApplicable = !isMobile(resolution) && isMaster(url);
 
     if (testIsApplicable) {
         describe("Measure Tool", function () {
@@ -27,7 +27,7 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                             capability["sauce:options"].name = this.currentTest.fullTitle();
                             builder.withCapabilities(capability);
                         }
-                        driver = await initDriver(builder, url, resolution);
+                        driver = await getDriver();
                     });
 
                     after(async function () {
@@ -36,20 +36,19 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                                 logTestingCloudUrlToTest(sessionData.id_);
                             });
                         }
-                        await driver.quit();
                     });
 
                     afterEach(async function () {
                         if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
-                            console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
-                            await driver.quit();
+                            await quitDriver();
                             driver = await initDriver(builder, url, resolution);
                         }
                     });
 
+
                     it("opens a widget with distance/meters preconfigured for geometry/unit", async function () {
                         await reclickUntilNotStale(driver, By.xpath("//ul[@id='tools']//.."));
-                        await (await driver.findElement(By.css("#tools .glyphicon-resize-full"))).click();
+                        await (await driver.findElement(By.css("#tools .bi-rulers"))).click();
 
                         selectGeometry = await driver.findElement(By.id("measure-tool-geometry-select"), 5000);
                         selectUnit = await driver.findElement(By.id("measure-tool-unit-select"), 5000);
@@ -104,9 +103,9 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                     });
 
                     it("allows deleting made measurements by clicking the deletion button", async function () {
-                        expect(await driver.executeScript(hasVectorLayerLength, "measure_layer", 0)).to.be.false;
+                        expect(await driver.executeScript(hasVectorLayerLength, "measureLayer", 0)).to.be.false;
                         await deleteButton.click();
-                        expect(await driver.executeScript(hasVectorLayerLength, "measure_layer", 0)).to.be.true;
+                        expect(await driver.executeScript(hasVectorLayerLength, "measureLayer", 0)).to.be.true;
                     });
 
                     it("draws a polygon, ending in double-click, displaying area in meters² and deviation", async function () {
@@ -151,7 +150,11 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                     });
 
                     after(async function () {
-                        await driver.quit();
+                        if (capability) {
+                            driver.session_.then(function (sessionData) {
+                                logTestingCloudUrlToTest(sessionData.id_);
+                            });
+                        }
                     });
 
                     it("sets 3D measurement option in 3D mode", async function () {

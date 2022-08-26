@@ -4,12 +4,12 @@ import Template from "text-loader!./templates/templateSingleLayer.html";
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
         "click .icon-checkbox, .icon-checkbox2, .title": "toggleIsSelected",
-        "click .icon-info": "showLayerInformation",
-        "click .glyphicon-cog": "toggleIsSettingVisible",
-        "click .arrows > .glyphicon-arrow-up": "moveModelUp",
-        "click .arrows > .glyphicon-arrow-down": "moveModelDown",
-        "click .glyphicon-plus-sign": "incTransparency",
-        "click .glyphicon-minus-sign": "decTransparency",
+        "click .info-icon": "showLayerInformation",
+        "click .settings-icon": "toggleIsSettingVisible",
+        "click .arrows > .up-icon": "moveModelUp",
+        "click .arrows > .down-icon": "moveModelDown",
+        "click .increase-icon": "incTransparency",
+        "click .decrease-icon": "decTransparency",
         "change select": "setTransparency",
         "click .remove-layer": "removeLayer"
     },
@@ -24,6 +24,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeTransparency
      */
     initialize: function () {
+        const channel = Radio.channel("Menu");
+
         this.listenTo(this.model, {
             "change:isSettingVisible": this.renderSetting,
             "change:transparency": this.render
@@ -33,6 +35,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
                 e.stopPropagation();
             }
         });
+        channel.on({
+            "renderSetting": this.renderSetting,
+            "rerender": this.render
+        }, this);
     },
     tagName: "li",
     className: "burgermenu-layer-list list-group-item",
@@ -54,13 +60,16 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
     /**
     * @description render the settings area and decide whether it is initially activated
+    * @param {String} layerId The layer id.
     * @returns {void}
     */
-    renderSetting: function () {
+    renderSetting: function (layerId) {
         const attr = this.model.toJSON();
 
-        // Animation Zahnrad
-        this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
+        // Animation cog
+        if (layerId === attr.id) {
+            this.$(".bi-gear").parent(".bootstrap-icon").toggleClass("rotate rotate-back");
+        }
         // Slide-Animation templateSetting
         if (this.model.get("isSettingVisible") === false) {
             this.$el.find(".layer-settings").slideUp("slow", function () {

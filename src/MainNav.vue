@@ -1,12 +1,12 @@
 <script>
 // TODO this is just the HTML copied in - functions/CSS are still to be migrated
-import Title from "./modules/title/components/Title.vue";
+import PortalTitle from "./modules/portalTitle/components/PortalTitle.vue";
 import LegendMenu from "./modules/legend/components/LegendMenu.vue";
 import {mapState, mapGetters} from "vuex";
 export default {
     name: "MainNav",
     components: {
-        Title,
+        PortalTitle,
         LegendMenu
     },
     computed: {
@@ -20,41 +20,58 @@ export default {
 </script>
 
 <template>
-    <div
-        id="main-nav"
-        class="navbar navbar-default"
-        role="navigation"
-    >
-        <div class="container-fluid">
-            <div id="navbarRow">
-                <div class="navbar-header">
-                    <button
-                        type="button"
-                        class="navbar-toggle"
-                        data-toggle="collapse"
-                        data-target=".navbar-collapse"
+    <header>
+        <nav
+            id="main-nav"
+            class="navbar navbar-expand-md navbar-light"
+            role="navigation"
+        >
+            <div class="container-fluid">
+                <div
+                    id="navbarRow"
+                    class="w-100"
+                >
+                    <div class="navbar-header d-flex justify-content-between">
+                        <button
+                            type="button"
+                            class="navbar-toggler"
+                            data-bs-toggle="collapse"
+                            data-bs-target=".navbar-collapse"
+                            aria-controls="navbarMenu"
+                            aria-expanded="false"
+                            aria-label="Navigation ein-/ausblenden"
+                        >
+                            <span class="navbar-toggler-icon" />
+                        </button>
+                    </div>
+                    <div
+                        id="navbarMenu"
+                        class="collapse navbar-collapse"
                     >
-                        <span class="sr-only">Navigation ein-/ausblenden</span>
-                        <span class="icon-bar" />
-                        <span class="icon-bar" />
-                        <span class="icon-bar" />
-                    </button>
+                        <ul
+                            id="root"
+                            class="nav-menu"
+                        />
+                    </div>
+                    <LegendMenu v-if="legendConfig" />
+                    <PortalTitle />
                 </div>
-                <div class="collapse navbar-collapse">
-                    <ul
-                        id="root"
-                        class="nav-menu"
-                    />
-                </div>
-                <LegendMenu v-if="legendConfig" />
-                <Title />
             </div>
-        </div>
-    </div>
+        </nav>
+    </header>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     #main-nav{
         flex-grow:0;
+    }
+
+    .navbar-toggler {
+        margin: 8px 15px 8px 0;
+    }
+
+    .navbar-toggler-icon {
+        width: 1.125em;
+        height: 1.125em;
     }
 </style>

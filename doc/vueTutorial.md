@@ -37,6 +37,7 @@ src
 |   |   |   |	|   |-- store
 |   |   |   |   |	|   |-- actionsScaleSwitcher.spec.js
 |   |   |   |   |	|   |-- gettersScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- mutationsScaleSwitcher.spec.js
 ```
 
 ## Creating the ScaleSwitcher.vue
@@ -45,12 +46,12 @@ Open `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue` and create the V
 
 ```vue
 <script>
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 
 export default {
     name: "ScaleSwitcher",
     components: {
-        Tool
+        ToolTemplate
     }
 };
 </script>
@@ -58,7 +59,7 @@ export default {
 <template lang="html">
 </template>
 
-<style lang="less">
+<style lang="scss">
 </style>
 ```
 
@@ -97,8 +98,8 @@ const state = {
     active: false,
     id: "scaleSwitcher",
     // mandatory defaults for config.json parameters
-    name: "common:menu.tools.coord",
-    glyphicon: "glyphicon-resize-full",
+    name: "common:menu.tools.scaleSwitcher",
+    icon: "bi-arrows-angle-expand",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,
@@ -159,9 +160,8 @@ export default mutations;
 
 ## Defining actions
 
-[Vuex actions](https://vuex.vuejs.org/guide/actions.html#actions) can be added to the `modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js`. The *ScaleSwitcher* does not need any actions. `activateByUrlParam` and `setToolActiveByConfig` are controlled globally by the *ToolManager*.
+[Vuex actions](https://vuex.vuejs.org/guide/actions.html#actions) can be added to the `modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js`. The *ScaleSwitcher* does not need any actions.`setToolActiveByConfig` is controlled globally by the *ToolManager*.
 
-- `activateByUrlParam` checks whether the url query holds a parameter `isinitopen` and activates the tool named there if applicable. See the [url parameter documentation](urlParameter.md).
 - The action `setToolActiveByConfig` sets a tool's value "active" to `true`, which results in rendering the tool. See property `active` in the *Tool.vue*.
 
 ```js
@@ -223,20 +223,20 @@ export default {
 Import the vuex helper function `mapGetters` in the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, and the *ScaleSwitchers* getters. All getter keys of the *ScaleSwitcher* and the Vuex *Map* module getters `scale` and `scales` are added. For `scale`, a setter is provided. Using `scale`, the current *Map* scale can be retrieved, and `scales` represents all available *Map* scales.
 
 ```js
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import {mapGetters} from "vuex";
 import getters from "../store/gettersScaleSwitcher";
 
     ...
     computed: {
             ...mapGetters("Tools/ScaleSwitcher", Object.keys(getters)),
-            ...mapGetters("Map", ["scales"]),
+            ...mapGetters("Maps", ["scales"]),
             scale: {
                 get () {
                     return this.$store.state.Map.scale;
                 },
                 set (value) {
-                    this.$store.commit("Map/setScale", value);
+                    this.$store.commit("Maps/setScale", value);
                 }
             }
         },
@@ -248,7 +248,7 @@ import getters from "../store/gettersScaleSwitcher";
 Import the vuex helper function `mapMutations` in the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, and the *ScaleSwitcher* mutations. All mutation keys of the *ScaleSwitcher* are added.
 
 ```js
-import Tool from "../../Tool.vue";
+import ToolTemplate from "../../ToolTemplate.vue";
 import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersScaleSwitcher";
 import mutations from "../store/mutationsScaleSwitcher";
@@ -299,9 +299,9 @@ In `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, the template is y
 
 ```html
 <template lang="html">
-    <Tool
+    <ToolTemplate
         :title="$t(name)"
-        :icon="glyphicon"
+        :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
@@ -311,15 +311,15 @@ In `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, the template is y
             <div id="scale-switcher" v-if="active">
                 <label
                     for="scale-switcher-select"
-                    class="col-md-5 col-sm-5 control-label"
+                    class="col-md-5 col-form-label"
                 >
                     Scale
                 </label>
-                <div class="col-md-7 col-sm-7">
+                <div class="col-md-7">
                     <select
                         id="scale-switcher-select"
                         v-model="scale"
-                        class="font-arial form-control input-sm pull-left"
+                        class="font-arial form-select form-select-sm float-start"
                     >
                         <option
                             v-for="(scaleValue, i) in scales"
@@ -332,16 +332,16 @@ In `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, the template is y
                 </div>
             </div>
         </template>
-    </Tool>
+    </ToolTemplate>
 </template>
 ```
 
-## Defining *less* styling rules
+## Defining *scss* styling rules
 
-Within the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue*`, styles can be added to the `style` tag. Note that the `css/variables.less` offers a set of predefined colors and values for usage in all components.
+Within the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue*`, styles can be added to the `style` tag. Note that the `css/variables.scss` offers a set of predefined colors and values for usage in all components.
 
-```less
-<style lang="less" scoped>
+```scss
+<style lang="scss" scoped>
     @import "~variables";
 
     label {
@@ -349,7 +349,7 @@ Within the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue*`, styles c
     }
 
     #scale-switcher-select {
-        border: 2px solid @secondary;
+        border: 2px solid $secondary;
     }
 </style>
 ```
@@ -361,7 +361,7 @@ Within the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue` template, 
 ```html
 <select
     id="scale-switcher-select"
-    class="font-arial form-control input-sm pull-left"
+    class="font-arial form-select form-select-sm float-start"
     @change="setResolutionByIndex($event.target.selectedIndex)"
 >
 ```
@@ -374,7 +374,7 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 
     ...
     methods: {
-        ...mapActions("Map", ["setResolutionByIndex"]),
+        ...mapActions("Maps", ["setResolutionByIndex"]),
         ...
     }
     ...
@@ -398,7 +398,7 @@ The value can be accessed directly in the template by using the globally availab
 ```html
 <label
     for="scale-switcher-select"
-    class="col-md-5 col-sm-5 control-label"
+    class="col-md-5 col-form-label"
 >
     {{ $t("modules.tools.scaleSwitcher.label") }}
 </label>
@@ -412,11 +412,11 @@ To make the tool usable within a portal, it has to be configured in the portal's
 {
     "tools": {
         "name": "Tools",
-        "glyphicon": "glyphicon-wrench",
+        "icon": "bi-wrench",
         "children": {
             "scaleSwitcher": {
                 "name": "translate#common:menu.tools.scaleSwitcher",
-                "glyphicon": "glyphicon-resize-full",
+                "icon": "bi-arrows-angle-contract",
                 "renderToWindow": true
             }
         }

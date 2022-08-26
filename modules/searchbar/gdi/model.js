@@ -1,12 +1,12 @@
 import "../model";
-import ElasticModel from "../../core/elasticsearch";
+import {initializeSearch} from "../../../src/api/elasticsearch";
 
 const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     defaults: {
         minChars: 3,
         serviceId: "",
         queryObject: {},
-        elasticSearch: new ElasticModel()
+        sortByName: false
     },
     /**
      * @class GdiModel
@@ -16,7 +16,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @property {Number} minChars=3 Minimum length of search string to start.
      * @property {String} serviceId="" Id of restService to derive url from.
      * @property {Object} queryObject={} Payload used to append to url.
-     * @property {ElasticModel} elasticSearch = new ElasticSearch() ElasticModel.
+     * @property {Boolean} sortByName=false Parameter to config if the searching result alphanumerically
      * @fires Core#RadioRequestParametricURLGetInitString
      * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @fires Searchbar#RadioTriggerSearchbarRemoveHits
@@ -55,9 +55,9 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @param {String} searchString The search string.
      * @returns {void}
      */
-    search: function (searchString) {
+    search: async function (searchString) {
         const payload = this.appendSearchStringToPayload(this.get("queryObject"), "query_string", searchString),
-            xhrConfig = {
+            requestConfig = {
                 url: this.get("url"),
                 type: "GET",
                 useProxy: false,
@@ -68,7 +68,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         let result;
 
         if (searchString.length >= this.get("minChars")) {
-            result = this.get("elasticSearch").search(xhrConfig);
+            result = await initializeSearch(requestConfig);
             this.createRecommendedList(result.hits);
         }
     },
@@ -91,18 +91,19 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
                 id: "_source.id",
                 source: "_source"
             },
-            hitType = "Fachthema",
-            hitGlyphicon = "glyphicon-list";
+            hitType = i18next.t("common:modules.searchbar.type.subject"),
+            hitIcon = "bi-list-ul",
+            hitList = this.get("sortByName") ? "hitList" : "originalOrderHitList";
 
         if (responseData.length > 0) {
             responseData.forEach(result => {
-                const hit = this.createHit(result, hitMap, hitType, hitGlyphicon, triggerEvent);
+                const hit = this.createHit(result, hitMap, hitType, hitIcon, triggerEvent);
 
-                Radio.trigger("Searchbar", "pushHits", "hitList", hit);
+                Radio.trigger("Searchbar", "pushHits", hitList, hit);
             });
         }
         else {
-            Radio.trigger("Searchbar", "removeHits", "hitList", {type: "Fachthema"});
+            Radio.trigger("Searchbar", "removeHits", hitList, {type: hitType});
         }
         Radio.trigger("Searchbar", "createRecommendedList", "gdi");
     },
@@ -112,18 +113,18 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @param {Object} result Result object from elastcisearch request.
      * @param {Object} hitMap Mapping object. Used to map results attributes to neccessary hit attributes.
      * @param {String} hitType Type of hit.
-     * @param {String} hitGlyphicon Glyphicon class to show in reccomendedList
+     * @param {String} hitIcon Icon class to show in reccomendedList
      * @param {Object} triggerEvent Object defining channel and event. used to fire event on mouseover and click in recommendedList.
      * @returns {Object} - hit.
      */
-    createHit: function (result, hitMap, hitType, hitGlyphicon, triggerEvent) {
+    createHit: function (result, hitMap, hitType, hitIcon, triggerEvent) {
         let hit = {};
 
         Object.keys(hitMap).forEach(key => {
             hit[key] = this.findAttributeByPath(result, hitMap[key]);
         });
         hit.type = hitType;
-        hit.glyphicon = hitGlyphicon;
+        hit.icon = hitIcon;
         if (Object.keys(triggerEvent).length > 0) {
             hit = Object.assign(hit, {triggerEvent: triggerEvent});
         }

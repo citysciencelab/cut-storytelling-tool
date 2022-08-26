@@ -120,7 +120,7 @@ const Config = {
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf:
         "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
-    uiStyle: "default",
+    uiStyle: "table",
     styleConf: "https://raw.githubusercontent.com/herzogrh/faircare-verkehr/main/assets/data/style.json",
     storyConf: "./assets/story-3d.json",
     isMenubarVisible: true,

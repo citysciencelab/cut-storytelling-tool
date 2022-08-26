@@ -3,7 +3,7 @@ import {fromCircle} from "ol/geom/Polygon.js";
 import {GeoJSON, GPX} from "ol/format.js";
 import convertFeaturesToKml from "../../../../../../src/utils/convertFeaturesToKml.js";
 
-import {transform, transformPoint} from "../../utils/download/transformGeometry";
+import {transform, transformPoint, transformGeometry} from "../../utils/download/transformGeometry";
 
 /**
  * Converts the features from OpenLayers Features to features in the chosen format.
@@ -101,11 +101,11 @@ function prepareDownload ({state, commit, dispatch}) {
  *
  * @returns {void}
  */
-function setDownloadFeatures ({state, commit, dispatch}) {
+function setDownloadFeatures ({state, commit, dispatch, rootGetters}) {
     const downloadFeatures = [],
-        drawnFeatures = state.layer.getSource().getFeatures();
+        drawnFeatures = state.layer?.getSource().getFeatures();
 
-    drawnFeatures.forEach(drawnFeature => {
+    drawnFeatures?.forEach(drawnFeature => {
         const feature = drawnFeature.clone(),
             geometry = feature.getGeometry();
 
@@ -115,6 +115,10 @@ function setDownloadFeatures ({state, commit, dispatch}) {
         }
 
         if (geometry instanceof Circle) {
+            feature.set("isGeoCircle", true);
+            transformGeometry(rootGetters["Maps/projection"], geometry);
+            feature.set("geoCircleCenter", geometry.getCenter().join(","));
+            feature.set("geoCircleRadius", geometry.getRadius());
             feature.setGeometry(fromCircle(geometry));
         }
 
@@ -157,7 +161,7 @@ function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
 async function setDownloadSelectedFormat ({state, commit, dispatch}, value) {
 
     commit("setDownloadSelectedFormat", value);
-    if (state.layer.getSource().getFeatures().length > 0) {
+    if (state.layer?.getSource().getFeatures().length > 0) {
         await dispatch("prepareData");
         dispatch("prepareDownload");
     }
@@ -170,17 +174,17 @@ async function setDownloadSelectedFormat ({state, commit, dispatch}, value) {
  * @param {module:ol/geom/Geometry} geometry Geometry to be transformed.
  * @returns {(Array<number>|Array<Array<number>>|Array<Array<Array<number>>>)|[]} The transformed Geometry or an empty array.
  */
-function transformCoordinates ({dispatch}, geometry) {
+function transformCoordinates ({dispatch, rootGetters}, geometry) {
     const coords = geometry.getCoordinates(),
         type = geometry.getType();
 
     switch (type) {
         case "LineString":
-            return transform(coords, false);
+            return transform(rootGetters["Maps/projectionCode"], coords, false);
         case "Point":
-            return transformPoint(coords);
+            return transformPoint(rootGetters["Maps/projectionCode"], coords);
         case "Polygon":
-            return transform(coords, true);
+            return transform(rootGetters["Maps/projectionCode"], coords, true);
         default:
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.download.unknownGeometry", {geometry: type}), {root: true});
             return [];

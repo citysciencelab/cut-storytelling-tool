@@ -6,8 +6,8 @@ import StaticLinkView from "./staticlink/view";
 import BreadCrumbListView from "./breadCrumb/listView";
 import "jquery-ui/ui/effects/effect-slide";
 import "jquery-ui/ui/effect";
-import "bootstrap/js/dropdown";
-import "bootstrap/js/collapse";
+import Dropdown from "bootstrap/js/dist/dropdown";
+import "bootstrap/js/dist/collapse";
 import store from "../../../src/app-store";
 
 
@@ -26,19 +26,19 @@ const MobileMenu = Backbone.View.extend({
                 }
             }
         });
-        this.render();
+        this.render(false);
         this.breadCrumbListView = new BreadCrumbListView();
     },
     collection: {},
     el: "nav#main-nav",
     attributes: {role: "navigation"},
     breadCrumbListView: {},
-    render: function () {
+    render: function (notFirstCall) {
         const rootModels = this.collection.where({parentId: "root"});
 
         $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
         $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
-        this.addViews(rootModels);
+        this.addViews(rootModels, notFirstCall);
         store.dispatch("Legend/setShowLegendInMenu", true);
         return this;
     },
@@ -91,14 +91,9 @@ const MobileMenu = Backbone.View.extend({
     },
 
     descentInTree: function (model) {
-        const lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")});
-        let models = [];
+        const lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")}),
+            models = this.collection.add(lightModels);
 
-        models = this.collection.add(lightModels);
-
-        if (model.get("isLeafFolder")) {
-            models.push(model);
-        }
         this.slideModels("descent", models, model.get("parentId"));
     },
 
@@ -176,9 +171,10 @@ const MobileMenu = Backbone.View.extend({
      * separates by modelType and add Views
      * add only tools that have the attribute "isVisibleInMenu" === true
      * @param {Item[]} models - all models
+     * @param {boolean} [notFirstCall = true] Whether this is the first time this function has been called; used for a fix on the menu item of the legend.
      * @returns {void}
      */
-    addViews: function (models) {
+    addViews: function (models, notFirstCall = true) {
         const treeType = this.doRequestTreeType(),
             newModels = models.filter(model => !(model.get("onlyDesktop") === true));
 
@@ -187,11 +183,12 @@ const MobileMenu = Backbone.View.extend({
 
         newModels.forEach(model => {
             model.setIsVisibleInTree(true);
+
             switch (model.get("type")) {
                 case "folder": {
                     attr = model.toJSON();
 
-                    if (attr.isLeafFolder && attr.isExpanded && !attr.isFolderSelectable) {
+                    if (attr.isExpanded && !attr.isFolderSelectable) {
                         // if the selectAll-checkbox should be hidden: don't add folder-view
                         // for expanded leaf-folder -> omit empty group item.
                         return;
@@ -203,6 +200,9 @@ const MobileMenu = Backbone.View.extend({
                 }
                 case "tool": {
                     if (model.get("isVisibleInMenu")) {
+                        if (notFirstCall && (model.get("name") === "common:modules.legend.name" || model.get("name") === i18next.t("common:modules.legend.name"))) {
+                            return;
+                        }
                         nodeView = new ToolView({model: model});
                     }
                     else {
@@ -252,7 +252,10 @@ const MobileMenu = Backbone.View.extend({
             modul.setIsActive(true);
         }
         else {
-            $("#" + modulId).parent().addClass("open");
+            // Upgrade to BT5, use JS method instead of class addition
+            const dropdown = Dropdown.getOrCreateInstance($("#" + modulId).parent().children(".dropdown-toggle").get(0));
+
+            dropdown.show();
         }
     }
 });

@@ -25,7 +25,7 @@ export default {
      * @returns {void}
      */
     setZoom: function ({dispatch}, zoomLevel) {
-        dispatch("Map/setZoomLevel", zoomLevel, {root: true});
+        dispatch("Maps/setZoomLevel", zoomLevel, {root: true});
     },
     /**
      * Takes the selected coordinates and centers the map to the new position.
@@ -33,11 +33,11 @@ export default {
      * @param {String[]} coordinates - coordinates for new center position
      * @returns {void}
      */
-    setCenter: function ({commit}, coordinates) {
+    setCenter: function ({dispatch}, coordinates) {
         // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
         const newCoords = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
 
-        commit("Map/setCenter", newCoords, {root: true});
+        dispatch("Maps/setCenter", newCoords, {root: true});
     },
     /**
      * Pushes the formatted coordinates in the selectedCoordinates String[].
@@ -140,8 +140,8 @@ export default {
      * Resets the error messages, calls the validation function with the entered coordinates
      * and calls the transformCoordinates function.
      * @param {Object} context actions context object.
-     * @param {String} coordinatesEasting the coordinates user entered
-     * @param {String} coordinatesNorthing the coordinates user entered
+     * @param {String} context.state.coordinatesEasting the coordinates user entered
+     * @param {String} context.state.coordinatesNorthing the coordinates user entered
      * @returns {void}
      */
     searchCoordinate ({dispatch, commit, state}) {

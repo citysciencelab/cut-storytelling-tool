@@ -1,5 +1,6 @@
 import ItemTemplate from "text-loader!./template.html";
 import store from "../../../../src/app-store/index";
+import Dropdown from "bootstrap/js/dist/dropdown";
 /**
  * @member ToolTemplate
  * @description Template for a Tool
@@ -7,14 +8,15 @@ import store from "../../../../src/app-store/index";
  */
 const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
     events: {
-        "click": "checkItem"
+        "click": "checkItem",
+        "keydown": "checkItem"
+
     },
     /**
     * @class ToolView
     * @extends Backbone.View
     * @memberof Menu.Desktop.Tool
     * @constructs
-    * @fires ClickCounter#RadioTriggerClickCounterToolChanged
     * @fires Map#RadioRequestMapGetMapMode
     * @listens Map#RadioTriggerMapChange
     */
@@ -25,7 +27,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         // Listener for addOns so that multilanguage geht initially adjusted.
         this.listenTo(this.model, {
             "change:name": this.rerender,
-            "change:glyphicon": this.rerender
+            "change:bootstrap-icon": this.rerender
         });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
@@ -38,7 +40,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         this.toggleIsActiveClass();
     },
     tagName: "li",
-    className: "dropdown",
+    className: "nav-item dropdown",
     template: _.template(ItemTemplate),
     /**
      * @todo Write the documentation.
@@ -118,10 +120,11 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
     setCssClass: function () {
         if (this.model.get("parentId") === "root") {
             this.$el.addClass("menu-style");
-            this.$el.find("span").addClass("hidden-sm");
+            this.$el.find("span").addClass("d-md-none d-lg-inline-block");
+            this.$el.attr("title", this.model.get("name"));
         }
         else {
-            this.$el.addClass("submenu-style");
+            this.$el.addClass("submenu-style").removeClass("nav-item");
         }
     },
     /**
@@ -137,41 +140,56 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         }
     },
     /**
-     * @todo Write the documentation.
+     * @todo Opens the selected tool.
+     * @param {Event} event - the dom event
      * @returns {void}
      */
-    checkItem: function () {
-        Radio.trigger("ClickCounter", "toolChanged");
-        if (this.model.get("id") === "legend") {
-            this.model.setIsActive(true);
-            store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
-        }
-        else {
-            if (!this.model.collection) {
-                // addons are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the addon.
-                // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
-                this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
-                // for the highlighting in the menu -> view-model-binding is lost by addons
-                this.listenTo(this.model, {
-                    "change:isActive": this.toggleIsActiveClass
-                });
-            }
-            if (!this.model.get("isActive")) {
-                // active the tool if it is not active
-                // deactivate all other modules as long as the tool is not set to "keepOpen"
-                this.model.collection.setActiveToolsToFalse(this.model);
-                this.model.setIsActive(true);
-                store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
+    checkItem: function (event) {
+        if (event.type === "click" || event.which === 32 || event.which === 13) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (this.model.get("id") === "legend") {
+                const isActive = this.model.get("isActive");
+
+                this.model.setIsActive(!isActive);
+                store.dispatch("Legend/setShowLegend", !isActive);
             }
             else {
-                // deactivate tool if it is already active
-                this.model.setIsActive(false);
-                store.dispatch("Tools/setToolActive", {id: this.model.id, active: false});
+                if (!this.model.collection) {
+                    // addons are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the addon.
+                    // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
+                    this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
+                    // for the highlighting in the menu -> view-model-binding is lost by addons
+                    this.listenTo(this.model, {
+                        "change:isActive": this.toggleIsActiveClass
+                    });
+                }
+                if (!this.model.get("isActive")) {
+                    // active the tool if it is not active
+                    // deactivate all other modules as long as the tool is not set to "keepOpen"
+                    this.model.collection.setActiveToolsToFalse(this.model);
+                    this.model.setIsActive(true);
+                    store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
+                }
+                else {
+                    // deactivate tool if it is already active
+                    this.model.setIsActive(false);
+                    store.dispatch("Tools/setToolActive", {id: this.model.id, active: false});
+                }
             }
-        }
 
-        // Navigation is closed
-        $("div.collapse.navbar-collapse").removeClass("in");
+            // menu navigation is closed
+            $("div.collapse.navbar-collapse").removeClass("show");
+            // Upgrade to BT5, use JS method instead of class removal
+            const dropdown = Dropdown.getInstance("li.dropdown-folder > .dropdown-toggle.show");
+
+            dropdown?.hide();
+            $(".dropdown-menu.fixed").removeClass("fixed");
+            $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin");
+            $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin-back");
+        }
     }
 });
 
