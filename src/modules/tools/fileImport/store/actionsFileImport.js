@@ -358,8 +358,8 @@ export default {
             let style;
 
             if (!drawState) {
-                const defaultColor = [255, 0, 0, 0.9],
-                    defaultFillColor = [200, 0, 0, 0.5],
+                const defaultColor = [226, 26, 28, 0.9],
+                    defaultFillColor = [228, 26, 28, 0.5],
                     defaultPointSize = 16,
                     defaultStrokeWidth = 1,
                     defaultCircleRadius = 300,

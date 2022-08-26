@@ -106,6 +106,7 @@ function setDownloadFeatures ({state, commit, dispatch, rootGetters}) {
         drawnFeatures = state.layer?.getSource().getFeatures();
 
     drawnFeatures?.forEach(drawnFeature => {
+        // console.log(drawnFeature);
         const feature = drawnFeature.clone(),
             geometry = feature.getGeometry();
 
@@ -162,6 +163,7 @@ async function setDownloadSelectedFormat ({state, commit, dispatch}, value) {
 
     commit("setDownloadSelectedFormat", value);
     if (state.layer?.getSource().getFeatures().length > 0) {
+        await dispatch("setDownloadFeatures");
         await dispatch("prepareData");
         dispatch("prepareDownload");
     }

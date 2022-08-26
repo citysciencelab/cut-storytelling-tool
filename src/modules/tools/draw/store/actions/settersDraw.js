@@ -302,21 +302,6 @@ function setSymbol ({state, commit, dispatch}, {target}) {
 }
 
 /**
- * Adds another symbol if it doesn't exist already.
- *
- * @param {Object} context actions context object.
- * @param {Object} symbol The icon to add.
- * @returns {void}
- */
-function addSymbolIfNotExists ({state, commit}, symbol) {
-    const iconList = state.iconList;
-
-    if (!iconList.find(icon => icon.id === symbol.id)) {
-        commit("addSymbol", symbol);
-    }
-}
-
-/**
  * Sets the text of the current drawType.
  *
  * @param {Object} context actions context object.
@@ -393,7 +378,6 @@ export {
     setPointSize,
     setStrokeWidth,
     setSymbol,
-    addSymbolIfNotExists,
     setText,
     setUnit,
     setDrawLayerVisible
