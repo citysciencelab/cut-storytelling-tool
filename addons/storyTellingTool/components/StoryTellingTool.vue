@@ -6,6 +6,7 @@ import StoryPlayer from "./storyPlayer/StoryPlayer.vue";
 import actions from "../store/actionsStoryTellingTool";
 import getters from "../store/gettersStoryTellingTool";
 import mutations from "../store/mutationsStoryTellingTool";
+import fetchDataFromUrl from "../utils/getStoryFromUrl";
 import * as constants from "../store/constantsStoryTellingTool";
 
 export default {
@@ -18,6 +19,7 @@ export default {
     data () {
         return {
             constants,
+            fetchDataFromUrl,
             mode: null,
             storyConfPath: Config.storyConf
         };
@@ -94,6 +96,13 @@ export default {
      */
     mounted () {
         this.applyTranslationKey(this.name);
+
+        if (this.storyConfPath) {
+            fetchDataFromUrl(this.storyConfPath).then(loadedStoryConf => {
+                this.setStoryConf(loadedStoryConf);
+                console.log("blubb");
+            });
+        }
     },
     methods: {
         ...mapMutations("Tools/StoryTellingTool", Object.keys(mutations)),
@@ -205,15 +214,14 @@ export default {
                             >
                                 <v-img
                                     v-if="option.title === 'Story starten'"
-                                    src="https://raw.githubusercontent.com/herzogrh/faircare-verkehr/main/assets/img/stroller-1.jpg"
+                                    :src="storyConf.coverImagePath"
                                     height="200px"
                                 />
                                 <v-card-title v-if="option.title === 'Story starten'">
-                                    FairCare Verkehr
+                                    {{ storyConf.title }}
                                 </v-card-title>
                                 <v-card-subtitle v-if="option.title === 'Story starten'">
-                                    Eine Geschichte zur Mobilität
-                                    von Personen, die unbezahlte Sorgearbeit ausüben.
+                                    {{ storyConf.description }}
                                 </v-card-subtitle>
                                 <v-card-actions>
                                     <v-btn
