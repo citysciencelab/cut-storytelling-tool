@@ -9,6 +9,7 @@ import {
     getStepReference,
     getHTMLContentReference
 } from "../../utils/getReference";
+import store from "../../../../src/app-store";
 
 export default {
     name: "StoryPlayer",
@@ -173,15 +174,15 @@ export default {
             }
 
             // Toggles 3D map mode
-            if (this.currentStep.is3D && Radio.request("Map", "getMapMode") !== "3D") {
-                Radio.trigger("Map", "activateMap3d");
+            if (this.currentStep.is3D && !Radio.request("Map", "isMap3d")) {
+                store.dispatch("Maps/activateMap3D");
             }
             else if (!this.currentStep.is3D && Radio.request("Map", "getMapMode") === "3D") {
                 Radio.trigger("Map", "deactivateMap3d");
             }
 
             // Updates the map center
-            if (this.currentStep.centerCoordinate) {
+            if (this.currentStep.centerCoordinate && this.currentStep.centerCoordinate.length > 0) {
                 if (this.currentStep.is3D) {
                     console.log("Dont use centerCoordinate for 3D navigation.");
                 }
@@ -198,8 +199,19 @@ export default {
             }
             // Updates the map center for 3D
             if (this.currentStep.navigation3D) {
-                this.currentStep.navigation3D.flyTo = true;
-                Radio.trigger("Map", "setCameraParameter", this.currentStep.navigation3D);
+                const position = this.currentStep.navigation3D.cameraPosition,
+                    map3d = Radio.request("Map", "getMap3d"),
+                    camera = map3d.getCesiumScene().camera,
+                    destination = Cesium.Cartesian3.fromDegrees(position[0], position[1], position[2]);
+
+                camera.flyTo({
+                    destination: destination,
+                    orientation: {
+                        heading: this.currentStep.navigation3D.heading,
+                        pitch: this.currentStep.navigation3D.pitch
+                    },
+                    easingFunction: Cesium.EasingFunction.QUADRATIC_OUT
+                });
             }
 
             if (!this.currentStep.is3D) {

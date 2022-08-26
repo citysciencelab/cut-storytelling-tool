@@ -55,7 +55,7 @@
       "legend": {
         "name": "common:modules.legend.name",
         "showCollapseAllButton": true,
-        "showLegend": true
+        "showLegend": false
       }
     },
     "controls": {
@@ -701,15 +701,6 @@
           "urlIsVisible": true,
           "legend": true,
           "transparency": 40
-        },
-        {
-          "id": "127",
-          "clusterDistance": 50,
-          "name": "Eingegebene Mobilitätsdaten",
-          "url": "http://localhost:8080/aggregated",
-          "typ": "GeoJSON",
-          "datasets": [],
-          "urlIsVisible": true
         }
       ]
     }
