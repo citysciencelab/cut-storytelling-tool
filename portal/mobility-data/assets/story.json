@@ -409,7 +409,7 @@
             "zoomLevel": 1,
             "layers": [],
             "interactionAddons": [
-                "mobilityDataDraw"
+                ""
             ]
         },
         {
