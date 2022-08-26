@@ -412,7 +412,6 @@ export default {
                 if (drawState.symbol.value !== "simple_point") {
                     style = new Style({
                         image: new Icon({
-                            color: drawState.color,
                             crossOrigin: "anonymous",
                             src: drawState.symbol.value.indexOf("/") > 0 ? drawState.symbol.value : drawState.imgPath + drawState.symbol.value,
                             scale: drawState.symbol.scale
