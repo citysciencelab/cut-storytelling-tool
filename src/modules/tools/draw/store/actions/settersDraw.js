@@ -159,6 +159,22 @@ function setOuterColorContour ({getters, commit, dispatch}, {target}) {
 }
 
 /**
+ * Adds another symbol if it doesn't exist already.
+ *
+ * @param {Object} context actions context object.
+ * @param {Object} symbol The icon to add.
+ * @returns {void}
+ */
+function addSymbolIfNotExists ({state, commit}, symbol) {
+    const iconList = state.iconList;
+
+    if (!iconList.find(icon => icon.id === symbol.id)) {
+        commit("addSymbol", symbol);
+    }
+}
+
+/**
+/**
  * Sets the drawType and triggers other methods to add the new interactions
  * to the map and remove the old one.
  *
@@ -378,6 +394,7 @@ export {
     setPointSize,
     setStrokeWidth,
     setSymbol,
+    addSymbolIfNotExists,
     setText,
     setUnit,
     setDrawLayerVisible
