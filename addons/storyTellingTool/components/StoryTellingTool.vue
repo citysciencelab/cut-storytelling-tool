@@ -1,5 +1,5 @@
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 import ToolTemplate from "../../../src/modules/tools/ToolTemplate.vue";
 import StoryCreator from "./storyCreator/StoryCreator.vue";
 import StoryPlayer from "./storyPlayer/StoryPlayer.vue";
@@ -15,7 +15,7 @@ export default {
         StoryCreator,
         StoryPlayer
     },
-    data() {
+    data () {
         return {
             constants,
             mode: null,
@@ -28,7 +28,7 @@ export default {
         /**
          * The story telling tool options
          */
-        modeOptions() {
+        modeOptions () {
             return Object.values(this.constants.storyTellingModes).map(
                 mode => ({
                     mode,
@@ -43,12 +43,25 @@ export default {
             );
         }
     },
-    created() {
+    watch: {
+        /**
+         * Starts the action for activation or deactivation processes.
+         * @param {Boolean} value Value deciding whether the tool gets activated or deactivated.
+         * @returns {void}
+         */
+        active (value) {
+            if (!value) {
+                this.mode = null;
+            }
+        }
+    },
+    created () {
         this.$on("close", this.close);
 
         // Fix masterportal main menu styles for "TABLE" UI Style
         if (Radio.request("Util", "getUiStyle") === "TABLE") {
             const tableNavigationElement = document.querySelector("#table-nav");
+
             if (tableNavigationElement) {
                 tableNavigationElement.classList.remove("row");
                 tableNavigationElement.classList.add("custom-table-row");
@@ -57,6 +70,7 @@ export default {
             const tableNavigationMainColumnElement = document.querySelector(
                 "#table-nav > .col-md-4"
             );
+
             if (tableNavigationMainColumnElement) {
                 tableNavigationMainColumnElement.classList.remove("col-md-4");
                 tableNavigationMainColumnElement.classList.add(
@@ -67,29 +81,18 @@ export default {
             const tableNavigationSecondaryColumnElements = document.querySelectorAll(
                 "#table-nav > .col-md-2"
             );
+
             tableNavigationSecondaryColumnElements.forEach(element => {
                 element.classList.remove("col-md-2");
                 element.classList.add("custom-table-column");
             });
         }
     },
-    watch: {
-        /**
-         * Starts the action for activation or deactivation processes.
-         * @param {Boolean} value Value deciding whether the tool gets activated or deactivated.
-         * @returns {void}
-         */
-        active(value) {
-            if (!value) {
-                this.mode = null;
-            }
-        }
-    },
     /**
      * Put initialize here if mounting occurs after config parsing
      * @returns {void}
      */
-    mounted() {
+    mounted () {
         this.applyTranslationKey(this.name);
     },
     methods: {
@@ -101,7 +104,7 @@ export default {
          * @param {Number} index the index of the new story telling mode
          * @returns {void}
          */
-        onChangeStoryTellingMode(index) {
+        onChangeStoryTellingMode (index) {
             this.mode = Object.values(this.constants.storyTellingModes)[index];
         },
 
@@ -109,29 +112,29 @@ export default {
          * Closes this tool window by setting active to false
          * @returns {void}
          */
-        close() {
+        close () {
             const closeStoryTellingTool = () => {
-                this.setActive(false);
-                this.resetModule();
+                    this.setActive(false);
+                    this.resetModule();
 
-                // TODO replace trigger when Menu is migrated
-                // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-                // else the menu-entry for this tool is always highlighted
-                const model = Radio.request(
-                    "ModelList",
-                    "getModelByAttributes",
-                    {
-                        id: this.$store.state.Tools.StoryTellingTool.id
+                    // TODO replace trigger when Menu is migrated
+                    // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
+                    // else the menu-entry for this tool is always highlighted
+                    const model = Radio.request(
+                        "ModelList",
+                        "getModelByAttributes",
+                        {
+                            id: this.$store.state.Tools.StoryTellingTool.id
+                        }
+                    );
+
+                    if (model) {
+                        model.set("isActive", false);
                     }
-                );
+                },
 
-                if (model) {
-                    model.set("isActive", false);
-                }
-            };
-
-            // Confirm tool closing if user is creating a story
-            const isCreatingAStory =
+                // Confirm tool closing if user is creating a story
+                isCreatingAStory =
                 this.mode === this.constants.storyTellingModes.CREATE &&
                 JSON.stringify(
                     this.$store.state.Tools.StoryTellingTool.storyConf
@@ -154,11 +157,13 @@ export default {
                     ),
                     forceClickToClose: true
                 };
+
                 this.$store.dispatch(
                     "ConfirmAction/addSingleAction",
                     confirmActionSettings
                 );
-            } else {
+            }
+            else {
                 closeStoryTellingTool();
             }
         }
@@ -178,38 +183,65 @@ export default {
         :initial-width-mobile="initialWidthMobile"
     >
         <template #toolBody>
-            <v-app v-if="active" id="tool-storyTellingTool" :class="mode">
+            <v-app
+                v-if="active"
+                id="tool-storyTellingTool"
+                :class="mode"
+            >
                 <v-item-group
                     v-if="!mode"
+                    id="tool-storyTellingTool-modeSelection"
                     :value="mode"
                     @change="onChangeStoryTellingMode"
-                    id="tool-storyTellingTool-modeSelection"
                 >
-                    <v-flex v-for="option in modeOptions" :key="option.title">
-                        <v-item v-slot="{ active, toggle }" >
-                            <v-card :disabled="option.disabled" class="my-4">
-                                <v-img v-if="option.title == 'Story starten'"
+                    <v-flex
+                        v-for="option in modeOptions"
+                        :key="option.title"
+                    >
+                        <v-item v-slot="{ active, toggle }">
+                            <v-card
+                                :disabled="option.disabled"
+                                class="my-4"
+                            >
+                                <v-img
+                                    v-if="option.title === 'Story starten'"
                                     src="https://raw.githubusercontent.com/herzogrh/faircare-verkehr/main/assets/img/stroller-1.jpg"
                                     height="200px"
-                                    ></v-img>
-                                <v-card-title v-if="option.title == 'Story starten'">FairCare Verkehr</v-card-title>
-                                <v-card-subtitle v-if="option.title == 'Story starten'">Eine Geschichte zur Mobilität von Personen, die unbezahlte Sorgearbeit ausüben.</v-card-subtitle>
+                                />
+                                <v-card-title v-if="option.title === 'Story starten'">
+                                    FairCare Verkehr
+                                </v-card-title>
+                                <v-card-subtitle v-if="option.title === 'Story starten'">
+                                    Eine Geschichte zur Mobilität
+                                    von Personen, die unbezahlte Sorgearbeit ausüben.
+                                </v-card-subtitle>
                                 <v-card-actions>
-                                    <v-btn v-if="option.title == 'Story starten'" text @click="toggle" >
+                                    <v-btn
+                                        v-if="option.title === 'Story starten'"
+                                        text
+                                        @click="toggle"
+                                    >
                                         {{ option.title }}
                                     </v-btn>
-                                    <v-col class="text-center" v-if="option.title == 'Story erstellen'">
+                                    <v-col
+                                        v-if="option.title === 'Story erstellen'"
+                                        class="text-center"
+                                    >
                                         <p><i>- Experimentell -</i></p>
-                                        <v-btn   outlined small color="" @click="toggle" >
+                                        <v-btn
+                                            outlined
+                                            small
+                                            color=""
+                                            @click="toggle"
+                                        >
                                             <v-icon>add</v-icon>
                                             Eigene {{ option.title }}
                                         </v-btn>
                                     </v-col>
-
                                 </v-card-actions>
                             </v-card>
                         </v-item>
-                        <v-spacer></v-spacer>
+                        <v-spacer />
                     </v-flex>
                 </v-item-group>
 
@@ -221,7 +253,7 @@ export default {
                         mode === constants.storyTellingModes.PLAY &&
                             storyConfPath
                     "
-                    :storyConfPath="storyConfPath"
+                    :story-conf-path="storyConfPath"
                 />
             </v-app>
         </template>
@@ -282,7 +314,7 @@ $white: #FFFFFF;
 
 }
 
-.table-nav-main{
+.table-nav-main {
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
     background-color: white;
@@ -313,7 +345,7 @@ $white: #FFFFFF;
 }
 
 .table-tool:hover {
-    background-color: fade($main-blue , 20%);
+    background-color: fade($main-blue, 20%);
 }
 
 #table-searchForm input#searchInput.form-control {
@@ -322,7 +354,7 @@ $white: #FFFFFF;
     width: 340px;
 }
 
-#searchInput::placeholder, .form-control::placeholder{
+#searchInput::placeholder, .form-control::placeholder {
     font-family: "Arial", sans-serif;
     font-size: 12px;
 }
@@ -390,11 +422,11 @@ $white: #FFFFFF;
 }
 
 .icon-tools::after {
-    color: rgba(142, 180, 210,1)
+    color: rgba(142, 180, 210, 1)
 }
 
 .table-tools-active .icon-tools::before {
-    color: rgba(142, 180, 210,1)
+    color: rgba(142, 180, 210, 1)
 }
 
 .icon-drag::before {
