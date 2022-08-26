@@ -106,7 +106,6 @@ function setDownloadFeatures ({state, commit, dispatch, rootGetters}) {
         drawnFeatures = state.layer?.getSource().getFeatures();
 
     drawnFeatures?.forEach(drawnFeature => {
-        // console.log(drawnFeature);
         const feature = drawnFeature.clone(),
             geometry = feature.getGeometry();
 
