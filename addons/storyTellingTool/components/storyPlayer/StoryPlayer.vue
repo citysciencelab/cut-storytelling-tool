@@ -72,7 +72,6 @@ export default {
         }
     },
     mounted () {
-        console.log("blubb");
         if (this.storyConf) {
             this.loadStep();
         }

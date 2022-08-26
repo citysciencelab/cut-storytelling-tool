@@ -100,7 +100,6 @@ export default {
         if (this.storyConfPath) {
             fetchDataFromUrl(this.storyConfPath).then(loadedStoryConf => {
                 this.setStoryConf(loadedStoryConf);
-                console.log("blubb");
             });
         }
     },
