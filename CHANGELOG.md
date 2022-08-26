@@ -12,6 +12,9 @@
 ### Added
 
 ### Changed
+- OAF:
+    - OAF no longer uses title: "next page" as an indicator for the next page but rel: "next".
+    - The CRS parameter can be turned off via crs: false. The default crs in the master portal for oaf has been set to http://www.opengis.net/def/crs/EPSG/0/25832.
 
 ### Deprecated
 

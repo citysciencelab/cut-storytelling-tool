@@ -4,7 +4,6 @@ import Layer from "./layer";
 import * as bridge from "./RadioBridge.js";
 import Cluster from "ol/source/Cluster";
 import {bbox, all} from "ol/loadingstrategy.js";
-import store from "../../app-store";
 
 /**
  * Creates a layer of type OAF.
@@ -44,7 +43,7 @@ OAFLayer.prototype = Object.create(Layer.prototype);
  * @returns {void}
  */
 OAFLayer.prototype.createLayer = function (attrs) {
-    const crs = attrs.crs ? attrs.crs : store.getters["Maps/projection"].getCode(),
+    const crs = attrs.crs === false || attrs.crs ? attrs.crs : "http://www.opengis.net/def/crs/EPSG/0/25832",
         rawLayerAttributes = {
             id: attrs.id,
             url: attrs.url,
