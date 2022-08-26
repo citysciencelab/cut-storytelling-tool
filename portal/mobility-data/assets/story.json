@@ -408,9 +408,7 @@
             ],
             "zoomLevel": 1,
             "layers": [],
-            "interactionAddons": [
-                "mobilityDataDraw"
-            ]
+            "interactionAddons": []
         },
         {
             "stepNumber": 3,

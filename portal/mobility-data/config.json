@@ -39,11 +39,6 @@
             "glyphicon": "glyphicon-book",
             "active": true
           },
-          "mobilityDataDraw": {
-            "name": "translate#additional:modules.tools.mobilityDataDraw.title",
-            "glyphicon": "glyphicon-user",
-            "active": false
-          },
           "gfi": {
             "name": "translate#common:menu.tools.getInfos",
             "glyphicon": "glyphicon-info-sign",
