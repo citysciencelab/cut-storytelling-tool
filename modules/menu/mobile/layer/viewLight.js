@@ -58,7 +58,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
     tagName: "li",
-    className: "list-group-item",
+    className: "dropdown-item",
     template: _.template(Template),
     templateSetting: _.template(SettingTemplate),
 

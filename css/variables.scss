@@ -61,16 +61,6 @@ $navbar-nav-link-padding-x: 0.9375rem;
 $navbar-toggler-padding-x: .625rem;
 $navbar-toggler-focus-width: 0;
 
-// Dropdowns
-//
-// Dropdown menu container and contents.
-
-$dropdown-spacer: 0;
-
-// List group
-
-$list-group-disabled-bg:  #eeeeee;
-
 
 $border-radius-base: 0;
 $border-radius-large: 0;
@@ -142,7 +132,18 @@ $accent_contrast: #ffffff;
  * Keywords: success, warning, danger, info
  * note: for the geo-online Masterportal these are usually not needed and should be discussed before using.
  */
- $danger: $light_red;
+$danger: $light_red;
+
+// Dropdowns
+//
+// Dropdown menu container and contents.
+
+$dropdown-spacer: 0;
+$dropdown-link-hover-bg: transparent;
+
+// List group
+
+$dropdown-item-disabled-bg:  #eeeeee;
 
 /* ICON SIZES */
 $icon_length: 2.25rem;

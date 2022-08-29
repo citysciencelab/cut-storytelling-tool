@@ -13,7 +13,7 @@
         font-size: 18px;
         padding: 5px;
     }
-    >.list-group-item {
+    >.dropdown-item {
         padding: 12px 5px;
         display: flex;
         flex-flow: row wrap;
@@ -56,7 +56,7 @@
         margin-right: 10px;
     }
 }
-.list-group-item {
+.dropdown-item {
     >.layer-info-item {
         >.rotate {
             transform: rotate(0deg);

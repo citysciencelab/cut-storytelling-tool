@@ -14,7 +14,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      * @returns {void}
      */
     initializeDomId: function (prefix) {
-        let idPrefix = "layer-list-group-item-";
+        let idPrefix = "layer-dropdown-item-";
 
         if (prefix) {
             idPrefix = prefix;

@@ -172,6 +172,9 @@ ul#tree {
             cursor: pointer;
         }
     }
+    .dropdown-item.disabled, .dropdown-item:disabled {
+        background-color: $dropdown-item-disabled-bg;
+    }
 }
 ul#tree.light {
     overflow-y: auto;
@@ -190,6 +193,9 @@ ul#tree.light {
             padding: 4px 0 0 5px;
             cursor: pointer;
         }
+    }
+    .dropdown-item.disabled, .dropdown-item:disabled {
+        background-color: $light_grey;
     }
 }
 
