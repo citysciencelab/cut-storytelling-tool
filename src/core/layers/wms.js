@@ -164,14 +164,19 @@ WMSLayer.prototype.createLegend = function () {
         const layerNames = this.get("layers").split(","),
             legends = [];
 
-        if (layerNames.length === 1) {
-            legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers")));
-        }
-        else if (layerNames.length > 1) {
-            layerNames.forEach(layerName => {
-                legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName));
-            });
-        }
+        // Compose GetLegendGraphic request(s)
+        layerNames.forEach(layerName => {
+            const legendUrl = new URL(this.get("url"));
+
+            legendUrl.searchParams.set("SERVICE", "wms");
+            legendUrl.searchParams.set("VERSION", version);
+            legendUrl.searchParams.set("REQUEST", "GetLegendGraphic");
+            legendUrl.searchParams.set("FORMAT", "image/png");
+            legendUrl.searchParams.set("LAYER", layerName);
+
+            legends.push(legendUrl.toString());
+        });
+
         this.setLegend(legends);
     }
     else if (typeof legend === "string") {
