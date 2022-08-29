@@ -172,9 +172,6 @@ describe("src/modules/tools/actionsTools.js", () => {
 
             testAction(controlActivationOfTools, {id: activeToolId, name: activeToolName, active: true}, state, {}, [
                 {type: "ScaleSwitcher/setActive", payload: false},
-                {type: "BorisComponent/setActive", payload: false},
-                {type: "BorisComponent/setActive", payload: true},
-                {type: "activateToolInModelList", payload: {tool: "BorisComponent", active: true}, dispatch: true},
                 {type: "WfsSearch/setActive", payload: true},
                 {type: "activateToolInModelList", payload: {tool: "WfsSearch", active: true}, dispatch: true}
             ], {

@@ -14,21 +14,19 @@ const actions = {
      */
     setToolActive ({state, commit, dispatch}, {id, active}) {
         const toolId = Object.keys(state).find(tool => state[tool]?.id?.toLowerCase() === id?.toLowerCase()),
-            keepOpenToolId = Object.keys(state).find(tool => state[tool]?.keepOpen === true);
+            keepOpenToolId = Object.keys(state).find(tool => state[tool].keepOpen === true);
 
-        if (toolId !== undefined) {
-            if (toolId === keepOpenToolId) {
-                dispatch("controlActivationOfTools", {id: state[toolId].id, name: state[toolId].name, active: true});
-                commit(toolId + "/setActive", true);
-            }
-            else {
-                dispatch("controlActivationOfTools", {id: state[toolId].id, name: state[toolId].name, active});
-                commit(toolId + "/setActive", active);
-            }
+        if (toolId !== undefined && toolId !== keepOpenToolId) {
+            dispatch("controlActivationOfTools", {id: state[toolId].id, name: state[toolId].name, active});
+            commit(toolId + "/setActive", active);
             if (toolId !== "Gfi") {
                 commit("Gfi/setActive", !state[toolId].deactivateGFI);
                 dispatch("activateToolInModelList", {tool: "Gfi", active: !state[toolId].deactivateGFI});
             }
+        }
+        else if (toolId === keepOpenToolId) {
+            dispatch("controlActivationOfTools", {id: state[toolId].id, name: state[toolId].name, active: true});
+            commit(toolId + "/setActive", true);
         }
     },
     /**
@@ -79,19 +77,18 @@ const actions = {
         let activeToolName;
         const keepOpenToolId = Object.keys(state).find(tool => state[tool].keepOpen === true);
 
-        getters.getActiveToolNames.forEach(tool => commit(tool + "/setActive", false));
-
+        getters.getActiveToolNames.forEach((tool) => {
+            if (tool !== keepOpenToolId) {
+                commit(tool + "/setActive", false);
+            }
+        });
         if (getters.getConfiguredToolNames.includes(name)) {
             activeToolName = name;
         }
         else if (getters.getConfiguredToolKeys.includes(id)) {
             activeToolName = upperFirst(id);
         }
-        if (activeToolName !== "Gfi") {
-            if (keepOpenToolId) {
-                commit(keepOpenToolId + "/setActive", true);
-                dispatch("activateToolInModelList", {tool: keepOpenToolId, active: true});
-            }
+        if (activeToolName !== "Gfi" && activeToolName !== keepOpenToolId) {
             commit(activeToolName + "/setActive", true);
             dispatch("activateToolInModelList", {tool: activeToolName, active: active});
         }
