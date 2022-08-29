@@ -103,7 +103,7 @@ describe("src/modules/tools/gfi/components/templates/MobileTemplate.vue", () => 
                 },
                 localVue
             }),
-            div = wrapper.find(".modal-mask");
+            div = wrapper.find(".modal");
 
 
         await div.trigger("click");

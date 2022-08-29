@@ -117,9 +117,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         // Animation cog
         if (layerId === attr.id) {
             this.$(".bi-gear").parent(".bootstrap-icon").toggleClass("rotate rotate-back");
+            this.$(".switch-icon").toggleClass("rotate rotate-back");
+            this.$(".switch-icon").children("i").toggleClass("bi-dash-lg bi-plus-lg");
         }
-        this.$(".switch-icon").toggleClass("rotate rotate-back");
-        this.$(".switch-icon").children("i").toggleClass("bi-dash-lg bi-plus-lg");
         // Slide-Animation templateSetting
         if (this.model.get("isSettingVisible") === false) {
             this.$el.find(".item-settings").slideUp("slow", function () {

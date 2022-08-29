@@ -73,7 +73,7 @@ export default {
 
 <template>
     <div
-        class="modal-mask"
+        class="modal"
         tabindex="0"
         @click="closeByClickOutside"
         @keydown.enter="closeByClickOutside"
@@ -112,7 +112,7 @@ export default {
 <style lang="scss" scoped>
 @import "~variables";
 
-.modal-mask {
+.modal {
     position: fixed;
     z-index: 9999;
     top: 0;

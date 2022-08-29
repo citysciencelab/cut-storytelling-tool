@@ -18,6 +18,10 @@
         display: flex;
         flex-flow: row wrap;
         align-items: center;
+        border-bottom: 1px solid rgba(0,0,0,.125);
+    }
+    .dropdown-item.disabled, .dropdown-item:disabled {
+        background-color: $dropdown-item-disabled-bg;
     }
 }
 .selected-layer-item {
@@ -70,4 +74,8 @@
     a {
         color: $black;
     }
+}
+
+li {
+    
 }
