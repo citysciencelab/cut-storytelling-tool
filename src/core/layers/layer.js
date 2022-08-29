@@ -235,10 +235,15 @@ Layer.prototype.setIsVisibleInMap = function (newValue) {
  */
 Layer.prototype.setTransparency = function (newValue) {
     const transparency = parseInt(newValue, 10),
-        opacity = (100 - transparency) / 100;
+        opacity = (100 - transparency) / 100,
+        lastValue = this.get("transparency");
 
     this.set("transparency", transparency);
     this.layer.setOpacity(opacity);
+
+    if (lastValue !== newValue) {
+        bridge.layerTransparencyChanged(this, this.get("transparency"));
+    }
 };
 /**
  * Decreases layer transparency by 10 percent
