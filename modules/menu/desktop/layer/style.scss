@@ -35,6 +35,12 @@ ul#tree {
             background-color: $dark_grey;
         }
     }
+    .bootstrap-icon:hover {
+        i {
+            color: $white;
+        }
+    }
+    
 }
 .rotate {
     transform: rotate(-360deg);
