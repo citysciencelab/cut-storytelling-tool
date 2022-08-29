@@ -7,7 +7,7 @@ import * as setters from "./actions/settersDraw";
 import * as withoutGUI from "./actions/withoutGUIDraw";
 
 import {calculateCircle} from "../utils/circleCalculations";
-import {createDrawInteraction, createModifyInteraction, createSelectInteraction} from "../utils/createInteractions";
+import {createDrawInteraction, createModifyInteraction, createModifyAttributesInteraction, createSelectInteraction} from "../utils/createInteractions";
 import {createStyle} from "../utils/style/createStyle";
 import createTooltipOverlay from "../utils/style/createTooltipOverlay";
 import drawTypeOptions from "./drawTypeOptions";
@@ -238,6 +238,75 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                 });
             });
         },
+        createModifyAttributesInteractionAndAddToMap ({state, commit, dispatch}, active) {
+            const modifyInteraction = createModifyAttributesInteraction(state.layer),
+                selectInteractionModify = createSelectInteraction(state.layer, 10);
+
+            commit("setModifyAttributesInteraction", modifyInteraction);
+            dispatch("manipulateInteraction", {interaction: "modifyAttributes", active: active});
+            dispatch("createModifyAttributesInteractionListener");
+            dispatch("Maps/addInteraction", modifyInteraction, {root: true});
+
+            commit("setSelectInteractionModifyAttributes", selectInteractionModify);
+            dispatch("createSelectInteractionModifyAttributesListener");
+            dispatch("Maps/addInteraction", selectInteractionModify, {root: true});
+        },
+        createModifyAttributesInteractionListener ({rootState, state, dispatch, commit, getters}) {
+            let tooltip,
+                changeInProgress = false;
+
+            state.modifyAttributesInteraction.on("modifystart", event => {
+                if (state.selectedFeature) {
+                    commit("setSelectedFeature", null);
+                }
+
+                event.features.getArray().forEach(feature => {
+                    let center = null;
+
+                    if (typeof feature.getGeometry().getCenter === "function") {
+                        center = JSON.stringify(feature.getGeometry().getCenter());
+                    }
+                    feature.getGeometry().once("change", async () => {
+                        if (changeInProgress) {
+                            return;
+                        }
+                        changeInProgress = true;
+
+                        if (!state.selectedFeature || state.selectedFeature.ol_uid !== feature.ol_uid) {
+                            await dispatch("setAsCurrentFeatureAndApplyStyleSettings", feature);
+
+                            if (!tooltip && (state.drawType.id === "drawCircle" || state.drawType.id === "drawDoubleCircle")) {
+                                if (center === JSON.stringify(feature.getGeometry().getCenter())) {
+                                    tooltip = createTooltipOverlay({getters, commit, dispatch});
+                                    mapCollection.getMap(rootState.Maps.mode).addOverlay(tooltip);
+                                    mapCollection.getMap(rootState.Maps.mode).on("pointermove", tooltip.get("mapPointerMoveEvent"));
+                                    state.selectedFeature.getGeometry().on("change", tooltip.get("featureChangeEvent"));
+                                }
+                            }
+                        }
+                    });
+                });
+            });
+            state.modifyAttributesInteraction.on("modifyend", event => {
+
+                changeInProgress = false;
+                if (tooltip) {
+                    state.selectedFeature.getGeometry().un("change", tooltip.get("featureChangeEvent"));
+                    dispatch("clearTooltip", tooltip);
+                    tooltip = null;
+                }
+
+                dispatch("setDownloadFeatures");
+
+                // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map
+                if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
+                    dispatch("createCenterPoint", {feature: event.features.getArray()[0], targetProjection: Config.inputMap.targetProjection}).then(centerPointCoords => {
+                        dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetProjection}, currentFeature: event.feature})
+                            .then(geoJSON => postDrawEnd({type: "Point", coordinates: centerPointCoords}, geoJSON));
+                    });
+                }
+            });
+        },
         /**
          * Creates a modify interaction and adds it to the map.
          *
@@ -318,6 +387,26 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                             .then(geoJSON => postDrawEnd({type: "Point", coordinates: centerPointCoords}, geoJSON));
                     });
                 }
+            });
+        },
+        createSelectInteractionModifyAttributesListener ({state, commit, dispatch}) {
+            state.selectInteractionModifyAttributes.on("select", event => {
+                if (state.currentInteraction !== "modifyAttributes" || !event.selected.length) {
+                    state.selectInteractionModifyAttributes.getFeatures().clear();
+                    if (state.selectedFeature) {
+                        commit("setSelectedFeature", null);
+                    }
+                    return;
+                }
+
+                const feature = event.selected[event.selected.length - 1];
+
+                dispatch("setAsCurrentFeatureAndApplyStyleSettings", feature);
+
+                // ui reason: this is the short period of time the ol default mark of select interaction is seen at mouse click event of a feature
+                setTimeout(() => {
+                    state.selectInteractionModifyAttributes.getFeatures().clear();
+                }, 300);
             });
         },
         /**
@@ -417,6 +506,14 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                 }
                 if (typeof state.selectInteractionModify !== "undefined" && state.selectInteractionModify !== null) {
                     state.selectInteractionModify.setActive(active);
+                }
+            }
+            else if (interaction === "modifyAttributes") {
+                if (typeof state.modifyAttributesInteraction !== "undefined" && state.modifyAttributesInteraction !== null) {
+                    state.modifyInteraction.setActive(active);
+                }
+                if (typeof state.selectInteractionModifyAttributes !== "undefined" && state.selectInteractionModifyAttributes !== null) {
+                    state.selectInteractionModifyAttributes.setActive(active);
                 }
             }
             else if (interaction === "delete") {
@@ -551,22 +648,32 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
             if (interaction === "draw") {
                 dispatch("manipulateInteraction", {interaction: "draw", active: true});
                 dispatch("manipulateInteraction", {interaction: "modify", active: false});
+                dispatch("manipulateInteraction", {interaction: "modifyAttributes", active: false});
                 dispatch("manipulateInteraction", {interaction: "delete", active: false});
                 dispatch("updateDrawInteraction");
             }
             else if (interaction === "modify") {
                 dispatch("manipulateInteraction", {interaction: "draw", active: false});
                 dispatch("manipulateInteraction", {interaction: "modify", active: true});
+                dispatch("manipulateInteraction", {interaction: "modifyAttributes", active: false});
+                dispatch("manipulateInteraction", {interaction: "delete", active: false});
+            }
+            else if (interaction === "modifyAttributes") {
+                dispatch("manipulateInteraction", {interaction: "draw", active: false});
+                dispatch("manipulateInteraction", {interaction: "modify", active: false});
+                dispatch("manipulateInteraction", {interaction: "modifyAttributes", active: true});
                 dispatch("manipulateInteraction", {interaction: "delete", active: false});
             }
             else if (interaction === "delete") {
                 dispatch("manipulateInteraction", {interaction: "draw", active: false});
                 dispatch("manipulateInteraction", {interaction: "modify", active: false});
+                dispatch("manipulateInteraction", {interaction: "modifyAttributes", active: false});
                 dispatch("manipulateInteraction", {interaction: "delete", active: true});
             }
             else if (interaction === "none") {
                 dispatch("manipulateInteraction", {interaction: "draw", active: false});
                 dispatch("manipulateInteraction", {interaction: "modify", active: false});
+                dispatch("manipulateInteraction", {interaction: "modifyAttributes", active: false});
                 dispatch("manipulateInteraction", {interaction: "delete", active: false});
             }
         },

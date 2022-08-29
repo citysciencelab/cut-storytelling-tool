@@ -61,12 +61,13 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
             expect(commit.firstCall.args).to.eql(["setActive", true]);
             expect(commit.thirdCall.args[0]).to.equal("setLayer");
             expect(commit.thirdCall.args[1]).to.be.undefined;
-            expect(dispatch.callCount).to.equal(5);
+            expect(dispatch.callCount).to.equal(6);
             expect(dispatch.firstCall.args).to.eql(["Maps/addNewLayerIfNotExists", "importDrawLayer", {root: true}]);
             expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true}]);
             expect(dispatch.thirdCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
             expect(dispatch.getCall(3).args).to.eql(["createModifyInteractionAndAddToMap", false]);
-            expect(dispatch.getCall(4).args).to.eql(["setDrawLayerVisible", true]);
+            expect(dispatch.getCall(4).args).to.eql(["createModifyAttributesInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(5).args).to.eql(["setDrawLayerVisible", true]);
         });
         it("should commit and dispatch as intended if 'active' and 'withoutGUI' are true", async () => {
             active = true;
@@ -78,12 +79,13 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
             expect(commit.firstCall.args).to.eql(["setActive", true]);
             expect(commit.thirdCall.args[0]).to.equal("setLayer");
             expect(commit.thirdCall.args[1]).to.be.undefined;
-            expect(dispatch.callCount).to.equal(6);
+            expect(dispatch.callCount).to.equal(7);
             expect(dispatch.firstCall.args).to.eql(["Maps/addNewLayerIfNotExists", "importDrawLayer", {root: true}]);
             expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true}]);
             expect(dispatch.thirdCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
             expect(dispatch.getCall(3).args).to.eql(["createModifyInteractionAndAddToMap", false]);
-            expect(dispatch.getCall(4).args).to.eql(["setDrawLayerVisible", true]);
+            expect(dispatch.getCall(4).args).to.eql(["createModifyAttributesInteractionAndAddToMap", false]);
+            expect(dispatch.getCall(5).args).to.eql(["setDrawLayerVisible", true]);
             expect(dispatch.lastCall.args).to.eql(["toggleInteraction", "draw"]);
         });
     });

@@ -30,6 +30,7 @@ async function setActive ({state, commit, dispatch, rootState}, active) {
         dispatch("createDrawInteractionAndAddToMap", {active: state.currentInteraction === "draw"});
         dispatch("createSelectInteractionAndAddToMap", state.currentInteraction === "delete");
         dispatch("createModifyInteractionAndAddToMap", state.currentInteraction === "modify");
+        dispatch("createModifyAttributesInteractionAndAddToMap", state.currentInteraction === "modifyAttributes");
         dispatch("setDrawLayerVisible", true);
 
         if (state.withoutGUI) {

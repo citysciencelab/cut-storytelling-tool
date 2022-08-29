@@ -27,6 +27,8 @@
     - New Flag `addIconsOfActiveLayers`. Set to `true` to be able to select the icons and symbols of all WFS layers activated in the topic tree as additional symbols besides the icons configured under `drawSymbolSettings`.
 
 ### Changed
+- Draw-Tool:
+    - You can now configure a button to edit custom attributes of a feature with the parameter `enableAttributesSelector`.
 - Filter:
     - Making intern wfs layer loadingStrategy with 'all' by filtering
     - The checkbox for filtering in the browsers extent now triggers direct filtering with `strategy`: `active`. This can be disabled by setting `searchInMapExtentProactive` to `false`.

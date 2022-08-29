@@ -767,6 +767,7 @@
                     "undo": "Rückgängig machen",
                     "redo": "Wiederholen",
                     "edit": "Geometrie bearbeiten",
+                    "editAttributes": "Attribute bearbeiten",
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen",
                     "saveDrawing": "Zeichnung speichern"
@@ -779,6 +780,17 @@
                     "iconCloud": "Wolke",
                     "iconMeadow": "Wiese",
                     "gelber Pin": "gelber Pin"
+                },
+                "attributeSelect": {
+                    "attributeKeyError": "Bitte einen Schlüssel fürs Attribut angeben.",
+                    "attributeDuplicatedKeyError": "Der Attribut-Schlüssel existiert bereits.",
+                    "noFeatureSelected": "Derzeit ist noch kein Feature ausgewählt. Bitte wählen Sie ein Feature aus!",
+                    "save": "Speichern",
+                    "remove": "Löschen",
+                    "input": {
+                        "key": "Neuer Schlüssel",
+                        "value": "Neuer Wert"
+                    }
                 }
             },
             "measure": {
