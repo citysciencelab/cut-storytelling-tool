@@ -48,7 +48,7 @@ export default {
          * @returns {void}
          */
         show () {
-            const el = document.querySelector(".modal"),
+            const el = document.querySelector(".modal.poi-choice"),
                 backdrop = document.querySelector(".modal-backdrop");
 
             if (el) {

@@ -2,6 +2,7 @@
 import DefaultTheme from "../themes/default/components/DefaultTheme.vue";
 import SensorTheme from "../themes/sensor/components/SensorTheme.vue";
 import getTheme from "../../utils/getTheme";
+import { Modal } from "bootstrap";
 
 export default {
     name: "MobileTemplate",
@@ -46,16 +47,6 @@ export default {
         });
     },
     methods: {
-        close () {
-            this.$emit("close");
-        },
-        closeByClickOutside: function (event) {
-            // stop event bubbling
-            if (!this.reactOnOutsideClick || event.target !== this.$el) {
-                return;
-            }
-            this.close();
-        },
 
         /**
          * it will show this mobile component if it is switched from attached theme.
@@ -66,6 +57,11 @@ export default {
             if (!document.getElementsByClassName("modal-dialog").length && document.getElementsByClassName("gfi").length) {
                 document.getElementsByClassName("gfi")[0].appendChild(this.$el);
             }
+            else {
+                const myModal = new Modal(document.getElementById("gfiModal"));
+
+                myModal.show();
+            }
         }
     }
 };
@@ -73,10 +69,9 @@ export default {
 
 <template>
     <div
+        id="gfiModal"
         class="modal"
         tabindex="0"
-        @click="closeByClickOutside"
-        @keydown.enter="closeByClickOutside"
     >
         <div class="modal-dialog">
             <div class="modal-content">
@@ -85,8 +80,7 @@ export default {
                         type="button"
                         class="close bootstrap-icon"
                         aria-label="Close"
-                        @click="close"
-                        @keydown.enter="close"
+                        data-bs-dismiss="modal"
                     >
                         <i class="bi-x-lg" />
                     </span>
