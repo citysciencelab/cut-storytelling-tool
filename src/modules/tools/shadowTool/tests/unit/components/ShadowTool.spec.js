@@ -5,7 +5,6 @@ import ShadowComponent from "../../../components/ShadowTool.vue";
 import ToggleCheckboxComponent from "../../../../../../share-components/toggleCheckbox/components/ToggleCheckbox.vue";
 import Module from "../../../store/indexShadowTool";
 import Getters from "../../../store/gettersShadowTool";
-import Actions from "../../../store/actionsShadowTool";
 import sinon from "sinon";
 
 
@@ -54,7 +53,6 @@ describe("src/modules/tools/contact/components/ShadowTool.vue", () => {
                 }
             },
             getters: Getters,
-            actions: Actions,
             state: {
                 configJson: mockConfigJson
             }
