@@ -77,6 +77,7 @@
 - fileImport: the styles of geoJsons are now retained on reimport of a previously in MP created file
 
 ### Deprecated
+- The GeoJson-Layer subTyp: `OpenSenseMap` is deprecated. It will be removed in the next Major-Release!
 
 ### Removed
 The following NPM package is removed:
