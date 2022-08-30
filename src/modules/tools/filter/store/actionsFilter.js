@@ -23,6 +23,22 @@ export default {
         context.commit("setLayers", converter.getLayers(snippetInfos));
     },
     /**
+     * Sets the rulesOfFilters array with the given payload.
+     * @param {Object} context the context Vue instance
+     * @param {Object} payload the payload
+     * @param {Oject[]} payload.rulesOfFilters the array of rules for each filter
+     * @returns {void}
+     */
+    setRulesArray: (context, {rulesOfFilters}) => {
+        if (!Array.isArray(rulesOfFilters)) {
+            return;
+        }
+
+        context.commit("setRulesOfFilters", {
+            rulesOfFilters
+        });
+    },
+    /**
      * Update rules depending on given rule.
      * @param {Object} context the context Vue instance
      * @param {Object} payload the payload Vue instance
@@ -37,7 +53,7 @@ export default {
         }
         let rules;
 
-        if (!Array.isArray(context.state.filters[filterId])) {
+        if (!Array.isArray(context.state.rulesOfFilters[filterId])) {
             context.commit("addSpotForRule", {
                 filterId
             });
@@ -45,7 +61,7 @@ export default {
         }
         else {
             try {
-                rules = JSON.parse(JSON.stringify(context.state.filters[filterId]));
+                rules = JSON.parse(JSON.stringify(context.state.rulesOfFilters[filterId]));
             }
             catch (error) {
                 console.warn("Cannot parse rules in action updateRules", error);
@@ -73,7 +89,7 @@ export default {
         let rules;
 
         try {
-            rules = JSON.parse(JSON.stringify(context.state.filters[filterId]));
+            rules = JSON.parse(JSON.stringify(context.state.rulesOfFilters[filterId]));
         }
         catch (error) {
             console.warn("Cannot parse rules in action updateRules", error);
@@ -107,5 +123,52 @@ export default {
             filterId,
             hits
         });
+    },
+    /**
+     * Serialize the state (includes rules, filterHits, selectedAccordions).
+     * @param {Object} context the context Vue instance
+     * @returns {void}
+     */
+    serializeState: (context) => {
+        const rulesOfFilters = context.state.rulesOfFilters,
+            selectedCategories = context.state.selectedCategories,
+            selectedAccordions = context.state.selectedAccordions,
+            result = {
+                rulesOfFilters,
+                selectedCategories,
+                selectedAccordions
+            };
+        let resultString = "";
+
+        try {
+            resultString = JSON.stringify(result);
+        }
+        catch (error) {
+            resultString = "";
+        }
+        context.commit("setSerializedString", {
+            serializiedString: resultString
+        });
+    },
+    /**
+     * Deserialize the state.
+     * @param {Object} context the context Vue instance
+     * @param {Object} payload The payload
+     * @param {Object[]} payload.rulesOfFilters The rules of the filters
+     * @param {Object[]} payload.selectedCategories The selected accordions
+     * @param {Object[]} payload.selectedAccordions The selected accordions
+     * @return {void}
+     */
+    deserializeState: (context, payload) => {
+        const rulesOfFilters = payload?.rulesOfFilters,
+            selectedCategories = payload?.selectedCategories,
+            selectedAccordions = payload?.selectedAccordions;
+
+        if (Array.isArray(rulesOfFilters) && Array.isArray(selectedAccordions)) {
+            context.dispatch("setRulesArray", {rulesOfFilters});
+            context.commit("setSelectedCategories", selectedCategories);
+            context.commit("setSelectedAccordions", selectedAccordions);
+            context.commit("setActive", true);
+        }
     }
 };

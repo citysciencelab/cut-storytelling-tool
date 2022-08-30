@@ -509,6 +509,5 @@ export default {
         padding: 2px 3px 2px 2px;
         background: none repeat scroll #D42132;
         border-radius: 50px;
-        font-size: 20px;
     }
 </style>

@@ -27,17 +27,21 @@ export default {
             type: Array,
             required: false,
             default: () => []
+        },
+        selectedCategories: {
+            type: Array,
+            required: false,
+            default: () => []
         }
     },
     data () {
         return {
-            selectedLayers: [],
-            selectedCategory: []
+            selectedLayers: []
         };
     },
     watch: {
         selectedLayers () {
-            this.$emit("updateselectedlayers", this.selectedLayers);
+            this.$emit("selectedaccordions", this.selectedLayers);
         }
     },
     methods: {
@@ -67,7 +71,7 @@ export default {
             }
         },
         /**
-         * Updates the selectedCategory array.
+         * Updates the selectedCategories array.
          * @param {String} category the name of the category
          * @returns {void}
          */
@@ -76,14 +80,16 @@ export default {
                 return;
             }
 
-            const index = this.selectedCategory.indexOf(category);
+            const index = this.selectedCategories.indexOf(category),
+                categories = this.selectedCategories;
 
             if (index >= 0) {
-                this.selectedCategory.splice(index, 1);
+                categories.splice(index, 1);
             }
             else {
-                this.selectedCategory.push(category);
+                categories.push(category);
             }
+            this.$emit("selectedcategories", categories);
         },
         /**
          * Check if Selector should be disabled.
@@ -107,7 +113,7 @@ export default {
          * @returns {String} the translatet string or empty string if given param is not a string
          */
         translateDescription (filter) {
-            const description = this.selectedCategory.includes(filter.category) && filter.description ? filter.description : filter.shortDescription;
+            const description = this.selectedCategories.includes(filter.category) && filter.description ? filter.description : filter.shortDescription;
 
             return translateKeyWithPlausibilityCheck(description, key => this.$t(key));
         }
@@ -127,7 +133,7 @@ export default {
             class="panel panel-default"
         >
             <div
-                :class="['panel-heading', selectedCategory.includes(filter.category) ? 'category-layer': '']"
+                :class="['panel-heading', selectedCategories.includes(filter.category) ? 'category-layer': '']"
                 role="tab"
             >
                 <h2
@@ -151,7 +157,7 @@ export default {
                     {{ translateDescription(filter) }}
                 </div>
                 <div
-                    v-if="selectedCategory.includes(filter.category)"
+                    v-if="selectedCategories.includes(filter.category)"
                     class="panel-group"
                     role="tablist"
                     aria-multiselectable="true"
@@ -159,7 +165,7 @@ export default {
                     <div
                         v-for="subFilter in filter.layers"
                         :key="subFilter.filterId"
-                        :class="['panel', 'accordion-collapse', 'collapse', selectedCategory.includes(filter.category) ? 'show': '']"
+                        :class="['panel', 'accordion-collapse', 'collapse', selectedCategories.includes(filter.category) ? 'show': '']"
                         role="tabpanel"
                     >
                         <div
