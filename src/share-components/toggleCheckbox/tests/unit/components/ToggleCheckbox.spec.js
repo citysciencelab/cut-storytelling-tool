@@ -22,6 +22,7 @@ describe("src/share-components/toggleCheckbox/components/ToggleCheckbox.vue", ()
         expect(btns.at(2).text()).to.be.equal("off");
         expect(btns.at(1).classes().indexOf("active")).not.to.equal(-1);
         expect(btns.at(2).classes().indexOf("active")).to.equal(-1);
+        wrapper.destroy();
     });
 
     it("should have the correct classes for inactive state", async () => {
@@ -35,13 +36,17 @@ describe("src/share-components/toggleCheckbox/components/ToggleCheckbox.vue", ()
 
         expect(btns.at(1).classes().indexOf("active")).to.equal(-1);
         expect(btns.at(2).classes().indexOf("active")).not.to.equal(-1);
+        wrapper.destroy();
     });
 
-    it.skip("should call toggle if label is clicked", async () => {
-        const spyToggle = sinon.spy(ToggleCheckboxComponent.methods, "toggle"),
+    it("should call toggle if label is clicked", async () => {
+        const spyToggle = sinon.spy(),
             wrapper = mount(ToggleCheckboxComponent, {
                 propsData: {
                     defaultState: false
+                },
+                methods: {
+                    toggle: spyToggle
                 },
                 localVue
             }),
@@ -51,8 +56,6 @@ describe("src/share-components/toggleCheckbox/components/ToggleCheckbox.vue", ()
         expect(spyToggle.calledOnce).to.be.true;
         await btns.at(2).trigger("click");
         expect(spyToggle.calledTwice).to.be.true;
-
-        spyToggle.restore();
     });
 
 });
