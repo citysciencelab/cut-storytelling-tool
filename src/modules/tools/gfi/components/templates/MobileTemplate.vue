@@ -2,7 +2,7 @@
 import DefaultTheme from "../themes/default/components/DefaultTheme.vue";
 import SensorTheme from "../themes/sensor/components/SensorTheme.vue";
 import getTheme from "../../utils/getTheme";
-import { Modal } from "bootstrap";
+import {Modal} from "bootstrap";
 
 export default {
     name: "MobileTemplate",
