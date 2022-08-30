@@ -168,7 +168,7 @@ WMSLayer.prototype.createLegend = function () {
         layerNames.forEach(layerName => {
             const legendUrl = new URL(this.get("url"));
 
-            legendUrl.searchParams.set("SERVICE", "wms");
+            legendUrl.searchParams.set("SERVICE", "WMS");
             legendUrl.searchParams.set("VERSION", version);
             legendUrl.searchParams.set("REQUEST", "GetLegendGraphic");
             legendUrl.searchParams.set("FORMAT", "image/png");
