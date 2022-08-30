@@ -1,11 +1,12 @@
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersShadowTool";
 import mutations from "../store/mutationsShadowTool";
 import getComponent from "../../../../utils/getComponent";
 import ToolTemplate from "../../ToolTemplate.vue";
 import SliderInput from "./SliderInput.vue";
 import ToggleCheckbox from "../../../../share-components/toggleCheckbox/components/ToggleCheckbox.vue";
+import {updateShadow, updateCesiumTime} from "../utils/utilsShadowTool.js";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
@@ -76,7 +77,8 @@ export default {
     },
     methods: {
         ...mapMutations("Tools/Shadow", Object.keys(mutations)),
-        ...mapActions("Tools/Shadow", ["updateCesiumTime", "updateShadow"]),
+        updateShadow,
+        updateCesiumTime,
 
         close () {
             this.setActive(false);
