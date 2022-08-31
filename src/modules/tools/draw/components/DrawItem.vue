@@ -1068,4 +1068,7 @@ export default {
     .cursor-crosshair {
         cursor: crosshair;
     }
+    .btn-sm {
+        font-size: $font-size-base;
+    }
 </style>

@@ -753,5 +753,8 @@ export default {
             transform: translate(0px, -70px)
         }
     }
+    .form-control[readonly] {
+        background-color: $light-grey;
+    }
 </style>
 
