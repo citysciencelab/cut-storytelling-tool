@@ -176,6 +176,10 @@ export default {
             this.disable = typeof value === "boolean" ? value : true;
         }
     },
+    created () {
+        this.intvEmitCurrentRule = -1;
+        this.sliderMouseDown = false;
+    },
     mounted () {
         this.$nextTick(() => {
             if (typeof this.minValue !== "undefined" && typeof this.maxValue !== "undefined") {
@@ -251,6 +255,25 @@ export default {
          * @returns {void}
          */
         emitCurrentRule (value, startup = false) {
+            if (startup) {
+                this.changeRule(value, startup);
+                return;
+            }
+            clearInterval(this.intvEmitCurrentRule);
+            this.intvEmitCurrentRule = setInterval(() => {
+                clearInterval(this.intvEmitCurrentRule);
+                if (!this.sliderMouseDown) {
+                    this.changeRule(value, startup);
+                }
+            }, 800);
+        },
+        /**
+         * Emits the current rule to whoever is listening.
+         * @param {*} value the value to put into the rule
+         * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
+         * @returns {void}
+         */
+        changeRule (value, startup = false) {
             this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
@@ -298,6 +321,7 @@ export default {
          * @returns {void}
          */
         startSliderChange () {
+            this.sliderMouseDown = true;
             if (!isObject(this.adjustment)) {
                 return;
             }
@@ -308,6 +332,7 @@ export default {
          * @returns {void}
          */
         endSliderChange () {
+            this.sliderMouseDown = false;
             if (!isObject(this.adjustment)) {
                 return;
             }
@@ -393,7 +418,7 @@ export default {
                     type="range"
                     :class="disable ? 'disabled':''"
                     :disabled="disable"
-                    :step="getSliderSteps()"
+                    :step="getSliderSteps(decimalPlaces)"
                     :min="minimumValue"
                     :max="maximumValue"
                     @mousedown="startSliderChange()"
@@ -407,7 +432,7 @@ export default {
                     type="range"
                     :class="disable ? 'disabled':''"
                     :disabled="disable"
-                    :step="getSliderSteps()"
+                    :step="getSliderSteps(decimalPlaces)"
                     :min="minimumValue"
                     :max="maximumValue"
                     @mousedown="startSliderChange()"
