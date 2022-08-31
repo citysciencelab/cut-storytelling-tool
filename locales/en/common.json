@@ -996,7 +996,8 @@
             "3d": {
                 "buttonTitle": "3D",
                 "openView3d": "Start view",
-                "closeView3d": "Close view"
+                "closeView3d": "Close view",
+                "noCesium": "Cesium/3D-Functionality could not be loaded - Please inform the service provider"
             },
             "oblique": {
                 "buttonTitle": "Oblique aerial photos",

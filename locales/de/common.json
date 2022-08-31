@@ -996,7 +996,8 @@
             "3d": {
                 "buttonTitle": "3D",
                 "openView3d": "Ansicht einschalten",
-                "closeView3d": "Ansicht ausschalten"
+                "closeView3d": "Ansicht ausschalten",
+                "noCesium": "Cesium/3D-Funktionalität konnte nicht geladen werden - Bitte informieren Sie den Serviceanbieter"
             },
             "oblique": {
                 "buttonTitle": "Schrägluftbilder",
