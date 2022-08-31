@@ -80,6 +80,7 @@
 - In the `light` topic tree, the `singleBaselayer` attribute can now also be used.
 - fileImport: the styles of geoJsons are now retained on reimport of a previously in MP created file
 - drawTool: previously set styles are now reflected in the drawTool and can be changed there.
+- highlightVectorRules: increaseFeature: image scaling works now. 
 
 ### Deprecated
 - The GeoJson-Layer subTyp: `OpenSenseMap` is deprecated. It will be removed in the next Major-Release!
