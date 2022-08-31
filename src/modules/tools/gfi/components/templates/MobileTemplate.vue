@@ -83,42 +83,35 @@ export default {
 
 <template>
     <div
-        class="modal-mask"
+        class="modal"
         tabindex="0"
         @click="closeByClickOutside"
         @keydown.enter="closeByClickOutside"
     >
-        <div
-            id="exampleModal"
-            class="modal fade"
-            tabindex="-1"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span
-                            type="button"
-                            class="close bootstrap-icon"
-                            aria-label="Close"
-                            @click="close"
-                            @keydown.enter="close"
-                        >
-                            <i class="bi-x-lg" />
-                        </span>
-                        <h5 class="modal-title">
-                            {{ $t(title) }}
-                        </h5>
-                    </div>
-                    <div class="modal-body">
-                        <component
-                            :is="theme"
-                            :feature="feature"
-                        />
-                    </div>
-                    <div class="modal-footer">
-                        <slot name="footer" />
-                    </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span
+                        type="button"
+                        class="close bootstrap-icon"
+                        aria-label="Close"
+                        @click="close"
+                        @keydown.enter="close"
+                    >
+                        <i class="bi-x-lg" />
+                    </span>
+                    <h5 class="modal-title">
+                        {{ $t(title) }}
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <component
+                        :is="theme"
+                        :feature="feature"
+                    />
+                </div>
+                <div class="modal-footer">
+                    <slot name="footer" />
                 </div>
             </div>
         </div>
@@ -129,7 +122,7 @@ export default {
 <style lang="scss" scoped>
 @import "~variables";
 
-.modal {
+.modal-mask {
     position: fixed;
     z-index: 9999;
     top: 0;
