@@ -83,35 +83,42 @@ export default {
 
 <template>
     <div
-        class="modal"
+        class="modal-mask"
         tabindex="0"
         @click="closeByClickOutside"
         @keydown.enter="closeByClickOutside"
     >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span
-                        type="button"
-                        class="close bootstrap-icon"
-                        aria-label="Close"
-                        @click="close"
-                        @keydown.enter="close"
-                    >
-                        <i class="bi-x-lg" />
-                    </span>
-                    <h5 class="modal-title">
-                        {{ $t(title) }}
-                    </h5>
-                </div>
-                <div class="modal-body">
-                    <component
-                        :is="theme"
-                        :feature="feature"
-                    />
-                </div>
-                <div class="modal-footer">
-                    <slot name="footer" />
+        <div
+            id="exampleModal"
+            class="modal fade"
+            tabindex="-1"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span
+                            type="button"
+                            class="close bootstrap-icon"
+                            aria-label="Close"
+                            @click="close"
+                            @keydown.enter="close"
+                        >
+                            <i class="bi-x-lg" />
+                        </span>
+                        <h5 class="modal-title">
+                            {{ $t(title) }}
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <component
+                            :is="theme"
+                            :feature="feature"
+                        />
+                    </div>
+                    <div class="modal-footer">
+                        <slot name="footer" />
+                    </div>
                 </div>
             </div>
         </div>
