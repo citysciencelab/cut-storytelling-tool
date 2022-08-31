@@ -12,7 +12,7 @@
 
 ### Added
 - KeepOpen attribute for tools:
-    - Allows to keep a tool open (that is rendered in a sidebar) when other tools (that are rendered to the window) are used.  
+    - Allows to keep a tool open (that is rendered in a sidebar) when other tools (that are rendered to the window) are used.
 - The following NPM packages are added:
     - dependencies:
         - "vue2-datepicker"
@@ -20,6 +20,7 @@
 - Possibility for development with self-signed SSL-certificates. See [wiki-doc](https://bitbucket.org/geowerkstatt-hamburg/masterportal/wiki/Entwicklungsumgebung%20mit%20selbstsignierten%20SSL-Zertifikat%20einrichten)
 - Filter:
     - Added an option to activate a csv download button for filtered data.
+    - wmsRefId is also for type array implemented so that multiple wms Layers can be activated or deactivated.
 - Draw-Tool:
     - A new checkbox has been added to the Draw tool that can be used to hide and retrieve the drawing.
     - New Flag `addIconsOfActiveLayers`. Set to `true` to be able to select the icons and symbols of all WFS layers activated in the topic tree as additional symbols besides the icons configured under `drawSymbolSettings`.

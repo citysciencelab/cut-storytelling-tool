@@ -390,22 +390,29 @@ export default class MapHandler {
     }
 
     /**
-     * Activate or deactivate the wms layer
-     * @param {String} wmsRefId the wms layer id
-     * @param {Boolean} active true as active or false as deactive
+     * Activate or deactivate the wms layer(s)
+     * @param {String|String[]} wmsRefId the wms layer id or ids in an array
+     * @param {Boolean} active true as active or false as inactive
      * @param {Boolean} isNeverVisibleInTree true as invisible false as visible in tree
      * @returns {void}
      */
     toggleWMSLayer (wmsRefId, active, isNeverVisibleInTree = false) {
-        let wmsLayerModel = this.handlers.getLayerByLayerId(wmsRefId);
+        if (typeof wmsRefId === "string") {
+            let wmsLayerModel = this.handlers.getLayerByLayerId(wmsRefId);
 
-        if (!isObject(wmsLayerModel) || typeof wmsLayerModel.get !== "function") {
-            Radio.trigger("ModelList", "addModelsByAttributes", {id: wmsRefId});
-            wmsLayerModel = this.handlers.getLayerByLayerId(wmsRefId);
+            if (!isObject(wmsLayerModel) || typeof wmsLayerModel.get !== "function") {
+                Radio.trigger("ModelList", "addModelsByAttributes", {id: wmsRefId});
+                wmsLayerModel = this.handlers.getLayerByLayerId(wmsRefId);
+            }
+
+            if (typeof wmsLayerModel !== "undefined") {
+                wmsLayerModel.set("isNeverVisibleInTree", isNeverVisibleInTree);
+                wmsLayerModel.setIsSelected(active);
+            }
         }
-
-        wmsLayerModel.set("isNeverVisibleInTree", isNeverVisibleInTree);
-        wmsLayerModel.setIsSelected(active);
+        else if (Array.isArray(wmsRefId) && wmsRefId.length) {
+            wmsRefId.forEach(id => this.toggleWMSLayer(id, active, isNeverVisibleInTree));
+        }
     }
 
     /**

@@ -608,9 +608,10 @@ export default class InterfaceWfsExtern {
             }
             return;
         }
-        const result = {};
+        const result = {},
+            elementCollections = responseXML.firstElementChild.children.length !== 1 ? responseXML.firstElementChild.children : responseXML.firstElementChild.firstElementChild.children;
 
-        Array.prototype.slice.call(responseXML.firstElementChild.children).forEach(element => {
+        Array.prototype.slice.call(elementCollections).forEach(element => {
             let node = this.getNodeByTagname(element, typename);
 
             if (!node) {
