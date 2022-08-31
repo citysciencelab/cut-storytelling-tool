@@ -2,7 +2,6 @@
 import DefaultTheme from "../themes/default/components/DefaultTheme.vue";
 import SensorTheme from "../themes/sensor/components/SensorTheme.vue";
 import getTheme from "../../utils/getTheme";
-import {Modal} from "bootstrap";
 
 export default {
     name: "MobileTemplate",
@@ -47,7 +46,22 @@ export default {
         });
     },
     methods: {
+        close () {
+            const modal = document.querySelector(".modal");
 
+            modal.classList.remove("show");
+            this.$emit("close");
+        },
+        closeByClickOutside: function (event) {
+            // stop event bubbling
+            if (!this.reactOnOutsideClick || event.target !== this.$el) {
+                return;
+            }
+            const modal = document.querySelector(".modal");
+
+            modal.classList.remove("show");
+            this.close();
+        },
         /**
          * it will show this mobile component if it is switched from attached theme.
          * the method is to fore to insert this component into parent gfi element.
@@ -58,9 +72,9 @@ export default {
                 document.getElementsByClassName("gfi")[0].appendChild(this.$el);
             }
             else {
-                const myModal = new Modal(document.getElementById("gfiModal"));
+                const modal = document.querySelector(".modal");
 
-                myModal.show();
+                modal.classList.add("show");
             }
         }
     }
@@ -69,9 +83,10 @@ export default {
 
 <template>
     <div
-        id="gfiModal"
         class="modal"
         tabindex="0"
+        @click="closeByClickOutside"
+        @keydown.enter="closeByClickOutside"
     >
         <div class="modal-dialog">
             <div class="modal-content">
@@ -80,7 +95,8 @@ export default {
                         type="button"
                         class="close bootstrap-icon"
                         aria-label="Close"
-                        data-bs-dismiss="modal"
+                        @click="close"
+                        @keydown.enter="close"
                     >
                         <i class="bi-x-lg" />
                     </span>
@@ -115,6 +131,7 @@ export default {
     height: 100%;
     background-color: $shadow_overlay;
 }
+.show {display: block;}
 
 .modal-header {
     padding: 0 15px;
