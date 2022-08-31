@@ -1,6 +1,5 @@
 <script>
 import {mapGetters, mapMutations} from "vuex";
-import getters from "../store/gettersShadowTool";
 import mutations from "../store/mutationsShadowTool";
 import getComponent from "../../../../utils/getComponent";
 import ToolTemplate from "../../ToolTemplate.vue";
@@ -38,7 +37,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Tools/Shadow", Object.keys(getters)),
+        ...mapGetters("Tools/Shadow", ["id", "isShadowEnabled", "active", "renderToWindow", "resizableWindow", "deactivateGFI", "icon", "name", "shadowTime"]),
         ...mapGetters("Language", ["layerIds", "currentLocale"])
     },
     watch: {

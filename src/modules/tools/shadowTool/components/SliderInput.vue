@@ -67,12 +67,14 @@ export default {
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "~variables";
 .d-flex {
     display: flex;
 }
 .flex-column {
     flex-direction: column;
+    accent-color: $primary;
 }
 .justify-content-between {
     justify-content: space-between;
