@@ -152,10 +152,9 @@ export default {
             }
 
             if (adjusting?.finish) {
-                this.currentSliderMin = typeof this.adjustMinMax[0] !== "undefined" ? this.getSliderIdxCloseToFromDate(this.adjustMinMax[0].format(this.internalFormat)) : 0;
-                this.currentSliderMax = typeof this.adjustMinMax[1] !== "undefined" ? this.getSliderIdxCloseToUntilDate(this.adjustMinMax[1].format(this.internalFormat)) : this.initialDateRef.length - 1;
-
                 if (!this.isSelfSnippetId(adjusting?.snippetId)) {
+                    this.currentSliderMin = typeof this.adjustMinMax[0] !== "undefined" ? this.getSliderIdxCloseToFromDate(this.adjustMinMax[0].format(this.internalFormat)) : 0;
+                    this.currentSliderMax = typeof this.adjustMinMax[1] !== "undefined" ? this.getSliderIdxCloseToUntilDate(this.adjustMinMax[1].format(this.internalFormat)) : this.initialDateRef.length - 1;
                     if (!this.hasRuleSet || this.currentSliderMin > this.sliderFrom) {
                         this.sliderFrom = this.currentSliderMin;
                     }
@@ -200,6 +199,7 @@ export default {
         this.internalFormat = "YYYY-MM-DD";
         this.initialDateRef = [];
         this.intvEmitCurrentRule = -1;
+        this.sliderMouseDown = false;
         this.operatorWhitelist = [
             "BETWEEN",
             "INTERSECTS"
@@ -292,7 +292,7 @@ export default {
             return "";
         },
         /**
-         * Returns the risk free attrName to use for from.
+         * Returns the riskless attrName to use for from.
          * @returns {String} The attrName to use for from.
          */
         getAttrNameFrom () {
@@ -302,7 +302,7 @@ export default {
             return this.attrName;
         },
         /**
-         * Returns the risk free attrName to use for until.
+         * Returns the riskless attrName to use for until.
          * @returns {String} The attrName to use for until.
          */
         getAttrNameUntil () {
@@ -348,7 +348,7 @@ export default {
             return 0;
         },
         /**
-         * Recieves unique value of api.
+         * Receives unique value of api.
          * @param {String} attrName The attrName to receive data for.
          * @param {Function} onsuccess A function(value) with value the received list.
          * @param {Function} onerror A function(error) to receive errors with.
@@ -514,7 +514,9 @@ export default {
             clearInterval(this.intvEmitCurrentRule);
             this.intvEmitCurrentRule = setInterval(() => {
                 clearInterval(this.intvEmitCurrentRule);
-                this.changeRule(value, startup);
+                if (!this.sliderMouseDown) {
+                    this.changeRule(value, startup);
+                }
             }, 800);
         },
         /**
@@ -561,6 +563,26 @@ export default {
                 }
                 this.isAdjusting = false;
             });
+        },
+        /**
+         * Sets flag if mouse is down on slider.
+         * @returns {void}
+         */
+        setSliderMouseDown () {
+            this.sliderMouseDown = true;
+        },
+        /**
+         * Sets flag if mouse is up after down on slider.
+         * @returns {void}
+         */
+        setSliderMouseUp () {
+            this.sliderMouseDown = false;
+            if (!this.isInitializing && !this.isAdjusting) {
+                this.emitCurrentRule([
+                    moment(this.initialDateRef[this.sliderFrom], this.internalFormat).format(this.getFormat("from")),
+                    moment(this.initialDateRef[this.sliderUntil], this.internalFormat).format(this.getFormat("until"))
+                ]);
+            }
         }
     }
 };
@@ -572,11 +594,11 @@ export default {
         class="snippetDateRangeContainer"
     >
         <div
-            v-if="title !== false || info"
+            v-if="title || info"
             class="titleWrapper"
         >
             <div
-                v-if="title !== false"
+                v-if="title"
                 class="title"
             >
                 {{ translateKeyWithPlausibilityCheck(getTitle(), key => $t(key)) }}
@@ -648,6 +670,8 @@ export default {
                 :disabled="disabled"
                 :min="currentSliderMin"
                 :max="currentSliderMax"
+                @mousedown="setSliderMouseDown"
+                @mouseup="setSliderMouseUp"
             >
             <input
                 v-model="sliderUntil"
@@ -657,6 +681,8 @@ export default {
                 :disabled="disabled"
                 :min="currentSliderMin"
                 :max="currentSliderMax"
+                @mousedown="setSliderMouseDown"
+                @mouseup="setSliderMouseUp"
             >
         </div>
     </div>
