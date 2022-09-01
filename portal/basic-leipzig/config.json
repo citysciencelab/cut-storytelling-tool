@@ -28,31 +28,23 @@
 				"name": "Themen"
 			},
       "tools": {
-        "name": "Werkzeuge",
+        "name": "translate#common:menu.tools.name",
+        "glyphicon": "glyphicon-wrench",
         "children": {
-          "gfi": {
-            "name": "Informationen abfragen",
-            "active": true
-          },
-          "coordToolkit": {
-            "name": "Koordinaten"
-          },
-          "measure": {
-            "name": "Strecke / Fläche messen"
-          },
-          "draw": {
-            "name": "Zeichnen / Schreiben"
-          },
-          "fileImport": {
-            "name": "Datei Import"
-          },
-          "saveSelection": {
-            "name": "Auswahl speichern"
-          },
           "storyTellingTool": {
             "name": "translate#additional:modules.tools.storyTellingTool.title",
             "glyphicon": "glyphicon-book",
             "active": true
+          },
+          "gfi": {
+            "name": "translate#common:menu.tools.getInfos",
+            "glyphicon": "glyphicon-info-sign",
+            "desktopType": "attached",
+            "active": true
+          },
+          "measure": {
+            "name": "translate#common:menu.tools.measure",
+            "icon": "bi-rulers"
           }
         }
       },

@@ -2,7 +2,7 @@ const Config = {
     addons: ["storyTellingTool"],
     vuetify: "addons/storyTellingTool/vuetify",
     storyConf: "./assets/story.json",
-
+    uiStyle: "table",
     namedProjections: [
         ['EPSG:25833',
             '+proj=utm +zone=33 +ellps=GRS80 +units=m +no_defs']
