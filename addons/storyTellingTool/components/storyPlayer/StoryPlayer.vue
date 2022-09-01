@@ -123,8 +123,10 @@ export default {
                 tool = configuredTools.find(({key}) => key === toolId);
 
             if (tool) {
+                const toolKey = tool.key.charAt(0).toUpperCase() + tool.key.slice(1);
+
                 this.$store.commit(
-                    `Tools/${tool.component.name}/setActive`,
+                    `Tools/${toolKey}/setActive`,
                     true
                 );
             }
@@ -159,11 +161,24 @@ export default {
             this.toggleLayer(layer, false);
         },
 
+        async activate3DMap () {
+            let isActive;
+
+            try {
+                isActive = await store.dispatch("Maps/activateMap3D");
+                console.log("2");
+            }
+            catch (ex) {
+                // Handle error
+                return false;
+            }
+            return isActive;
+        },
         /**
          * Sets up the tool window and content for the selected step.
          * @returns {void}
          */
-        loadStep () {
+        async loadStep () {
             if (!this.currentStep) {
                 return;
             }
@@ -175,10 +190,10 @@ export default {
 
             // Toggles 3D map mode
             if (this.currentStep.is3D && !Radio.request("Map", "isMap3d")) {
-                store.dispatch("Maps/activateMap3D");
+                await store.dispatch("Maps/activateMap3D");
             }
-            else if (!this.currentStep.is3D && Radio.request("Map", "getMapMode") === "3D") {
-                Radio.trigger("Map", "deactivateMap3d");
+            else if (!this.currentStep.is3D && Radio.request("Map", "isMap3d")) {
+                store.dispatch("Maps/deactivateMap3D");
             }
 
             // Updates the map center
@@ -198,7 +213,7 @@ export default {
                 }
             }
             // Updates the map center for 3D
-            if (this.currentStep.navigation3D) {
+            if (this.currentStep.navigation3D && Object.prototype.hasOwnProperty.call(this.currentStep.navigation3D, "cameraPosition")) {
                 const position = this.currentStep.navigation3D.cameraPosition,
                     map3d = Radio.request("Map", "getMap3d"),
                     camera = map3d.getCesiumScene().camera,
