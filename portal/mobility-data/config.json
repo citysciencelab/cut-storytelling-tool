@@ -44,6 +44,10 @@
             "glyphicon": "glyphicon-info-sign",
             "desktopType": "attached",
             "active": true
+          },
+          "measure": {
+            "name": "translate#common:menu.tools.measure",
+            "icon": "bi-rulers"
           }
         }
       },
