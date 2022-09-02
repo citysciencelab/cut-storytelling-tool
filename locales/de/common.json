@@ -833,6 +833,7 @@
             },
             "wfsTransaction": {
                 "layerSelectLabel" : "Aktueller Layer:",
+                "polygonHint": "Halten Sie die Strg-Taste und bewegen Sie die Maus mit gedrückter Maustaste, um ein Polygon zu bewegen.",
                 "interactionSelect": {
                     "update": "Geometrie bearbeiten",
                     "delete": "Geometrie löschen",

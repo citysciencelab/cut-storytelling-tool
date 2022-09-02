@@ -51,6 +51,9 @@
                 <template v-else>
                     <div>
                         <hr>
+                        <p v-if="currentInteractionConfig.Polygon.available">
+                            {{ $t("common:modules.tools.wfsTransaction.polygonHint") }}
+                        </p>
                         <form id="tool-wfsTransaction-form">
                             <template v-for="property of featureProperties">
                                 <template v-if="property.type !== 'geometry'">
