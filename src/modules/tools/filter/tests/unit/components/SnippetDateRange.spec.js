@@ -32,6 +32,7 @@ describe("src/module/tools/filter/components/SnippetDateRange.vue", () => {
             expect(wrapper.vm.internalFormat).to.equal("YYYY-MM-DD");
             expect(wrapper.vm.initialDateRef).to.be.an("array").that.is.empty;
             expect(wrapper.vm.intvEmitCurrentRule).to.equal(-1);
+            expect(wrapper.vm.sliderMouseDown).to.be.false;
             expect(wrapper.vm.operatorWhitelist).to.deep.equal([
                 "BETWEEN",
                 "INTERSECTS"
