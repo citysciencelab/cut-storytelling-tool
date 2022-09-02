@@ -13,6 +13,7 @@ let drawInteraction,
     drawLayer,
     modifyInteraction,
     modifyFeature,
+    modifyFeatureSaveId,
     selectInteraction,
     translateInteraction;
 
@@ -99,6 +100,8 @@ const actions = {
             selectInteraction.getFeatures().on("add", (event) => {
                 commit("setSelectedInteraction", "selectedUpdate");
                 modifyFeature = event.target.getArray()[0].clone();
+                // ol sensibly cleans id off clones; keep id for saving
+                modifyFeatureSaveId = event.target.getArray()[0].getId();
                 modifyInteraction = new Modify({
                     features: event.target,
                     condition: e => primaryAction(e) && !platformModifierKeyOnly(e)
@@ -158,6 +161,7 @@ const actions = {
                 ?.setGeometry(modifyFeature.getGeometry());
             sourceLayer?.getSource().refresh();
             modifyFeature = undefined;
+            modifyFeatureSaveId = undefined;
         }
     },
     /**
@@ -183,7 +187,7 @@ const actions = {
         dispatch(
             "sendTransaction",
             await addFeaturePropertiesToFeature(
-                {id: feature.getId(), geometryName: feature.getGeometryName(), geometry: feature.getGeometry()},
+                {id: feature.getId() || modifyFeatureSaveId, geometryName: feature.getGeometryName(), geometry: feature.getGeometry()},
                 featureProperties,
                 layerInformation[currentLayerIndex].featurePrefix,
                 selectedInteraction === "selectedUpdate"
