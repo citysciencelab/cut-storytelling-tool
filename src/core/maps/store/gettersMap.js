@@ -149,13 +149,14 @@ const getters = {
 
     /**
      * calculate the extent for the current view state and the passed size
+     * @param {Object} state the state
      * @return {ol.extent} extent
      */
-    getCurrentExtent: () => {
+    getCurrentExtent: (state) => {
         let size;
 
-        if (Array.isArray(getters.size)) {
-            size = getters.size;
+        if (Array.isArray(state.size)) {
+            size = state.size;
         }
         else {
             size = mapCollection.getMap("2D").getSize();

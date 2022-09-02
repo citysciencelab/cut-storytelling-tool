@@ -105,7 +105,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "removeModelsByParentId": this.removeModelsByParentId,
             "removeModelsById": this.removeModelsById,
             "replaceModelById": this.replaceModelById,
-            // Initial sichtbare Layer etc.
+            // shown layer
             "addInitiallyNeededModels": this.addInitiallyNeededModels,
             "addModelsByAttributes": this.addModelsByAttributes,
             "addModel": this.addModel,
@@ -128,7 +128,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "updateSelection": function (model) {
                 this.trigger("updateSelection", model);
             },
-            "selectedChanged": this.selectedChanged
+            "selectedChanged": this.selectedChanged,
+            "transparencyChanged": function () {
+                channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+                store.dispatch("Tools/SaveSelection/createUrlParams", filterAndReduceLayerList(this.where({isSelected: true, type: "layer"})));
+            }
         }, this);
 
         this.listenTo(this, {
@@ -148,10 +152,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
             "change:isSelected": this.selectedChanged,
-            "change:transparency": function () {
-                channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
-                store.dispatch("Tools/SaveSelection/createUrlParams", filterAndReduceLayerList(this.where({isSelected: true, type: "layer"})));
-            },
             "change:selectionIDX": function () {
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             }

@@ -469,7 +469,7 @@
                     "unit": "{{amountOfFilteredItems}} Treffer"
                 },
                 "geometryFilter": {
-                    "activate": "Gebiets-Filter aktivieren",
+                    "activate": "Gebiet für Filterung setzen",
                     "help": "Wählen Sie auf der Karte ein Gebiet aus um nur innerhalb dieses Gebietes zu filtern.",
                     "selectGeometry": "Wählen Sie eine Geometrie aus.",
                     "buffer": "Puffer [m]",

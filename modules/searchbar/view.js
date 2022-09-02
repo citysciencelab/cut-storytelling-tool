@@ -999,7 +999,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @param {$.Event} evt Event
      * @returns {void}
      */
-    showMarker: function (evt) {
+    showMarker: async function (evt) {
         const isEvent = evt instanceof $.Event,
             hitId = isEvent ? evt.currentTarget.id : null,
             hit = isEvent ? this.model.get("finalHitList").find(obj => obj.id === hitId) : null,
@@ -1012,7 +1012,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         else if (hit && hit?.coordinate) {
             store.dispatch("MapMarker/removePolygonMarker");
-            store.dispatch("MapMarker/removePointMarker");
+            await store.dispatch("MapMarker/removePointMarker");
 
             if (hit.coordinate.length === 2 && !Array.isArray(hit.coordinate[0])) {
                 hit.coordinate = this.sanitizePoint(hit.coordinate);

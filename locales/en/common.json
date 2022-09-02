@@ -469,7 +469,7 @@
                     "unit": "{{amountOfFilteredItems}} Results"
                 },
                 "geometryFilter": {
-                    "activate": "Activate area filter",
+                    "activate": "Set area for filtering",
                     "help": "Select an area on the map to filter only within that area.",
                     "selectGeometry": "Choose an area.",
                     "buffer": "Buffer [m]",

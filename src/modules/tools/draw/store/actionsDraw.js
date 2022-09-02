@@ -513,31 +513,25 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
 
             // styleSettings for imported KML-Lines has wrong entries
             if (feature.getGeometry().getType() === "LineString" && styleSettings.colorContour === undefined) {
-                const styles = feature.getStyle()(feature);
+                try {
+                    const styles = feature.getStyle()(feature);
 
-                if (styles && styles.length > 0) {
-                    const style = styles[styles.length - 1],
-                        color = style.getStroke().getColor();
+                    if (styles && styles.length > 0) {
+                        const style = styles[styles.length - 1],
+                            color = style.getStroke().getColor();
 
-                    styleSettings.colorContour = color;
-                    styleSettings.opacityContour = color.length === 4 ? color[3] : 1;
-                    styleSettings.strokeWidth = style.getStroke().getWidth();
+                        styleSettings.colorContour = color;
+                        styleSettings.opacityContour = color.length === 4 ? color[3] : 1;
+                        styleSettings.strokeWidth = style.getStroke().getWidth();
+                    }
+                }
+                catch (exc) {
+                    console.warn(exc.message);
                 }
             }
 
             Object.assign(styleSettings,
-                drawState.color,
-                drawState.colorContour,
-                drawState.outerColorContour,
-                drawState.strokeWidth,
-                drawState.opacity,
-                drawState.opacityContour,
-                drawState.font,
-                drawState.fontSize,
-                drawState.text,
-                drawState.circleMethod,
-                drawState.circleRadius,
-                drawState.circleOuterRadius);
+                drawState);
 
             commit("setSymbol", feature.get("drawState").symbol);
 

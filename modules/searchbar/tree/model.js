@@ -94,12 +94,30 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
         }
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
             this.set("inUse", true);
-            searchStringRegExp = new RegExp(searchString.replace(/ /g, ""), "i"); // Erst join dann als regulärer Ausdruck
+            try {
+                searchStringRegExp = this.createRegExp(searchString);
+            }
+            catch (e) {
+                console.warn(e);
+                this.set("inUse", false);
+            }
             this.searchInLayers(searchStringRegExp);
             this.searchInNodes(searchStringRegExp);
             Radio.trigger("Searchbar", "createRecommendedList", "tree");
             this.set("inUse", false);
         }
+    },
+
+    /**
+     * Creates manually a regular Expression to handle special Characters like '('
+     * @param {String} searchString - search string
+     * @return {String} regExp String
+     */
+    createRegExp: function (searchString) {
+        const string = searchString.replace(/ /g, ""),
+            regExp = "/" + string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&") + "/i";
+
+        return regExp;
     },
 
     /**

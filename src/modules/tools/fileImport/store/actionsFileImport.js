@@ -358,8 +358,8 @@ export default {
             let style;
 
             if (!drawState) {
-                const defaultColor = [255, 0, 0, 0.9],
-                    defaultFillColor = [200, 0, 0, 0.5],
+                const defaultColor = [226, 26, 28, 0.9],
+                    defaultFillColor = [228, 26, 28, 0.5],
                     defaultPointSize = 16,
                     defaultStrokeWidth = 1,
                     defaultCircleRadius = 300,
@@ -412,7 +412,6 @@ export default {
                 if (drawState.symbol.value !== "simple_point") {
                     style = new Style({
                         image: new Icon({
-                            color: drawState.color,
                             crossOrigin: "anonymous",
                             src: drawState.symbol.value.indexOf("/") > 0 ? drawState.symbol.value : drawState.imgPath + drawState.symbol.value,
                             scale: drawState.symbol.scale

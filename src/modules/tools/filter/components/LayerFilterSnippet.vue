@@ -75,6 +75,11 @@ export default {
             type: [Object, Boolean],
             required: false,
             default: false
+        },
+        isLayerFilterSelected: {
+            type: [Function, Boolean],
+            required: false,
+            default: false
         }
     },
     data () {
@@ -115,9 +120,16 @@ export default {
             if (val.page >= val.total) {
                 this.setFormDisable(false);
                 if (!this.isRefreshing && !this.getSearchInMapExtent() && this.liveZoomToFeatures) {
-                    this.mapHandler.zoomToFilteredFeature(this.layerConfig?.filterId, this.minScale, error => {
-                        console.warn("map error", error);
-                    });
+                    if (this.filterGeometry) {
+                        this.mapHandler.zoomToGeometry(this.filterGeometry, this.minScale, error => {
+                            console.warn(error);
+                        });
+                    }
+                    else {
+                        this.mapHandler.zoomToFilteredFeature(this.layerConfig?.filterId, this.minScale, error => {
+                            console.warn(error);
+                        });
+                    }
                 }
                 this.isRefreshing = false;
             }
@@ -150,6 +162,11 @@ export default {
                 filterId: this.layerConfig?.filterId,
                 hits: amount
             });
+        },
+        filterGeometry () {
+            if (typeof this.isLayerFilterSelected === "function" && this.isLayerFilterSelected(this.layerConfig.filterId) || this.isLayerFilterSelected === true) {
+                this.handleActiveStrategy();
+            }
         }
     },
     created () {
@@ -175,7 +192,6 @@ export default {
         }, error => {
             console.warn(error);
         });
-
         this.setSnippetValueByState(this.filterRules);
         if (typeof this.filterHits === "number" && !this.isStrategyActive()) {
             this.amountOfFilteredItems = this.filterHits;
@@ -197,11 +213,14 @@ export default {
 
             rules.forEach(rule => {
                 if (this.isRule(rule)) {
-                    if (this.snippets[rule.snippetId]?.type === "dropdown"
+                    if (!Array.isArray(rule?.value)
+                        && (this.snippets[rule.snippetId]?.type === "dropdown"
                         || this.snippets[rule.snippetId]?.type === "sliderRange"
                         || this.snippets[rule.snippetId]?.type === "dateRange"
-                        && !Array.isArray(rule?.value)) {
+                        )
+                    ) {
                         this.snippets[rule.snippetId].prechecked = [rule?.value];
+                        return;
                     }
                     this.snippets[rule.snippetId].prechecked = rule?.value;
                 }
@@ -329,7 +348,7 @@ export default {
         /**
          * Handles the active strategy.
          * @param {Number|Number[]} snippetId the snippet Id(s)
-         * @param {Boolean|undefined} reset true if filtering should reset the layer (fuzzy logic)
+         * @param {Boolean|undefined} [reset=undefined] true if filtering should reset the layer (fuzzy logic)
          * @returns {void}
          */
         handleActiveStrategy (snippetId, reset = undefined) {
@@ -556,8 +575,8 @@ export default {
             if (this.api instanceof FilterApi && this.mapHandler instanceof MapHandler) {
                 this.mapHandler.activateLayer(filterId, () => {
                     if (Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")) {
-                        this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, !this.hasUnfixedRules(filterQuestion.rules));
-                        this.mapHandler.toggleWFSLayerInTree(filterId, this.hasUnfixedRules(filterQuestion.rules));
+                        this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, !this.hasUnfixedRules(filterQuestion.rules) && !filterQuestion.commands.searchInMapExtent && !filterQuestion.commands.filterGeometry);
+                        this.mapHandler.toggleWFSLayerInTree(filterId, this.hasUnfixedRules(filterQuestion.rules) || filterQuestion.commands.searchInMapExtent || filterQuestion.commands.filterGeometry);
                     }
                     this.api.filter(filterQuestion, filterAnswer => {
                         if (typeof onsuccess === "function" && !alterLayer) {
@@ -575,7 +594,14 @@ export default {
                         }
 
                         if (!this.isParentSnippet(snippetId) && !this.hasOnlyParentRules()) {
-                            if (!this.hasUnfixedRules(filterQuestion.rules) && (this.layerConfig.clearAll || Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId"))) {
+                            if (
+                                !this.hasUnfixedRules(filterQuestion.rules)
+                                && (
+                                    this.layerConfig.clearAll || Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")
+                                )
+                                && !filterQuestion.commands.searchInMapExtent
+                                && !filterQuestion.commands.filterGeometry
+                            ) {
                                 if (this.layerConfig.clearAll && Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")) {
                                     this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, false, false);
                                 }
@@ -909,13 +935,14 @@ export default {
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :disabled="disabled"
+                    :display="snippet.display"
                     :info="snippet.info"
                     :format="snippet.format"
                     :filter-id="layerConfig.filterId"
                     :is-parent="isParentSnippet(snippet.snippetId)"
                     :title="getTitle(snippet, layerConfig.layerId)"
-                    :max-value="snippet.maxValue"
-                    :min-value="snippet.minValue"
+                    :sub-titles="snippet.subTitles"
+                    :value="snippet.value"
                     :operator="snippet.operator"
                     :prechecked="snippet.prechecked"
                     :fixed-rules="fixedRules"
@@ -1028,7 +1055,7 @@ export default {
     @import "~/css/mixins.scss";
     @import "~variables";
     .win-body-vue {
-        padding: 0px;
+        padding: 0;
     }
     .panel-body {
         padding: 0 5px;
@@ -1073,7 +1100,7 @@ export default {
     .snippetTagText {
         font-size: 12px;
         float: left;
-        padding: 6px 4px 0px 0px;
+        padding: 6px 4px 0 0;
     }
     .form-group {
         clear: both;

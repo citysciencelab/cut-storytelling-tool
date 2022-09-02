@@ -71,18 +71,24 @@ export default {
             this.draw.setActive(val);
             this.$emit("setGfiActive", !val);
         },
-        buffer (val, oldVal) {
+        buffer (val) {
             if (!this.feature) {
                 return;
             }
             const newValue = isNaN(parseInt(val, 10)) ? this.defaultBuffer : val,
-                oldValue = isNaN(parseInt(oldVal, 10)) ? this.defaultBuffer : oldVal,
-                jstsGeom = this.ol3Parser.read(this.feature.getGeometry()),
-                buffered = jstsGeom.buffer(!this.invertGeometry ? newValue - oldValue : oldValue - newValue);
+                jstsGeom = this.ol3Parser.read(this.initFeatureGeometry),
+                buffered = jstsGeom.buffer(newValue);
 
-            // convert back from JSTS and replace the geometry on the feature
-            this.feature.setGeometry(this.ol3Parser.write(buffered));
-            this.emitGeometryOfLineBuffer(this.feature.getGeometry().getCoordinates());
+            if (newValue <= 0) {
+                return;
+            }
+            this.setGeometryAtFeature(this.feature, this.ol3Parser.write(buffered), this.invertGeometry);
+
+            clearInterval(this.intvBuffer);
+            this.intvBuffer = setInterval(() => {
+                clearInterval(this.intvBuffer);
+                this.emitGeometryOfLineBuffer(this.feature.getGeometry().getCoordinates());
+            }, 800);
         }
     },
     created () {
@@ -95,6 +101,7 @@ export default {
         );
 
         this.buffer = this.defaultBuffer;
+        this.initFeatureGeometry = null;
 
         this.setLayer();
         this.setDrawInteraction();
@@ -166,11 +173,11 @@ export default {
                 geometryFunction: this.getGeometryFunction(selectedGeometry.type, this.circleSides)
             });
             this.draw.setActive(this.isActive);
-
             this.draw.on("drawend", (evt) => {
                 const geometry = this.getGeometryOnDrawEnd(evt.feature, selectedGeometry.type, this.buffer);
 
                 this.feature = evt.feature;
+                this.initFeatureGeometry = evt.feature.getGeometry();
                 this.isGeometryVisible = true;
                 this.isBufferInputVisible = selectedGeometry.type === "LineString";
                 this.setGeometryAtFeature(this.feature, geometry, this.invertGeometry);
@@ -361,6 +368,7 @@ export default {
                     v-model="buffer"
                     class="form-control"
                     type="number"
+                    min="1"
                 >
             </div>
             <div v-if="isGeometryVisible">
