@@ -82,11 +82,13 @@ export default {
     /**
      * Rotates the point marker.
      * @param {Object} param.commit the commit
+     * @param {Object} param.dispatch the dispatch
      * @param {Object} param.getters the getters
+     * @param {Object} param.rootGetters the rootGetters
      * @param {Number} angle angle to rotate
      * @returns {void}
      */
-    rotatePointMarker ({commit, getters}, angle) {
+    rotatePointMarker ({commit, dispatch, getters, rootGetters}, angle) {
         const features = getters.markerPoint?.getSource().getFeatures();
 
         if (features && features.length > 0) {
@@ -97,7 +99,65 @@ export default {
             feature.getStyle().setImage(icon);
             commit("clearMarker", "markerPoint");
             commit("addFeatureToMarker", {feature: feature, marker: "markerPoint"});
+
+            if (rootGetters["Maps/mode"] === "3D") {
+                setTimeout(() => {
+                    dispatch("rotatePointMarkerIn3D", angle);
+                }, 0.1);
+            }
         }
+    },
+
+    /**
+     * Rotates the point marker in 3D.
+     * @param {Object} param.commit the commit
+     * @param {Object} param.rootGetters the rootGetters
+     * @param {Number} angle angle to rotate
+     * @returns {void}
+     */
+    rotatePointMarkerIn3D ({rootGetters}, angle) {
+        const clickCartesianCoordinate = rootGetters["Maps/clickCartesianCoordinate"];
+        let pixelOffset;
+
+        mapCollection.getMap("3D").getCesiumScene().drillPick({x: clickCartesianCoordinate[0], y: clickCartesianCoordinate[1]}).forEach((primitiveObject) => {
+            if (primitiveObject?.primitive?.olLayer?.get("id") === "marker_point_layer") {
+                switch (angle) {
+                    case 0: {
+                        pixelOffset = {
+                            x: 0,
+                            y: -primitiveObject.primitive.height * primitiveObject.primitive.scale / 2
+                        };
+                        break;
+                    }
+                    case 90: {
+                        pixelOffset = {
+                            x: primitiveObject.primitive.width * primitiveObject.primitive.scale / 2,
+                            y: 0
+                        };
+                        break;
+                    }
+                    case 180: {
+                        pixelOffset = {
+                            x: 0,
+                            y: primitiveObject.primitive.height * primitiveObject.primitive.scale / 2
+                        };
+                        break;
+                    }
+                    case 270: {
+                        pixelOffset = {
+                            x: -primitiveObject.primitive.width * primitiveObject.primitive.scale / 2,
+                            y: 0
+                        };
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+                primitiveObject.primitive.pixelOffset = pixelOffset;
+                primitiveObject.primitive.rotation = -angle * Math.PI / 180;
+            }
+        });
     },
 
     /**
