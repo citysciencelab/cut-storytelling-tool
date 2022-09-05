@@ -737,7 +737,7 @@ export default {
         transform: translate(0px, -75px)
     }
     #copyCoordsPairBtn{
-        height: 85px;
+        height: 91px;
         position: absolute;
     }
     .copyBtn{
