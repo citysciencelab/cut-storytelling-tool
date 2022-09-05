@@ -1,6 +1,7 @@
 /* eslint-disable no-process-env */
 const webpack = require("webpack"),
     MiniCssExtractPlugin = require("mini-css-extract-plugin"),
+    CssMinimizerPlugin = require("css-minimizer-webpack-plugin"),
     path = require("path"),
     fse = require("fs-extra"),
     VueLoaderPlugin = require("vue-loader/lib/plugin"),
@@ -98,6 +99,12 @@ module.exports = function () {
             }
         },
         */
+        optimization: {
+            // add minimize: true after the array to enable the minimization in development as well
+            minimizer: [
+                new CssMinimizerPlugin()
+            ]
+        },
         output: {
             path: path.resolve(__dirname, "../build/"),
             filename: "js/[name].js",
