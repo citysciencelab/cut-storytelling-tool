@@ -172,8 +172,17 @@ const actions = {
      */
     async save ({dispatch, getters}) {
         const feature = modifyFeature ? modifyFeature : drawLayer.getSource().getFeatures()[0],
-            {currentLayerIndex, featureProperties, layerInformation, selectedInteraction} = getters,
-            error = getters.savingErrorMessage(feature);
+            {currentLayerIndex, featureProperties, layerInformation, selectedInteraction, layerIds} = getters,
+            error = getters.savingErrorMessage(feature),
+            currentLayerId = layerIds[currentLayerIndex],
+            geometryFeature = modifyFeature
+                ? Radio
+                    .request("ModelList", "getModelByAttributes", {id: currentLayerId})
+                    .layer
+                    .getSource()
+                    .getFeatures()
+                    .find((workFeature) => workFeature.getId() === modifyFeatureSaveId)
+                : feature;
 
         if (error.length > 0) {
             dispatch("Alerting/addSingleAlert", {
@@ -187,7 +196,11 @@ const actions = {
         dispatch(
             "sendTransaction",
             await addFeaturePropertiesToFeature(
-                {id: feature.getId() || modifyFeatureSaveId, geometryName: feature.getGeometryName(), geometry: feature.getGeometry()},
+                {
+                    id: feature.getId() || modifyFeatureSaveId,
+                    geometryName: feature.getGeometryName(),
+                    geometry: geometryFeature.getGeometry()
+                },
                 featureProperties,
                 layerInformation[currentLayerIndex].featurePrefix,
                 selectedInteraction === "selectedUpdate"
