@@ -46,6 +46,8 @@
 - Draw-Tool:
     - A new checkbox has been added to the Draw tool that can be used to hide and retrieve the drawing.
     - New Flag `addIconsOfActiveLayers`. Set to `true` to be able to select the icons and symbols of all WFS layers activated in the topic tree as additional symbols besides the icons configured under `drawSymbolSettings`.
+- Searchbar:
+    - Add possibility to search for folders in tree search if 'tree' is configured in 'searchbar' in config.json.
 
 ### Changed
 - Draw-Tool:
