@@ -83,6 +83,11 @@ export default {
             required: false,
             default: false
         },
+        timeoutSlider: {
+            type: Number,
+            required: false,
+            default: 800
+        },
         title: {
             type: [String, Boolean],
             required: false,
@@ -139,7 +144,7 @@ export default {
             const minMoment = moment(adjusting?.adjust?.min, this.getFormat("from")),
                 maxMoment = moment(adjusting?.adjust?.max, this.getFormat("until"));
 
-            if (adjusting?.start) {
+            if (adjusting.start) {
                 this.isAdjusting = true;
                 this.adjustMinMax = [];
             }
@@ -151,7 +156,7 @@ export default {
                 this.adjustMinMax[1] = maxMoment;
             }
 
-            if (adjusting?.finish) {
+            if (adjusting.finish) {
                 if (!this.isSelfSnippetId(adjusting?.snippetId)) {
                     this.currentSliderMin = typeof this.adjustMinMax[0] !== "undefined" ? this.getSliderIdxCloseToFromDate(this.adjustMinMax[0].format(this.internalFormat)) : 0;
                     this.currentSliderMax = typeof this.adjustMinMax[1] !== "undefined" ? this.getSliderIdxCloseToUntilDate(this.adjustMinMax[1].format(this.internalFormat)) : this.initialDateRef.length - 1;
@@ -290,6 +295,13 @@ export default {
                 return this.attrName[1];
             }
             return "";
+        },
+        /**
+         * Returns the title to be used by the SnippetTag representing this snippet.
+         * @returns {String} The tagTitle to use.
+         */
+        getTagTitle () {
+            return moment(this.dateFromComputed, this.internalFormat).format(this.getFormat("from")) + " - " + moment(this.dateUntilComputed, this.internalFormat).format(this.getFormat("from"));
         },
         /**
          * Returns the riskless attrName to use for from.
@@ -511,13 +523,12 @@ export default {
                 this.changeRule(value, startup);
                 return;
             }
-            clearInterval(this.intvEmitCurrentRule);
+            clearTimeout(this.intvEmitCurrentRule);
             this.intvEmitCurrentRule = setInterval(() => {
-                clearInterval(this.intvEmitCurrentRule);
                 if (!this.sliderMouseDown) {
                     this.changeRule(value, startup);
                 }
-            }, 800);
+            }, this.timeoutSlider);
         },
         /**
          * Emits the current rule to whoever is listening.
@@ -534,7 +545,8 @@ export default {
                 attrName: this.attrName,
                 operator: this.getOperator(),
                 format: this.format,
-                value
+                value,
+                tagTitle: this.getTagTitle()
             });
         },
         /**

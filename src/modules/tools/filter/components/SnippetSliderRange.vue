@@ -1,5 +1,6 @@
 <script>
 import isObject from "../../../../utils/isObject";
+import thousandsSeparator from "../../../../utils/thousandsSeparator";
 import {translateKeyWithPlausibilityCheck} from "../../../../utils/translateKeyWithPlausibilityCheck.js";
 import {getDefaultOperatorBySnippetType} from "../utils/compileSnippets.js";
 import SnippetInfo from "./SnippetInfo.vue";
@@ -72,6 +73,16 @@ export default {
             required: false,
             default: 0
         },
+        timeoutInput: {
+            type: Number,
+            required: false,
+            default: 1400
+        },
+        timeoutSlider: {
+            type: Number,
+            required: false,
+            default: 800
+        },
         title: {
             type: [String, Boolean],
             required: false,
@@ -97,10 +108,6 @@ export default {
         intvInputReaction: -1,
         currentSource: "init",
         sliderMouseDown: false,
-        timeouts: {
-            slider: 800,
-            input: 1600
-        },
         operatorWhitelist: [
             "BETWEEN",
             "INTERSECTS"
@@ -122,19 +129,19 @@ export default {
                 return;
             }
 
-            if (adjusting?.start) {
+            if (adjusting.start) {
                 this.setIsAdjusting(true);
                 this.resetMemoryAdjustMinMax();
             }
 
-            if (adjusting?.adjust?.min && (typeof this.getMemoryAdjustMin() === "undefined" || adjusting.adjust.min < this.getMemoryAdjustMin())) {
+            if (typeof adjusting.adjust?.min !== "undefined" && (typeof this.getMemoryAdjustMin() === "undefined" || adjusting.adjust.min < this.getMemoryAdjustMin())) {
                 this.setMemoryAdjustMin(adjusting.adjust.min);
             }
-            if (adjusting?.adjust?.max && (typeof this.getMemoryAdjustMax() === "undefined" || adjusting.adjust.max < this.getMemoryAdjustMax())) {
+            if (typeof adjusting.adjust?.max !== "undefined" && (typeof this.getMemoryAdjustMax() === "undefined" || adjusting.adjust.max < this.getMemoryAdjustMax())) {
                 this.setMemoryAdjustMax(adjusting.adjust.max);
             }
 
-            if (adjusting?.finish) {
+            if (adjusting.finish) {
                 if (!this.isSelfSnippetId(adjusting?.snippetId)) {
                     if (typeof this.getMemoryAdjustMin() !== "undefined") {
                         this.currentSliderMin = this.getMemoryAdjustMin();
@@ -189,11 +196,11 @@ export default {
                 return;
             }
             else if (value > this.sliderUntil) {
-                this.setInputFrom(this.sliderUntil);
+                this.setInputUntil(this.sliderFrom);
                 return;
             }
-            else if (value < this.sliderFrom) {
-                this.setInputFrom(this.sliderFrom);
+            else if (value < this.currentSliderMin) {
+                this.setInputFrom(this.currentSliderMin);
                 return;
             }
             this.setInputFrom(value);
@@ -208,11 +215,11 @@ export default {
                 return;
             }
             else if (value < this.sliderFrom) {
-                this.setInputFrom(this.sliderFrom);
+                this.setInputFrom(this.sliderUntil);
                 return;
             }
-            else if (value > this.sliderUntil) {
-                this.setInputFrom(this.sliderUntil);
+            else if (value > this.currentSliderMax) {
+                this.setInputUntil(this.currentSliderMax);
                 return;
             }
             this.setInputUntil(value);
@@ -347,6 +354,13 @@ export default {
             return "";
         },
         /**
+         * Returns the title to be used by the SnippetTag representing this snippet.
+         * @returns {String} The tagTitle to use.
+         */
+        getTagTitle () {
+            return thousandsSeparator(this.sliderFrom) + " - " + thousandsSeparator(this.sliderUntil);
+        },
+        /**
          * Returns the riskless attrName to use for from.
          * @returns {String} The attrName to use for from.
          */
@@ -390,7 +404,7 @@ export default {
          */
         isSelfSnippetId (snippetId) {
             if (Array.isArray(snippetId)) {
-                return snippetId.includes(this.snippetId);
+                return snippetId.some(id => id === this.snippetId);
             }
             return snippetId === this.snippetId;
         },
@@ -431,7 +445,7 @@ export default {
                 if (!this.isSliderMouseDown()) {
                     this.changeRule(value, startup);
                 }
-            }, this.getTimeoutSlider());
+            }, this.timeoutSlider);
         },
         /**
          * Emits the current rule to whoever is listening.
@@ -447,7 +461,8 @@ export default {
                 fixed: !this.visible,
                 attrName: this.attrName,
                 operator: this.getOperator(),
-                value
+                value,
+                tagTitle: this.getTagTitle()
             });
         },
         /**
@@ -497,7 +512,7 @@ export default {
             }
             this.setIntervalInputReaction(() => {
                 this.sliderFrom = value;
-            }, this.getTimeoutInput());
+            }, this.timeoutInput);
         },
         /**
          * Setter for inputUntil, behavior varies by currentSource.
@@ -511,7 +526,7 @@ export default {
             }
             this.setIntervalInputReaction(() => {
                 this.sliderUntil = value;
-            }, this.getTimeoutInput());
+            }, this.timeoutInput);
         },
         /**
          * Returns if the slider is currently initializing.
@@ -604,9 +619,8 @@ export default {
          * @returns {void}
          */
         setIntervalEmitCurrentRule (callback, timeout) {
-            clearInterval(this.$options.dataCustom.intvEmitCurrentRule);
-            this.$options.dataCustom.intvEmitCurrentRule = setInterval(() => {
-                clearInterval(this.$options.dataCustom.intvEmitCurrentRule);
+            clearTimeout(this.$options.dataCustom.intvEmitCurrentRule);
+            this.$options.dataCustom.intvEmitCurrentRule = setTimeout(() => {
                 callback();
             }, timeout);
         },
@@ -618,9 +632,8 @@ export default {
          * @returns {void}
          */
         setIntervalInputReaction (callback, timeout) {
-            clearInterval(this.$options.dataCustom.intvInputReaction);
-            this.$options.dataCustom.intvInputReaction = setInterval(() => {
-                clearInterval(this.$options.dataCustom.intvInputReaction);
+            clearTimeout(this.$options.dataCustom.intvInputReaction);
+            this.$options.dataCustom.intvInputReaction = setTimeout(() => {
                 callback();
             }, timeout);
         },
@@ -664,20 +677,6 @@ export default {
             if (!this.isInitializing() && !this.isAdjusting()) {
                 this.emitCurrentRule([this.sliderFrom, this.sliderUntil]);
             }
-        },
-        /**
-         * Returns the timeout for the slider.
-         * @returns {Number} The timeout for the slider.
-         */
-        getTimeoutSlider () {
-            return this.$options.dataCustom.timeouts.slider;
-        },
-        /**
-         * Returns the timeout for the input.
-         * @returns {Number} The timeout for the input.
-         */
-        getTimeoutInput () {
-            return this.$options.dataCustom.timeouts.input;
         }
     }
 };

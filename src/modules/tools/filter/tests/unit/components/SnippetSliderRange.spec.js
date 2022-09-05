@@ -32,10 +32,6 @@ describe("src/module/tools/filter/components/SnippetSliderRange.vue", () => {
             expect(wrapper.vm.$options.dataCustom.intvInputReaction).to.equal(-1);
             expect(wrapper.vm.$options.dataCustom.currentSource).to.equal("init");
             expect(wrapper.vm.$options.dataCustom.sliderMouseDown).to.be.false;
-            expect(wrapper.vm.$options.dataCustom.timeouts).to.deep.equal({
-                slider: 800,
-                input: 1600
-            });
             expect(wrapper.vm.$options.dataCustom.operatorWhitelist).to.deep.equal([
                 "BETWEEN",
                 "INTERSECTS"
@@ -56,6 +52,8 @@ describe("src/module/tools/filter/components/SnippetSliderRange.vue", () => {
             expect(wrapper.vm.operator).to.be.undefined;
             expect(wrapper.vm.prechecked).to.be.undefined;
             expect(wrapper.vm.snippetId).to.equal(0);
+            expect(wrapper.vm.timeoutInput).to.equal(1400);
+            expect(wrapper.vm.timeoutSlider).to.equal(800);
             expect(wrapper.vm.title).to.be.true;
             expect(wrapper.vm.value).to.be.undefined;
             expect(wrapper.vm.visible).to.be.true;
@@ -375,7 +373,8 @@ describe("src/module/tools/filter/components/SnippetSliderRange.vue", () => {
                     fixed: true,
                     attrName: "attrName",
                     operator: "INTERSECTS",
-                    value: "value"
+                    value: "value",
+                    tagTitle: "0 - 100"
                 });
             });
         });
@@ -519,6 +518,24 @@ describe("src/module/tools/filter/components/SnippetSliderRange.vue", () => {
                     attrName: ["attrNameA", "attrNameB"]
                 }});
                 expect(wrapper.vm.getAttrNameFrom()).to.equal("attrNameA");
+            });
+        });
+        describe("getTagTitle", () => {
+            it("should return a certain string to display from and until as tag title", async () => {
+                const api = {
+                    getMinMax: (attrName, onsuccess) => onsuccess({
+                        min: 8,
+                        max: 90
+                    })
+                };
+
+                wrapper = shallowMount(SnippetSliderRange, {localVue, propsData: {
+                    api,
+                    attrName: "attrName",
+                    prechecked: [12, 80]
+                }});
+                await wrapper.vm.$nextTick();
+                expect(wrapper.vm.getTagTitle()).to.equal("12 - 80");
             });
         });
         describe("getTitle", () => {
