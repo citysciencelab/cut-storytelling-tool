@@ -1816,6 +1816,7 @@ Note: Time-related snippets (`date` and `dateRange`) can only be operated in `ex
 |delimitor|no|String||For type `dropdown` only: If feature attributes are themselfs again seperated by a delimitor to act as pseudo array, setting delimitor to the sign that seperates the terms, will result in the expected outcome.|false|
 |renderIcons|no|String|"none"|For type `dropdown` with `display: "list"` only: If set to `fromLegend` icons will be placed left hand side of each entry. Icons are taken from legend. Use an object with attrNames as keys and imagePath as value {attrName: imagePath} to manually set images (see example).|false|
 |service|no|[service](#markdown-header-portalconfigmenutoolfilterfilterlayersnippetsservice)||For the initial filling of a snippet (dropdown, date, slider) an alternative service can be used. This may increase the performance during initial loading. The default is the service of the configured [filterLayer](#markdown-header-portalconfigmenutoolfilterfilterlayer).|false|
+|children|no|[children](#markdown-header-portalconfigmenutoolfilterfilterlayersnippetschildren)[]|[]|Child snippet configuration.|true|
 
 **Example**
 
@@ -1857,32 +1858,6 @@ Example for a dropdown snippet. A simple dropdown with single select and placeho
     "type": "dropdown",
     "multiselect": false,
     "placeholder": "Choose a district"
-}
-```
-
-**Example**
-
-Example for a dropdown snippet in parent-child Mode.
-
-```json
-{
-    "title": "District",
-    "attrName": "city_district",
-    "type": "dropdown",
-    "multiselect": false,
-    "placeholder": "Choose a district",
-    "children": [
-        {
-            "type": "dropdown",
-            "attrName": "cityA",
-            "placeholder": "cityA"
-        },
-        {
-            "type": "dropdown",
-            "attrName": "cityB",
-            "placeholder": "cityB"
-        }
-    ]
 }
 ```
 
@@ -2035,6 +2010,49 @@ Example for a feature info snippet. Displays all values of the configured attrib
     "title": "Steckbrief",
     "attrName": ["tierartengruppe", "deutscher_artname", "artname", "rote_liste_d", "rote_liste_hh"],
     "type": "featureInfo"
+}
+```
+
+***
+#### Portalconfig.menu.tool.filter.filterLayer.snippets.children
+Child snippet configuration.
+The child snippets are configured in the same way as "normal" snippets.
+See [filterLayerSnippets](#markdown-header-portalconfigmenutoolfilterfilterlayersnippets).
+
+The parent-child relationship can be used for the following use case:
+If a dataset is too large, preselecting an attribute can reduce the amount of subsequent filtering.
+(Example: animal species group `mammals` as preselection would significantly reduce the data space of all animals).
+
+The `children` parameter instructs a snippet not to trigger any filtering itself, but to "feed" only its child snippets configured under `children` with the data resulting from its setting.
+(Example: `mammals` will shrink the resulting animal species to an acceptable range).
+Only the selection in one of the child snippets (example: "blue whale") finally performs the filtering.
+
+In case of using parent-child relationships, we recommend setting `snippetTags` to `false`.
+Multi-dimensional nesting (grandparent, parent, child) is not currently provided.
+
+**Example**
+
+Example of a dropdown snippet with parent-child relationship. The `cityA` and `cityB` dropdowns are initially not filled. Only when a `district` is selected do they fill with the cities of the selected district, but no filtering takes place on the map. Only the selection of a city finally initiates the filtering by the city name.
+
+```json
+{
+    "title": "District",
+    "attrName": "city_district",
+    "type": "dropdown",
+    "multiselect": false,
+    "placeholder": "Choose a district",
+    "children": [
+        {
+            "type": "dropdown",
+            "attrName": "cityA",
+            "placeholder": "cityA"
+        },
+        {
+            "type": "dropdown",
+            "attrName": "cityB",
+            "placeholder": "cityB"
+        }
+    ]
 }
 ```
 
