@@ -379,7 +379,10 @@
                 "invisibleLayer": "Folgende Themen können im ausgewählten Druckmaßstab {{scale}} nicht gedruckt werden:"
             },
             "shadow": {
-                "shadowDisplay": "Schattendarstellung"
+                "shadowDisplay": "Schattendarstellung:",
+                "pickDate": "Wählen Sie ein Datum:",
+                "slideHour": "Wählen Sie eine Uhrzeit:",
+                "slideDate": "Wählen Sie ein Datum:"
               },
             "styleVT": {
               "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
@@ -767,6 +770,7 @@
                     "undo": "Rückgängig machen",
                     "redo": "Wiederholen",
                     "edit": "Geometrie bearbeiten",
+                    "editAttributes": "Attribute bearbeiten",
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen",
                     "saveDrawing": "Zeichnung speichern"
@@ -779,6 +783,17 @@
                     "iconCloud": "Wolke",
                     "iconMeadow": "Wiese",
                     "gelber Pin": "gelber Pin"
+                },
+                "attributeSelect": {
+                    "attributeKeyError": "Bitte einen Schlüssel fürs Attribut angeben.",
+                    "attributeDuplicatedKeyError": "Der Attribut-Schlüssel existiert bereits.",
+                    "noFeatureSelected": "Derzeit ist noch kein Feature ausgewählt. Bitte wählen Sie ein Feature aus!",
+                    "save": "Speichern",
+                    "remove": "Löschen",
+                    "input": {
+                        "key": "Neuer Schlüssel",
+                        "value": "Neuer Wert"
+                    }
                 }
             },
             "measure": {
@@ -1029,7 +1044,8 @@
             "3d": {
                 "buttonTitle": "3D",
                 "openView3d": "Ansicht einschalten",
-                "closeView3d": "Ansicht ausschalten"
+                "closeView3d": "Ansicht ausschalten",
+                "noCesium": "Cesium/3D-Funktionalität konnte nicht geladen werden - Bitte informieren Sie den Serviceanbieter"
             },
             "oblique": {
                 "buttonTitle": "Schrägluftbilder",

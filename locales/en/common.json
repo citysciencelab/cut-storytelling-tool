@@ -379,7 +379,10 @@
                 "invisibleLayer": "The following topics cannot be printed in the selected print scale {{scale}}:"
             },
             "shadow": {
-                "shadowDisplay": "Shadow display"
+                "shadowDisplay": "Shadow display:",
+                "pickDate": "Select a date:",
+                "slideHour": "Select time:",
+                "slideDate": "Select a date:"
               },
             "styleVT": {
               "introText": "Various predefined styles can be applied to VectorTile layers to optimize the view to match your requirements.",
@@ -767,6 +770,7 @@
                     "undo": "Undo",
                     "redo": "Redo",
                     "edit": "Edit geometry",
+                    "editAttributes": "Attribute bearbeiten",
                     "delete": "Delete geometry / text",
                     "deleteAll": "Delete all",
                     "saveDrawing": "Save drawing"
@@ -779,6 +783,17 @@
                     "iconCloud": "Cloud",
                     "iconMeadow": "Meadow",
                     "gelber Pin": "yellow Pin"
+                },
+                "attributeSelect": {
+                    "attributeKeyError": "Attribute key must be set!",
+                    "attributeDuplicatedKeyError": "Key already exists!",
+                    "noFeatureSelected": "Please select a feature!",
+                    "save": "Save",
+                    "remove": "Delete",
+                    "input": {
+                        "key": "New attribute key",
+                        "value": "New attribute value"
+                    }
                 }
             },
             "measure": {
@@ -1029,7 +1044,8 @@
             "3d": {
                 "buttonTitle": "3D",
                 "openView3d": "Start view",
-                "closeView3d": "Close view"
+                "closeView3d": "Close view",
+                "noCesium": "Cesium/3D-Functionality could not be loaded - Please inform the service provider"
             },
             "oblique": {
                 "buttonTitle": "Oblique aerial photos",

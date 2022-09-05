@@ -689,11 +689,12 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(commit.firstCall.args).to.eql(["setFormerInteraction", "none"]);
             expect(commit.secondCall.args).to.eql(["setCurrentInteraction", "draw"]);
             expect(commit.thirdCall.args).to.eql(["setSelectedFeature", null]);
-            expect(dispatch.callCount).to.equal(4);
+            expect(dispatch.callCount).to.equal(5);
             expect(dispatch.args[0]).to.eql(["manipulateInteraction", {interaction: "draw", active: true}]);
             expect(dispatch.args[1]).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
-            expect(dispatch.args[2]).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
-            expect(dispatch.args[3]).to.eql(["updateDrawInteraction"]);
+            expect(dispatch.args[2]).to.eql(["manipulateInteraction", {interaction: "modifyAttributes", active: false}]);
+            expect(dispatch.args[3]).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
+            expect(dispatch.args[4]).to.eql(["updateDrawInteraction"]);
         });
         it("should enable the modify interaction and disable the other interactions if the given interaction equals 'modify'", () => {
             interaction = "modify";
@@ -704,10 +705,11 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(commit.firstCall.args).to.eql(["setFormerInteraction", "none"]);
             expect(commit.secondCall.args).to.eql(["setCurrentInteraction", "modify"]);
             expect(commit.thirdCall.args).to.eql(["setSelectedFeature", null]);
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
-            expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: true}]);
-            expect(dispatch.thirdCall.args).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
+            expect(dispatch.callCount).to.equal(4);
+            expect(dispatch.args[0]).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
+            expect(dispatch.args[1]).to.eql(["manipulateInteraction", {interaction: "modify", active: true}]);
+            expect(dispatch.args[2]).to.eql(["manipulateInteraction", {interaction: "modifyAttributes", active: false}]);
+            expect(dispatch.args[3]).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
         });
         it("should enable the select interaction and disable the other interactions if the given interaction equals 'delete'", () => {
             interaction = "delete";
@@ -718,10 +720,11 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(commit.firstCall.args).to.eql(["setFormerInteraction", "none"]);
             expect(commit.secondCall.args).to.eql(["setCurrentInteraction", "delete"]);
             expect(commit.thirdCall.args).to.eql(["setSelectedFeature", null]);
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
-            expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
-            expect(dispatch.thirdCall.args).to.eql(["manipulateInteraction", {interaction: "delete", active: true}]);
+            expect(dispatch.callCount).to.equal(4);
+            expect(dispatch.args[0]).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
+            expect(dispatch.args[1]).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
+            expect(dispatch.args[2]).to.eql(["manipulateInteraction", {interaction: "modifyAttributes", active: false}]);
+            expect(dispatch.args[3]).to.eql(["manipulateInteraction", {interaction: "delete", active: true}]);
         });
     });
     describe("undoLastStep", () => {

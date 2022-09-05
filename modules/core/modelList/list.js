@@ -33,7 +33,6 @@ import TreeFilter from "../../treeFilter/model";
  * @deprecated in 3.0.0
  */
 import ExtendedFilter from "../../tools/extendedFilter/model";
-import Shadow from "../../tools/shadow/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import Viewpoint from "./viewPoint/model";
@@ -237,9 +236,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
-            }
-            else if (attrs.id === "shadow") {
-                return new Shadow(attrs, options);
             }
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(Object.assign(attrs, Object.prototype.hasOwnProperty.call(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);

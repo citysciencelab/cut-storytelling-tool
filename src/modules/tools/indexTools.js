@@ -25,6 +25,7 @@ import SaveSelection from "./saveSelection/store/indexSaveSelection";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
 import SelectFeatures from "./selectFeatures/store/indexSelectFeatures";
+import Shadow from "./shadowTool/store/indexShadowTool";
 import StyleVT from "./styleVT/store/indexStyleVT";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 import WfsSearch from "./wfsSearch/store/indexWfsSearch";
@@ -56,6 +57,7 @@ export default {
         ScaleSwitcher,
         SearchByCoord,
         SelectFeatures,
+        Shadow,
         StyleVT,
         SupplyCoord,
         WfsSearch,

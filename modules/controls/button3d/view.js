@@ -158,21 +158,30 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
         if (evt) {
             evt.stopPropagation();
         }
-        const supportedOnlyIn3d = Radio.request("Tool", "getSupportedOnlyIn3d"),
-            supportedIn3d = Radio.request("Tool", "getSupportedIn3d"),
-            supportedOnlyInOblique = Radio.request("Tool", "getSupportedOnlyInOblique"),
-            modelCollection = Radio.request("Tool", "getCollection"),
-            activeTools = modelCollection !== undefined ? modelCollection.where({"type": "tool", "isActive": true}) : [],
-            activeVueToolNames = store.getters["Tools/getActiveToolNames"];
+        if (Cesium !== null) {
+            const supportedOnlyIn3d = Radio.request("Tool", "getSupportedOnlyIn3d"),
+                supportedIn3d = Radio.request("Tool", "getSupportedIn3d"),
+                supportedOnlyInOblique = Radio.request("Tool", "getSupportedOnlyInOblique"),
+                modelCollection = Radio.request("Tool", "getCollection"),
+                activeTools = modelCollection !== undefined ? modelCollection.where({"type": "tool", "isActive": true}) : [],
+                activeVueToolNames = store.getters["Tools/getActiveToolNames"];
 
-        if (Radio.request("Map", "isMap3d")) {
-            this.controlsMapChangeClose3D(activeTools, supportedOnlyIn3d);
-        }
-        else if (Radio.request("ObliqueMap", "isActive")) {
-            this.controlsMapChangeCloseOblique(activeTools, supportedOnlyInOblique);
+            if (Radio.request("Map", "isMap3d")) {
+                this.controlsMapChangeClose3D(activeTools, supportedOnlyIn3d);
+            }
+            else if (Radio.request("ObliqueMap", "isActive")) {
+                this.controlsMapChangeCloseOblique(activeTools, supportedOnlyInOblique);
+            }
+            else {
+                this.controlsMapChangeClose2D(activeTools, activeVueToolNames, supportedIn3d);
+            }
         }
         else {
-            this.controlsMapChangeClose2D(activeTools, activeVueToolNames, supportedIn3d);
+            store.dispatch("Alerting/addSingleAlert", {
+                category: "error",
+                content: i18next.t("common:modules.controls.3d.noCesium"),
+                displayClass: "error"
+            });
         }
     },
 
