@@ -24,19 +24,19 @@ describe("src/module/tools/filter/components/SnippetSliderRange.vue", () => {
         it("should have correct default vars", () => {
             wrapper = shallowMount(SnippetSliderRange, {localVue});
 
-            expect(wrapper.vm.isInitializing).to.be.true;
-            expect(wrapper.vm.isAdjusting).to.be.false;
-            expect(wrapper.vm.hasRuleSet).to.be.false;
-            expect(wrapper.vm.adjustMinMax).to.be.an("array").that.is.empty;
-            expect(wrapper.vm.intvEmitCurrentRule).to.equal(-1);
-            expect(wrapper.vm.intvInputReaction).to.equal(-1);
-            expect(wrapper.vm.currentSource).to.equal("init");
-            expect(wrapper.vm.sliderMouseDown).to.be.false;
-            expect(wrapper.vm.timeouts).to.deep.equal({
+            expect(wrapper.vm.$options.dataCustom.isInitializing).to.be.true;
+            expect(wrapper.vm.$options.dataCustom.isAdjusting).to.be.false;
+            expect(wrapper.vm.$options.dataCustom.hasRuleSet).to.be.false;
+            expect(wrapper.vm.$options.dataCustom.adjustMinMax).to.be.an("array").that.is.empty;
+            expect(wrapper.vm.$options.dataCustom.intvEmitCurrentRule).to.equal(-1);
+            expect(wrapper.vm.$options.dataCustom.intvInputReaction).to.equal(-1);
+            expect(wrapper.vm.$options.dataCustom.currentSource).to.equal("init");
+            expect(wrapper.vm.$options.dataCustom.sliderMouseDown).to.be.false;
+            expect(wrapper.vm.$options.dataCustom.timeouts).to.deep.equal({
                 slider: 800,
                 input: 1600
             });
-            expect(wrapper.vm.operatorWhitelist).to.deep.equal([
+            expect(wrapper.vm.$options.dataCustom.operatorWhitelist).to.deep.equal([
                 "BETWEEN",
                 "INTERSECTS"
             ]);
@@ -306,7 +306,7 @@ describe("src/module/tools/filter/components/SnippetSliderRange.vue", () => {
                 wrapper = shallowMount(SnippetSliderRange, {localVue});
 
                 wrapper.vm.setCurrentSource("test");
-                expect(wrapper.vm.currentSource).to.equal("test");
+                expect(wrapper.vm.isCurrentSource("test")).to.be.true;
             });
         });
         describe("getSliderSteps", () => {
