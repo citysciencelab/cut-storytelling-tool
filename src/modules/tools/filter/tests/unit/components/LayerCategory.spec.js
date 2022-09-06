@@ -106,27 +106,26 @@ describe("src/modules/tools/filter/components/LayerCategory.vue", () => {
     });
 
     describe("updateSelectedCategories", () => {
-        it("should not change selected categories if passed argument is not an id", () => {
-            const expected = [];
-
+        it("should not emit the update for categories if passed argument is not an id", () => {
             wrapper.vm.updateSelectedCategories(null);
+            expect(wrapper.emitted("selectedcategories")).to.be.undefined;
             wrapper.vm.updateSelectedCategories(undefined);
+            expect(wrapper.emitted("selectedcategories")).to.be.undefined;
             wrapper.vm.updateSelectedCategories([]);
+            expect(wrapper.emitted("selectedcategories")).to.be.undefined;
             wrapper.vm.updateSelectedCategories(1234);
+            expect(wrapper.emitted("selectedcategories")).to.be.undefined;
             wrapper.vm.updateSelectedCategories({});
+            expect(wrapper.emitted("selectedcategories")).to.be.undefined;
             wrapper.vm.updateSelectedCategories(false);
+            expect(wrapper.emitted("selectedcategories")).to.be.undefined;
             wrapper.vm.updateSelectedCategories(true);
-
-            expect(wrapper.vm.selectedCategory).to.deep.equal(expected);
-
+            expect(wrapper.emitted("selectedcategories")).to.be.undefined;
         });
 
-        it("should update selected layers", () => {
-            const expected = ["foo"],
-                category = "foo";
-
-            wrapper.vm.updateSelectedCategories(category);
-            expect(wrapper.vm.selectedCategory).to.deep.equal(expected);
+        it("should emit the update for selected categories", () => {
+            wrapper.vm.updateSelectedCategories("foo");
+            expect(wrapper.emitted().selectedcategories).to.have.lengthOf(1);
         });
     });
 });

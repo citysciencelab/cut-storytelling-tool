@@ -2,8 +2,10 @@
 import * as constants from "../store/constantsDraw";
 import DownloadItem from "../components/DownloadItem.vue";
 import DrawItemFeaturesFilter from "./DrawItemFeaturesFilter.vue";
+import DrawItemAttributes from "./DrawItemAttributes.vue";
 
 import getComponent from "../../../../utils/getComponent";
+import {listenToUpdatedSelectedLayerList} from "../utils/RadioBridge";
 
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import ToolTemplate from "../../ToolTemplate.vue";
@@ -12,6 +14,7 @@ export default {
     name: "DrawItem",
     components: {
         DrawItemFeaturesFilter,
+        DrawItemAttributes,
         DownloadItem,
         ToolTemplate
     },
@@ -305,11 +308,55 @@ export default {
 
         Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
         this.$on("close", this.close);
+
+        if (this.addIconsOfActiveLayers) {
+            listenToUpdatedSelectedLayerList(layerModels => {
+                this.addSymbolsByLayerModels(layerModels);
+            });
+        }
     },
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
         ...mapActions("Tools/Draw", constants.keyStore.actions),
 
+        /**
+         * Adds all symbols found in layerModels to the iconList.
+         * @param {Object[]} layerModels The layer models.
+         * @returns {void}
+         */
+        addSymbolsByLayerModels (layerModels) {
+            if (!Array.isArray(layerModels)) {
+                return;
+            }
+            layerModels.forEach(layerModel => {
+                if (typeof layerModel?.get !== "function") {
+                    return;
+                }
+                const legend = layerModel.get("legend");
+
+                if (!Array.isArray(legend)) {
+                    return;
+                }
+                legend.forEach(legendInfo => {
+                    if (
+                        typeof legendInfo?.styleObject?.get !== "function"
+                        || typeof legendInfo.styleObject.get("imageScale") !== "number"
+                        || typeof legendInfo.styleObject.get("imagePath") !== "string"
+                        || !legendInfo.styleObject.get("imageName")
+                    ) {
+                        return;
+                    }
+                    const icon = {
+                        "id": legendInfo.label || legendInfo.styleObject.get("imageName"),
+                        "type": "image",
+                        "scale": legendInfo.styleObject.get("imageScale"),
+                        "value": legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName")
+                    };
+
+                    this.addSymbolIfNotExists(icon);
+                });
+            });
+        },
         /**
          * Sets the focus to the first control
          * @returns {void}
@@ -354,7 +401,7 @@ export default {
             this.mapElement.onmouseup = this.onMouseUp;
         },
         setCanvasCursorByInteraction (interaction) {
-            if (interaction === "modify" || interaction === "delete") {
+            if (interaction === "modify" || interaction === "delete" || interaction === "modifyAttributes") {
                 this.setCanvasCursor("pointer");
             }
             else {
@@ -422,8 +469,11 @@ export default {
                     </div>
                 </div>
             </div>
-            <hr>
-            <div class="form-group form-group-sm">
+            <div
+                v-if="currentInteraction !== 'modifyAttributes'"
+                class="form-group form-group-sm"
+            >
+                <hr>
                 <div class="row">
                     <label
                         for="tool-draw-drawType"
@@ -461,7 +511,15 @@ export default {
                     :features="featuresFromDrawTool"
                 />
             </template>
+            <template
+                v-if="enableAttributesSelector && currentInteraction === 'modifyAttributes'"
+            >
+                <DrawItemAttributes
+                    :selected-feature="selectedFeature"
+                />
+            </template>
             <form
+                v-if="currentInteraction !== 'modifyAttributes'"
                 class="form-horizontal"
                 role="form"
                 @submit.prevent
@@ -943,6 +1001,25 @@ export default {
                                 <i class="bi-wrench" />
                             </span>
                             {{ $t("common:modules.tools.draw.button.edit") }}
+                        </button>
+                    </div>
+                </div>
+                <div
+                    v-if="enableAttributesSelector"
+                    class="form-group form-group-sm row"
+                >
+                    <div class="col-12 d-grid gap-2">
+                        <button
+                            id="tool-draw-editInteraction"
+                            class="btn btn-sm"
+                            :class="currentInteraction === 'modifyAttributes' ? 'btn-primary' : 'btn-secondary'"
+                            :disabled="!drawLayerVisible || currentInteraction === 'modifyAttributes'"
+                            @click="toggleInteraction('modifyAttributes'); setCanvasCursorByInteraction('modifyAttributes')"
+                        >
+                            <span class="bootstrap-icon">
+                                <i class="bi-wrench" />
+                            </span>
+                            {{ $t("common:modules.tools.draw.button.editAttributes") }}
                         </button>
                     </div>
                 </div>

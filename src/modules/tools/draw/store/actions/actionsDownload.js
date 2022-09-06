@@ -162,6 +162,7 @@ async function setDownloadSelectedFormat ({state, commit, dispatch}, value) {
 
     commit("setDownloadSelectedFormat", value);
     if (state.layer?.getSource().getFeatures().length > 0) {
+        await dispatch("setDownloadFeatures");
         await dispatch("prepareData");
         dispatch("prepareDownload");
     }

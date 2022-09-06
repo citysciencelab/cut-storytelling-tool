@@ -378,15 +378,11 @@
                 "hintInfoScale": "Der ausgewählte Druckmaßstab weicht vom Maßstab im Kartenfenster ab. Das kann zu einem veränderten Kartenlayout im Druck führen.",
                 "invisibleLayer": "Folgende Themen können im ausgewählten Druckmaßstab {{scale}} nicht gedruckt werden:"
             },
-            "sessionTool": {
-                "uploadHeader": "Sitzung laden",
-                "buttonTextUpload": "Hochladen",
-                "buttonTextDownload": "Herunterladen",
-                "downloadHeader": "Sitzung speichern",
-                "errorOnLoad": "Beim hochladen ist ein Fehler aufgetreten!"
-            },
             "shadow": {
-                "shadowDisplay": "Schattendarstellung"
+                "shadowDisplay": "Schattendarstellung:",
+                "pickDate": "Wählen Sie ein Datum:",
+                "slideHour": "Wählen Sie eine Uhrzeit:",
+                "slideDate": "Wählen Sie ein Datum:"
               },
             "styleVT": {
               "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
@@ -476,7 +472,7 @@
                     "unit": "{{amountOfFilteredItems}} Treffer"
                 },
                 "geometryFilter": {
-                    "activate": "Gebiets-Filter aktivieren",
+                    "activate": "Gebiet für Filterung setzen",
                     "help": "Wählen Sie auf der Karte ein Gebiet aus um nur innerhalb dieses Gebietes zu filtern.",
                     "selectGeometry": "Wählen Sie eine Geometrie aus.",
                     "buffer": "Puffer [m]",
@@ -488,8 +484,9 @@
                         "lineString": "Linie + Puffer"
                     }
                 },
-                "downloadAsCSV": {
-                    "label": "Gefilterte Daten herunterladen"
+                "download": {
+                    "label": "Gefilterte Daten herunterladen",
+                    "labelBtn": "Herunterladen"
                 }
             },
             "pendler": {
@@ -773,6 +770,7 @@
                     "undo": "Rückgängig machen",
                     "redo": "Wiederholen",
                     "edit": "Geometrie bearbeiten",
+                    "editAttributes": "Attribute bearbeiten",
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen",
                     "saveDrawing": "Zeichnung speichern"
@@ -785,6 +783,17 @@
                     "iconCloud": "Wolke",
                     "iconMeadow": "Wiese",
                     "gelber Pin": "gelber Pin"
+                },
+                "attributeSelect": {
+                    "attributeKeyError": "Bitte einen Schlüssel fürs Attribut angeben.",
+                    "attributeDuplicatedKeyError": "Der Attribut-Schlüssel existiert bereits.",
+                    "noFeatureSelected": "Derzeit ist noch kein Feature ausgewählt. Bitte wählen Sie ein Feature aus!",
+                    "save": "Speichern",
+                    "remove": "Löschen",
+                    "input": {
+                        "key": "Neuer Schlüssel",
+                        "value": "Neuer Wert"
+                    }
                 }
             },
             "measure": {
@@ -987,7 +996,8 @@
             "3d": {
                 "buttonTitle": "3D",
                 "openView3d": "Ansicht einschalten",
-                "closeView3d": "Ansicht ausschalten"
+                "closeView3d": "Ansicht ausschalten",
+                "noCesium": "Cesium/3D-Funktionalität konnte nicht geladen werden - Bitte informieren Sie den Serviceanbieter"
             },
             "oblique": {
                 "buttonTitle": "Schrägluftbilder",
@@ -1192,6 +1202,21 @@
             "zoomToResults": "Zur Auswahl zoomen",
             "pagination": "Ergebnisseite",
             "selection": "Zeilenauswahl"
+        }
+    },
+    "libraries": {
+        "vue2-datepicker": {
+            "lang": {
+                "formatLocale": {
+                    "months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+                    "monthsShort": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
+                    "weekdays": ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+                    "weekdaysShort": ["Son", "Mon", "Die", "Mit", "Don", "Fre", "Sam"],
+                    "weekdaysMin": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+                    "firstDayOfWeek": 1,
+                    "firstWeekContainsDate": 4
+                }
+            }
         }
     }
 }

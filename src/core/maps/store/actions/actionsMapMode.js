@@ -26,19 +26,19 @@ export default {
      * @param {Object} param.dispatch the dispatch.
      * @param {Object} param.commit the commit.
      * @param {Object} param.rootState the rootState.
+     * @param {Object} param.state the state.
      * @fires Core#RadioRequestMapGetMapMode
      * @fires Core#RadioTriggerMapBeforeChange
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioTriggerMapChange
      * @returns {void}
      */
-    async activateMap3D ({getters, dispatch, commit, rootState}) {
+    async activateMap3D ({getters, dispatch, commit, rootState, state}) {
         const mapMode = getters.mode;
         let map3D = mapCollection.getMap("3D");
 
         dispatch("unregisterListener", {type: "pointermove", listener: "updatePointer", listenerType: "dispatch"});
         dispatch("unregisterListener", {type: "click", listener: "updateClick", listenerType: "dispatch"});
-        dispatch("unregisterListener", {type: "moveend", listener: "updateAttributes", listenerType: "dispatch"});
         if (getters.is3D) {
             return;
         }
@@ -56,6 +56,7 @@ export default {
                     "3D": zoomLevelmap2D
                 });
             }
+            commit("setInitialZoomLevel", state.changeZoomLevel["3D"]);
             Radio.trigger("Map", "beforeChange", "3D");
             allLayerModels = allLayerModels.filter(layerModel => {
                 return ["Oblique", "TileSet3D", "Terrain3D", "Entities3D"].indexOf(layerModel.get("typ")) === -1;
@@ -118,12 +119,13 @@ export default {
      * @param {Object} param store context.
      * @param {Object} param.commit the commit.
      * @param {Object} param.getters the getters.
+     * @param {Object} param.state the state.
      * @fires Core#RadioTriggerMapBeforeChange
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioTriggerMapChange
      * @returns {void}
      */
-    deactivateMap3D ({commit, getters, dispatch}) {
+    deactivateMap3D ({commit, getters, dispatch, state}) {
         const map3D = mapCollection.getMap("3D");
 
         if (map3D) {
@@ -132,13 +134,14 @@ export default {
             eventHandler.destroy();
             dispatch("registerListener", {type: "pointermove", listener: "updatePointer", listenerType: "dispatch"});
             dispatch("registerListener", {type: "click", listener: "updateClick", listenerType: "dispatch"});
-            dispatch("registerListener", {type: "moveend", listener: "updateAttributes", listenerType: "dispatch"});
             Radio.trigger("Map", "beforeChange", "2D");
             view.animate({rotation: 0}, () => {
                 map3D.setEnabled(false);
                 view.setRotation(0);
                 Radio.trigger("Map", "change", "2D");
                 dispatch("controlZoomLevel", {currentMapMode: getters.mode, targetMapMode: "2D"});
+                commit("setInitialZoomLevel", state.changeZoomLevel["2D"]);
+                commit("setZoom", state.initialZoomLevel);
                 commit("setMode", "2D");
             });
         }

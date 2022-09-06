@@ -7,13 +7,13 @@ import actions from "../store/actionsWmsTime";
 export default {
     name: "LayerSwiper",
     computed: {
-        ...mapGetters("Maps", ["visibleLayerList", "mode"]),
+        ...mapGetters("Maps", ["getVisibleLayerList", "mode"]),
         ...mapGetters("WmsTime", Object.keys(getters))
     },
     mounted () {
         const target = document.getElementById("wmsTime-layerSwiper-button");
 
-        this.setLayerSwiperTargetLayer(this.visibleLayerList.find(element => element.values_.id === this.currentTimeSliderObject.layerId + this.layerAppendix));
+        this.setLayerSwiperTargetLayer(this.getVisibleLayerList.find(element => element.values_.id === this.currentTimeSliderObject.layerId + this.layerAppendix));
         this.setLayerSwiperValueX(mapCollection.getMap(this.mode).getSize()[0] / 2);
         mapCollection.getMap(this.mode).on("postcompose", this.updateMap);
 

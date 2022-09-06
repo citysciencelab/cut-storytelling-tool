@@ -11,17 +11,28 @@
 ### __Breaking Changes__
 
 ### Added
+- KeepOpen attribute for tools:
+    - Allows to keep a tool open (that is rendered in a sidebar) when other tools (that are rendered to the window) are used.
+- The following NPM packages are added:
+    - dependencies:
+        - "vue2-datepicker"
 - #657: Polygon hatch patterns to allow for further design options in the style.json file have been implemented.
 - Possibility for development with self-signed SSL-certificates. See [wiki-doc](https://bitbucket.org/geowerkstatt-hamburg/masterportal/wiki/Entwicklungsumgebung%20mit%20selbstsignierten%20SSL-Zertifikat%20einrichten)
+- Filter:
+    - Added an option to activate a csv download button for filtered data.
+    - wmsRefId is also for type array implemented so that multiple wms Layers can be activated or deactivated.
+    - Added a slider for dateRange.
+- Draw-Tool:
+    - A new checkbox has been added to the Draw tool that can be used to hide and retrieve the drawing.
+    - New Flag `addIconsOfActiveLayers`. Set to `true` to be able to select the icons and symbols of all WFS layers activated in the topic tree as additional symbols besides the icons configured under `drawSymbolSettings`.
 
 ### Changed
+- Draw-Tool:
+    - You can now configure a button to edit custom attributes of a feature with the parameter `enableAttributesSelector`.
 - Filter:
     - Making intern wfs layer loadingStrategy with 'all' by filtering
     - The checkbox for filtering in the browsers extent now triggers direct filtering with `strategy`: `active`. This can be disabled by setting `searchInMapExtentProactive` to `false`.
     - New parameter wmsRefId is added. If the layer is filtered, the WMS layer with "wmsRefId" will be invisible and deactivated from Tree. After resetting the layer, the WMS layer will be activated and visible again.
-    - Added an option to activate a csv download button for filtered data.
-- Draw-Tool:
-    - A new checkbox has been added to the Draw tool that can be used to hide and retrieve the drawing.
 - The version of node was updated, must be >= 16.13.2 <= 16.16.0 and the version of npm was updated, must be >= 8.1.2 <=8.11.0.
 - Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
 - The following NPM packages have been updated:
@@ -69,17 +80,41 @@
         - zip-a-folder: 1.1.3 to 1.1.5
 - WfsSearch: `inputLabel` are now translated.
 - In the `light` topic tree, the `singleBaselayer` attribute can now also be used.
+- fileImport: the styles of geoJsons are now retained on reimport of a previously in MP created file
+- drawTool: previously set styles are now reflected in the drawTool and can be changed there.
+- highlightVectorRules: increaseFeature: image scaling works now.
+- shadow-Tool: the tool is refactored from Backbone to Vue.js.
 
 ### Deprecated
+- The GeoJson-Layer subTyp: `OpenSenseMap` is deprecated. It will be removed in the next Major-Release!
 
 ### Removed
 The following NPM package is removed:
     - @intlify/vue-i18n-loader
 
 ### Fixed
+- Issue #818: Back to InitialView works again
+- Issue #808: Fix geometry polygon-with-hole for searchBar/specialWfs.
+- Issue #813: Fix various WMS-T bugs and styling.
+- Save Selection: takes over the transparency of the layer again.
+- Issue #823: Fix tree search.
+- Isue #827: fix image scaling for gfi: highlightVectorRules
 
 ---
+## v2.24.1 - 2022-08-19
+### Added
+- The following NPM packages are added:
 
+    - dependencies:
+
+        - "vue2-datepicker"
+### Changed
+- Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
+
+### Fixed
+- Fix sensor layer extent-display issues caused by url parameter usage.
+
+---
 ## v2.24.0 - 2022-08-03
 ### Added
 - PortalFooter:

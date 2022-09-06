@@ -356,10 +356,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {*} version - todo
      * @param {boolean} [transparent = true] Whether the given layer is transparent.
      * @param {boolean} [isSelected = false] Whether the given layer is selected .
-     * @param {(boolean/object)} [time = false] If set to `true` or and Object, the configured Layer is expected to be a WMS-T.
+     * @param {(boolean/object)} [time = false] If set to `true` or an object, the configured Layer is expected to be a WMS-T.
      * @returns {void}
      */
-    addLayer: function (name, id, parentId, level, layers, url, version, {transparent = true, isSelected = false, time = false, styles = ""}) {
+    addLayer: function (name, id, parentId, level, layers, url, version, {transparent = true, isSelected = false, time = false,
+        styles = "", legendURL = "", gfiAttributes = "showAll", featureCount = 3}) {
         const layer = {
             id,
             name,
@@ -372,15 +373,15 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isSelected,
             time,
             styles,
+            legendURL,
+            gfiAttributes,
+            featureCount,
             cache: false,
             datasets: [],
-            featureCount: 3,
             format: "image/png",
-            gfiAttributes: "showAll",
             gutter: "0",
             isBaseLayer: false,
             layerAttribution: "nicht vorhanden",
-            legendURL: "",
             maxScale: "2500000",
             minScale: "0",
             singleTile: false,

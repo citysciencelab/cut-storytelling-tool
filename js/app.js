@@ -16,7 +16,6 @@ import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
-import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
@@ -167,10 +166,6 @@ async function loadApp () {
 
     Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
-            case "shadow": {
-                new ShadowView({model: tool});
-                break;
-            }
             case "parcelSearch": {
                 new ParcelSearchView({model: tool});
                 break;

@@ -378,15 +378,11 @@
                 "hintInfoScale": "The selected print scale differs from the scale in the map window. This can lead to a different map layout in print.",
                 "invisibleLayer": "The following topics cannot be printed in the selected print scale {{scale}}:"
             },
-            "sessionTool": {
-                "uploadHeader": "Load Session",
-                "buttonTextUpload": "Upload",
-                "buttonTextDownload": "Download",
-                "downloadHeader": "Save Session",
-                "errorOnLoad": "An error occurred during upload!"
-            },
             "shadow": {
-                "shadowDisplay": "Shadow display"
+                "shadowDisplay": "Shadow display:",
+                "pickDate": "Select a date:",
+                "slideHour": "Select time:",
+                "slideDate": "Select a date:"
               },
             "styleVT": {
               "introText": "Various predefined styles can be applied to VectorTile layers to optimize the view to match your requirements.",
@@ -476,7 +472,7 @@
                     "unit": "{{amountOfFilteredItems}} Results"
                 },
                 "geometryFilter": {
-                    "activate": "Activate area filter",
+                    "activate": "Set area for filtering",
                     "help": "Select an area on the map to filter only within that area.",
                     "selectGeometry": "Choose an area.",
                     "buffer": "Buffer [m]",
@@ -488,8 +484,9 @@
                         "lineString": "Line + Buffer"
                     }
                 },
-                "downloadAsCSV": {
-                    "label": "Download filtered data"
+                "download": {
+                    "label": "Download filtered data",
+                    "labelBtn": "Download"
                 }
             },
             "pendler": {
@@ -773,6 +770,7 @@
                     "undo": "Undo",
                     "redo": "Redo",
                     "edit": "Edit geometry",
+                    "editAttributes": "Attribute bearbeiten",
                     "delete": "Delete geometry / text",
                     "deleteAll": "Delete all",
                     "saveDrawing": "Save drawing"
@@ -785,6 +783,17 @@
                     "iconCloud": "Cloud",
                     "iconMeadow": "Meadow",
                     "gelber Pin": "yellow Pin"
+                },
+                "attributeSelect": {
+                    "attributeKeyError": "Attribute key must be set!",
+                    "attributeDuplicatedKeyError": "Key already exists!",
+                    "noFeatureSelected": "Please select a feature!",
+                    "save": "Save",
+                    "remove": "Delete",
+                    "input": {
+                        "key": "New attribute key",
+                        "value": "New attribute value"
+                    }
                 }
             },
             "measure": {
@@ -987,7 +996,8 @@
             "3d": {
                 "buttonTitle": "3D",
                 "openView3d": "Start view",
-                "closeView3d": "Close view"
+                "closeView3d": "Close view",
+                "noCesium": "Cesium/3D-Functionality could not be loaded - Please inform the service provider"
             },
             "oblique": {
                 "buttonTitle": "Oblique aerial photos",
@@ -1192,6 +1202,21 @@
             "zoomToResults": "Zoom to selection",
             "pagination": "Pagination",
             "selection": "Row selection"
+        }
+    },
+    "libraries": {
+        "vue2-datepicker": {
+            "lang": {
+                "formatLocale": {
+                    "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                    "monthsShort": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    "weekdays": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                    "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                    "weekdaysMin": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+                    "firstDayOfWeek": 0,
+                    "firstWeekContainsDate": 1
+                }
+            }
         }
     }
 }

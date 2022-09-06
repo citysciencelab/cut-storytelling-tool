@@ -98,6 +98,6 @@ export default {
     }
     .snippetCheckboxContainer .right {
         position: absolute;
-        right: 0px;
+        right: 0;
     }
 </style>

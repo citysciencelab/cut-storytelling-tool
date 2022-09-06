@@ -5,10 +5,26 @@ import state from "../../../store/stateFilter";
 const {
     updateRules,
     deleteAllRules,
-    updateFilterHits
+    updateFilterHits,
+    serializeState,
+    setRulesArray,
+    deserializeState
 } = actions;
 
 describe("tools/filter/store/actionsFilter", () => {
+    describe("setRulesArray", () => {
+        it("should set the rules array", done => {
+            const payload = {
+                rulesOfFilters: []
+            };
+
+            testAction(setRulesArray, payload, state, {}, [
+                {type: "setRulesOfFilters", payload: {
+                    rulesOfFilters: payload.rulesOfFilters
+                }, commit: true}
+            ], {}, done);
+        });
+    });
     describe("updateRules", () => {
         it("update rules by given rule", done => {
             const payload = {
@@ -35,7 +51,7 @@ describe("tools/filter/store/actionsFilter", () => {
                     filterId: 0
                 },
                 localState = {
-                    filters: [
+                    rulesOfFilters: [
                         [
                             {},
                             {}
@@ -63,6 +79,44 @@ describe("tools/filter/store/actionsFilter", () => {
                     filterId: payload.filterId,
                     hits: payload.hits
                 }, commit: true}
+            ], {}, done);
+        });
+    });
+    describe("serializeState", () => {
+        it("serialize the state", done => {
+            const rulesOfFilters = state.rulesOfFilters,
+                selectedCategories = state.selectedCategories,
+                selectedAccordions = state.selectedAccordions,
+                result = {
+                    rulesOfFilters,
+                    selectedCategories,
+                    selectedAccordions
+                },
+                serializiedString = JSON.stringify(result);
+
+            testAction(serializeState, {}, state, {}, [
+                {type: "setSerializedString", payload: {
+                    serializiedString
+                }, commit: true}
+            ], {}, done);
+        });
+    });
+    describe("deserializeState", () => {
+        it("deserialize the state", done => {
+            const rulesOfFilters = [],
+                selectedAccordions = [],
+                selectedCategories = [],
+                payload = {
+                    rulesOfFilters,
+                    selectedCategories,
+                    selectedAccordions
+                };
+
+            testAction(deserializeState, payload, state, {}, [
+                {type: "setRulesArray", payload: {rulesOfFilters}, dispatch: true},
+                {type: "setSelectedCategories", payload: selectedCategories, commit: true},
+                {type: "setSelectedAccordions", payload: selectedAccordions, commit: true},
+                {type: "setActive", payload: true, commit: true}
             ], {}, done);
         });
     });

@@ -33,7 +33,6 @@ import TreeFilter from "../../treeFilter/model";
  * @deprecated in 3.0.0
  */
 import ExtendedFilter from "../../tools/extendedFilter/model";
-import Shadow from "../../tools/shadow/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import Viewpoint from "./viewPoint/model";
@@ -105,7 +104,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "removeModelsByParentId": this.removeModelsByParentId,
             "removeModelsById": this.removeModelsById,
             "replaceModelById": this.replaceModelById,
-            // Initial sichtbare Layer etc.
+            // shown layer
             "addInitiallyNeededModels": this.addInitiallyNeededModels,
             "addModelsByAttributes": this.addModelsByAttributes,
             "addModel": this.addModel,
@@ -128,7 +127,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "updateSelection": function (model) {
                 this.trigger("updateSelection", model);
             },
-            "selectedChanged": this.selectedChanged
+            "selectedChanged": this.selectedChanged,
+            "transparencyChanged": function () {
+                channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+                store.dispatch("Tools/SaveSelection/createUrlParams", filterAndReduceLayerList(this.where({isSelected: true, type: "layer"})));
+            }
         }, this);
 
         this.listenTo(this, {
@@ -148,10 +151,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
             "change:isSelected": this.selectedChanged,
-            "change:transparency": function () {
-                channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
-                store.dispatch("Tools/SaveSelection/createUrlParams", filterAndReduceLayerList(this.where({isSelected: true, type: "layer"})));
-            },
             "change:selectionIDX": function () {
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             }
@@ -168,45 +167,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
         });
         this.defaultToolId = Object.prototype.hasOwnProperty.call(Config, "defaultToolId") ? Config.defaultToolId : "gfi";
-        store.dispatch("Tools/SessionTool/register", {key: "Layers", getter: () => {
-            const models = this.where({isSelected: true, type: "layer"}),
-                layerIds = [];
-
-            if (Array.isArray(models) && models.length) {
-                models.forEach(model => layerIds.push(model.id));
-            }
-            else if (models?.id) {
-                layerIds.push(models.id);
-            }
-            return {
-                layerIds
-            };
-        }, setter: ({layerIds}) => {
-            if (!Array.isArray(layerIds)) {
-                return;
-            }
-
-            layerIds.forEach(layerId => {
-                const layers = this.where({id: layerId});
-                let model;
-
-                if (Array.isArray(layers) && layers.length > 0) {
-                    model = layers[0];
-                }
-                else {
-                    Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
-                    model = this.findWhere({id: layerId});
-                }
-
-                if (!model) {
-                    return;
-                }
-                if (typeof model.setIsSelected === "function") {
-                    model.setIsSelected(true);
-                }
-            });
-
-        }}, {root: true});
     },
     defaultToolId: "",
     alwaysActiveTools: [],
@@ -276,9 +236,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
-            }
-            else if (attrs.id === "shadow") {
-                return new Shadow(attrs, options);
             }
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(Object.assign(attrs, Object.prototype.hasOwnProperty.call(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);

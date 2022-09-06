@@ -157,7 +157,7 @@ function increaseFeature (commit, getters, highlightObject) {
             clonedStyle.getText().setScale(scaleFactor);
         }
         clonedImage.setScale(clonedImage.getScale() * scaleFactor);
-        if (highlightObject.highlightStyle.fill && highlightObject.highlightStyle.fill.color) {
+        if (highlightObject?.highlightStyle?.fill && highlightObject?.highlightStyle?.fill?.color) {
             clonedImage.getFill().setColor(highlightObject.highlightStyle.fill.color);
         }
         feature.setStyle(clonedStyle);

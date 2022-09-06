@@ -27,6 +27,9 @@ export default {
     minScale: 5000,
     saveTo: "void",
     layers: [],
-    filters: [],
+    rulesOfFilters: [],
+    serializedString: "",
+    selectedAccordions: [],
+    selectedCategories: [],
     filtersHits: []
 };

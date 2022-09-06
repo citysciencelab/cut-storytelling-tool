@@ -11,6 +11,11 @@ export default {
         SnippetInfo
     },
     props: {
+        adjustment: {
+            type: [Object, Boolean],
+            required: false,
+            default: false
+        },
         api: {
             type: Object,
             required: false,
@@ -21,15 +26,32 @@ export default {
             required: false,
             default: ""
         },
-        adjustment: {
-            type: [Object, Boolean],
-            required: false,
-            default: false
-        },
         disabled: {
             type: Boolean,
             required: false,
             default: false
+        },
+        display: {
+            type: String,
+            required: false,
+            default: "all"
+        },
+        filterId: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        fixedRules: {
+            type: Array,
+            required: false,
+            default: () => {
+                return [];
+            }
+        },
+        format: {
+            type: [String, Array],
+            required: false,
+            default: "YYYY-MM-DD"
         },
         info: {
             type: [String, Boolean],
@@ -41,31 +63,6 @@ export default {
             required: false,
             default: false
         },
-        filterId: {
-            type: Number,
-            required: false,
-            default: 0
-        },
-        format: {
-            type: String,
-            required: false,
-            default: "YYYY-MM-DD"
-        },
-        title: {
-            type: [String, Boolean],
-            required: false,
-            default: true
-        },
-        maxValue: {
-            type: String,
-            required: false,
-            default: undefined
-        },
-        minValue: {
-            type: String,
-            required: false,
-            default: undefined
-        },
         operator: {
             type: String,
             required: false,
@@ -76,17 +73,30 @@ export default {
             required: false,
             default: undefined
         },
-        fixedRules: {
-            type: Array,
-            required: false,
-            default: () => {
-                return [];
-            }
-        },
         snippetId: {
             type: Number,
             required: false,
             default: 0
+        },
+        subTitles: {
+            type: [Array, Boolean],
+            required: false,
+            default: false
+        },
+        timeoutSlider: {
+            type: Number,
+            required: false,
+            default: 800
+        },
+        title: {
+            type: [String, Boolean],
+            required: false,
+            default: true
+        },
+        value: {
+            type: Array,
+            required: false,
+            default: undefined
         },
         visible: {
             type: Boolean,
@@ -96,258 +106,429 @@ export default {
     },
     data () {
         return {
-            disable: true,
-            internalFormat: "YYYY-MM-DD",
-            isInitializing: true,
-            isAdjusting: false,
-            minimumValue: "",
-            maximumValue: "",
-            value: ["", ""],
-            precheckedIsValid: false,
-            translationKey: "snippetDateRange",
-            operatorWhitelist: [
-                "BETWEEN",
-                "INTERSECTS"
-            ]
+            sliderFrom: -1,
+            sliderUntil: -1,
+            currentSliderMin: -1,
+            currentSliderMax: -1
         };
     },
     computed: {
-        ariaLabelDateFrom () {
-            return this.$t("modules.tools.filter.ariaLabel.dateRange.from", {param: this.attrName});
-        },
-        ariaLabelDateTo () {
-            return this.$t("modules.tools.filter.ariaLabel.dateRange.to", {param: this.attrName});
-        },
-        titleText () {
-            if (this.title === true) {
-                if (Array.isArray(this.attrName)) {
-                    return this.attrName[0];
-                }
-                return this.attrName;
-            }
-            else if (typeof this.title === "string") {
-                return this.translateKeyWithPlausibilityCheck(this.title, key => this.$t(key));
-            }
-            return "";
-        },
-        inRangeValueLeft: {
+        dateFromComputed: {
             get () {
-                if (!Array.isArray(this.value) || this.value.length !== 2) {
-                    return "";
-                }
-                return this.getValueWithinBorders(this.value[0], this.minimumValue, this.maximumValue, this.internalFormat);
+                return this.initialDateRef[this.sliderFrom] ? this.initialDateRef[this.sliderFrom] : this.initialDateRef[0];
             },
-            set (value) {
-                this.$set(this.value, 0, value);
+            set (date) {
+                this.sliderFrom = this.getSliderIdxCloseToFromDate(date);
             }
         },
-        inRangeValueRight: {
+        dateUntilComputed: {
             get () {
-                if (!Array.isArray(this.value) || this.value.length !== 2) {
-                    return "";
-                }
-                return this.getValueWithinBorders(this.value[1], this.minimumValue, this.maximumValue, this.internalFormat);
+                return this.initialDateRef[this.sliderUntil] ? this.initialDateRef[this.sliderUntil] : this.initialDateRef[this.initialDateRef.length - 1];
             },
-            set (value) {
-                this.$set(this.value, 1, value);
+            set (date) {
+                this.sliderUntil = this.getSliderIdxCloseToUntilDate(date);
             }
         },
-        securedOperator () {
-            if (!this.operatorWhitelist.includes(this.operator)) {
-                return getDefaultOperatorBySnippetType("dateRange");
-            }
-            return this.operator;
+        dateMinComputed () {
+            return this.initialDateRef[this.currentSliderMin] ? this.initialDateRef[this.currentSliderMin] : this.initialDateRef[0];
+        },
+        dateMaxComputed () {
+            return this.initialDateRef[this.currentSliderMax] ? this.initialDateRef[this.currentSliderMax] : this.initialDateRef[this.initialDateRef.length - 1];
         }
     },
     watch: {
-        inRangeValueLeft (val) {
-            if (!this.isAdjusting && (!this.isInitializing || this.precheckedIsValid)) {
-                const value = [
-                    moment(val, this.internalFormat).format(this.format),
-                    moment(this.inRangeValueRight, this.internalFormat).format(this.format)
-                ];
-
-                this.emitCurrentRule(value, this.isInitializing);
-            }
-        },
-        inRangeValueRight (val) {
-            if (!this.isAdjusting && (!this.isInitializing || this.precheckedIsValid)) {
-                const value = [
-                    moment(this.inRangeValueLeft, this.internalFormat).format(this.format),
-                    moment(val, this.internalFormat).format(this.format)
-                ];
-
-                this.emitCurrentRule(value, this.isInitializing);
-            }
-        },
         adjustment (adjusting) {
             if (!isObject(adjusting) || this.visible === false || this.isParent) {
                 return;
             }
+            const minMoment = moment(adjusting?.adjust?.min, this.getFormat("from")),
+                maxMoment = moment(adjusting?.adjust?.max, this.getFormat("until"));
 
-            if (adjusting?.start) {
+            if (adjusting.start) {
                 this.isAdjusting = true;
+                this.adjustMinMax = [];
             }
 
-            if (adjusting?.finish) {
+            if (minMoment.isValid() && (typeof this.adjustMinMax[0] === "undefined" || this.adjustMinMax[0].isBefore(minMoment))) {
+                this.adjustMinMax[0] = minMoment;
+            }
+            if (maxMoment.isValid() && (typeof this.adjustMinMax[1] === "undefined" || this.adjustMinMax[1].isAfter(maxMoment))) {
+                this.adjustMinMax[1] = maxMoment;
+            }
+
+            if (adjusting.finish) {
+                if (!this.isSelfSnippetId(adjusting?.snippetId)) {
+                    this.currentSliderMin = typeof this.adjustMinMax[0] !== "undefined" ? this.getSliderIdxCloseToFromDate(this.adjustMinMax[0].format(this.internalFormat)) : 0;
+                    this.currentSliderMax = typeof this.adjustMinMax[1] !== "undefined" ? this.getSliderIdxCloseToUntilDate(this.adjustMinMax[1].format(this.internalFormat)) : this.initialDateRef.length - 1;
+                    if (!this.hasRuleSet || this.currentSliderMin > this.sliderFrom) {
+                        this.sliderFrom = this.currentSliderMin;
+                    }
+                    if (!this.hasRuleSet || this.currentSliderMax < this.sliderUntil) {
+                        this.sliderUntil = this.currentSliderMax;
+                    }
+                }
+
                 this.$nextTick(() => {
                     this.isAdjusting = false;
                 });
             }
         },
-        disabled (value) {
-            this.disable = typeof value === "boolean" ? value : true;
+        sliderFrom (val) {
+            if (parseInt(val, 10) > parseInt(this.sliderUntil, 10)) {
+                this.sliderUntil = val;
+            }
+            else if (!this.isInitializing && !this.isAdjusting) {
+                this.emitCurrentRule([
+                    moment(this.initialDateRef[this.sliderFrom], this.internalFormat).format(this.getFormat("from")),
+                    moment(this.initialDateRef[this.sliderUntil], this.internalFormat).format(this.getFormat("until"))
+                ]);
+            }
+        },
+        sliderUntil (val) {
+            if (parseInt(val, 10) < parseInt(this.sliderFrom, 10)) {
+                this.sliderFrom = val;
+            }
+            else if (!this.isInitializing && !this.isAdjusting) {
+                this.emitCurrentRule([
+                    moment(this.initialDateRef[this.sliderFrom], this.internalFormat).format(this.getFormat("from")),
+                    moment(this.initialDateRef[this.sliderUntil], this.internalFormat).format(this.getFormat("until"))
+                ]);
+            }
         }
     },
+    created () {
+        this.isInitializing = true;
+        this.isAdjusting = false;
+        this.hasRuleSet = false;
+        this.adjustMinMax = [];
+        this.internalFormat = "YYYY-MM-DD";
+        this.initialDateRef = [];
+        this.intvEmitCurrentRule = -1;
+        this.sliderMouseDown = false;
+        this.operatorWhitelist = [
+            "BETWEEN",
+            "INTERSECTS"
+        ];
+    },
     mounted () {
-        this.$nextTick(() => {
-            const momentPrecheckedLeft = moment(Array.isArray(this.prechecked) ? this.prechecked[0] : "", this.format),
-                momentPrecheckedRight = moment(Array.isArray(this.prechecked) ? this.prechecked[1] : "", this.format),
-                momentMin = moment(this.minValue, this.format),
-                momentMax = moment(this.maxValue, this.format);
+        if (this.isPrecheckedValid()) {
+            this.emitCurrentRule(this.prechecked, true, true);
+            this.$emit("setSnippetPrechecked", this.visible);
+        }
+        else {
+            this.$emit("setSnippetPrechecked", false);
+        }
 
-            this.precheckedIsValid = momentPrecheckedLeft.isValid() || momentPrecheckedRight.isValid();
-
-            if (this.api) {
-                const attrName = [];
-
-                if (Array.isArray(this.attrName)) {
-                    attrName.push(this.attrName[0]);
-                    attrName.push(this.attrName[1]);
-                }
-                else if (typeof this.attrName === "string") {
-                    attrName.push(this.attrName);
-                    attrName.push(this.attrName);
-                }
-
-                if (attrName.length === 2) {
-                    this.minimumValue = momentMin.format(this.internalFormat);
-                    this.maximumValue = momentMax.format(this.internalFormat);
-
-                    this.setMinimumMaximumValue(attrName[0], !momentMin.isValid(), false, () => {
-                        this.setMinimumMaximumValue(attrName[1], false, !momentMax.isValid(), () => {
-                            this.value[0] = momentPrecheckedLeft.isValid() ? momentPrecheckedLeft.format(this.internalFormat) : this.minimumValue;
-                            this.value[1] = momentPrecheckedRight.isValid() ? momentPrecheckedRight.format(this.internalFormat) : this.maximumValue;
-
-                            this.$nextTick(() => {
-                                this.isInitializing = false;
-                                this.disable = false;
-                            });
-                        }, error => {
-                            this.isInitializing = false;
-                            this.disable = false;
-                            console.warn(error);
-                        });
-                    }, error => {
+        if (Array.isArray(this.attrName) && this.attrName.length === 2) {
+            this.getValueListFromApi(this.attrName[0], listFrom => {
+                this.getValueListFromApi(this.attrName[1], listUntil => {
+                    this.initSlider(listFrom, listUntil);
+                    this.$nextTick(() => {
                         this.isInitializing = false;
-                        this.disable = false;
-                        console.warn(error);
                     });
-                }
-            }
-            else {
-                this.minimumValue = momentMin.isValid() ? momentMin.format(this.internalFormat) : "";
-                this.maximumValue = momentMax.isValid() ? momentMax.format(this.internalFormat) : "";
-                if (this.precheckedIsValid) {
-                    this.value = [
-                        momentPrecheckedLeft.isValid() ? momentPrecheckedLeft.format(this.internalFormat) : this.minimumValue,
-                        momentPrecheckedRight.isValid() ? momentPrecheckedRight.format(this.internalFormat) : this.maximumValue
-                    ];
-                }
+                });
+            });
+        }
+        else if (typeof this.attrName === "string" && this.attrName) {
+            this.getValueListFromApi(this.attrName, list => {
+                this.initSlider(list);
                 this.$nextTick(() => {
                     this.isInitializing = false;
-                    this.disable = false;
                 });
-            }
-            if (this.visible && this.precheckedIsValid) {
-                this.emitCurrentRule(this.prechecked, true);
-            }
-        });
-        this.$emit("setSnippetPrechecked", this.visible && this.precheckedIsValid);
+            });
+        }
     },
     methods: {
         translateKeyWithPlausibilityCheck,
 
         /**
-         * Returns the label to use in the gui as description for the left calendar box.
-         * @returns {String} the label to use
+         * Initializes the slider with the given value lists.
+         * @param {String[]} listFrom A sorted list of start dates.
+         * @param {String[]} [listUntil=undefined] A sorted list of end dates.
+         * @returns {void}
          */
-        getLabelLeft () {
-            if (Array.isArray(this.attrName)) {
-                return this.attrName[0];
+        initSlider (listFrom, listUntil = undefined) {
+            this.initialDateRef = this.getInitialDateReference(listFrom, listUntil);
+            this.currentSliderMin = 0;
+            this.currentSliderMax = this.initialDateRef.length - 1;
+            if (this.isPrecheckedValid()) {
+                this.sliderFrom = this.getSliderIdxCloseToFromDate(moment(this.prechecked[0], this.getFormat("from")).format(this.internalFormat));
+                this.sliderUntil = this.getSliderIdxCloseToUntilDate(moment(this.prechecked[1], this.getFormat("until")).format(this.internalFormat));
+            }
+            else {
+                this.sliderFrom = this.currentSliderMin;
+                this.sliderUntil = this.currentSliderMax;
+            }
+        },
+        /**
+         * Returns the title to use for this snippet.
+         * @returns {String} The title to use.
+         */
+        getTitle () {
+            if (typeof this.title === "string") {
+                return this.title;
+            }
+            else if (this.title === true) {
+                return this.getAttrNameFrom();
             }
             return "";
         },
         /**
-         * Returns the label to use in the gui as description for the right calendar box.
-         * @returns {String} the label to use
+         * Returns the subtitle to use for from.
+         * @returns {String} The subtitle to use.
          */
-        getLabelRight () {
-            if (Array.isArray(this.attrName)) {
+        getSubTitleFrom () {
+            if (Array.isArray(this.subTitles) && this.subTitles.length === 2) {
+                return this.subTitles[0];
+            }
+            return this.getAttrNameFrom();
+        },
+        /**
+         * Returns the subtitle to use for until.
+         * @returns {String} The subtitle to use.
+         */
+        getSubTitleUntil () {
+            if (Array.isArray(this.subTitles) && this.subTitles.length === 2) {
+                return this.subTitles[1];
+            }
+            else if (Array.isArray(this.attrName) && this.attrName.length === 2) {
                 return this.attrName[1];
             }
             return "";
         },
         /**
-         * Returns a value in range of the given borders.
-         * @param {String} value the value to return or correct
-         * @param {String} leftBorder the value to be the bottom/left border
-         * @param {String} rightBorder the value to be the top/right border
-         * @param {String} format the format to format from and format to
-         * @returns {String} the value but asured to be in borders
+         * Returns the title to be used by the SnippetTag representing this snippet.
+         * @returns {String} The tagTitle to use.
          */
-        getValueWithinBorders (value, leftBorder, rightBorder, format) {
-            const momentMinimum = moment(leftBorder, format),
-                momentMaximum = moment(rightBorder, format),
-                momentValue = moment(value, format);
-
-            if (!momentValue.isValid()) {
-                return "";
-            }
-            else if (momentValue.isSameOrAfter(momentMaximum)) {
-                return momentMaximum.format(format);
-            }
-            else if (momentValue.isSameOrBefore(momentMinimum)) {
-                return momentMinimum.format(format);
-            }
-            return momentValue.format(format);
+        getTagTitle () {
+            return moment(this.dateFromComputed, this.internalFormat).format(this.getFormat("from")) + " - " + moment(this.dateUntilComputed, this.internalFormat).format(this.getFormat("from"));
         },
         /**
-         * Calls the minMax api for the given attrName and sets minimumValue and maximumValue.
-         * @param {String} attrName the attribute to receive the min and max value from
-         * @param {Boolean} minOnly if minimumValue should be set
-         * @param {Boolean} maxOnly if maximumValue should be set
-         * @param {Function} onsuccess a function({min, max}) with the received values
-         * @param {Function} onerror a function(errorMsg)
+         * Returns the riskless attrName to use for from.
+         * @returns {String} The attrName to use for from.
+         */
+        getAttrNameFrom () {
+            if (Array.isArray(this.attrName) && this.attrName.length === 2) {
+                return this.attrName[0];
+            }
+            return this.attrName;
+        },
+        /**
+         * Returns the riskless attrName to use for until.
+         * @returns {String} The attrName to use for until.
+         */
+        getAttrNameUntil () {
+            if (Array.isArray(this.attrName) && this.attrName.length === 2) {
+                return this.attrName[1];
+            }
+            return this.attrName;
+        },
+        /**
+         * Returns the slider index equal or close to untilDate in an upward direction.
+         * @param {String} fromDate The until from in internal format.
+         * @returns {Number} The index equal or close to.
+         */
+        getSliderIdxCloseToFromDate (fromDate) {
+            const len = this.initialDateRef.length;
+
+            if (!fromDate) {
+                return 0;
+            }
+            for (let i = 0; i < len; i++) {
+                if (this.initialDateRef[i] >= fromDate) {
+                    return i;
+                }
+            }
+            return len - 1;
+        },
+        /**
+         * Returns the slider index equal or close to untilDate in a downward direction.
+         * @param {String} untilDate The until date in internal format.
+         * @returns {Number} The index equal or close to.
+         */
+        getSliderIdxCloseToUntilDate (untilDate) {
+            const len = this.initialDateRef.length - 1;
+
+            if (!untilDate) {
+                return len;
+            }
+            for (let i = len; i >= 0; i--) {
+                if (this.initialDateRef[i] <= untilDate) {
+                    return i;
+                }
+            }
+            return 0;
+        },
+        /**
+         * Receives unique value of api.
+         * @param {String} attrName The attrName to receive data for.
+         * @param {Function} onsuccess A function(value) with value the received list.
+         * @param {Function} onerror A function(error) to receive errors with.
          * @returns {void}
          */
-        setMinimumMaximumValue (attrName, minOnly, maxOnly, onsuccess, onerror) {
-            if (minOnly === false && maxOnly === false) {
-                if (typeof onsuccess === "function") {
-                    onsuccess();
-                }
+        getValueListFromApi (attrName, onsuccess, onerror) {
+            if (typeof this.api?.getUniqueValues !== "function") {
                 return;
             }
+            this.api.getUniqueValues(attrName, value => {
+                if (typeof onsuccess === "function") {
+                    onsuccess(value);
+                }
+            }, onerror, {rules: this.fixedRules, filterId: this.filterId});
+        },
+        /**
+         * Merges given lists into one, sorted by time, removes doublings.
+         * @param {String[]} listFrom A list to draw string dates from.
+         * @param {String[]} listUntil A secondary list to draw string dates from.
+         * @returns {String[]} A list of date entries following internal format, sorted and without doublings.
+         */
+        getInitialDateReference (listFrom, listUntil) {
+            const result = [],
+                displayAssoc = {},
+                unixAssoc = {},
+                formatFrom = this.getFormat("from"),
+                formatUntil = this.getFormat("until"),
+                minMoment = moment(Array.isArray(this.value) ? this.value[0] : undefined, formatFrom),
+                minValid = minMoment.isValid(),
+                maxMoment = moment(Array.isArray(this.value) ? this.value[1] : undefined, formatUntil),
+                maxValid = maxMoment.isValid();
 
-            this.api.getMinMax(attrName, minMaxObj => {
-                if (!isObject(minMaxObj)) {
-                    if (typeof onsuccess === "function") {
-                        onsuccess();
-                    }
+            this.addListToUnixAssoc(listFrom, formatFrom, minValid, maxValid, minMoment, maxMoment, unixAssoc);
+            this.addListToUnixAssoc(listUntil, formatUntil, minValid, maxValid, minMoment, maxMoment, unixAssoc);
+
+            Object.values(unixAssoc).forEach(momentDate => {
+                const key = momentDate.format(this.internalFormat);
+
+                if (!Object.prototype.hasOwnProperty.call(displayAssoc, key)) {
+                    result.push(key);
+                    displayAssoc[key] = true;
+                }
+            });
+
+            return result;
+        },
+        /**
+         * Adds all entries of list into result, that are recognized and between given min and max moment.
+         * @param {String[]} list A list of string dates to check and add.
+         * @param {String} format The format to translate entries of list into date with.
+         * @param {Boolean} minValid true if the given minMoment is a valid date.
+         * @param {Boolean} maxValid true if the given maxMoment is a valid date.
+         * @param {Object} minMoment The lower boundary as moment.
+         * @param {Object} maxMoment The higher boundary as moment.
+         * @param {Object} result The reference to the result object.
+         * @returns {Boolean} true if result was altered, false if something went wrong.
+         */
+        addListToUnixAssoc (list, format, minValid, maxValid, minMoment, maxMoment, result) {
+            if (
+                !Array.isArray(list)
+                || typeof format !== "string"
+                || typeof minValid !== "boolean"
+                || typeof maxValid !== "boolean"
+                || typeof minMoment?.isValid !== "function"
+                || typeof maxMoment?.isValid !== "function"
+                || !isObject(result)
+            ) {
+                return false;
+            }
+            list.forEach(rawDate => {
+                const momentDate = moment(rawDate, format);
+
+                if (
+                    !momentDate.isValid()
+                    || minValid && momentDate.isBefore(minMoment)
+                    || maxValid && momentDate.isAfter(maxMoment)
+                ) {
                     return;
                 }
+                result[momentDate.unix()] = momentDate;
+            });
+            return true;
+        },
+        /**
+         * Returns the format, free of risks.
+         * @param {String} what If format should be returned for 'from' or 'until'.
+         * @returns {String} The set format for what.
+         */
+        getFormat (what) {
+            if (typeof this.format === "string") {
+                return this.format;
+            }
+            else if (!Array.isArray(this.format) || this.format.length !== 2) {
+                return this.internalFormat;
+            }
+            else if (what === "from") {
+                return this.format[0];
+            }
+            return this.format[1];
+        },
+        /**
+         * Returns the operator, free of risks.
+         * @returns {String} The set operator of if not possible the default operator.
+         */
+        getOperator () {
+            if (!this.operatorWhitelist.includes(this.operator)) {
+                return getDefaultOperatorBySnippetType("dateRange");
+            }
+            return this.operator;
+        },
+        /**
+         * Checks if the prechecked value is valid.
+         * @returns {Boolean} true if the prechecked value is valid, false if not.
+         */
+        isPrecheckedValid () {
+            return Array.isArray(this.prechecked) && this.prechecked.length === 2 && moment(this.prechecked[0], this.getFormat("from")).isValid() && moment(this.prechecked[1], this.getFormat("until")).isValid();
+        },
+        /**
+         * Returns true if the given snippetId equals - or if an array, holds - the own snippetId.
+         * @param {Number|Number[]} snippetId The snippetId to check or an array of snippetIds to search through.
+         * @returns {Boolean} true if this is the own snippetId or param contains the own snippetId, false if not.
+         */
+        isSelfSnippetId (snippetId) {
+            if (Array.isArray(snippetId)) {
+                return snippetId.includes(this.snippetId);
+            }
+            return snippetId === this.snippetId;
+        },
+        /**
+         * Calculates the position of the left slider button in percent.
+         * @info a 5% offset is calculated in to compensate for button width
+         * @returns {String} the percentage to use for css left style
+         */
+        getMeasureLeft () {
+            const range = this.currentSliderMax - this.currentSliderMin,
+                left = this.sliderFrom - this.currentSliderMin;
 
-                if (Object.prototype.hasOwnProperty.call(minMaxObj, "min")) {
-                    this.minimumValue = moment(minMaxObj.min, this.format).format(this.internalFormat);
+            return String((95 / Math.max(1, range) * left).toFixed(1)) + "%";
+        },
+        /**
+         * Calculates the distance between both slider buttons in percent.
+         * @info a 5% offset is calculated in to compensate for button width
+         * @returns {String} the percentage to use for css width style
+         */
+        getMeasureWidth () {
+            const range = this.currentSliderMax - this.currentSliderMin,
+                measure = this.sliderUntil - this.sliderFrom;
+
+            return String((95 / Math.max(1, range) * measure + 5).toFixed(1)) + "%";
+        },
+        /**
+         * Emits the current rule to whoever is listening.
+         * @param {*} value the value to put into the rule
+         * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
+         * @param {Boolean} [immediate=false] true if emit should be at once, false if soft waiting period should be applied
+         * @returns {void}
+         */
+        emitCurrentRule (value, startup = false, immediate = false) {
+            if (immediate) {
+                this.changeRule(value, startup);
+                return;
+            }
+            clearTimeout(this.intvEmitCurrentRule);
+            this.intvEmitCurrentRule = setInterval(() => {
+                if (!this.sliderMouseDown) {
+                    this.changeRule(value, startup);
                 }
-                if (Object.prototype.hasOwnProperty.call(minMaxObj, "max")) {
-                    this.maximumValue = moment(minMaxObj.max, this.format).format(this.internalFormat);
-                }
-                if (typeof onsuccess === "function") {
-                    onsuccess();
-                }
-            }, onerror, minOnly, maxOnly, true,
-            {rules: this.fixedRules, filterId: this.filterId, format: this.format});
+            }, this.timeoutSlider);
         },
         /**
          * Emits the current rule to whoever is listening.
@@ -355,15 +536,17 @@ export default {
          * @param {Boolean} [startup=false] true if the call comes on startup, false if a user actively changed a snippet
          * @returns {void}
          */
-        emitCurrentRule (value, startup = false) {
+        changeRule (value, startup = false) {
+            this.hasRuleSet = true;
             this.$emit("changeRule", {
                 snippetId: this.snippetId,
                 startup,
                 fixed: !this.visible,
                 attrName: this.attrName,
-                operator: this.securedOperator,
+                operator: this.getOperator(),
                 format: this.format,
-                value
+                value,
+                tagTitle: this.getTagTitle()
             });
         },
         /**
@@ -371,6 +554,7 @@ export default {
          * @returns {void}
          */
         deleteCurrentRule () {
+            this.hasRuleSet = false;
             this.$emit("deleteRule", this.snippetId);
         },
         /**
@@ -379,53 +563,38 @@ export default {
          * @returns {void}
          */
         resetSnippet (onsuccess) {
+            this.isAdjusting = true;
             if (this.visible) {
-                if (this.precheckedIsValid) {
-                    const left = moment(this.getValueWithinBorders(this.prechecked[0], this.minimumValue, this.maximumValue, this.format), this.format),
-                        right = moment(this.getValueWithinBorders(this.prechecked[1], this.minimumValue, this.maximumValue, this.format), this.format);
-
-                    this.value = [left.format(this.internalFormat), right.format(this.internalFormat)];
-                }
-                else if (this.minimumValue && this.maximumValue) {
-                    this.value = [this.minimumValue, this.maximumValue];
-                }
-                else {
-                    this.value = ["", ""];
-                }
+                this.hasRuleSet = false;
+                this.sliderFrom = this.currentSliderMin;
+                this.sliderUntil = this.currentSliderMax;
             }
             this.$nextTick(() => {
                 if (typeof onsuccess === "function") {
                     onsuccess();
                 }
+                this.isAdjusting = false;
             });
         },
         /**
-         * Triggered once when changes are made at the date picker to avoid set of rules during changes.
+         * Sets flag if mouse is down on slider.
          * @returns {void}
          */
-        startDateChange () {
-            if (!isObject(this.adjustment)) {
-                return;
-            }
-            this.isAdjusting = true;
+        setSliderMouseDown () {
+            this.sliderMouseDown = true;
         },
         /**
-         * Triggered once when end of changes are detected at the date picker to start set of rules after changes.
+         * Sets flag if mouse is up after down on slider.
          * @returns {void}
          */
-        endDateChange () {
-            if (!isObject(this.adjustment)) {
-                return;
+        setSliderMouseUp () {
+            this.sliderMouseDown = false;
+            if (!this.isInitializing && !this.isAdjusting) {
+                this.emitCurrentRule([
+                    moment(this.initialDateRef[this.sliderFrom], this.internalFormat).format(this.getFormat("from")),
+                    moment(this.initialDateRef[this.sliderUntil], this.internalFormat).format(this.getFormat("until"))
+                ]);
             }
-            this.isAdjusting = false;
-            this.$nextTick(() => {
-                const value = [
-                    moment(this.inRangeValueLeft, this.internalFormat).format(this.format),
-                    moment(this.inRangeValueRight, this.internalFormat).format(this.format)
-                ];
-
-                this.emitCurrentRule(value, this.isInitializing);
-            });
         }
     }
 };
@@ -437,129 +606,274 @@ export default {
         class="snippetDateRangeContainer"
     >
         <div
-            v-if="title !== false"
-            class="left"
+            v-if="title || info"
+            class="titleWrapper"
         >
-            <label
-                for="date-from-input-container"
-                class="snippetDateRangeLabel"
+            <div
+                v-if="title"
+                class="title"
             >
-                {{ titleText }}
-            </label>
+                {{ translateKeyWithPlausibilityCheck(getTitle(), key => $t(key)) }}
+            </div>
+            <div
+                v-if="info"
+                class="info"
+            >
+                <SnippetInfo
+                    :info="info"
+                    translation-key="snippetDateRange"
+                />
+            </div>
         </div>
         <div
-            v-if="info"
-            class="right"
+            v-if="display === 'all' || display === 'datepicker'"
+            class="datepickerWrapper"
         >
-            <SnippetInfo
-                :info="info"
-                :translation-key="translationKey"
-            />
+            <div class="from">
+                <label
+                    v-if="subTitles"
+                    :for="'inputDateRangeFrom-' + snippetId"
+                >
+                    {{ translateKeyWithPlausibilityCheck(getSubTitleFrom(), key => $t(key)) }}
+                </label>
+                <input
+                    :id="'inputDateRangeFrom-' + snippetId"
+                    v-model="dateFromComputed"
+                    type="date"
+                    :min="dateMinComputed"
+                    :max="dateMaxComputed"
+                    :aria-label="$t('common:modules.tools.filter.ariaLabel.dateRange.from', {param: getAttrNameFrom()})"
+                    :disabled="disabled"
+                >
+            </div>
+            <div class="until">
+                <label
+                    v-if="subTitles"
+                    :for="'inputDateRangeUntil-' + snippetId"
+                >
+                    {{ translateKeyWithPlausibilityCheck(getSubTitleUntil(), key => $t(key)) }}
+                </label>
+                <input
+                    :id="'inputDateRangeUntil-' + snippetId"
+                    v-model="dateUntilComputed"
+                    type="date"
+                    :min="dateMinComputed"
+                    :max="dateMaxComputed"
+                    :aria-label="$t('common:modules.tools.filter.ariaLabel.dateRange.to', {param: getAttrNameUntil()})"
+                    :disabled="disabled"
+                >
+            </div>
         </div>
-        <div class="date-input-container">
-            <div
-                id="date-from-input-container"
-                class="date-from-input-container"
-            >
-                <label
-                    v-if="title !== false"
-                    :for="'inputDateFrom-' + snippetId"
-                >{{ getLabelLeft() }}</label>
-                <input
-                    :id="'inputDateFrom-' + snippetId"
-                    v-model="inRangeValueLeft"
-                    :aria-label="ariaLabelDateFrom"
-                    name="inputDateFrom"
-                    class="snippetDateRangeFrom form-control"
-                    type="date"
-                    :min="minimumValue"
-                    :max="inRangeValueRight"
-                    :disabled="disable"
-                    @focus="startDateChange()"
-                    @blur="endDateChange()"
-                    @keyup.enter="endDateChange()"
-                >
+        <div
+            v-if="display === 'all' || display === 'slider'"
+            class="sliderWrapper"
+        >
+            <div class="track">
+                <div
+                    class="measure"
+                    :style="{ left: getMeasureLeft(), width: getMeasureWidth() }"
+                />
             </div>
-            <div
-                id="date-to-input-container"
-                class="date-to-input-container"
+            <input
+                v-model="sliderFrom"
+                type="range"
+                :aria-label="$t('common:modules.tools.filter.ariaLabel.slider.from', {param: getAttrNameFrom()})"
+                class="from"
+                :disabled="disabled"
+                :min="currentSliderMin"
+                :max="currentSliderMax"
+                @mousedown="setSliderMouseDown"
+                @mouseup="setSliderMouseUp"
             >
-                <label
-                    v-if="title !== false"
-                    :for="'inputDateUntil-' + snippetId"
-                >{{ getLabelRight() }}</label>
-                <input
-                    :id="'inputDateUntil-' + snippetId"
-                    v-model="inRangeValueRight"
-                    :aria-label="ariaLabelDateTo"
-                    name="inputDateUntil"
-                    class="snippetDateRangeUntil form-control"
-                    type="date"
-                    :min="inRangeValueLeft"
-                    :max="maximumValue"
-                    :disabled="disable"
-                    @focus="startDateChange()"
-                    @blur="endDateChange()"
-                    @keyup.enter="endDateChange()"
-                >
-            </div>
+            <input
+                v-model="sliderUntil"
+                type="range"
+                :aria-label="$t('common:modules.tools.filter.ariaLabel.slider.to', {param: getAttrNameUntil()})"
+                class="until"
+                :disabled="disabled"
+                :min="currentSliderMin"
+                :max="currentSliderMax"
+                @mousedown="setSliderMouseDown"
+                @mouseup="setSliderMouseUp"
+            >
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
-    .form-control {
-        height: 28px;
-    }
-    .snippetDateRangeContainer {
-        height: auto;
-    }
-    .snippetDateRangeContainer input {
-        clear: left;
-        width: 100%;
-        box-sizing: border-box;
-        outline: 0;
-        position: relative;
-        margin-bottom: 5px;
-        height: 34px;
-    }
-    .snippetDateRangeContainer .left {
-        float: left;
-        width: 90%;
-    }
-    .snippetDateRangeContainer .right {
-        position: absolute;
-        right: 0;
-    }
-    input[type='range'] {
-        width: 10.5rem;
-    }
-    label {
-        margin: 0;
-    }
-    .snippetDateRangeContainer > div {
-        margin-bottom: 0.5rem;
-    }
-    input {
-        box-sizing: border-box;
-        outline: 0;
-        position: relative;
-        width: 100%;
-    }
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        background: transparent;
-        bottom: 0;
-        color: transparent;
-        cursor: pointer;
-        height: auto;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: auto;
-    }
+
     .category-layer .right {
         right: 30px;
+    }
+
+    .snippetDateRangeContainer {
+        height: auto;
+
+        .titleWrapper {
+            position: relative;
+            height: 16px;
+            .title {
+                position: absolute;
+                left: 0;
+                width: 90%;
+            }
+            .info {
+                position: absolute;
+                right: 0;
+            }
+        }
+        .datepickerWrapper {
+            position: relative;
+            margin-top: 5px;
+            height: 38px;
+            .from {
+                position: absolute;
+                left: 0;
+                width: 50%;
+
+                label {
+                    display: block;
+                    height: 18px;
+                }
+                input {
+                    width: 90%;
+                }
+            }
+            .until {
+                position: absolute;
+                right: 0;
+                width: 50%;
+                text-align: right;
+
+                label {
+                    display: block;
+                    height: 18px;
+                }
+                input {
+                    width: 90%;
+                }
+            }
+        }
+        .sliderWrapper {
+            position: relative;
+            margin-top: 5px;
+            height: 28px;
+            .track {
+                width: 100%;
+                height: 15px;
+                background-color: $light_grey;
+                position: absolute;
+                margin: auto;
+                top: 0;
+                bottom: 0;
+                border-radius: 10px;
+            }
+            .measure {
+                height: 15px;
+                background-color: $light_blue;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                border-radius: 10px;
+            }
+
+            input[type="range"] {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                width: 100%;
+                outline: none;
+                position: absolute;
+                margin: auto;
+                top: 0;
+                bottom: 1px;
+                left: 0;
+                background-color: transparent;
+                pointer-events: none;
+            }
+            input[type=range]:focus {
+                outline: none;
+            }
+            input[type="range"]::-webkit-slider-runnable-track {
+                -webkit-appearance: none;
+                height: 3px;
+                width: 100%;
+                cursor: pointer;
+                border-radius: 1px;
+                box-shadow: none;
+            }
+            input[type="range"]::-moz-range-track {
+                -moz-appearance: none;
+                height: 3px;
+            }
+            input[type="range"]::-ms-track {
+                appearance: none;
+                height: 3px;
+            }
+            input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                height: 15px;
+                width: 15px;
+                background-color: $white;
+                cursor: pointer;
+                border-radius: 10px;
+                pointer-events: auto;
+                margin-top: -5px;
+                z-index: 2;
+            }
+            input[type="range"]::-moz-range-thumb {
+                -webkit-appearance: none;
+                height: 15px;
+                width: 15px;
+                background-color: $white;
+                cursor: pointer;
+                border-radius: 50%;
+                pointer-events: auto;
+            }
+            input[type="range"]::-ms-thumb {
+                -appearance: none;
+                height: 15px;
+                width: 15px;
+                background-color: $white;
+                cursor: pointer;
+                border-radius: 50%;
+                pointer-events: auto;
+            }
+            input[type="range"]:active::-ms-thumb {
+                background-color: $white;
+                border: 1px solid $light_blue;
+            }
+            input[type="range"]:active::-moz-range-thumb {
+                background-color: $white;
+                border: 1px solid $light_blue;
+            }
+            input[type="range"]:active::-webkit-slider-thumb {
+                background-color: $white;
+                border: 1px solid $light_blue;
+            }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            span {
+                &.min {
+                    float: left;
+                    position: absolute;
+                    left: 0;
+                    top: 48px;
+                }
+                &.max {
+                    float: right;
+                    position: absolute;
+                    right: 0;
+                    top: 48px;
+                }
+            }
+            input[type="range"].disabled::-webkit-slider-thumb {
+                background-color: $light_grey;
+            }
+        }
     }
 </style>

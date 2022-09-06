@@ -379,6 +379,7 @@
           "draw": {
             "name": "translate#common:menu.tools.draw",
             "icon": "bi-pencil-fill",
+            "addIconsOfActiveLayers": true,
             "iconList": [
               {
                 "id": "iconPoint",
