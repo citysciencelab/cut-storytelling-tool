@@ -524,7 +524,7 @@ export default {
                 return;
             }
             clearTimeout(this.intvEmitCurrentRule);
-            this.intvEmitCurrentRule = setInterval(() => {
+            this.intvEmitCurrentRule = setTimeout(() => {
                 if (!this.sliderMouseDown) {
                     this.changeRule(value, startup);
                 }
