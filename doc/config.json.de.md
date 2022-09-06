@@ -1340,7 +1340,11 @@ Neben **Portalconfig.menu.tools** können auch die Pfade **Portalconfig.menu.inf
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
+<<<<<<< HEAD
 |addWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mit diesem Werkzeug lassen sich Layer eines WMS laden. Die Angabe erfolgt über eine URL. Es werden alle Layer des Dienstes geladen und sind im Themenbaum unter "Externe Fachdaten" verfügbar. Bisher ist die Verwendung des Werkzeugs nur in Kombination mit den Tehmenbäumen "custom" und "default" möglich.|true|
+=======
+|addWMS|nein|**[addWMS](#markdown-header-portalconfigmenutooladdWMS)**||Mit diesem Werkzeug lassen sich Layer eines WMS laden. Die Angabe erfolgt über eine URL. Es werden alle Layer des Dienstes geladen und sind im Themenbaum unter "Externe Fachdaten" verfügbar. Bisher ist die Verwendung des Werkzeugs nur in Kombination mit den Tehmenbäumen "custom" und "default" möglich.|true|
+>>>>>>> fc3bb7908 (Syntax Fehler behoben)
 |compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Bietet eine Vergleichsmöglichkeit von Vektor-Features. In der getFeatureInfo lassen sich Features über das Stern-Symbol auf die Vergleichliste setzen. Funktioniert in Verbindung mit dem GFI-Theme **Default**!|false|
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Das Kontaktformular bietet dem User eine Möglichkeit an das konfigurierte Postfach eine Nachricht zu senden. Es können beispielsweise Fehler oder Wünsche und Anregungen gemeldet werden.|false|
 |coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
@@ -2798,6 +2802,7 @@ Erlaub das auswählen von Vektor Features indem der Nutzer auf der Karte eine Au
     }
 }
 ```
+***
 
 ##### Portalconfig.menu.tool.selectFeatures.highlightVectorRulesPolygon
 
@@ -3841,6 +3846,127 @@ Koordinaten-Werkzeug. Um zusätzlich zu den 2 dimensionalen Koordinaten die Höh
 ```
 
 ***
+<<<<<<< HEAD
+=======
+     
+#### Portalconfig.menu.tool.addWMS
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Mit diesem Werkzeug lassen sich zusätzliche WMS Layer über eine angegebene URL laden.
+
+
+***
+
+#### Portalconfig.menu.tool.bufferAnalysis
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Mit diesem Werkzeug lassen sich die Features einer Ziel-Layer anzeigen, die sich inner- oder außerhalb einer Kreisfläche um die Features einer Quell-Layer befinden. Dabei wird die Kreisfläche, ausgehend von den Quell-Layer Features, über den Buffer-Radius definiert. Die Quell- und Ziel-Layer benötigen hierzu vektorbasierte Daten aus WFS(❗) Diensten.   
+
+***
+
+#### Portalconfig.menu.tool.coord
+
+[inherits]: # (Portalconfig.menu.tool)
+
+⚠️Deprecated in 3.0.0 Bitte "supplyCoord" verwenden.
+
+Ermöglicht die Abfrage von Koordinaten per Maus(-Klick). 
+
+***
+
+#### Portalconfig.menu.tool.coordToolkit
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Ermöglicht die Suche von Koordinaten mithilfe einer Eingabemaske sowie die Abfrage von Koordinaten per Maus(-Klick). 
+
+***
+
+#### Portalconfig.menu.tool.extendedFilter
+
+[inherits]: # (Portalconfig.menu.tool)
+
+⚠️Deprecated in 3.0.0 Bitte "filter" verwenden.
+
+Über dieses Werkzeug können WFS(❗) Features dynamisch gefiltert werden. Dafür müssen die entsprechenden WFS Layer jedoch **[konfiguriert](#markdown-header-themenconfiglayervector)** werden.
+
+
+***
+
+#### Portalconfig.menu.tool.fileImport
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Über dieses Werkzeug können Dateien der Formate "*.kml", "*.geojson" und "*.gpx" importiert werden.
+
+***
+
+#### Portalconfig.menu.tool.kmlimport
+
+[inherits]: # (Portalconfig.menu.tool)
+
+⚠️Deprecated in 3.0.0 Bitte "fileImport" verwenden.
+
+Über dieses Werkzeug können Dateien der Formate "*.kml", "*.geojson" und "*.gpx" importiert werden.
+
+***
+
+#### Portalconfig.menu.tool.layerClusterToggler
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Mit diesem Werkzeug lassen sich Layer in Clustern gleichzeitig aktivieren/laden und deaktivieren
+
+***
+
+#### Portalconfig.menu.tool.selectFeatures
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute. Zur Verwendung werden
+vektorbasierte Daten aus WFS(❗) Layern benötigt.
+
+***
+
+#### Portalconfig.menu.tool.styleVT
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Das Werkzeug ermöglicht das Umschalten des Stylings von Vector Tile Layers(❗), sofern in der services.json mehrere Styles für die entsprechende Layer eingetragen sind.
+
+***
+
+#### Portalconfig.menu.tool.supplyCoord
+
+[inherits]: # (Portalconfig.menu.tool)
+
+⚠️Deprecated in 3.0.0 Bitte "coordToolkit" verwenden.
+
+Ermöglicht die Abrfage von Koordinaten per Maus(-Klick). 
+
+***
+
+#### Portalconfig.menu.tool.resetTree
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Werkzeug zum zurücksetzten des Themenbaums. 
+
+
+***
+
+#### Portalconfig.menu.tool.wfsFeatureFilter
+
+[inherits]: # (Portalconfig.menu.tool)
+
+⚠️Deprecated in 3.0.0 Bitte "filter" verwenden.
+
+Über dieses Werkzeug können WFS(❗) Features gefiltert werden. Dafür muss die "**[filterOptions](#markdown-header-themenconfiglayervector)**" der entsprechenden WFS Layer jedoch konfiguriert werden.
+
+***
+>>>>>>> fc3bb7908 (Syntax Fehler behoben)
 
 #### Portalconfig.menu.tool.routing
 
