@@ -1350,7 +1350,7 @@ Neben **Portalconfig.menu.tools** können auch die Pfade **Portalconfig.menu.inf
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|addWMS|nein|**[addWMS](markdown-header-portalconfigmenutooladdWMS)**||Mit diesem Werkzeug lassen sich Layer eines WMS laden. Die Angabe erfolgt über eine URL. Es werden alle Layer des Dienstes geladen und sind im Themenbaum unter "Externe Fachdaten" verfügbar. Bisher ist die Verwendung des Werkzeugs nur in Kombination mit den Tehmenbäumen "custom" und "default" möglich.|true|
+|addWMS|nein|**[addWMS](#markdown-header-portalconfigmenutooladdWMS)**||Mit diesem Werkzeug lassen sich Layer eines WMS laden. Die Angabe erfolgt über eine URL. Es werden alle Layer des Dienstes geladen und sind im Themenbaum unter "Externe Fachdaten" verfügbar. Bisher ist die Verwendung des Werkzeugs nur in Kombination mit den Tehmenbäumen "custom" und "default" möglich.|true|
 |compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Bietet eine Vergleichsmöglichkeit von Vektor-Features. In der getFeatureInfo lassen sich Features über das Stern-Symbol auf die Vergleichliste setzen. Funktioniert in Verbindung mit dem GFI-Theme **Default**!|false|
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Das Kontaktformular bietet dem User eine Möglichkeit an das konfigurierte Postfach eine Nachricht zu senden. Es können beispielsweise Fehler oder Wünsche und Anregungen gemeldet werden.|false|
 |coord|nein|**[coord](#markdown-header-portalconfigmenutoolcoord)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
@@ -2809,6 +2809,7 @@ Erlaub das auswählen von Vektor Features indem der Nutzer auf der Karte eine Au
     }
 }
 ```
+***
 
 ##### Portalconfig.menu.tool.selectFeatures.highlightVectorRulesPolygon
 
@@ -3865,7 +3866,7 @@ Koordinaten-Werkzeug. Um zusätzlich zu den 2 dimensionalen Koordinaten die Höh
 ```
 
 ***
-
+     
 #### Portalconfig.menu.tool.addWMS
 
 [inherits]: # (Portalconfig.menu.tool)
