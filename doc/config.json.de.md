@@ -3939,15 +3939,6 @@ Mit diesem Werkzeug lassen sich Layer in Clustern gleichzeitig aktivieren/laden 
 
 ***
 
-#### Portalconfig.menu.tool.selectFeatures
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute. Zur Verwendung werden
-vektorbasierte Daten aus WFS(❗) Layern benötigt.
-
-***
-
 #### Portalconfig.menu.tool.styleVT
 
 [inherits]: # (Portalconfig.menu.tool)
