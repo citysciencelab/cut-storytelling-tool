@@ -3906,6 +3906,117 @@ Coordinates tool. To display the height above sea level in addition to the 2 dim
 
 ***
 
+<<<<<<< HEAD
+=======
+#### Portalconfig.menu.tool.addWMS
+
+[inherits]: # (Portalconfig.menu.tool)
+
+The tool allows for adding additional WMS layers via a provided URL.
+
+
+***
+
+#### Portalconfig.menu.tool.bufferAnalysis
+
+[inherits]: # (Portalconfig.menu.tool)
+
+The tool highlights features of a target layer, that are located within or outside a circle around the features of a source-Layer. The circle is defined by a buffer-radius. The tool requires vector based Data from WFS(❗) services for both the source and the target layer. 
+
+***
+
+#### Portalconfig.menu.tool.coord
+
+[inherits]: # (Portalconfig.menu.tool)
+
+⚠️Deprecated in 3.0.0 Please use  "supplyCoord" instead.
+Tool to read coordinates on mouse click
+
+
+***
+
+#### Portalconfig.menu.tool.coordToolkit
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Tool to read coordinates on mouse click and search for coordinates.
+
+***
+
+#### Portalconfig.menu.tool.extendedFilter
+
+[inherits]: # (Portalconfig.menu.tool)
+
+⚠️Deprecated in 3.0.0 Please use "filter" instead.
+
+Dynamic filtering of WFS(❗) features. This requires an **[ `extendedFilter`](#markdown-header-themenconfiglayervector)** configuration on the WFS layer object.
+
+***
+
+#### Portalconfig.menu.tool.fileImport
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Import "*.kml", "*.geojson" and "*.gpx" files with this tool.
+
+
+***
+
+#### Portalconfig.menu.tool.kmlimport
+
+[inherits]: # (Portalconfig.menu.tool)
+
+⚠️Deprecated in 3.0.0. Please use `fileImport` instead.
+
+Import "*.kml", "*.geojson" and "*.gpx" files with this tool.
+
+***
+
+#### Portalconfig.menu.tool.layerClusterToggler
+
+[inherits]: # (Portalconfig.menu.tool)
+
+With this tool one can de-/activate clusters of layers together.
+
+***
+
+#### Portalconfig.menu.tool.styleVT
+
+[inherits]: # (Portalconfig.menu.tool)
+
+The tool allows for switching the style of vector tile layers(❗) which provides multiple stylings defined in the `services.json` file.
+
+***
+
+#### Portalconfig.menu.tool.supplyCoord
+
+[inherits]: # (Portalconfig.menu.tool)
+
+⚠️Deprecated in 3.0.0. Please use `coordToolkit` instead.
+
+Tool to read coordinates on mouse click.
+
+***
+
+#### Portalconfig.menu.tool.resetTree
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Tool to reset the tree.
+
+***
+
+#### Portalconfig.menu.tool.wfsFeatureFilter
+
+[inherits]: # (Portalconfig.menu.tool)
+
+⚠️Deprecated in 3.0.0. Please use `filter` instead.
+
+The tool allows for filtering WFS(❗) features. This required configuring "**[filterOptions](#markdown-header-themenconfiglayervector)**" on the WFS layer object.|false|
+
+***
+
+>>>>>>> 9549d05b3 (Remove duplicate block from config.json(.de).md)
 #### Portalconfig.menu.tool.routing
 
 [inherits]: # (Portalconfig.menu.tool)
