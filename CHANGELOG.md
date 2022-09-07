@@ -6,8 +6,20 @@
 ## Known Issues
 
 ---
-
 ## Unreleased - in development
+### __Breaking Changes__
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+### Fixed
+
+---
+## v2.25.0 - 2022-09-07
 ### __Breaking Changes__
 
 ### Added
@@ -37,7 +49,7 @@
 - Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
 - The following NPM packages have been updated:
     - dependencies:
-        - @masterportal/masterportalapi: 2.4.0 to 2.5.1
+        - @masterportal/masterportalapi: 2.4.0 to 2.6.0
         - @popperjs/core: 2.10.2 to 2.11.5
         - axios: 0.25.0 to 0.27.2
         - bootstrap-icons: 1.7.1 to 1.9.1
@@ -97,12 +109,12 @@ The following NPM package is removed:
 The Tool StyleWMS was removed.
 
 ### Fixed
-- Issue #818: Back to InitialView works again
 - Issue #808: Fix geometry polygon-with-hole for searchBar/specialWfs.
 - Issue #813: Fix various WMS-T bugs and styling.
-- Save Selection: takes over the transparency of the layer again.
+- Issue #818: Back to InitialView works again
 - Issue #823: Fix tree search.
-- Isue #827: fix image scaling for gfi: highlightVectorRules
+- Issue #827: fix image scaling for gfi: highlightVectorRules
+- Save Selection: takes over the transparency of the layer again.
 
 ---
 ## v2.24.1 - 2022-08-19
