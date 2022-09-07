@@ -1393,7 +1393,6 @@ A folder object defined by a name, icon, and its children.
 [type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
 [type:selectFeatures]: # (Portalconfig.menu.tool.selectFeatures)
 [type:shadow]: # (Portalconfig.menu.tool.shadow)
-[type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
 [type:styleVT]: # (Portalconfig.menu.tool.styleVT)
 [type:supplyCoord]: # (Portalconfig.menu.tool.supplyCoord)
 [type:resetTree]: # (Portalconfig.menu.tool.resetTree)
@@ -1432,7 +1431,6 @@ Alternatively, also the paths **Portalconfig.menu.info**, **Portalconfig.menu.si
 |searchByCoord|no|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||_Deprecated in 3.0.0. Please use "coordToolkit" instead._ Coordinate search with switchable coordinate reference system. The tool will zoom to any given coordinate and set a marker on it.|false|
 |selectFeatures|no|**[selectFeatures](#markdown-header-portalconfigmenutoolselectfeatures)**||Allows selecting a set of vector features by letting the user draw a box on the map. Features in that box will be displayed with GFI information.|false|
 |shadow|no|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Configuration object for the 3D mode shadow time.|false|
-|styleWMS|no|**[styleWMS](#markdown-header-portalconfigmenutoolstylewms)**||Classification of WMS services. This tool is used in the commute portal of MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg). With a mask, classifications can be defined. The GetMap request will have an SLD body as payload, used by the server to render. The WMS service now delivers its tiles in the defined classifications and colors.|true|
 |styleVT|no|**[styleVT](#markdown-header-portalconfigmenutoolstyleVT)**||Style selection for VT services. Allows switching between styles of a Vector Tile Layer that provides multiple stylings via the `services.json` file.|false|
 |supplyCoord|no|**[supplyCoord](#markdown-header-portalconfigmenutoolsupplyCoord)**||_Deprecated in 3.0.0. Please use "coordToolkit" instead._ Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`.|false|
 |resetTree|no|**[resetTree](#markdown-header-portalconfigmenutoolresetTree)**||Tool to reset tree. Clicking on Tool name in the menu under Tools resets the tree.|false|
@@ -3277,18 +3275,6 @@ Todo.
 
 ***
 
-#### Portalconfig.menu.tool.styleWMS
-
-[inherits]: # (Portalconfig.menu.tool)
-
-WMS service classification. This tool is used in the MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg) commute portal. With a mask, classifications can be defined. The GetMap request will have an SLD body as payload, used by the server to render. The WMS service now delivers its tiles in the defined classifications and colors.
-
-|Name|Required|Type|Default|Description|
-|----|--------|----|-------|-----------|
-|useProxy|no|Boolean|false|_Deprecated in the next major release. [GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Defines whether a service URL should be requested via proxy. For this, dots in the URL are replaced with underscores.|false|
-
-***
-
 #### Portalconfig.menu.tool.wfsSearch
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -5061,11 +5047,8 @@ List of typical WMS attributes.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |name|no|String/String[]||Layer name. If the attribute `styles` is configured, `name` must be of type String[].|false|
-|attributesToStyle|no|String[]||Attribute array by which the WMS is styled. Required by the **[tool](#markdown-header-portalconfigmenutools)** `styleWMS`.|false|
 |extent|no|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Only relevant for 3D mode. Extent of the layer. If not specified, it will be used Extent of the MapView.|false|
 |featureCount|no|Integer|1|Amount of feature to be returned at maximum on a *GetFeatureInfo* request.|false|
-|geomType|no|String||Geometry type of WMS data. Currently, only `"polygon"` is supported. Required by the **[tool](#markdown-header-portalconfigmenutools)** `styleWMS`.|false|
-|styleable|no|Boolean||Whether the `styleWMS` tool may use this layer. Required by the **[tool](#markdown-header-portalconfigmenutools)** `styleWMS`.|true|
 |gfiAsNewWindow|no|**[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)**|null|Relevant if `"text/html"` is used.|true|
 |styles|no|String[]||Will be sent to the server if defined. The server will interpret and apply these styles and return the corresponding styled tiles.|true|
 
@@ -5087,12 +5070,10 @@ List of typical WMS attributes.
     "isNeverVisibleInTree": false,
     "attributesToStyle": ["MyFirstAttr"],
     "featureCount": 2,
-    "geomType": "geometry",
     "gfiAsNewWindow": {
         "name": "_blank",
         "specs": "width=800,height=700"
     },
-    "styleable": true,
     "styles": ["firstStyle", "secondStyle"]
 }
 ```
