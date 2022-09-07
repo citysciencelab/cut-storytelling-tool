@@ -1,8 +1,8 @@
 version: '3.9'
 services:
-  # Frontend incl. Masterportal configuration and both the storytelling and the data collection add-on
-  mobility-frontend:
-    container_name: mobility-frontend
+  # Frontend incl. Masterportal configuration for the storytelling tool
+  stt-frontend:
+    container_name: stt-frontend
     build:
       context: .
       dockerfile: Dockerfile

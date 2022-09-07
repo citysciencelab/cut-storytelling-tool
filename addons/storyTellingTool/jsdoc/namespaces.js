@@ -1,0 +1,4 @@
+/**
+ * @namespace StoryTellingTool
+ * @memberof Addons
+ */

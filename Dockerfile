@@ -1,5 +1,5 @@
-# Create container for building mobility-frontend
-FROM node:12-alpine as build
+# Create container for building stt-frontend
+FROM node:16.14.0-alpine as build
 
 RUN mkdir -p /usr/app
 WORKDIR /usr/app
@@ -16,17 +16,17 @@ RUN apk add --update --no-cache \
     autoconf \
     automake
 
-COPY . ./masterportal
+COPY . .
 
-RUN npm i --prefix masterportal/addons/storyTellingTool
-RUN npm i --prefix masterportal
+RUN npm i --prefix addons/storyTellingTool
+RUN npm i --prefix
 
-RUN npm run buildPortal --prefix masterportal
+RUN npm run buildPortal --prefix
 
-# Create container for running mobility-frontend
+# Create container for running stt-frontend
 FROM nginx
 
 # Copy build files from build container
-COPY --from=build /usr/app/masterportal/dist /usr/share/nginx/html
+COPY --from=build /usr/app/dist /usr/share/nginx/html
 
 EXPOSE 80

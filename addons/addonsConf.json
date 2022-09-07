@@ -1,5 +1,6 @@
 {
   "storyTellingTool": {
+    "vue": true,
     "type": "tool"
   }
 }
