@@ -174,7 +174,6 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         if (Object.keys(triggerEvent).length > 0) {
             hit = Object.assign(hit, {triggerEvent: triggerEvent});
         }
-        console.log(result._source.datasets[0].md_name);
         if (result._source.datasets[0].md_name) {
             hit.metaName = hit.name + " (" + result._source.datasets[0].md_name + ")";
         }
