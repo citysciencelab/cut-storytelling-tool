@@ -7,7 +7,7 @@
 
 ---
 
-## Unreleased - in development
+## v2.25.0 - 2022-09-07
 ### __Breaking Changes__
 
 ### Added
@@ -97,12 +97,12 @@ The following NPM package is removed:
 The Tool StyleWMS was removed.
 
 ### Fixed
-- Issue #818: Back to InitialView works again
 - Issue #808: Fix geometry polygon-with-hole for searchBar/specialWfs.
 - Issue #813: Fix various WMS-T bugs and styling.
-- Save Selection: takes over the transparency of the layer again.
+- Issue #818: Back to InitialView works again
 - Issue #823: Fix tree search.
-- Isue #827: fix image scaling for gfi: highlightVectorRules
+- Issue #827: fix image scaling for gfi: highlightVectorRules
+- Save Selection: takes over the transparency of the layer again.
 
 ---
 ## v2.24.1 - 2022-08-19
