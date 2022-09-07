@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["storyTellingTool", "mobilityDataDraw"],
+    addons: ["storyTellingTool"],
     ignoredKeys: [
         "BOUNDEDBY",
         "SHAPE",
