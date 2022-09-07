@@ -2742,7 +2742,6 @@ A hover event controls highlighting hovered features in the map. By clicking a f
     }
 }
 ```
-***
 
 ##### Portalconfig.menu.tool.featureLister.highlightVectorRulesPolygon
 
@@ -2869,7 +2868,6 @@ Allows selecting a set of vector features by letting the user draw a box on the 
     }
 }
 ```
-***
 
 ##### Portalconfig.menu.tool.selectFeatures.highlightVectorRulesPolygon
 

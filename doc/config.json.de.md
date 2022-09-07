@@ -2809,7 +2809,6 @@ Erlaub das auswählen von Vektor Features indem der Nutzer auf der Karte eine Au
     }
 }
 ```
-***
 
 ##### Portalconfig.menu.tool.selectFeatures.highlightVectorRulesPolygon
 
@@ -3866,7 +3865,7 @@ Koordinaten-Werkzeug. Um zusätzlich zu den 2 dimensionalen Koordinaten die Höh
 ```
 
 ***
-     
+
 #### Portalconfig.menu.tool.addWMS
 
 [inherits]: # (Portalconfig.menu.tool)
