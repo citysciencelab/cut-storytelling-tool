@@ -37,7 +37,7 @@
 - Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
 - The following NPM packages have been updated:
     - dependencies:
-        - @masterportal/masterportalapi: 2.4.0 to 2.5.1
+        - @masterportal/masterportalapi: 2.4.0 to 2.6.0
         - @popperjs/core: 2.10.2 to 2.11.5
         - axios: 0.25.0 to 0.27.2
         - bootstrap-icons: 1.7.1 to 1.9.1
