@@ -173,12 +173,16 @@ const KomootModel = Backbone.Model.extend(/** @lends KomootModel.prototype */{
         let metaName;
 
         metaName = display;
-        if (hit.properties.state !== undefined || hit.properties.country !== undefined) {
-            metaName = metaName + ", " + hit.properties.state + " " + hit.properties.country;
-            if (hit.properties.suburb !== undefined) {
-                metaName = metaName + " (" + hit.properties.suburb + ")";
-            }
+        if (hit.properties.state !== undefined) {
+            metaName = metaName + ", " + hit.properties.state;
         }
+        if (hit.properties.country !== undefined) {
+            metaName = metaName + " " + hit.properties.country;
+        }
+        if (hit.properties.suburb !== undefined) {
+            metaName = metaName + " (" + hit.properties.suburb + ")";
+        }
+
         return metaName;
     },
 
