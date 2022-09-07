@@ -5068,7 +5068,6 @@ List of typical WMS attributes.
     "minScale": "1000",
     "autoRefresh": "10000",
     "isNeverVisibleInTree": false,
-    "attributesToStyle": ["MyFirstAttr"],
     "featureCount": 2,
     "gfiAsNewWindow": {
         "name": "_blank",
