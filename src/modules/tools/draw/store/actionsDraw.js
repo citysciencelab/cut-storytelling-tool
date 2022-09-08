@@ -566,6 +566,8 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
             dispatch("removeInteraction", state.modifyInteraction);
             dispatch("removeInteraction", state.selectInteractionModify);
             dispatch("removeInteraction", state.selectInteraction);
+            dispatch("removeInteraction", state.modifyAttributesInteraction);
+            dispatch("removeInteraction", state.selectInteractionModifyAttributes);
 
             commit("setSelectedFeature", null);
             commit("setDrawType", initialState.drawType);
