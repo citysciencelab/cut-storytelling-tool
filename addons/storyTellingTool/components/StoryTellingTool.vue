@@ -6,6 +6,7 @@ import StoryPlayer from "./storyPlayer/StoryPlayer.vue";
 import actions from "../store/actionsStoryTellingTool";
 import getters from "../store/gettersStoryTellingTool";
 import mutations from "../store/mutationsStoryTellingTool";
+import fetchDataFromUrl from "../utils/getStoryFromUrl";
 import * as constants from "../store/constantsStoryTellingTool";
 
 export default {
@@ -18,6 +19,7 @@ export default {
     data () {
         return {
             constants,
+            fetchDataFromUrl,
             mode: null,
             storyConfPath: Config.storyConf
         };
@@ -94,6 +96,12 @@ export default {
      */
     mounted () {
         this.applyTranslationKey(this.name);
+
+        if (this.storyConfPath) {
+            fetchDataFromUrl(this.storyConfPath).then(loadedStoryConf => {
+                this.setStoryConf(loadedStoryConf);
+            });
+        }
     },
     methods: {
         ...mapMutations("Tools/StoryTellingTool", Object.keys(mutations)),
@@ -204,26 +212,26 @@ export default {
                                 class="my-4"
                             >
                                 <v-img
-                                    v-if="option.title == 'Story starten'"
-                                    src="https://raw.githubusercontent.com/herzogrh/faircare-verkehr/main/assets/img/stroller-1.jpg"
+                                    v-if="option.title === 'Story starten'"
+                                    :src="storyConf.coverImagePath"
                                     height="200px"
                                 />
-                                <v-card-title v-if="option.title == 'Story starten'">
-                                    FairCare Verkehr
+                                <v-card-title v-if="option.title === 'Story starten'">
+                                    {{ storyConf.title }}
                                 </v-card-title>
-                                <v-card-subtitle v-if="option.title == 'Story starten'">
-                                    Eine Geschichte zur Mobilität von Personen, die unbezahlte Sorgearbeit ausüben.
+                                <v-card-subtitle v-if="option.title === 'Story starten'">
+                                    {{ storyConf.description }}
                                 </v-card-subtitle>
                                 <v-card-actions>
                                     <v-btn
-                                        v-if="option.title == 'Story starten'"
+                                        v-if="option.title === 'Story starten'"
                                         text
                                         @click="toggle"
                                     >
                                         {{ option.title }}
                                     </v-btn>
                                     <v-col
-                                        v-if="option.title == 'Story erstellen'"
+                                        v-if="option.title === 'Story erstellen'"
                                         class="text-center"
                                     >
                                         <p><i>- Experimentell -</i></p>
@@ -313,7 +321,7 @@ $white: #FFFFFF;
 
 }
 
-.table-nav-main{
+.table-nav-main {
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
     background-color: white;
@@ -344,7 +352,7 @@ $white: #FFFFFF;
 }
 
 .table-tool:hover {
-    background-color: fade($main-blue , 20%);
+    background-color: fade($main-blue, 20%);
 }
 
 #table-searchForm input#searchInput.form-control {
@@ -353,7 +361,7 @@ $white: #FFFFFF;
     width: 340px;
 }
 
-#searchInput::placeholder, .form-control::placeholder{
+#searchInput::placeholder, .form-control::placeholder {
     font-family: "Arial", sans-serif;
     font-size: 12px;
 }
@@ -421,11 +429,11 @@ $white: #FFFFFF;
 }
 
 .icon-tools::after {
-    color: rgba(142, 180, 210,1)
+    color: rgba(142, 180, 210, 1)
 }
 
 .table-tools-active .icon-tools::before {
-    color: rgba(142, 180, 210,1)
+    color: rgba(142, 180, 210, 1)
 }
 
 .icon-drag::before {
