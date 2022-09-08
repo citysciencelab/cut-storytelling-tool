@@ -19,8 +19,7 @@ export default {
         return {
             constants,
             mode: null,
-            storyConfPath: Config.storyConf,
-            dings: "bums"
+            storyConfPath: Config.storyConf
         };
     },
     computed: {
