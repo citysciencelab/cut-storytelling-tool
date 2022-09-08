@@ -99,20 +99,6 @@ export default {
             default: true
         }
     },
-    dataCustom: {
-        isInitializing: true,
-        isAdjusting: false,
-        hasRuleSet: false,
-        adjustMinMax: [],
-        intvEmitCurrentRule: -1,
-        intvInputReaction: -1,
-        currentSource: "init",
-        sliderMouseDown: false,
-        operatorWhitelist: [
-            "BETWEEN",
-            "INTERSECTS"
-        ]
-    },
     data () {
         return {
             inputFrom: 0,
@@ -149,10 +135,10 @@ export default {
                     if (typeof this.getMemoryAdjustMax() !== "undefined") {
                         this.currentSliderMax = this.getMemoryAdjustMax();
                     }
-                    if (!this.hasRuleSet() || this.currentSliderMin > this.sliderFrom) {
+                    if (!this.hasRuleSet || this.currentSliderMin > this.sliderFrom) {
                         this.sliderFrom = this.currentSliderMin;
                     }
-                    if (!this.hasRuleSet() || this.currentSliderMax < this.sliderUntil) {
+                    if (!this.hasRuleSet || this.currentSliderMax < this.sliderUntil) {
                         this.sliderUntil = this.currentSliderMax;
                     }
                 }
@@ -168,7 +154,7 @@ export default {
             if (value > this.sliderUntil) {
                 this.sliderUntil = value;
             }
-            else if (!this.isInitializing() && !this.isAdjusting()) {
+            else if (!this.isInitializing && !this.isAdjusting) {
                 this.emitCurrentRule([value, this.sliderUntil]);
             }
             this.setInputFrom(value);
@@ -180,7 +166,7 @@ export default {
             if (value < this.sliderFrom) {
                 this.sliderFrom = value;
             }
-            else if (!this.isInitializing() && !this.isAdjusting()) {
+            else if (!this.isInitializing && !this.isAdjusting) {
                 this.emitCurrentRule([this.sliderFrom, value]);
             }
             this.setInputFrom(this.sliderFrom);
@@ -224,6 +210,20 @@ export default {
             }
             this.setInputUntil(value);
         }
+    },
+    created () {
+        this.isInitializing = true;
+        this.isAdjusting = false;
+        this.hasRuleSet = false;
+        this.adjustMinMax = [];
+        this.intvEmitCurrentRule = -1;
+        this.intvInputReaction = -1;
+        this.currentSource = "init";
+        this.sliderMouseDown = false;
+        this.operatorWhitelist = [
+            "BETWEEN",
+            "INTERSECTS"
+        ];
     },
     mounted () {
         if (this.isPrecheckedValid()) {
@@ -385,7 +385,7 @@ export default {
          * @returns {String} The set operator of if not possible the default operator.
          */
         getOperator () {
-            if (!this.$options.dataCustom.operatorWhitelist.includes(this.operator)) {
+            if (!this.operatorWhitelist.includes(this.operator)) {
                 return getDefaultOperatorBySnippetType("sliderRange");
             }
             return this.operator;
@@ -529,26 +529,12 @@ export default {
             }, this.timeoutInput);
         },
         /**
-         * Returns if the slider is currently initializing.
-         * @returns {Boolean} true if the current is initializing, false if not.
-         */
-        isInitializing () {
-            return this.$options.dataCustom.isInitializing;
-        },
-        /**
          * Sets the initializing flag.
          * @param {Boolean} value The flag to set.
          * @returns {void}
          */
         setIsInitializing (value) {
-            this.$options.dataCustom.isInitializing = value;
-        },
-        /**
-         * Returns if the slider is adjusting. This happens if prop adjustment is changing.
-         * @returns {Boolean} true if the slider is adjusting.
-         */
-        isAdjusting () {
-            return this.$options.dataCustom.isAdjusting;
+            this.isInitializing = value;
         },
         /**
          * Sets the adjusting flag.
@@ -556,14 +542,7 @@ export default {
          * @returns {void}
          */
         setIsAdjusting (value) {
-            this.$options.dataCustom.isAdjusting = value;
-        },
-        /**
-         * Returns the flag that indicates if a rule was set by this slider.
-         * @returns {Boolean} true if a rule was set, false if not.
-         */
-        hasRuleSet () {
-            return this.$options.dataCustom.hasRuleSet;
+            this.isAdjusting = value;
         },
         /**
          * Sets the flag to indicate if a rule has been set by this slider.
@@ -571,21 +550,21 @@ export default {
          * @returns {void}
          */
         setHasRuleSet (value) {
-            this.$options.dataCustom.hasRuleSet = value;
+            this.hasRuleSet = value;
         },
         /**
          * Returns the min value memorized during adjustment.
          * @returns {Number} The memorized min value.
          */
         getMemoryAdjustMin () {
-            return this.$options.dataCustom.adjustMinMax[0];
+            return this.adjustMinMax[0];
         },
         /**
          * Returns the max value memorized during adjustment.
          * @returns {Number} The memorized max value.
          */
         getMemoryAdjustMax () {
-            return this.$options.dataCustom.adjustMinMax[1];
+            return this.adjustMinMax[1];
         },
         /**
          * Memorizes the given min value during adjustment.
@@ -593,7 +572,7 @@ export default {
          * @returns {void}
          */
         setMemoryAdjustMin (value) {
-            this.$options.dataCustom.adjustMinMax[0] = value;
+            this.adjustMinMax[0] = value;
         },
         /**
          * Memorizes the given max value during adjustment.
@@ -601,7 +580,7 @@ export default {
          * @returns {void}
          */
         setMemoryAdjustMax (value) {
-            this.$options.dataCustom.adjustMinMax[1] = value;
+            this.adjustMinMax[1] = value;
         },
         /**
          * Resets the memory of min and max value for a new round of adjustment.
@@ -609,7 +588,7 @@ export default {
          * @returns {void}
          */
         resetMemoryAdjustMinMax () {
-            this.$options.dataCustom.adjustMinMax = [];
+            this.adjustMinMax = [];
         },
         /**
          * Starts the interval to emit the current rule after a timeout and cancels the running interval.
@@ -619,8 +598,8 @@ export default {
          * @returns {void}
          */
         setIntervalEmitCurrentRule (callback, timeout) {
-            clearTimeout(this.$options.dataCustom.intvEmitCurrentRule);
-            this.$options.dataCustom.intvEmitCurrentRule = setTimeout(() => {
+            clearTimeout(this.intvEmitCurrentRule);
+            this.intvEmitCurrentRule = setTimeout(() => {
                 callback();
             }, timeout);
         },
@@ -632,8 +611,8 @@ export default {
          * @returns {void}
          */
         setIntervalInputReaction (callback, timeout) {
-            clearTimeout(this.$options.dataCustom.intvInputReaction);
-            this.$options.dataCustom.intvInputReaction = setTimeout(() => {
+            clearTimeout(this.intvInputReaction);
+            this.intvInputReaction = setTimeout(() => {
                 callback();
             }, timeout);
         },
@@ -643,7 +622,7 @@ export default {
          * @returns {Boolean} true if the given value matches the currentSource, false if not.
          */
         isCurrentSource (value) {
-            return this.$options.dataCustom.currentSource === value;
+            return this.currentSource === value;
         },
         /**
          * Sets the current source for input data.
@@ -651,14 +630,14 @@ export default {
          * @returns {void}
          */
         setCurrentSource (value) {
-            this.$options.dataCustom.currentSource = value;
+            this.currentSource = value;
         },
         /**
          * Checks if the mouse is down on the slider.
          * @returns {Boolean} true if the mouse has been pressed down on slider touch, false if not.
          */
         isSliderMouseDown () {
-            return this.$options.dataCustom.sliderMouseDown === true;
+            return this.sliderMouseDown === true;
         },
         /**
          * Sets flag if mouse is down on slider.
@@ -666,15 +645,15 @@ export default {
          */
         setSliderMouseDown () {
             this.setCurrentSource("slider");
-            this.$options.dataCustom.sliderMouseDown = true;
+            this.sliderMouseDown = true;
         },
         /**
          * Sets flag if mouse is up after down on slider.
          * @returns {void}
          */
         setSliderMouseUp () {
-            this.$options.dataCustom.sliderMouseDown = false;
-            if (!this.isInitializing() && !this.isAdjusting()) {
+            this.sliderMouseDown = false;
+            if (!this.isInitializing && !this.isAdjusting) {
                 this.emitCurrentRule([this.sliderFrom, this.sliderUntil]);
             }
         }
