@@ -10,10 +10,10 @@ services:
             - proxy
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.mobility-frontend-re2.entrypoints=https"
-            - "traefik.http.routers.mobility-frontend-re2.rule=Host(`stt.cut.hcu-hamburg.de`)"
-            - "traefik.http.routers.mobility-frontend-re2.tls=true"
-            - "traefik.http.routers.mobility-frontend-re2.tls.certresolver=lets-encr"
+            - "traefik.http.routers.stt-frontend.entrypoints=https"
+            - "traefik.http.routers.stt-frontend.rule=Host(`stt.cut.hcu-hamburg.de`)"
+            - "traefik.http.routers.stt-frontend.tls=true"
+            - "traefik.http.routers.stt-frontend.tls.certresolver=lets-encr"
 
 networks:
     proxy:
