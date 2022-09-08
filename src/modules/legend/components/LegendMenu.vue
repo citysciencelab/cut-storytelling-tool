@@ -52,9 +52,12 @@ export default {
             if (root && this.uiStyle !== "TABLE") {
                 const span = root.querySelector("[name=legend]");
 
-                if (this.mobile && span && span.parentNode) {
+                if (this.mobile && span?.parentNode) {
                     span.parentNode.style.display = "none";
-                    root.insertBefore(this.element, span.parentNode.nextSibling);
+                    root.insertBefore(this.element, span.parentNode.nextElementSibling);
+                }
+                else if (!this.mobile && span?.parentNode?.parentNode && this.childNode) {
+                    root.replaceChild(this.childNode, span.parentNode.parentNode);
                 }
             }
         },
