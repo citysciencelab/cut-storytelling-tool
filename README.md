@@ -12,8 +12,47 @@ The current version of the repository includes an example from the real-life exp
 
 https://user-images.githubusercontent.com/36763878/161025746-b8ac51be-a687-4e63-8bcf-b1da01334ead.mp4
 
-### Docker
+### Setup
 
+
+1. copy master portal storytelling tool repository and follow the **[Masterportal setup](#masterportal-setup)**
+2. copy portal configuration 'basic' and select desired name for portal
+3. remove all unused files from the folder '*portalname*/resources' and corresponding references from config.js
+4. enter all used services into a JSON and reference them in config.js in the attribute 'layerConf
+5. configure attribute namedProjections in config.js
+6. specify the attributes startCenter, extent, startZoomLevel, epsg of the mapView attribute in config.json
+7. fill the attributes background maps and subject data with the corresponding IDs of the JSON from point 4
+8. add the following attributes to config.js:
+```
+addons: ["storyTellingTool"],
+vuetify: "addons/storyTellingTool/vuetify",
+storyConf: "./ressources/story.json",
+uiStyle: "table",
+
+```
+9. configure the tools attribute of config.json as follows:
+```
+    "tools": {
+        "name": "translate#common:menu.tools.name",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+            "storyTellingTool": {
+                "name": "translate#additional:modules.tools.storyTellingTool.title",
+                "glyphicon": "glyphicon-book",
+                "active": true
+            }
+        }
+    },
+```
+10. add the following line to index.html:
+```
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
+```
+12. create test story
+13. start with docker or npm
+
+
+### Docker
 
 Quick setup of a local version of the storytelling tool.
 
