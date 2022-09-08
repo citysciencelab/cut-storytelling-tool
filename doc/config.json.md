@@ -1453,7 +1453,7 @@ A tool's attribute key defines which tool is loaded. Each tool provides at least
 |keepOpen|no|Boolean|false|Whether the tool remains open parallel to other tools. Only works if it is used for one tool and if tool is rendered to sidebar, other tools should be rendered to window.|false|
 |name|yes|String||Name displayed in the menu.|false|
 |onlyDesktop|no|Boolean|false|Whether the tool should only be visible in desktop mode.|false|
-|renderToWindow|no|Boolean|true|Whether the tool should be displayed in the movable widget element.|false|
+|renderToWindow|no|Boolean|true|Whether the tool should be displayed in the movable widget element. In mobile mode, the window is always used.|false|
 |resizableWindow|no|Boolean|false|Whether the tool window can be minimized/restored.|false|
 
 **Example**
