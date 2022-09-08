@@ -33,7 +33,10 @@ export default {
 
         <form @submit.prevent="downloadStoryFiles">
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    for="title"
+                    class="form-label"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.storyName"
@@ -42,6 +45,7 @@ export default {
                 </label>
 
                 <input
+                    id="title"
                     v-model="storyConf.title"
                     class="form-control"
                     type="text"
@@ -50,7 +54,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    for="description"
+                    class="form-label"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.storyDescription"
@@ -59,13 +66,16 @@ export default {
                 </label>
 
                 <textarea
+                    id="description"
                     v-model="storyConf.description"
                     class="form-control"
                 />
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.author"
@@ -74,6 +84,7 @@ export default {
                 </label>
 
                 <input
+                    id="author"
                     v-model="storyConf.author"
                     class="form-control"
                     type="text"

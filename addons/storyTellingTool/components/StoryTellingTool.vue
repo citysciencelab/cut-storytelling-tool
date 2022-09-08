@@ -143,10 +143,10 @@ export default {
 
                 // Confirm tool closing if user is creating a story
                 isCreatingAStory =
-                this.mode === this.constants.storyTellingModes.CREATE &&
-                JSON.stringify(
-                    this.$store.state.Tools.StoryTellingTool.storyConf
-                ) !== JSON.stringify(this.constants.emptyStoryConf);
+                    this.mode === this.constants.storyTellingModes.CREATE &&
+                    JSON.stringify(
+                        this.$store.state.Tools.StoryTellingTool.storyConf
+                    ) !== JSON.stringify(this.constants.emptyStoryConf);
 
             if (isCreatingAStory) {
                 const confirmActionSettings = {

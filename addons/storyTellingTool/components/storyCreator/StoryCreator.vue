@@ -1,5 +1,5 @@
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 import StoryForm from "./StoryForm.vue";
 import StepForm from "./StepForm.vue";
 import StoryPlayer from "../storyPlayer/StoryPlayer.vue";
@@ -15,7 +15,7 @@ export default {
         StepForm,
         StoryPlayer
     },
-    data() {
+    data () {
         return {
             constants,
             view: constants.storyCreationViews.STORY_CREATION,
@@ -25,8 +25,8 @@ export default {
     computed: {
         ...mapGetters("Tools/StoryTellingTool", Object.keys(getters))
     },
-    mounted() {
-        this.setStoryConf({ ...this.constants.emptyStoryConf });
+    mounted () {
+        this.setStoryConf({...this.constants.emptyStoryConf});
     },
     methods: {
         ...mapMutations("Tools/StoryTellingTool", Object.keys(mutations)),
@@ -37,7 +37,7 @@ export default {
          * @param {Object} step the step to edit
          * @returns {void}
          */
-        onEditStep(step) {
+        onEditStep (step) {
             this.stepToEdit = step;
             this.view = this.constants.storyCreationViews.STEP_CREATION;
         },
@@ -46,7 +46,7 @@ export default {
          * Return to the story form
          * @returns {void}
          */
-        returnToStoryForm() {
+        returnToStoryForm () {
             this.stepToEdit = null;
             this.view = this.constants.storyCreationViews.STORY_CREATION;
         }
@@ -64,8 +64,8 @@ export default {
 
         <StepForm
             v-if="view === constants.storyCreationViews.STEP_CREATION"
-            :isEditing="Boolean(stepToEdit)"
-            :initialStep="stepToEdit"
+            :is-editing="Boolean(stepToEdit)"
+            :initial-step="stepToEdit"
             @return="returnToStoryForm"
         />
 
@@ -74,13 +74,19 @@ export default {
             class="tool-storyTellingTool-creator-preview"
         >
             <div class="tool-storyTellingTool-creator-preview-header primary">
-                <v-btn color="white" icon @click="returnToStoryForm">
+                <v-btn
+                    color="white"
+                    icon
+                    @click="returnToStoryForm"
+                >
                     <v-icon>arrow_back_ios_new</v-icon>
                 </v-btn>
-                <h4 class="white--text">Vorschau</h4>
+                <h4 class="white--text">
+                    Vorschau
+                </h4>
             </div>
 
-            <StoryPlayer isPreview />
+            <StoryPlayer is-preview />
         </div>
     </div>
 </template>

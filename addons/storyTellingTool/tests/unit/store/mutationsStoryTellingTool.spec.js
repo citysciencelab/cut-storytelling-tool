@@ -1,11 +1,11 @@
-import { expect } from "chai";
+import {expect} from "chai";
 import mutations from "../../../store/mutationsStoryTellingTool";
 
-const { applyTranslationKey } = mutations;
+const {applyTranslationKey} = mutations;
 
-describe("addons/StoryTellingTool/store/mutationsStoryTellingTool", function() {
-    describe("applyTranslationKey", function() {
-        it("removes 'translate#' from name if present", function() {
+describe("addons/StoryTellingTool/store/mutationsStoryTellingTool", function () {
+    describe("applyTranslationKey", function () {
+        it("removes 'translate#' from name if present", function () {
             const state = {
                     name:
                         "translate#additional:modules.tools.StoryTellingTool.title"
@@ -19,7 +19,7 @@ describe("addons/StoryTellingTool/store/mutationsStoryTellingTool", function() {
             );
         });
 
-        it("does nothing, if name not starts with 'translate#'", function() {
+        it("does nothing, if name not starts with 'translate#'", function () {
             const name = "dies ist ein StoryTellingTool",
                 state = {
                     name: name
@@ -30,7 +30,7 @@ describe("addons/StoryTellingTool/store/mutationsStoryTellingTool", function() {
             expect(state.name).to.equals(name);
         });
 
-        it("does nothing, if payload is undefined", function() {
+        it("does nothing, if payload is undefined", function () {
             const name = "name",
                 state = {
                     name: name

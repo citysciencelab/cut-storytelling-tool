@@ -1,16 +1,16 @@
 export const routeMobilityModes = {
-  WALK: "walk",
-  BICYCLE: "bicycle",
-  CAR: "car",
-  BUS: "bus",
-  TRAIN: "train",
+    WALK: "walk",
+    BICYCLE: "bicycle",
+    CAR: "car",
+    BUS: "bus",
+    TRAIN: "train"
 };
 
 export const stopMobilityModes = {
-  POI: "poi",
+    POI: "poi"
 };
 
 export const mobilityModes = {
-  ...routeMobilityModes,
-  ...stopMobilityModes,
+    ...routeMobilityModes,
+    ...stopMobilityModes
 };

@@ -1,9 +1,9 @@
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 import actions from "../../store/actionsStoryTellingTool";
 import getters from "../../store/gettersStoryTellingTool";
 import mutations from "../../store/mutationsStoryTellingTool";
-import { getStepReference } from "../../utils/getReference";
+import {getStepReference} from "../../utils/getReference";
 
 export default {
     name: "StoryNavigation",
@@ -28,7 +28,7 @@ export default {
             default: []
         }
     },
-    data() {
+    data () {
         return {
             getStepReference
         };
@@ -44,12 +44,13 @@ export default {
          * Selects the previous step
          * @returns {void}
          */
-        selectPreviousStep() {
-            const minStepIndex = 0;
-            const previousStepIndex = Math.max(
-                minStepIndex,
-                this.currentStepIndex - 1
-            );
+        selectPreviousStep () {
+            const minStepIndex = 0,
+                previousStepIndex = Math.max(
+                    minStepIndex,
+                    this.currentStepIndex - 1
+                );
+
             this.$emit("change", previousStepIndex);
         },
 
@@ -57,12 +58,13 @@ export default {
          * Selects the next step
          * @returns {void}
          */
-        selectNextStep() {
-            const maxStepIndex = this.steps.length - 1;
-            const nextStepIndex = Math.min(
-                maxStepIndex,
-                this.currentStepIndex + 1
-            );
+        selectNextStep () {
+            const maxStepIndex = this.steps.length - 1,
+                nextStepIndex = Math.min(
+                    maxStepIndex,
+                    this.currentStepIndex + 1
+                );
+
             this.$emit("change", nextStepIndex);
         }
     }
@@ -83,9 +85,9 @@ export default {
 
         <v-slide-group
             :value="currentStepIndex + 1"
-            @change="index => $emit('change', index > 0 ? index - 1 : null)"
             show-arrows
             center-active
+            @change="index => $emit('change', index > 0 ? index - 1 : null)"
         >
             <v-slide-item>
                 <v-btn
@@ -118,15 +120,17 @@ export default {
                     rounded
                     @click="toggle"
                 >
-                    <template v-if="step.associatedChapter === currentChapter"
-                        >{{
+                    <template v-if="step.associatedChapter === currentChapter">
+                        {{
                             getStepReference(
                                 step.associatedChapter,
                                 step.stepNumber
                             )
                         }}
                     </template>
-                    <template v-else>{{ step.associatedChapter }} </template>
+                    <template v-else>
+                        {{ step.associatedChapter }}
+                    </template>
                 </v-btn>
             </v-slide-item>
         </v-slide-group>

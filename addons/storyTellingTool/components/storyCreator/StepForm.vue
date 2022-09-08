@@ -11,7 +11,6 @@ import {
     getStepReference,
     getHTMLContentReference
 } from "../../utils/getReference";
-import store from "../../../../src/app-store";
 
 export default {
     name: "StepForm",
@@ -825,15 +824,15 @@ export default {
 
     &::v-deep {
         .v-text-field.v-text-field--enclosed:not(.v-text-field--rounded)
-            > .v-input__control
-            > .v-input__slot {
+        > .v-input__control
+        > .v-input__slot {
             margin: 0;
             padding: 0 0 0 0.3125rem;
         }
 
         .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat)
-            > .v-input__control
-            > .v-input__slot {
+        > .v-input__control
+        > .v-input__slot {
             height: 34px;
             height: 34px;
             font-size: 14px;
@@ -843,12 +842,12 @@ export default {
         }
 
         .v-text-field.v-text-field--solo.v-input--is-focused:not(.v-text-field--solo-flat)
-            > .v-input__control
-            > .v-input__slot {
+        > .v-input__control
+        > .v-input__slot {
             border-color: #66afe9;
             outline: 0;
             box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08),
-                0 0 8px rgba(102, 175, 233, 0.6);
+            0 0 8px rgba(102, 175, 233, 0.6);
         }
     }
 
