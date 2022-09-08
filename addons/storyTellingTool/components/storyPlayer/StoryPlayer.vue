@@ -161,19 +161,6 @@ export default {
             this.toggleLayer(layer, false);
         },
 
-        async activate3DMap () {
-            let isActive;
-
-            try {
-                isActive = await store.dispatch("Maps/activateMap3D");
-                console.log("2");
-            }
-            catch (ex) {
-                // Handle error
-                return false;
-            }
-            return isActive;
-        },
         /**
          * Sets up the tool window and content for the selected step.
          * @returns {void}
