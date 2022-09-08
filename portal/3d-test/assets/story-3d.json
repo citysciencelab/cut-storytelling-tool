@@ -1,0 +1,111 @@
+{
+  "title": "3D Test",
+  "author": "City Science Lab",
+  "description": "Diese Story soll die Funktionalitäten des 3D Modus im Storytellingtool veranschaulichen.",
+  "coverImagePath": "assets/img/3dcover.png",
+  "htmlFolder": "story",
+  "chapters": [
+    {
+      "chapterNumber": 1,
+      "chapterTitle": "3d showcase"
+    }
+  ],
+  "steps": [
+    {
+      "stepNumber": 1,
+      "stepWidth": 800,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Wechsel zur 3D Ansicht",
+      "htmlFile": "",
+      "is3D": true,
+      "centerCoordinate": [],
+      "zoomLevel": 4,
+      "layers": [],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 2,
+      "stepWidth": 800,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Flug zur weiteren 3D Ansicht. Alles noch im Testmodus.",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.944997,
+          53.553876,
+          170.0
+        ],
+        "heading": 0.90,
+        "pitch": -0.3725214263618002
+      },
+      "zoomLevel": 0,
+      "layers": [],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 3,
+      "stepWidth": 800,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Kamerawinkel verändern",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.946620,
+          53.554060,
+          150.0
+        ],
+        "heading": 0.37138509963163635,
+        "pitch": -0.4025214263618002
+      },
+      "zoomLevel": 0,
+      "layers": [],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 4,
+      "stepWidth": 800,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Ein weiterer Flug",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.993736,
+          53.541553,
+          200.0
+        ],
+        "heading": 0.25138509963163635,
+        "pitch": -0.2525214263618002
+      },
+      "zoomLevel": 0,
+      "layers": [],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 5,
+      "stepWidth": 800,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "3D deaktiviert",
+      "htmlFile": "",
+      "centerCoordinate": [
+        567770.5793074201,
+        5936891.307962078
+      ],
+      "is3D": false,
+      "navigation3D": {},
+      "zoomLevel": 0,
+      "layers": [],
+      "interactionAddons": []
+    }
+  ]
+}
