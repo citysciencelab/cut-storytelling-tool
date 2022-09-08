@@ -1,15 +1,15 @@
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 import actions from "../../store/actionsStoryTellingTool";
 import getters from "../../store/gettersStoryTellingTool";
 import mutations from "../../store/mutationsStoryTellingTool";
 import * as constants from "../../store/constantsStoryTellingTool";
-import { getStepReference } from "../../utils/getReference";
+import {getStepReference} from "../../utils/getReference";
 
 export default {
     name: "StoryForm",
     components: {},
-    data() {
+    data () {
         return {
             constants,
             getStepReference
@@ -42,11 +42,11 @@ export default {
                 </label>
 
                 <input
-                    v-model="storyConf.name"
+                    v-model="storyConf.title"
                     class="form-control"
                     type="text"
                     required
-                />
+                >
             </div>
 
             <div class="form-group">
@@ -77,7 +77,7 @@ export default {
                     v-model="storyConf.author"
                     class="form-control"
                     type="text"
-                />
+                >
             </div>
 
             <div class="form-group">
@@ -90,12 +90,12 @@ export default {
                 </label>
 
                 <v-slide-group
+                    show-arrows
+                    center-active
                     @change="
                         stepIndex =>
                             $emit('editStep', storyConf.steps[stepIndex])
                     "
-                    show-arrows
-                    center-active
                 >
                     <v-slide-item
                         v-for="step in storyConf.steps"
