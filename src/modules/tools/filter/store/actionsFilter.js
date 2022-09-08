@@ -163,9 +163,17 @@ export default {
         const rulesOfFilters = payload?.rulesOfFilters,
             selectedCategories = payload?.selectedCategories,
             selectedAccordions = payload?.selectedAccordions;
+        let rulesOfFiltersCopy;
 
         if (Array.isArray(rulesOfFilters) && Array.isArray(selectedAccordions)) {
-            context.dispatch("setRulesArray", {rulesOfFilters});
+            rulesOfFiltersCopy = JSON.parse(JSON.stringify(payload.rulesOfFilters));
+
+            rulesOfFilters.forEach((ruleOfFilter, idx) => {
+                if (ruleOfFilter === null) {
+                    rulesOfFiltersCopy[idx] = undefined;
+                }
+            });
+            context.dispatch("setRulesArray", {rulesOfFilters: rulesOfFiltersCopy});
             context.commit("setSelectedCategories", selectedCategories);
             context.commit("setSelectedAccordions", selectedAccordions);
             context.commit("setActive", true);
