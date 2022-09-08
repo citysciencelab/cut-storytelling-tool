@@ -1395,7 +1395,7 @@ Neben **Portalconfig.menu.tools** können auch die Pfade **Portalconfig.menu.inf
 |keepOpen|nein|Boolean|false|Flag, ob das Tool parallel zu anderen Tools geöffnet bleibt.|false|
 |name|ja|String||Name des Werkzeuges im Menu.|false|
 |onlyDesktop|nein|Boolean|false|Flag, ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|false|
-|renderToWindow|nein|Boolean|true|Flag, ob das Tool beim Anklicken im frei schwebenden Fenster dargestellt werden soll. Im Mobilen Modus wird das Fenster immer verwendet.|false|
+|renderToWindow|nein|Boolean|true|Flag, ob das Tool beim Anklicken im frei schwebenden Fenster dargestellt werden soll. Im mobilen Modus wird das Fenster immer verwendet.|false|
 |resizableWindow|nein|Boolean|false|Flag, ob das Tool-Fenster vergrößer-/verkleinerbar ist.|false|
 
 **Beispiel eines Tools**
@@ -3865,7 +3865,7 @@ Mit diesem Werkzeug lassen sich zusätzliche WMS Layer über eine angegebene URL
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Mit diesem Werkzeug lassen sich die Features einer Ziel-Layer anzeigen, die sich inner- oder außerhalb einer Kreisfläche um die Features einer Quell-Layer befinden. Dabei wird die Kreisfläche, ausgehend von den Quell-Layer Features, über den Buffer-Radius definiert. Die Quell- und Ziel-Layer benötigen hierzu vektorbasierte Daten aus WFS(❗) Diensten.   
+Mit diesem Werkzeug lassen sich die Features einer Ziel-Layer anzeigen, die sich inner- oder außerhalb einer Kreisfläche um die Features einer Quell-Layer befinden. Dabei wird die Kreisfläche, ausgehend von den Quell-Layer Features, über den Buffer-Radius definiert. Die Quell- und Ziel-Layer benötigen hierzu vektorbasierte Daten aus WFS(❗) Diensten.
 
 ***
 
@@ -3875,7 +3875,7 @@ Mit diesem Werkzeug lassen sich die Features einer Ziel-Layer anzeigen, die sich
 
 ⚠️Deprecated in 3.0.0 Bitte "supplyCoord" verwenden.
 
-Ermöglicht die Abfrage von Koordinaten per Maus(-Klick). 
+Ermöglicht die Abfrage von Koordinaten per Maus(-Klick).
 
 ***
 
@@ -3883,7 +3883,7 @@ Ermöglicht die Abfrage von Koordinaten per Maus(-Klick).
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Ermöglicht die Suche von Koordinaten mithilfe einer Eingabemaske sowie die Abfrage von Koordinaten per Maus(-Klick). 
+Ermöglicht die Suche von Koordinaten mithilfe einer Eingabemaske sowie die Abfrage von Koordinaten per Maus(-Klick).
 
 ***
 
@@ -3938,7 +3938,7 @@ Das Werkzeug ermöglicht das Umschalten des Stylings von Vector Tile Layers(❗)
 
 ⚠️Deprecated in 3.0.0 Bitte "coordToolkit" verwenden.
 
-Ermöglicht die Abrfage von Koordinaten per Maus(-Klick). 
+Ermöglicht die Abrfage von Koordinaten per Maus(-Klick).
 
 ***
 
@@ -3946,7 +3946,7 @@ Ermöglicht die Abrfage von Koordinaten per Maus(-Klick).
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Werkzeug zum zurücksetzten des Themenbaums. 
+Werkzeug zum zurücksetzten des Themenbaums.
 
 
 ***
