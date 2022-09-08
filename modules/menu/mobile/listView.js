@@ -26,19 +26,21 @@ const MobileMenu = Backbone.View.extend({
                 }
             }
         });
-        this.render(false);
+        this.render();
         this.breadCrumbListView = new BreadCrumbListView();
     },
     collection: {},
     el: "nav#main-nav",
     attributes: {role: "navigation"},
     breadCrumbListView: {},
-    render: function (notFirstCall) {
+    rootModelsOrder: [],
+    render: function () {
         const rootModels = this.collection.where({parentId: "root"});
 
         $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
         $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
-        this.addViews(rootModels, notFirstCall);
+        rootModels.forEach(model => this.rootModelsOrder.push(model.get("id")));
+        this.addViews(rootModels);
         store.dispatch("Legend/setShowLegendInMenu", true);
         return this;
     },
@@ -110,13 +112,6 @@ const MobileMenu = Backbone.View.extend({
             slideOut,
             groupedModels;
 
-        if (modelsToShow.length > 0 && modelsToShow[0].get("parentId") === "root") {
-            store.dispatch("Legend/setShowLegendInMenu", true);
-        }
-        else {
-            store.dispatch("Legend/setShowLegendInMenu", false);
-        }
-
         if (direction === "descent") {
             slideIn = "right";
             slideOut = "left";
@@ -134,11 +129,13 @@ const MobileMenu = Backbone.View.extend({
                 that.addViews(modelsToShow);
             }
             else {
-                // Gruppieren nach Folder und Rest
+                let modelsSorted = [];
+
+                // group by folder und other
                 groupedModels = Radio.request("Util", "groupBy", modelsToShow, function (model) {
                     return model.get("type") === "folder" ? "folder" : "other";
                 });
-                // Im default-Tree werden folder und layer alphabetisch sortiert
+                // in default-Tree folder und layer are sort alphabetical
                 if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].get("parentId") !== "tree") {
                     if (groupedModels.folder) {
                         groupedModels.folder.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
@@ -146,13 +143,26 @@ const MobileMenu = Backbone.View.extend({
                     if (groupedModels.other) {
                         groupedModels.other.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
                     }
+                    modelsSorted = groupedModels.folder ? groupedModels.folder.concat(groupedModels.other) : [].concat(groupedModels.other);
                 }
-                // Folder zuerst zeichnen
-                if (groupedModels.folder) {
-                    that.addViews(groupedModels.folder);
+                else {
+                    const allModels = groupedModels.folder ? groupedModels.folder.concat(groupedModels.other) : [].concat(groupedModels.other);
+
+                    if (modelsToShow[0].get("parentId") === "root") {
+                        that.rootModelsOrder.forEach(id => {
+                            modelsSorted.push(allModels.find(model => model.id === id));
+                        });
+                    }
+                    else {
+                        modelsSorted = allModels;
+                    }
                 }
-                if (groupedModels.other) {
-                    that.addViews(groupedModels.other);
+                that.addViews(modelsSorted);
+                if (modelsToShow.length > 0 && modelsToShow[0].get("parentId") === "root") {
+                    store.dispatch("Legend/setShowLegendInMenu", true);
+                }
+                else {
+                    store.dispatch("Legend/setShowLegendInMenu", false);
                 }
             }
         });
@@ -171,10 +181,9 @@ const MobileMenu = Backbone.View.extend({
      * separates by modelType and add Views
      * add only tools that have the attribute "isVisibleInMenu" === true
      * @param {Item[]} models - all models
-     * @param {boolean} [notFirstCall = true] Whether this is the first time this function has been called; used for a fix on the menu item of the legend.
      * @returns {void}
      */
-    addViews: function (models, notFirstCall = true) {
+    addViews: function (models) {
         const treeType = this.doRequestTreeType(),
             newModels = models.filter(model => !(model.get("onlyDesktop") === true));
 
@@ -200,9 +209,6 @@ const MobileMenu = Backbone.View.extend({
                 }
                 case "tool": {
                     if (model.get("isVisibleInMenu")) {
-                        if (notFirstCall && (model.get("name") === "common:modules.legend.name" || model.get("name") === i18next.t("common:modules.legend.name"))) {
-                            return;
-                        }
                         nodeView = new ToolView({model: model});
                     }
                     else {

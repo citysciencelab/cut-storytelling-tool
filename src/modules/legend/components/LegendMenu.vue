@@ -52,11 +52,9 @@ export default {
             if (root && this.uiStyle !== "TABLE") {
                 const span = root.querySelector("[name=legend]");
 
-                if (this.mobile && span?.parentNode && this.element) {
-                    root.replaceChild(this.element, span.parentNode);
-                }
-                else if (span?.parentNode?.parentNode && this.childNode) {
-                    root.replaceChild(this.childNode, span.parentNode.parentNode);
+                if (this.mobile && span && span.parentNode) {
+                    span.parentNode.style.display = "none";
+                    root.insertBefore(this.element, span.parentNode.nextSibling);
                 }
             }
         },
@@ -132,7 +130,8 @@ export default {
 <style lang="scss" scoped>
     @import "~variables";
     #legend-menu {
-        border-right: 1px solid #e5e5e5;
+        border-right: none;
+        border-top: none;
         font-size: 14px;
         cursor: pointer;
     }

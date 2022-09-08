@@ -21,6 +21,7 @@
 
 ### Removed
 ### Fixed
+- #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
 
 ---
 ## v2.25.0 - 2022-09-07
