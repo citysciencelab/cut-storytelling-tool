@@ -47,13 +47,13 @@ export default {
     },
     watch: {
         /**
-         * Starts the action for activation or deactivation processes.
-         * @param {Boolean} value Value deciding whether the tool gets activated or deactivated.
+         * Listens to the active property change.
+         * @param {Boolean} isActive Value deciding whether the tool gets activated or deactivated.
          * @returns {void}
          */
-        active (value) {
-            if (!value) {
-                this.mode = null;
+        active (isActive) {
+            if (isActive) {
+                this.setFocusToFirstControl();
             }
         }
     },
@@ -179,7 +179,7 @@ export default {
 };
 </script>
 
-<template lang="html">
+<template>
     <ToolTemplate
         :title="$t(name)"
         :icon="glyphicon"
