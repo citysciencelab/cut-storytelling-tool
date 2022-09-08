@@ -407,7 +407,7 @@ export default class InterfaceWfsExtern {
      * @returns {void}
      */
     filter (filterQuestion, onsuccess, onerror, axiosMock = false) {
-        const filter = Array.isArray(filterQuestion?.rules) && filterQuestion.rules.length ? this.getFilter(filterQuestion.rules, filterQuestion.commands?.searchInMapExtent, filterQuestion.commands?.geometryName, filterQuestion.commands?.filterGeometry) : undefined,
+        const filter = Array.isArray(filterQuestion?.rules) && filterQuestion?.rules.length || filterQuestion.commands?.filterGeometry ? this.getFilter(filterQuestion.rules, filterQuestion.commands?.searchInMapExtent, filterQuestion.commands?.geometryName, filterQuestion.commands?.filterGeometry) : undefined,
             featureRequest = new WFS().writeGetFeature({
                 srsName: filterQuestion?.service?.srsName,
                 featureNS: filterQuestion?.service?.featureNS,
