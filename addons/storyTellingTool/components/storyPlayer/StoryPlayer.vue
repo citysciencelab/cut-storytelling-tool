@@ -1,21 +1,15 @@
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
-import axios from "axios";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 import StoryNavigation from "./StoryNavigation.vue";
 import actions from "../../store/actionsStoryTellingTool";
 import getters from "../../store/gettersStoryTellingTool";
 import mutations from "../../store/mutationsStoryTellingTool";
+import fetchDataFromUrl from "../../utils/getStoryFromUrl";
 import {
     getStepReference,
     getHTMLContentReference
 } from "../../utils/getReference";
-
-const fetchDataFromUrl = url => {
-    return axios
-        .get(url)
-        .then(response => response.data)
-        .then(content => content);
-};
+import store from "../../../../src/app-store";
 
 export default {
     name: "StoryPlayer",
@@ -34,9 +28,10 @@ export default {
             default: false
         }
     },
-    data() {
+    data () {
         return {
             getStepReference,
+            fetchDataFromUrl,
             getHTMLContentReference,
             currentStepIndex: 0,
             loadedContent: null,
@@ -49,7 +44,7 @@ export default {
         /**
          * The current selected step of the story.
          */
-        currentStep() {
+        currentStep () {
             return this.currentStepIndex !== null
                 ? this.storyConf && this.storyConf.steps[this.currentStepIndex]
                 : null;
@@ -58,12 +53,11 @@ export default {
         /**
          * The current selected chapter of the story.
          */
-        currentChapter() {
+        currentChapter () {
             return (
                 this.storyConf &&
                 this.storyConf.chapters.find(
-                    ({ chapterNumber }) =>
-                        this.currentStep &&
+                    ({chapterNumber}) => this.currentStep &&
                         this.currentStep.associatedChapter === chapterNumber
                 )
             );
@@ -74,12 +68,15 @@ export default {
          * Handles step changes.
          * @returns {void}
          */
-        currentStepIndex() {
+        currentStepIndex () {
             this.loadStep();
         }
     },
-    mounted() {
-        if (this.storyConfPath) {
+    mounted () {
+        if (this.storyConf) {
+            this.loadStep();
+        }
+        else if (!this.storyConf && this.storyConfPath) {
             fetchDataFromUrl(this.storyConfPath).then(loadedStoryConf => {
                 this.setStoryConf(loadedStoryConf);
                 this.loadStep();
@@ -90,7 +87,7 @@ export default {
             this.loadStep();
         }
     },
-    beforeDestroy() {
+    beforeDestroy () {
         // Hides all story layers
         const layerList = Radio.request("ModelList", "getModelsByAttributes", {
             isVisibleInTree: true
@@ -121,13 +118,15 @@ export default {
          * @param {Object} toolId the id of the tool to activate
          * @returns {void}
          */
-        activateTool(toolId) {
-            const configuredTools = this.$store.state.Tools.configuredTools;
-            const tool = configuredTools.find(({ key }) => key === toolId);
+        activateTool (toolId) {
+            const configuredTools = this.$store.state.Tools.configuredTools,
+                tool = configuredTools.find(({key}) => key === toolId);
 
             if (tool) {
+                const toolKey = tool.key.charAt(0).toUpperCase() + tool.key.slice(1);
+
                 this.$store.commit(
-                    `Tools/${tool.component.name}/setActive`,
+                    `Tools/${toolKey}/setActive`,
                     true
                 );
             }
@@ -139,7 +138,7 @@ export default {
          * @param {Boolean} enabled enables the layer if `true`, disables the layer if `false`
          * @returns {void}
          */
-        toggleLayer(layer, enabled) {
+        toggleLayer (layer, enabled) {
             layer.setIsVisibleInMap(enabled);
             layer.set("isSelected", enabled);
         },
@@ -149,7 +148,7 @@ export default {
          * @param {Object} layer the layer to enable
          * @returns {void}
          */
-        enableLayer(layer) {
+        enableLayer (layer) {
             this.toggleLayer(layer, true);
         },
 
@@ -158,7 +157,7 @@ export default {
          * @returns {Object} layer the layer to disable
          * @returns {void}
          */
-        disableLayer(layer) {
+        disableLayer (layer) {
             this.toggleLayer(layer, false);
         },
 
@@ -166,7 +165,7 @@ export default {
          * Sets up the tool window and content for the selected step.
          * @returns {void}
          */
-        loadStep() {
+        async loadStep () {
             if (!this.currentStep) {
                 return;
             }
@@ -176,64 +175,99 @@ export default {
                 this.setInitialWidth(this.currentStep.stepWidth);
             }
 
-            // Updates the map center
-            if (this.currentStep.centerCoordinate) {
-                const map = Radio.request("Map", "getMap"),
-                    mapView = typeof map?.getView === "function" ? map.getView() : undefined;
+            // Toggles 3D map mode
+            if (this.currentStep.is3D && !Radio.request("Map", "isMap3d")) {
+                await store.dispatch("Maps/activateMap3D");
+            }
+            else if (!this.currentStep.is3D && Radio.request("Map", "isMap3d")) {
+                store.dispatch("Maps/deactivateMap3D");
+            }
 
-                mapView.animate({
-                    center: this.currentStep.centerCoordinate,
-                    duration: 2000,
-                    zoom: this.currentStep.zoomLevel
+            // Updates the map center
+            if (this.currentStep.centerCoordinate && this.currentStep.centerCoordinate.length > 0) {
+                if (this.currentStep.is3D) {
+                    console.log("Dont use centerCoordinate for 3D navigation.");
+                }
+                else {
+                    const map = Radio.request("Map", "getMap"),
+                        mapView = typeof map?.getView === "function" ? map.getView() : undefined;
+
+                    mapView.animate({
+                        center: this.currentStep.centerCoordinate,
+                        duration: 2000,
+                        zoom: this.currentStep.zoomLevel
+                    });
+                }
+            }
+            // Updates the map center for 3D
+            if (this.currentStep.navigation3D && Object.prototype.hasOwnProperty.call(this.currentStep.navigation3D, "cameraPosition")) {
+                const position = this.currentStep.navigation3D.cameraPosition,
+                    map3d = Radio.request("Map", "getMap3d"),
+                    camera = map3d.getCesiumScene().camera,
+                    destination = Cesium.Cartesian3.fromDegrees(position[0], position[1], position[2]);
+
+                camera.flyTo({
+                    destination: destination,
+                    orientation: {
+                        heading: this.currentStep.navigation3D.heading,
+                        pitch: this.currentStep.navigation3D.pitch
+                    },
+                    easingFunction: Cesium.EasingFunction.QUADRATIC_OUT
                 });
             }
 
-            // Updates the map layers
-            const layerList = Radio.request(
-                "ModelList",
-                "getModelsByAttributes",
-                { isVisibleInTree: true }
-            );
-
-            for (const layer of layerList) {
-                const isStepLayer = (this.currentStep.layers || []).includes(
-                    layer.id
+            if (!this.currentStep.is3D) {
+                // Updates the map layers
+                const layerList = Radio.request(
+                    "ModelList",
+                    "getModelsByAttributes",
+                    {isVisibleInTree: true}
                 );
 
-                if (isStepLayer && !layer.attributes.isVisibleInMap) {
-                    this.enableLayer(layer);
-                } else if (!isStepLayer && layer.attributes.isVisibleInMap) {
-                    this.disableLayer(layer);
+                for (const layer of layerList) {
+                    const isStepLayer = (this.currentStep.layers || []).includes(
+                        layer.id
+                    );
+
+                    if (isStepLayer && !layer.attributes.isVisibleInMap) {
+                        this.enableLayer(layer);
+                    }
+                    else if (!isStepLayer && layer.attributes.isVisibleInMap) {
+                        this.disableLayer(layer);
+                    }
                 }
-            }
-            Radio.trigger("TableMenu", "rerenderLayers");
+                Radio.trigger("TableMenu", "rerenderLayers");
 
-            // Updates the step html content
-            const htmlReference = getHTMLContentReference(
-                this.currentStep.associatedChapter,
-                this.currentStep.stepNumber
-            );
+                // Updates the step html content
+                const htmlReference = getHTMLContentReference(
+                    this.currentStep.associatedChapter,
+                    this.currentStep.stepNumber
+                );
 
-            if (this.storyConf.htmlFolder && this.currentStep.htmlFile) {
-                // Load HTML file for the story step
-                fetchDataFromUrl(
-                    "./assets/" +
+                if (this.storyConf.htmlFolder && this.currentStep.htmlFile) {
+                    // Load HTML file for the story step
+                    fetchDataFromUrl(
+                        "./assets/" +
                         this.storyConf.htmlFolder +
                         "/" +
                         this.currentStep.htmlFile
-                ).then(data => (this.loadedContent = data));
-            } else if (this.isPreview && this.htmlContents[htmlReference]) {
-                // Get temporary HTML for the story step preview
-                this.loadedContent = this.htmlContents[htmlReference];
-            } else {
-                this.loadedContent = null;
-            }
+                    ).then(data => this.loadedContent = data);
+                }
+                else if (this.isPreview && this.htmlContents[htmlReference]) {
+                    // Get temporary HTML for the story step preview
+                    this.loadedContent = this.htmlContents[htmlReference];
+                }
+                else {
+                    this.loadedContent = null;
+                }
 
-            // Activates or deactivates tools
-            const interactionAddons = this.currentStep.interactionAddons || [];
-            const configuredTools = this.$store.state.Tools.configuredTools;
-            // Activate all tools of the current step
-            interactionAddons.forEach(this.activateTool);
+                // Activates or deactivates tools
+                const interactionAddons = this.currentStep.interactionAddons || [],
+                    configuredTools = this.$store.state.Tools.configuredTools;
+
+                // Activate all tools of the current step
+                interactionAddons.forEach(this.activateTool);
+            }
         }
     }
 };
@@ -245,25 +279,36 @@ export default {
         id="tool-storyTellingTool-player"
     >
         <div id="tool-storyTellingTool-currentStep">
-            <!--<h3>{{ storyConf.name }}</h3>-->
-            <p> </p>
-            <h2 v-if="currentChapter">{{ currentChapter.chapterTitle }}</h2>
+            <!--<h3>{{ storyConf.title }}</h3>-->
+            <p />
+            <h2 v-if="currentChapter">
+                {{ currentChapter.chapterTitle }}
+            </h2>
             <h1>{{ currentStep.title }}</h1>
 
-            <div v-if="currentStep" class="tool-storyTellingTool-content">
-                <div v-if="loadedContent" v-html="loadedContent" />
+            <div
+                v-if="currentStep"
+                class="tool-storyTellingTool-content"
+            >
+                <div
+                    v-if="loadedContent"
+                    v-html="loadedContent"
+                />
             </div>
         </div>
 
         <StoryNavigation
             v-model="currentStepIndex"
-            :currentChapter="currentStep && currentStep.associatedChapter"
+            :current-chapter="currentStep && currentStep.associatedChapter"
             :steps="storyConf.steps"
         />
     </div>
 
-    <div v-else id="tool-storyTellingTool-tableOfContents">
-        <h1>{{ storyConf.name }}</h1>
+    <div
+        v-else
+        id="tool-storyTellingTool-tableOfContents"
+    >
+        <h1>{{ storyConf.title }}</h1>
 
         <h2>
             {{
@@ -274,11 +319,11 @@ export default {
         <ol class="tableOfContents">
             <li v-for="chapter in storyConf.chapters">
                 <span
-                    @mouseover="isHovering = chapter.chapterNumber"
-                    @mouseout="isHovering = null"
                     :class="{
                         'primary--text': isHovering === chapter.chapterNumber
                     }"
+                    @mouseover="isHovering = chapter.chapterNumber"
+                    @mouseout="isHovering = null"
                     @click="
                         currentStepIndex = storyConf.steps.findIndex(
                             ({ associatedChapter }) =>
@@ -293,13 +338,6 @@ export default {
                     <li
                         v-for="(step, stepIndex) in storyConf.steps"
                         v-if="step.associatedChapter === chapter.chapterNumber"
-                        @mouseover.stop="
-                            isHovering = getStepReference(
-                                step.associatedChapter,
-                                step.stepNumber
-                            )
-                        "
-                        @mouseout.stop="isHovering = null"
                         :class="{
                             'primary--text':
                                 isHovering ===
@@ -308,6 +346,13 @@ export default {
                                     step.stepNumber
                                 )
                         }"
+                        @mouseover.stop="
+                            isHovering = getStepReference(
+                                step.associatedChapter,
+                                step.stepNumber
+                            )
+                        "
+                        @mouseout.stop="isHovering = null"
                         @click.stop="currentStepIndex = stepIndex"
                     >
                         {{
