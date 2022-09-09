@@ -110,7 +110,7 @@ export default {
             @keydown.enter="toggleLegend"
         >
             <div class="folder-item d-flex align-items-center">
-                <span class="bootstrap-icon d-sm-none d-md-inline-block">
+                <span class="bootstrap-icon d-md-inline-block">
                     <i :class="icon" />
                 </span>
                 <span class="title">{{ $t(name) }}</span>

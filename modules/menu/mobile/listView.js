@@ -135,7 +135,7 @@ const MobileMenu = Backbone.View.extend({
                 groupedModels = Radio.request("Util", "groupBy", modelsToShow, function (model) {
                     return model.get("type") === "folder" ? "folder" : "other";
                 });
-                // in default-Tree folder und layer are sort alphabetical
+                // in default-Tree folder and layer are sorted alphabetical
                 if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].get("parentId") !== "tree") {
                     if (groupedModels.folder) {
                         groupedModels.folder.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));

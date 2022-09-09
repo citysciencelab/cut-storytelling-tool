@@ -107,7 +107,7 @@ describe("LegendMenu.vue", () => {
             wrapper.vm.toggleLegend();
             expect(store.state.Legend.showLegend).to.be.equals(true);
         });
-        it.only("replaceMenuChild mobile", () => {
+        it("replaceMenuChild mobile", () => {
             let root = null,
                 hiddenLegendEntry = null,
                 legendMenu = null;
@@ -126,14 +126,15 @@ describe("LegendMenu.vue", () => {
             expect(legendMenu).to.be.instanceof(Object);
         });
         it("replaceMenuChild desktop", () => {
-            let legendMenu = null;
+            let legendMenues = null;
 
             wrapper = shallowMount(LegendMenuComponent, {store, localVue});
             wrapper.vm.replaceMenuChild();
+            legendMenues = document.getElementsByClassName("menuitem");
 
-            legendMenu = document.getElementById("legend-menu");
-
-            expect(legendMenu).to.be.instanceof(Object);
+            expect(legendMenues.length).to.be.equals(1);
+            expect(legendMenues.item(0)).to.be.instanceof(Object);
+            expect(legendMenues.item(0).textContent).to.be.equals("common:modules.legend.name");
         });
     });
 });
