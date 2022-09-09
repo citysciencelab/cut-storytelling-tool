@@ -123,7 +123,7 @@ export default {
      * @fires Core#RadioTriggerMapChange
      * @returns {void}
      */
-    deactivateMap3D ({commit, getters, dispatch}) {
+    async deactivateMap3D ({commit, getters, dispatch}) {
         const map3D = mapCollection.getMap("3D");
 
         if (map3D) {

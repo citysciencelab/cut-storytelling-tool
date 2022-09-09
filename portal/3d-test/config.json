@@ -90,21 +90,28 @@
           "visibility": true,
           "isVisibleInTree": false,
           "legend": false
-        },
-        {
-          "id": "12884",
-          "name": "Gebäude LoD2",
-          "visibility": true
-        },
-        {
-          "id": "13032",
-          "name": "Oblique",
-          "visibility": true
         }
       ]
     },
     "Fachdaten": {
-      "Layer": []
+      "Layer": [
+        {
+          "id": "12883",
+          "name": "Gelände",
+          "visibility": false
+        },
+        {
+          "id": "12884",
+          "name": "Gebäude LoD2",
+          "visibility": false
+        },
+        {
+          "id": "13032",
+          "name": "Oblique",
+          "visibility": false,
+          "isVisibleInTree": false
+        }
+      ]
     }
   }
 }

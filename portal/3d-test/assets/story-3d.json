@@ -16,10 +16,12 @@
       "stepWidth": 800,
       "visible": true,
       "associatedChapter": 1,
-      "title": "Wechsel zur 3D Ansicht",
+      "title": "Einleitung",
       "htmlFile": "",
-      "is3D": true,
-      "centerCoordinate": [],
+      "centerCoordinate": [
+        555894.6872343315,
+        5931378.984010641
+      ],
       "zoomLevel": 4,
       "layers": [],
       "interactionAddons": []
@@ -34,16 +36,16 @@
       "centerCoordinate": [],
       "is3D": true,
       "navigation3D": {
-        "cameraPosition": [
-          9.944997,
-          53.553876,
-          170.0
-        ],
-        "heading": 0.90,
-        "pitch": -0.3725214263618002
-      },
+      "cameraPosition": [
+        9.946620,
+        53.554060,
+        150.0
+      ],
+      "heading": 0.38138509963163635,
+      "pitch": -0.4525214263618002
+    },
       "zoomLevel": 0,
-      "layers": [],
+      "layers": ["12883", "12884"],
       "interactionAddons": []
     },
     {
@@ -65,7 +67,7 @@
         "pitch": -0.4025214263618002
       },
       "zoomLevel": 0,
-      "layers": [],
+      "layers": ["12883", "12884"],
       "interactionAddons": []
     },
     {
@@ -87,7 +89,7 @@
         "pitch": -0.2525214263618002
       },
       "zoomLevel": 0,
-      "layers": [],
+      "layers": ["12883", "12884"],
       "interactionAddons": []
     },
     {
