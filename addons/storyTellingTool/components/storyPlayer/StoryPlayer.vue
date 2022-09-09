@@ -35,7 +35,8 @@ export default {
             getHTMLContentReference,
             currentStepIndex: 0,
             loadedContent: null,
-            isHovering: null
+            isHovering: null,
+            isChangeFrom3D: false
         };
     },
     computed: {
@@ -180,7 +181,8 @@ export default {
                 await store.dispatch("Maps/activateMap3D");
             }
             else if (!this.currentStep.is3D && Radio.request("Map", "isMap3d")) {
-                store.dispatch("Maps/deactivateMap3D");
+                this.isChangeFrom3D = true;
+                await store.dispatch("Maps/deactivateMap3D");
             }
 
             // Updates the map center
@@ -192,11 +194,15 @@ export default {
                     const map = Radio.request("Map", "getMap"),
                         mapView = typeof map?.getView === "function" ? map.getView() : undefined;
 
-                    mapView.animate({
-                        center: this.currentStep.centerCoordinate,
-                        duration: 2000,
-                        zoom: this.currentStep.zoomLevel
-                    });
+                    setTimeout(() => {
+                        mapView.animate({
+                            center: this.currentStep.centerCoordinate,
+                            duration: 2000,
+                            zoom: this.currentStep.zoomLevel
+                        });
+                        this.isChangeFrom3D = false;
+                    }, this.isChangeFrom3D ? 1500 : 0);
+
                 }
             }
             // Updates the map center for 3D
@@ -216,51 +222,53 @@ export default {
                 });
             }
 
-            if (!this.currentStep.is3D) {
-                // Updates the map layers
-                const layerList = Radio.request(
+            const layerList = Radio.request(
                     "ModelList",
                     "getModelsByAttributes",
                     {isVisibleInTree: true}
-                );
-
-                for (const layer of layerList) {
-                    const isStepLayer = (this.currentStep.layers || []).includes(
-                        layer.id
-                    );
-
-                    if (isStepLayer && !layer.attributes.isVisibleInMap) {
-                        this.enableLayer(layer);
-                    }
-                    else if (!isStepLayer && layer.attributes.isVisibleInMap) {
-                        this.disableLayer(layer);
-                    }
-                }
-                Radio.trigger("TableMenu", "rerenderLayers");
-
-                // Updates the step html content
-                const htmlReference = getHTMLContentReference(
+                ),
+                htmlReference = getHTMLContentReference(
                     this.currentStep.associatedChapter,
                     this.currentStep.stepNumber
                 );
 
-                if (this.storyConf.htmlFolder && this.currentStep.htmlFile) {
-                    // Load HTML file for the story step
-                    fetchDataFromUrl(
-                        "./assets/" +
-                        this.storyConf.htmlFolder +
-                        "/" +
-                        this.currentStep.htmlFile
-                    ).then(data => this.loadedContent = data);
-                }
-                else if (this.isPreview && this.htmlContents[htmlReference]) {
-                    // Get temporary HTML for the story step preview
-                    this.loadedContent = this.htmlContents[htmlReference];
-                }
-                else {
-                    this.loadedContent = null;
-                }
+            // Updates the map layers
 
+            for (const layer of layerList) {
+                const isStepLayer = (this.currentStep.layers || []).includes(
+                    layer.id
+                );
+
+                // if (isStepLayer && !layer.attributes.isVisibleInMap) {
+                if (isStepLayer) {
+                    this.enableLayer(layer);
+                }
+                // else if (!isStepLayer && layer.attributes.isVisibleInMap) {
+                else if (!isStepLayer) {
+                    this.disableLayer(layer);
+                }
+            }
+            Radio.trigger("TableMenu", "rerenderLayers");
+
+            // Updates the step html content
+            if (this.storyConf.htmlFolder && this.currentStep.htmlFile) {
+                // Load HTML file for the story step
+                fetchDataFromUrl(
+                    "./assets/" +
+                    this.storyConf.htmlFolder +
+                    "/" +
+                    this.currentStep.htmlFile
+                ).then(data => this.loadedContent = data);
+            }
+            else if (this.isPreview && this.htmlContents[htmlReference]) {
+                // Get temporary HTML for the story step preview
+                this.loadedContent = this.htmlContents[htmlReference];
+            }
+            else {
+                this.loadedContent = null;
+            }
+
+            if (!this.currentStep.is3D) {
                 // Activates or deactivates tools
                 const interactionAddons = this.currentStep.interactionAddons || [],
                     configuredTools = this.$store.state.Tools.configuredTools;
