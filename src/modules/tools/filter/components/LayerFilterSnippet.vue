@@ -189,10 +189,10 @@ export default {
     mounted () {
         compileSnippets(this.layerConfig.snippets, this.api, snippets => {
             this.snippets = snippets;
+            this.setSnippetValueByState(this.filterRules);
         }, error => {
             console.warn(error);
         });
-        this.setSnippetValueByState(this.filterRules);
         if (typeof this.filterHits === "number" && !this.isStrategyActive()) {
             this.amountOfFilteredItems = this.filterHits;
         }
