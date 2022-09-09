@@ -6,5 +6,15 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        ports:
-            - '80:80'
+        networks:
+            - proxy
+        #labels:
+            #- "traefik.enable=true"
+            #- "traefik.http.routers.stt-frontend.entrypoints=https"
+            #- "traefik.http.routers.stt-frontend.rule=Host(`stt.cut.hcu-hamburg.de`)"
+            #- "traefik.http.routers.stt-frontend.tls=true"
+            #- "traefik.http.routers.stt-frontend.tls.certresolver=lets-encr"
+
+networks:
+    proxy:
+        external: true
