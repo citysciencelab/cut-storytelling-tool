@@ -95,7 +95,7 @@ describe("src/modules/tools/ToolManager.vue", () => {
         expect(wrapper.find(".tool-manager").exists()).to.be.true;
     });
 
-    it("renders all tools in window", () => {
+    it("renders one tool in sidebar and one in window", () => {
         wrapper = shallowMount(ToolManagerComponent, {store, localVue});
 
         expect(wrapper.vm.toolsInSidebar).to.deep.equals({
