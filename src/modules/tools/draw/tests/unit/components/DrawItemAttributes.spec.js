@@ -2,11 +2,14 @@ import DrawItemAttributes from "../../../components/DrawItemAttributes.vue";
 import {shallowMount} from "@vue/test-utils";
 import {expect} from "chai";
 import Feature from "ol/Feature";
-
+import sinon from "sinon";
 
 describe("src/tools/draw/components/DrawItemAttributes.vue", () => {
-    let testFeature;
-    const requiredProps = {selectedFeature: undefined},
+    let testFeature, testLayer;
+    const requiredProps = {
+            selectedFeature: undefined,
+            layer: undefined
+        },
         factory = {
             getShallowMount: (props = requiredProps) => {
                 return shallowMount(DrawItemAttributes, {
@@ -27,6 +30,10 @@ describe("src/tools/draw/components/DrawItemAttributes.vue", () => {
                 }
             }
         });
+        testLayer = {
+            get: () => sinon.stub(),
+            set: () => sinon.stub()
+        };
     });
 
     describe("Component DOM", () => {
@@ -101,10 +108,10 @@ describe("src/tools/draw/components/DrawItemAttributes.vue", () => {
             testFeature.set("attributes", {foo: "bar", biz: "buz"});
             const props = {selectedFeature: testFeature},
                 wrapper = factory.getShallowMount(props),
-                expected = {fow: "bar", biz: "buz"};
+                expected = {fow: "bar", biz: "buz"},
+                attributes = [{key: "fow", value: "bar"}, {key: "biz", value: "buz"}];
 
-            wrapper.vm.attributes = [{key: "fow", value: "bar"}, {key: "biz", value: "buz"}];
-            wrapper.vm.saveChanges();
+            wrapper.vm.saveChanges(attributes, testFeature, testLayer);
 
             expect(testFeature.get("attributes")).to.deep.equal(expected);
         });

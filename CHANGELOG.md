@@ -10,6 +10,8 @@
 ### __Breaking Changes__
 
 ### Added
+- Draw-Tool:
+  - If there are attributes set on the feature of drawn layer, after clicking on the feature, the attributes will be shown in standard gfi theme.
 
 ### Changed
 - OAF:

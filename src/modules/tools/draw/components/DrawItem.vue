@@ -516,6 +516,7 @@ export default {
             >
                 <DrawItemAttributes
                     :selected-feature="selectedFeature"
+                    :layer="layer"
                 />
             </template>
             <form
