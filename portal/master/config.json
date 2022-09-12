@@ -400,10 +400,6 @@
               }
             ]
           },
-          "styleWMS": {
-            "name": "translate#common:menu.tools.styleWMS",
-            "icon": "bi-paint-bucket"
-          },
           "featureLister": {
             "name": "translate#common:menu.tools.featureLister",
             "maxFeatures": 10,

@@ -516,6 +516,7 @@ export default {
             >
                 <DrawItemAttributes
                     :selected-feature="selectedFeature"
+                    :layer="layer"
                 />
             </template>
             <form
@@ -1067,5 +1068,8 @@ export default {
     }
     .cursor-crosshair {
         cursor: crosshair;
+    }
+    .btn-sm {
+        font-size: $font-size-base;
     }
 </style>

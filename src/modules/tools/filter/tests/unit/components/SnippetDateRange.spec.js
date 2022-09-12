@@ -32,6 +32,7 @@ describe("src/module/tools/filter/components/SnippetDateRange.vue", () => {
             expect(wrapper.vm.internalFormat).to.equal("YYYY-MM-DD");
             expect(wrapper.vm.initialDateRef).to.be.an("array").that.is.empty;
             expect(wrapper.vm.intvEmitCurrentRule).to.equal(-1);
+            expect(wrapper.vm.sliderMouseDown).to.be.false;
             expect(wrapper.vm.operatorWhitelist).to.deep.equal([
                 "BETWEEN",
                 "INTERSECTS"
@@ -54,6 +55,7 @@ describe("src/module/tools/filter/components/SnippetDateRange.vue", () => {
             expect(wrapper.vm.prechecked).to.be.undefined;
             expect(wrapper.vm.snippetId).to.equal(0);
             expect(wrapper.vm.subTitles).to.be.false;
+            expect(wrapper.vm.timeoutSlider).to.equal(800);
             expect(wrapper.vm.title).to.be.true;
             expect(wrapper.vm.value).to.be.undefined;
             expect(wrapper.vm.visible).to.be.true;
@@ -460,16 +462,28 @@ describe("src/module/tools/filter/components/SnippetDateRange.vue", () => {
             });
         });
         describe("emitCurrentRule", () => {
-            it("should emit changeRule function with the expected values", () => {
+            it("should emit changeRule function with the expected values", async () => {
+                const api = {
+                    getUniqueValues: (attrName, onsuccess) => onsuccess([
+                        "20.08.2022",
+                        "30.08.2022",
+                        "26.08.2022",
+                        "10.08.2022",
+                        "16.08.2022"
+                    ])
+                };
+
                 wrapper = shallowMount(SnippetDateRange, {localVue, propsData: {
+                    api,
                     snippetId: 1,
                     visible: false,
                     attrName: "attrName",
                     operator: "INTERSECTS",
-                    format: "format"
+                    format: "DD.MM.YYYY"
                 }});
 
-                wrapper.vm.emitCurrentRule("value", "startup", "immediate");
+                await wrapper.vm.$nextTick();
+                wrapper.vm.emitCurrentRule(["01.01.2019", "31.12.2022"], "startup", "immediate");
                 expect(wrapper.emitted("changeRule")).to.be.an("array").and.to.have.lengthOf(1);
                 expect(wrapper.emitted("changeRule")[0]).to.be.an("array").and.to.have.lengthOf(1);
                 expect(wrapper.emitted("changeRule")[0][0]).to.deep.equal({
@@ -478,8 +492,9 @@ describe("src/module/tools/filter/components/SnippetDateRange.vue", () => {
                     fixed: true,
                     attrName: "attrName",
                     operator: "INTERSECTS",
-                    format: "format",
-                    value: "value"
+                    format: "DD.MM.YYYY",
+                    value: ["01.01.2019", "31.12.2022"],
+                    tagTitle: "10.08.2022 - 30.08.2022"
                 });
             });
         });
@@ -911,6 +926,28 @@ describe("src/module/tools/filter/components/SnippetDateRange.vue", () => {
                     attrName: ["attrNameA", "attrNameB"]
                 }});
                 expect(wrapper.vm.getAttrNameFrom()).to.equal("attrNameA");
+            });
+        });
+        describe("getTagTitle", () => {
+            it("should return a certain string to display from and until as tag title", async () => {
+                const api = {
+                    getUniqueValues: (attrName, onsuccess) => onsuccess([
+                        "20.08.2022",
+                        "30.08.2022",
+                        "26.08.2022",
+                        "10.08.2022",
+                        "16.08.2022"
+                    ])
+                };
+
+                wrapper = shallowMount(SnippetDateRange, {localVue, propsData: {
+                    api,
+                    attrName: "attrName",
+                    format: "DD.MM.YYYY",
+                    prechecked: ["11.08.2022", "29.08.2022"]
+                }});
+                await wrapper.vm.$nextTick();
+                expect(wrapper.vm.getTagTitle()).to.equal("16.08.2022 - 26.08.2022");
             });
         });
         describe("getSubTitleUntil", () => {

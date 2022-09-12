@@ -189,10 +189,10 @@ export default {
     mounted () {
         compileSnippets(this.layerConfig.snippets, this.api, snippets => {
             this.snippets = snippets;
+            this.setSnippetValueByState(this.filterRules);
         }, error => {
             console.warn(error);
         });
-        this.setSnippetValueByState(this.filterRules);
         if (typeof this.filterHits === "number" && !this.isStrategyActive()) {
             this.amountOfFilteredItems = this.filterHits;
         }
@@ -749,6 +749,22 @@ export default {
                 result.push(properties);
             });
             onsuccess(result);
+        },
+        /**
+         * Returns the timeout for the input.
+         * @param {Object} snippet The snippet to get the timeout from.
+         * @returns {Number} The timeout for the input or undefined if missing.
+         */
+        getTimeoutInput (snippet) {
+            return snippet?.timeouts?.input ? snippet.timeouts.input : undefined;
+        },
+        /**
+         * Returns the timeout for the slider.
+         * @param {Object} snippet The snippet to get the timeout from.
+         * @returns {Number} The timeout for the slider or undefined if missing.
+         */
+        getTimeoutSlider (snippet) {
+            return snippet?.timeouts?.slider ? snippet.timeouts.slider : undefined;
         }
     }
 };
@@ -947,6 +963,7 @@ export default {
                     :prechecked="snippet.prechecked"
                     :fixed-rules="fixedRules"
                     :snippet-id="snippet.snippetId"
+                    :timeout-slider="getTimeoutSlider(snippet)"
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
@@ -1001,6 +1018,8 @@ export default {
                     :prechecked="snippet.prechecked"
                     :fixed-rules="fixedRules"
                     :snippet-id="snippet.snippetId"
+                    :timeout-slider="getTimeoutSlider(snippet)"
+                    :timeout-input="getTimeoutInput(snippet)"
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"

@@ -53,7 +53,6 @@
             "fileImport": "Importar archivo",
             "draw": "Dibujar / Escribir",
             "shadow": "Sombras",
-            "styleWMS": "Estilo WMS",
             "commuterLines": "Desplazamiento (Linien)",
             "commuterAnimation": "Desplazamiento (Animation)",
             "layerSlider": "Serie temporal",
@@ -302,24 +301,6 @@
               "theme": "Tema",
               "chooseTheme": "Por favor, seleccione el tema activo",
               "style": "Estilo"
-            },
-            "styleWMS": {
-                "noStyleableLayers": "Actualmente no hay capas a los que se pueda aplicar esta herramienta.",
-                "theme": "Tema",
-                "chooseTheme": "Por favor, seleccione un tema",
-                "attribute": "Atributo",
-                "chooseAttribute": "Por favor, seleccione un atributo",
-                "countOfClasses": "Número de clases",
-                "chooseNumberOfClasses": "Por favor, seleccione el número de clases",
-                "rangeOfValues": "Rango de valores Clase",
-                "from": "de",
-                "to": "hasta",
-                "reset": "Reiniciar",
-                "apply": "Aplicar",
-                "pleaseEnterInteger": "Introduzca un número entero.",
-                "pleaseChooseColor": "Seleccione un color.",
-                "checkTheValues": "Compruebe los valores.",
-                "overlappingValueRanges": "Comprueba los valores. Los rangos de valores no deben superponerse."
             },
             "featureLister": {
                 "chooseTheme": "Elija el tema",

@@ -20,7 +20,6 @@
         bottom: 50px;
         .lng-header {
             display: block;
-            float: right;
             width: 100%;
             border-bottom: 1px solid $light_grey;
             padding: 0 0 3px 10px;
@@ -46,10 +45,6 @@
             }
         }
     }
-}
-
-.footer #languagebar {
-    float: right;
 }
 
 .ol-overlaycontainer-stopevent #languagebar {

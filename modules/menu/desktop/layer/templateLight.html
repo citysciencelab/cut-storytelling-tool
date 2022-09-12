@@ -13,9 +13,6 @@
         <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
     </a>
     <span class="last-item">
-        <% if (styleable === true) { %>
-            <span class="bootstrap-icon style-icon styleWMS tabable" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="<%=changeClassDivisionText%>"><i class="bi-paint-bucket"></i></span>
-        <% } %>
         <% if (typeof typ !== "undefined" && typ === "VectorTile" && vtStyles && vtStyles.length > 1) { %>
             <span class="bootstrap-icon style-icon styleVT tabable" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Style für Layer auswählen"><i class="bi-paint-bucket"></i></span>
         <% } %>

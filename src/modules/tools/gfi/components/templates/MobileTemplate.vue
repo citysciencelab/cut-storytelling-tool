@@ -47,6 +47,9 @@ export default {
     },
     methods: {
         close () {
+            const modal = document.querySelector(".modal");
+
+            modal.classList.remove("show");
             this.$emit("close");
         },
         closeByClickOutside: function (event) {
@@ -54,9 +57,11 @@ export default {
             if (!this.reactOnOutsideClick || event.target !== this.$el) {
                 return;
             }
+            const modal = document.querySelector(".modal");
+
+            modal.classList.remove("show");
             this.close();
         },
-
         /**
          * it will show this mobile component if it is switched from attached theme.
          * the method is to fore to insert this component into parent gfi element.
@@ -66,6 +71,11 @@ export default {
             if (!document.getElementsByClassName("modal-dialog").length && document.getElementsByClassName("gfi").length) {
                 document.getElementsByClassName("gfi")[0].appendChild(this.$el);
             }
+            else {
+                const modal = document.querySelector(".modal");
+
+                modal.classList.add("show");
+            }
         }
     }
 };
@@ -73,7 +83,7 @@ export default {
 
 <template>
     <div
-        class="modal-mask"
+        class="modal"
         tabindex="0"
         @click="closeByClickOutside"
         @keydown.enter="closeByClickOutside"
@@ -121,6 +131,7 @@ export default {
     height: 100%;
     background-color: $shadow_overlay;
 }
+.show {display: block;}
 
 .modal-header {
     padding: 0 15px;

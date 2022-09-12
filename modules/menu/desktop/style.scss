@@ -72,6 +72,7 @@ ul#tree {
             display: flex;
             flex-wrap: wrap;
             padding: 5px 5px;
+            border-bottom: 1px solid rgba(0,0,0,.125);
             a {
                 font-size: 15px;
                 margin: 0;
@@ -133,6 +134,7 @@ ul#tree {
     }
     .themen-folder {
         font-weight: 400;
+        border-bottom: 1px solid rgba(0,0,0,.125);
     }
     .rotate-adjust {
         transform: rotate(180deg);
@@ -170,6 +172,9 @@ ul#tree {
             cursor: pointer;
         }
     }
+    .dropdown-item.disabled, .dropdown-item:disabled {
+        background-color: $dropdown-item-disabled-bg;
+    }
 }
 ul#tree.light {
     overflow-y: auto;
@@ -179,6 +184,7 @@ ul#tree.light {
         padding: 5px;
         display: flex;
         flex-wrap: wrap;
+        border-bottom: 1px solid rgba(0,0,0,.125);
         > div > a {
             color: $dark_grey;
             flex-grow: 1;
@@ -187,6 +193,9 @@ ul#tree.light {
             padding: 4px 0 0 5px;
             cursor: pointer;
         }
+    }
+    .dropdown-item.disabled, .dropdown-item:disabled {
+        background-color: $light_grey;
     }
 }
 

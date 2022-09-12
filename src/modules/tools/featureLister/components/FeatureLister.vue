@@ -279,8 +279,7 @@ export default {
                         >
                             <button
                                 type="button"
-                                class="btn btn-default navbar-btn feature-lister-list-button"
-                                aria-label="Left Align"
+                                class="btn btn-primary navbar-btn feature-lister-list-button"
                                 :disabled="featureCount <= maxFeatures || shownFeatures === featureCount"
                                 @click="showMore()"
                             >

@@ -737,7 +737,7 @@ export default {
         transform: translate(0px, -75px)
     }
     #copyCoordsPairBtn{
-        height: 85px;
+        height: 91px;
         position: absolute;
     }
     .copyBtn{
@@ -752,6 +752,9 @@ export default {
         .northingToTopNoError{
             transform: translate(0px, -70px)
         }
+    }
+    .form-control[readonly] {
+        background-color: $light-grey;
     }
 </style>
 

@@ -11,15 +11,23 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(["menuConfig"]),
+        ...mapGetters(["menuConfig", "mobile"]),
         ...mapGetters("Tools", ["configuredTools"]),
+
+        /**
+         * Returns tools which are rendered in the sidebar.
+         * @returns {Object} Tools in sidebar
+         */
         toolsInSidebar: function () {
             const toolsInSidebar = {};
 
             this.configuredTools.forEach(tool => {
                 const toolName = tool.key.charAt(0).toUpperCase() + tool.key.slice(1);
 
-                if (typeof this.$store.state.Tools[toolName] !== "undefined") {
+                if (this.mobile) {
+                    toolsInSidebar[toolName] = false;
+                }
+                else if (typeof this.$store.state.Tools[toolName] !== "undefined") {
                     toolsInSidebar[toolName] = this.$store.state.Tools[toolName].renderToWindow === false;
                 }
                 else if (typeof this.$store.state[toolName] !== "undefined") {

@@ -6,8 +6,27 @@
 ## Known Issues
 
 ---
-
 ## Unreleased - in development
+### __Breaking Changes__
+
+### Added
+- Draw-Tool:
+  - If there are attributes set on the feature of drawn layer, after clicking on the feature, the attributes will be shown in standard gfi theme.
+
+### Changed
+- OAF:
+    - OAF no longer uses title: "next page" as an indicator for the next page but rel: "next".
+    - The CRS parameter can be turned off via crs: false. The default crs in the master portal for oaf has been set to http://www.opengis.net/def/crs/EPSG/0/25832.
+- Tools are now always rendered in the window in mobile mode, since the sidebar is currently not usable in mobile mode.
+
+### Deprecated
+
+### Removed
+### Fixed
+- #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
+
+---
+## v2.25.0 - 2022-09-07
 ### __Breaking Changes__
 
 ### Added
@@ -16,6 +35,7 @@
 - The following NPM packages are added:
     - dependencies:
         - "vue2-datepicker"
+        - "css-minimizer-webpack-plugin"
 - #657: Polygon hatch patterns to allow for further design options in the style.json file have been implemented.
 - Possibility for development with self-signed SSL-certificates. See [wiki-doc](https://bitbucket.org/geowerkstatt-hamburg/masterportal/wiki/Entwicklungsumgebung%20mit%20selbstsignierten%20SSL-Zertifikat%20einrichten)
 - Refactored tool wfsTransaction
@@ -38,11 +58,12 @@
 - Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
 - The following NPM packages have been updated:
     - dependencies:
-        - @masterportal/masterportalapi: 2.4.0 to 2.5.1
+        - @masterportal/masterportalapi: 2.4.0 to 2.6.0
         - @popperjs/core: 2.10.2 to 2.11.5
         - axios: 0.25.0 to 0.27.2
         - bootstrap-icons: 1.7.1 to 1.9.1
         - bootstrap-sass: 3.4.1 to 3.4.3
+        - bootstrap: 5.1.3 to 5.2.0
         - core-js: 3.24.0 to 3.24.1
         - i18next: 21.6.7 to 21.8.16
         - i18next-browser-languagedetector: 6.1.3 to 6.1.4
@@ -93,14 +114,17 @@
 ### Removed
 The following NPM package is removed:
     - @intlify/vue-i18n-loader
+    - bootstrap-colorpicker
+
+The Tool StyleWMS was removed.
 
 ### Fixed
-- Issue #818: Back to InitialView works again
 - Issue #808: Fix geometry polygon-with-hole for searchBar/specialWfs.
 - Issue #813: Fix various WMS-T bugs and styling.
-- Save Selection: takes over the transparency of the layer again.
+- Issue #818: Back to InitialView works again
 - Issue #823: Fix tree search.
-- Isue #827: fix image scaling for gfi: highlightVectorRules
+- Issue #827: fix image scaling for gfi: highlightVectorRules
+- Save Selection: takes over the transparency of the layer again.
 
 ---
 ## v2.24.1 - 2022-08-19

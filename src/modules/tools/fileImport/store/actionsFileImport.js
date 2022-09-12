@@ -6,6 +6,7 @@ import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import Icon from "ol/style/Icon";
 import {createDrawStyle} from "../../draw/utils/style/createDrawStyle";
+import isObject from "../../../../utils/isObject";
 
 const supportedFormats = {
     kml: new KML({extractStyles: true, iconUrlFunction: (url) => proxyGstaticUrl(url)}),
@@ -308,9 +309,9 @@ export default {
      * @returns {void}
      */
     importGeoJSON: ({state, dispatch, rootGetters}, datasrc) => {
-        const
-            vectorLayer = datasrc.layer,
-            format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
+        const vectorLayer = datasrc.layer,
+            format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats),
+            gfiAttributes = {};
 
         let
             alertingMessage,
@@ -469,6 +470,12 @@ export default {
         features.forEach(feature => {
             let geometries;
 
+            if (isObject(feature.get("attributes"))) {
+                Object.keys(feature.get("attributes")).forEach(key => {
+                    gfiAttributes[key] = key;
+                });
+            }
+
             if (vectorLayer.getStyleFunction()(feature) !== undefined) {
                 feature.setStyle(vectorLayer.getStyleFunction()(feature));
             }
@@ -493,6 +500,10 @@ export default {
 
             vectorLayer.getSource().addFeature(feature);
         });
+
+        if (!vectorLayer.get("gfiAttributes")) {
+            vectorLayer.set("gfiAttributes", gfiAttributes);
+        }
 
         alertingMessage = {
             category: i18next.t("common:modules.alerting.categories.info"),

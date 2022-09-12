@@ -41,7 +41,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         }, this);
     },
     tagName: "li",
-    className: "burgermenu-layer-list list-group-item",
+    className: "burgermenu-layer-list dropdown-item",
     template: _.template(Template),
     templateSettings: _.template(TemplateSettings),
     render: function () {

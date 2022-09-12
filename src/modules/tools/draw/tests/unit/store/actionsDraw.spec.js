@@ -634,6 +634,8 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             modifyInteraction = Symbol(),
             selectInteractionModify = Symbol(),
             selectInteraction = Symbol(),
+            modifyAttributesInteraction = Symbol(),
+            selectInteractionModifyAttributes = Symbol(),
             un = sinon.spy();
 
         it("should commit and dispatch as intended", () => {
@@ -644,7 +646,9 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
                 layer: {getSource: () => ({un})},
                 modifyInteraction,
                 selectInteractionModify,
-                selectInteraction
+                selectInteraction,
+                modifyAttributesInteraction,
+                selectInteractionModifyAttributes
             };
             actions.resetModule({state, commit, dispatch, getters});
 
@@ -664,7 +668,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(commit.getCall(9).args).to.eql(["setDownloadFileName", initialState.download.fileName]);
             expect(commit.getCall(10).args).to.eql(["setDownloadSelectedFormat", initialState.download.selectedFormat]);
 
-            expect(dispatch.callCount).to.equal(7);
+            expect(dispatch.callCount).to.equal(9);
             expect(dispatch.getCall(0).args).to.eql(["toggleInteraction", "draw"]);
             expect(dispatch.getCall(1).args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
             expect(dispatch.getCall(2).args).to.eql(["removeInteraction", drawInteraction]);
@@ -672,6 +676,8 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(dispatch.getCall(4).args).to.eql(["removeInteraction", modifyInteraction]);
             expect(dispatch.getCall(5).args).to.eql(["removeInteraction", selectInteractionModify]);
             expect(dispatch.getCall(6).args).to.eql(["removeInteraction", selectInteraction]);
+            expect(dispatch.getCall(7).args).to.eql(["removeInteraction", modifyAttributesInteraction]);
+            expect(dispatch.getCall(8).args).to.eql(["removeInteraction", selectInteractionModifyAttributes]);
         });
     });
     describe("toggleInteraction", () => {

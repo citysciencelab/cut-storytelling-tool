@@ -8,6 +8,11 @@ export default {
             type: Object,
             requried: false,
             default: undefined
+        },
+        layer: {
+            type: Object,
+            requried: false,
+            default: undefined
         }
     },
     data () {
@@ -31,7 +36,7 @@ export default {
                 if (!this.checkAttributes(this.attributes)) {
                     return;
                 }
-                this.saveChanges();
+                this.saveChanges(this.attributes, this.selectedFeature, this.layer);
             },
             deep: true
         }
@@ -108,19 +113,24 @@ export default {
             const key = this.attributes[idx].key;
 
             delete this.selectedFeature.get("attributes")[key];
+            this.selectedFeature.unset(key);
             this.$delete(this.attributes, idx);
         },
         /**
          * Save the current changes which were made on already existing attributes.
+         * @param {String[]} addedAttributes the added feature attributes
+         * @param {ol/Feature} selectedFeature the selected feature to add attributes
+         * @param {module:ol/layer/Vector} layer The drawn layer
          * @returns {void}
          */
-        saveChanges () {
-            if (!Array.isArray(this.attributes)) {
+        saveChanges (addedAttributes, selectedFeature, layer) {
+            if (!Array.isArray(addedAttributes)) {
                 return;
             }
-            const attributes = {};
+            const attributes = {},
+                gfiAttributes = isObject(layer?.get("gfiAttributes")) ? layer?.get("gfiAttributes") : {};
 
-            this.attributes.forEach(attributeRow => {
+            addedAttributes.forEach(attributeRow => {
                 if (!isObject(attributeRow)) {
                     return;
                 }
@@ -128,9 +138,14 @@ export default {
                     value = attributeRow.value;
 
                 attributes[key] = value;
+                gfiAttributes[key] = key;
             });
 
-            this.selectedFeature.set("attributes", attributes);
+            if (Object.keys(attributes).length) {
+                selectedFeature.set("attributes", attributes);
+                selectedFeature.setProperties(attributes);
+                layer.set("gfiAttributes", gfiAttributes);
+            }
         },
         /**
          * Checks if the selectedFeature is a feature.

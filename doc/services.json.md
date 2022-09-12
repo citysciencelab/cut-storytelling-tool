@@ -1213,7 +1213,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |isSecured|no|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
 |authenticationUrl|no|String||Additional url called to trigger basic authentication in the browser.|"https://api.hamburg.de/datasets/v1/schulen/collections/staatliche_schulen/appschema"|
 |limit|false|Number||Limits the number of items presented in the response document. Ignored if bulk is `true`.|`10`|
-|crs|false|String|EPSG:25832|The coordinate reference system of the response geometries. If not supported, server will respond with error 400. See collections index of your oaf service for supported crs. e.g. https://api.hamburg.de/datasets/v1/schulen/collections|`"EPSG:25832"`|
+|crs|false|String|http://www.opengis.net/def/crs/EPSG/0/25832|The coordinate reference system of the response geometries. If not supported, server will respond with error 400. See collections index of your oaf service for supported crs. e.g. https://api.hamburg.de/datasets/v1/schulen/collections. Can also be set to false to disable the crs parameter|`"EPSG:25832"`|
 
 **OAF example:**
 
@@ -1225,7 +1225,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
     "collection" : "staatliche_schulen",
     "typ": "OAF",
     "limit": 10,
-    "crs": "EPSG:25832",
+    "crs": "http://www.opengis.net/def/crs/EPSG/0/25832",
     "styleId": "8712",
     "gfiAttributes": "showAll",
     "gfiTheme": "default"
