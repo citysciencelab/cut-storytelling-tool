@@ -56,7 +56,11 @@ export async function initializeSearch (requestConfig) {
 export async function sendRequest (url, requestConfig, result) {
     const type = requestConfig.type || "POST",
         payload = requestConfig.payload || undefined,
-        urlWithPayload = type === "GET" ? url + JSON.stringify(payload) : url,
+        urlWithPayload = type === "GET"
+            ? `${url}?source_content_type=application/json&source=${
+                JSON.stringify(payload)
+            }`
+            : url,
         controller = new AbortController();
     let resultWithHits = result,
         res = null;

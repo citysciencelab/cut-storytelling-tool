@@ -23,7 +23,8 @@
 
 ### Removed
 ### Fixed
-- #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
+- Issue #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
+- Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
 
 ---
 ## v2.25.0 - 2022-09-07
