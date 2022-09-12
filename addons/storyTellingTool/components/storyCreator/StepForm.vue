@@ -691,7 +691,7 @@ export default {
                         <button
                             type="button"
                             class="btn"
-                            @click="step.zoomLevel = zoomLevel()"
+                            @click="step.zoomLevel = zoom()"
                         >
                             <v-icon>add_circle</v-icon>
                         </button>
@@ -707,7 +707,7 @@ export default {
                 <p
                     v-if="
                         step.zoomLevel !== null &&
-                            step.zoomLevel !== zoomLevel()
+                            step.zoomLevel !== zoom()
                     "
                     class="text-warning"
                 >
