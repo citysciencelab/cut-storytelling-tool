@@ -247,7 +247,7 @@ export default {
         ...mapMutations("Tools/StoryTellingTool", Object.keys(mutations)),
         ...mapActions("Tools/StoryTellingTool", Object.keys(actions)),
         // These application wide getters and setters can be found in 'src/modules/map/store'
-        ...mapGetters("Map", ["center", "zoomLevel"]),
+        ...mapGetters("Maps", ["center", "zoom"]),
 
         /**
          * Handles new chapter number changes
