@@ -6,8 +6,6 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        ports:
-            - '80:80'
         networks:
             - proxy
         labels:
