@@ -22,13 +22,13 @@
 ### Deprecated
 
 ### Removed
+
 ### Fixed
 - #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
+- #825 The Control layerAttributions remain open when a layer with content is activated until they are explicitly collapsed.
 
 ---
 ## v2.25.0 - 2022-09-07
-### __Breaking Changes__
-
 ### Added
 - KeepOpen attribute for tools:
     - Allows to keep a tool open (that is rendered in a sidebar) when other tools (that are rendered to the window) are used.
@@ -125,6 +125,7 @@ The Tool StyleWMS was removed.
 - Save Selection: takes over the transparency of the layer again.
 
 ---
+
 ## v2.24.1 - 2022-08-19
 ### Added
 - The following NPM packages are added:
@@ -132,6 +133,7 @@ The Tool StyleWMS was removed.
     - dependencies:
 
         - "vue2-datepicker"
+
 ### Changed
 - Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
 
@@ -139,6 +141,7 @@ The Tool StyleWMS was removed.
 - Fix sensor layer extent-display issues caused by url parameter usage.
 
 ---
+
 ## v2.24.0 - 2022-08-03
 ### Added
 - PortalFooter:
