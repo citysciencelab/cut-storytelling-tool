@@ -248,7 +248,7 @@ export default {
         ...mapMutations("Tools/StoryTellingTool", Object.keys(mutations)),
         ...mapActions("Tools/StoryTellingTool", Object.keys(actions)),
         // These application wide getters and setters can be found in 'src/modules/map/store'
-        ...mapGetters("Map", ["center", "zoomLevel"]),
+        ...mapGetters("Maps", ["center", "zoom"]),
 
         /**
          * Handles new chapter number changes
@@ -692,7 +692,7 @@ export default {
                         <button
                             type="button"
                             class="btn"
-                            @click="step.zoomLevel = zoomLevel()"
+                            @click="step.zoomLevel = zoom()"
                         >
                             <v-icon>add_circle</v-icon>
                         </button>
@@ -708,7 +708,7 @@ export default {
                 <p
                     v-if="
                         step.zoomLevel !== null &&
-                            step.zoomLevel !== zoomLevel()
+                            step.zoomLevel !== zoom()
                     "
                     class="text-warning"
                 >
