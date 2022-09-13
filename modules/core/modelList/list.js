@@ -1010,7 +1010,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         this.closeAllExpandedFolder();
         // open the layerTree
-        // Upgrade to BT5, use JS method instead of class addition
         dropdown.show();
         // Parent and possible siblings are added
         this.addAndExpandModelsRecursive(lightModel.parentId);
@@ -1025,7 +1024,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // für DIPAS Table Ansicht
         if (Radio.request("Util", "getUiStyle") === "TABLE") {
             Radio.request("ModelList", "getModelByAttributes", {id: modelId}).setIsJustAdded(true);
-            // Upgrade to BT5
+
             const collapseElement = document.querySelector("#table-nav-layers-panel"),
                 collapse = new Collapse(collapseElement);
 

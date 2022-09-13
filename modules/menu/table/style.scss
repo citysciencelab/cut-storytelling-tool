@@ -67,7 +67,7 @@
     position: relative;
 }
 #table-category-list.table-category-active {
-    background-color: $light_grey;
+    background-color: $dark_grey;
 }
 .table-category-active {
     .icon-categories {
@@ -158,7 +158,7 @@ a {
     }
 }
 .table-tools-active {
-    background-color: $light_grey;
+    background-color: $dark_grey;
     .icon-tools {
         &:before {
             color: $secondary_table_style;
@@ -353,6 +353,7 @@ a {
             font-size: 14px;
             padding-top: 6px;
             background-color: $dark_grey;
+            color: $white;
         }
         .remove-layer {
             color: $secondary_table_style;
