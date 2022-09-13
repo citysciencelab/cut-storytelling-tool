@@ -301,7 +301,11 @@ export default {
          * @returns {String} The tagTitle to use.
          */
         getTagTitle () {
-            return moment(this.dateFromComputed, this.internalFormat).format(this.getFormat("from")) + " - " + moment(this.dateUntilComputed, this.internalFormat).format(this.getFormat("from"));
+            if (typeof this.dateFromComputed === "undefined" && typeof this.dateUntilComputed === "undefined") {
+                return this.prechecked[0] + " - " + this.prechecked[1];
+            }
+
+            return moment(this.dateFromComputed, this.internalFormat).format(this.getFormat("from")) + " - " + moment(this.dateUntilComputed, this.internalFormat).format(this.getFormat("until"));
         },
         /**
          * Returns the riskless attrName to use for from.
