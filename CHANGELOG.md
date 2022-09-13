@@ -31,6 +31,7 @@
         - @masterportal/masterportalapi: 2.6.0 to 2.7.0 (This also raised ol to version 7.1.0 and olcs to 2.13.1)
         - jsts: 2.9.0 to 2.9.1
         - @geoblocks/print: 0.7.2 to 0.7.3
+- HighlightFeature is working with AD-Secure services now.
 
 ### Deprecated
 

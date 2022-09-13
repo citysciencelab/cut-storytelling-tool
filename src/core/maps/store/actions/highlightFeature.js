@@ -124,7 +124,7 @@ function highlightViaParametricUrl (dispatch, getters, layerIdAndFeatureId) {
  * @returns {ol/feature} feature to highlight
  */
 function getHighlightFeature (layerId, featureId, getters) {
-    const layer = getters.getLayerById(layerId)?.olLayer;
+    const layer = getters.getLayerById({layerId});
 
     if (layer) {
         return layer.getSource().getFeatureById(featureId)
