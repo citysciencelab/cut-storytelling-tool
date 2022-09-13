@@ -806,7 +806,7 @@ export default {
     .filter-select-box-container .multiselect .multiselect__tag-icon::after {
         content: "\D7";
         color: $light_grey;
-        font-size: 14px;
+        font-size: $font_size_big;
     }
     .filter-select-box-container .multiselect .multiselect__tag-icon:hover {
         background: $light_blue;
@@ -816,7 +816,7 @@ export default {
         display: inline-block;
         margin-bottom: 0;
         padding-top: 0;
-        font-size: 14px;
+        font-size: $font_size_big;
     }
     .filter-select-box-container .multiselect .multiselect__tag-icon:focus, .multiselect__tag-icon:hover {
         background: $light_grey;

@@ -198,7 +198,7 @@ export default {
         right: 25px;
         margin: 6px 0 0 10px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: $font_size_icon_lg;
         &:focus {
             @include primary_action_focus;
         }

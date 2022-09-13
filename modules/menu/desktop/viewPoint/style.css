@@ -1,5 +1,5 @@
 .menu-style {
-    font-size: 14px;
+    font-size: $font_size_big;
 }
 
 .viewpoint-style {

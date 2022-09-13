@@ -344,13 +344,13 @@ a {
     }
     .layer-settings {
         margin-left: -3px;
-        font-size: 14px;
+        font-size: $font_size_big;
         .bootstrap-icon {
             font-size: x-large;
             color: $secondary_icon_button;
         }
         .badge {
-            font-size: 14px;
+            font-size: $font_size_big;
             padding-top: 6px;
             background-color: $dark_grey;
             color: $white;

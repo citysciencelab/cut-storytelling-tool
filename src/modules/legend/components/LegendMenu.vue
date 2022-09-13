@@ -135,7 +135,7 @@ export default {
     #legend-menu {
         border-right: none;
         border-top: none;
-        font-size: 14px;
+        font-size: $font_size_big;
         cursor: pointer;
     }
 </style>

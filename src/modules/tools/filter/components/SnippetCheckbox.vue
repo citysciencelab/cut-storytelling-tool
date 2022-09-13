@@ -207,7 +207,7 @@ export default {
     }
     .snippetCheckboxContainer .info-icon {
         float: right;
-        font-size: 16px;
+        font-size: $font_size_icon_lg;
         color: $light_grey;
     }
     .snippetCheckboxContainer .info-icon .opened {

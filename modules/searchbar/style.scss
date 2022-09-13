@@ -10,7 +10,7 @@
     }
     &:-ms-input-placeholder {
         font-weight: bold;
-        font-size: 13px;
+        font-size: $font_size_big;
     }
     box-shadow: none;
     font-size: $font-size-base;
@@ -107,7 +107,7 @@
 }
 .btn-search {
     >.bootstrap-icon > .bi-search {
-        font-size: 13px;
+        font-size: $font_size_big;
     }
     &:hover {
         background-color: $accent_hover;
@@ -148,7 +148,7 @@
     >div {
         >.bootstrap-icon {
             color: $white;
-            font-size: 16px;
+            font-size: $font_size_icon_lg;
             vertical-align: middle;
             padding-top: 1px;
         }
@@ -248,7 +248,7 @@ li.results {
         background-color: $white;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         float: left;
-        font-size: 13px;
+        font-size: $font_size_big;
         list-style: outside none none;
         margin: 2px 0 0;
         min-width: 200px;
@@ -390,7 +390,7 @@ input#searchInput.form-control {
     #searchInput {
         min-width: 200px;
         &+span {
-            font-size: 14px;
+            font-size: $font_size_big;
         }
     }
     #searchInputUL {

@@ -80,11 +80,11 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     .title {
-        font-size: 14px;
+        font-size: $font_size_big;
         font-weight: bold;
     }
     .info {
-        font-size: 14px;
+        font-size: $font_size_big;
         font-style: italic;
     }
 }

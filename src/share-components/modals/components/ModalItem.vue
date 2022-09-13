@@ -140,7 +140,7 @@ export default {
             display:block;
         }
         .bootstrap-icon {
-            font-size: 14px;
+            font-size: $font_size_big;
             padding: 5px;
             color:#555555;
             &:focus {
