@@ -81,6 +81,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @fires ModelList#updateOverlayerView
      * @fires ModelList#UpdateOverlayerView
      * @fires ModelList#UpdateSelection
+     * @fires ModelList#OpenFolderInTree
      */
     initialize: function () {
         const channel = Radio.channel("ModelList");
@@ -130,7 +131,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "transparencyChanged": function () {
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                 store.dispatch("Tools/SaveSelection/createUrlParams", filterAndReduceLayerList(this.where({isSelected: true, type: "layer"})));
-            }
+            },
+            "openFolderInTree": this.openFolderInTree
         }, this);
 
         this.listenTo(this, {
@@ -1028,6 +1030,18 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             collapse.show();
 
         }
+    },
+
+    /**
+     * Opens the folder with the given id in the layetree
+     * @param {string} id - id of the folder to open
+     * @return {void}
+     */
+    openFolderInTree: function (id) {
+        const dropdown = Dropdown.getInstance("#root li:first-child > .dropdown-toggle");
+
+        dropdown.show();
+        this.addAndExpandModelsRecursive(id);
     },
 
     /**

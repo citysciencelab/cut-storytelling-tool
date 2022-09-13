@@ -543,8 +543,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     zoomToDesktopTopicTree: function (hitId, hitName) {
-        const layerTyp = Radio.request("Parser", "getItemByAttributes", {id: hitId})?.typ?.toUpperCase(),
-            mapMode = Radio.request("Map", "getMapMode");
+        const hitTyp = Radio.request("Parser", "getItemByAttributes", {id: hitId})?.typ?.toUpperCase(),
+            mapMode = Radio.request("Map", "getMapMode"),
+            layerTyp = hitTyp === undefined ? Radio.request("Parser", "getItemByAttributes", {id: hitId})?.type : hitTyp;
 
         if (layerTyp === "OBLIQUE" && mapMode !== "OBLIQUE") {
             this.switchToObliqueMapMode(hitName);
@@ -552,6 +553,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         else if ((layerTyp === "TILESET3D" || layerTyp === "TERRAIN3D") && mapMode !== "3D") {
             this.switchTo3dMapMode(hitId, hitName);
+        }
+        else if (layerTyp === "folder") {
+            Radio.trigger("ModelList", "openFolderInTree", hitId);
         }
         else {
             Radio.trigger("ModelList", "showModelInTree", hitId);
@@ -1006,7 +1010,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             hitName = isEvent ? hit?.name : "undefined";
 
         // with gdi-search no action on mousehover or on GFI onClick
-        if (hit && hit?.triggerEvent && hit.type !== i18next.t("common:modules.searchbar.type.subject") && hit.type !== i18next.t("common:modules.searchbar.type.general") && hit.triggerEvent.event !== "gfiOnClick") {
+        if (hit && hit?.triggerEvent && hit.type !== i18next.t("common:modules.searchbar.type.subject") && hit.type !== i18next.t("common:modules.searchbar.type.general") && hit.type !== i18next.t("common:modules.searchbar.type.folder") && hit.triggerEvent.event !== "gfiOnClick") {
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
             return;
         }
@@ -1023,7 +1027,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             }
             return;
         }
-        else if (hit && hit?.type && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject") || hit.type === i18next.t("common:modules.searchbar.type.general"))) {
+        else if (hit && hit?.type && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject") || hit.type === i18next.t("common:modules.searchbar.type.general") || hit.type === i18next.t("common:modules.searchbar.type.folder"))) {
             return;
         }
 

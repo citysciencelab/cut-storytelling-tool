@@ -84,13 +84,18 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
     search: function (searchString) {
         let searchStringRegExp = "",
             layersForSearch = [],
-            uniqueLayerModels = [];
+            uniqueLayerModels = [],
+            folderModels = [],
+            nodesForSearch = [];
 
         if (this.get("layers").length === 0) {
             uniqueLayerModels = this.getUniqeLayermodels(Radio.request("Parser", "getItemsByAttributes", {type: "layer"}));
+            folderModels = Radio.request("Parser", "getOverlayer");
             uniqueLayerModels = this.removeLayerInCaseOfMissingConfig(uniqueLayerModels, store.getters.controlsConfig);
             layersForSearch = this.getLayerForSearch(uniqueLayerModels);
+            nodesForSearch = this.getNodeForSearch(folderModels);
             this.setLayers(layersForSearch);
+            this.setNodes(nodesForSearch);
         }
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
             this.set("inUse", true);
@@ -109,13 +114,13 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
     },
 
     /**
-     * Creates manually a regular Expression to handle special Characters like '('
+     * Creates a regular Expression to handle special Characters like '('
      * @param {String} searchString - search string
      * @return {String} regExp String
      */
     createRegExp: function (searchString) {
         const string = searchString.replace(/ /g, ""),
-            regExp = "/" + string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&") + "/i";
+            regExp = new RegExp(string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"), "i");
 
         return regExp;
     },
@@ -247,12 +252,60 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
     },
 
     /**
+     * Creates new models for the search for topictree folders
+     * @param {object[]} nodeModels - Overlayer Models from Parser
+     * @returns {object[]} Folders for search
+     */
+    getNodeForSearch: function (nodeModels = []) {
+        const nodesForSearch = [],
+            folders = [],
+            allFolder = nodeModels?.Ordner ? nodeModels.Ordner : [];
+
+        allFolder.forEach(node => {
+            if (node.Ordner !== undefined && node.Ordner.length > 0) {
+                node.Ordner.forEach(subfolder => {
+                    let rekursionFolderForSearch = [];
+
+                    folders.push(subfolder);
+                    if (subfolder?.Ordner !== undefined) {
+                        rekursionFolderForSearch = this.getNodeForSearch(subfolder);
+                    }
+                    rekursionFolderForSearch.forEach(model => {
+                        nodesForSearch.push(model);
+                    });
+                });
+            }
+            folders.push(node);
+        });
+
+        folders.forEach(model => {
+            nodesForSearch.push({
+                name: model.Titel,
+                type: i18next.t("common:modules.searchbar.type.folder"),
+                icon: "bi-folder-fill",
+                id: model.id
+            });
+        });
+
+        return nodesForSearch;
+    },
+
+    /**
      * Setter for layers.
      * @param {object[]} layers - Layers for search.
      * @returns {void}
      */
     setLayers: function (layers) {
         this.set("layers", layers);
+    },
+
+    /**
+     * Setter for nodes.
+     * @param {object[]} nodes - Nodes / folders for search.
+     * @returns {void}
+     */
+    setNodes: function (nodes) {
+        this.set("nodes", nodes);
     }
 });
 
