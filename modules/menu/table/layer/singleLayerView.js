@@ -41,7 +41,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         }, this);
     },
     tagName: "li",
-    className: "burgermenu-layer-list list-item d-flex justify-content-between py-2",
+    className: "burgermenu-layer-list list-item d-flex justify-content-between py-2 row mx-0",
     template: _.template(Template),
     templateSettings: _.template(TemplateSettings),
     render: function () {
