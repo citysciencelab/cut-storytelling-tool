@@ -48,7 +48,7 @@ OAFLayer.prototype.createLayer = function (attrs) {
             id: attrs.id,
             url: attrs.url,
             clusterDistance: attrs.clusterDistance,
-            limit: attrs.limit,
+            limit: typeof attrs.limit === "undefined" ? 400 : attrs.limit,
             collection: attrs.collection,
             offset: attrs.offset,
             bbox: attrs.bbox,
