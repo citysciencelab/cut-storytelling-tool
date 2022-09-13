@@ -65,7 +65,7 @@ export default {
     }
     .snippetTagContainer button {
         padding: 5px 6px;
-        font-size: 12px;
+        font-size: $font-size-base;
         color: $white;
         background-color: rgba(0, 0, 0, 0.5);
         border: none;
@@ -77,7 +77,7 @@ export default {
         cursor: pointer;
     }
     .snippetTagContainer .snippetTagLabel {
-        font-size: 10px;
+        font-size: $font-size-sm;
     }
     .snippetTagContainer .snippetTagValue {
         padding-right: 5px;

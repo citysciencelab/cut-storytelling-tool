@@ -10,7 +10,7 @@
         vertical-align: text-bottom;
     }
     span.bootstrap-icon {
-        font-size: 18px;
+        font-size: 1.125rem;
         padding: 5px;
     }
     >.dropdown-item {
@@ -36,7 +36,7 @@
     >.form-inline {
         >.form-group {
             >label {
-                font-size: 12px;
+                font-size: $font-size-base;
                 padding-right: 10px;
             }
             >select {

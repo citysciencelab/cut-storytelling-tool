@@ -15,12 +15,12 @@
         word-break: normal;
         word-wrap: normal;
         white-space: normal;
-        font-size: 12px;
+        font-size: $font-size-base;
 
     }
 
     .record-button > .bootstrap-icon {
-        font-size: 15px;
+        font-size: $font-size-lg;
     }
 
     .record-active {
@@ -112,7 +112,7 @@
 
     #wfst-module-infoText {
         display: none;
-        font-size: 12px;
+        font-size: $font-size-base;
         padding: 5px 0;
     }
 
@@ -139,7 +139,7 @@
                         background: none;
                         .datepicker-switch {
                             cursor: default;
-                            font-size: 15px;
+                            font-size: $font-size-lg;
                             &:hover {
                                 background: none;							
                             }

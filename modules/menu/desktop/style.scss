@@ -65,7 +65,7 @@ ul#tree {
         max-height: 55vh;
         .title {
             padding: 4px 0 0 5px;
-            font-size: 12px;
+            font-size: $font-size-base;
             cursor: pointer;
         }
         li {
@@ -74,7 +74,7 @@ ul#tree {
             padding: 5px 5px;
             border-bottom: 1px solid rgba(0,0,0,.125);
             a {
-                font-size: 15px;
+                font-size: $font-size-lg;
                 margin: 0;
                 color: $dark_grey;
                 flex-grow: 1;
@@ -94,11 +94,11 @@ ul#tree {
     }
     .bootstrap-icon {
         cursor: pointer;
-        font-size: 15px;
+        font-size: $font-size-lg;
         padding: 4px 2px 1px 2px;
     }
     .bi-info-circle-fill, .bi-gear, .bi-paint-bucket, .bi-x-circle {
-        font-size: 18px;
+        font-size: 1.125rem;
 
         &:not(:hover) {
             color: $secondary_icon_button;
@@ -139,13 +139,13 @@ ul#tree {
     .rotate-adjust {
         transform: rotate(180deg);
         transition: 0.5s;
-        font-size: 15px;
+        font-size: $font-size-lg;
         cursor: pointer;
     }
     .rotate-adjust-back {
         transform: rotate(0deg);
         transition: 0.5s;
-        font-size: 15px;
+        font-size: $font-size-lg;
         cursor: pointer;
     }
     .rotate-pin {
@@ -178,7 +178,7 @@ ul#tree {
 }
 ul#tree.light {
     overflow-y: auto;
-    font-size: 12px;
+    font-size: $font-size-base;
     color: $dark_grey;
     li {
         padding: 5px;

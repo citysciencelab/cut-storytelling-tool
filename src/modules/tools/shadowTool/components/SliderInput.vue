@@ -80,6 +80,6 @@ export default {
     justify-content: space-between;
 }
 h6 {
-    font-size: 12px;
+    font-size: $font-size-base;
 }
 </style>

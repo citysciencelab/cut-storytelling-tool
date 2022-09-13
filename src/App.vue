@@ -95,7 +95,7 @@ export default {
         width: 100%;
 
         font-family: $font_family_default;
-        font-size: $font_size_default;
+        font-size: $font-size-base;
 
         .map-region {
             display: flex;

@@ -70,7 +70,7 @@ export default {
 @import "~variables";
 
 .mouseHover {
-    font-size: 12px;
+    font-size: $font-size-base;
     text-align: left;
     max-width: inherit;
     padding: 8px;

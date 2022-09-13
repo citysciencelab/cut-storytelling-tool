@@ -276,7 +276,7 @@ a {
             color: $secondary_table_style;
             top: 11px;
             left: 11px;
-            font-size: 18px;
+            font-size: 1.125rem;
         }
         .icon-burgermenu_alt:before {
             display: none;
@@ -327,7 +327,7 @@ a {
     }
     ul#layers {
         border: none;
-        font-size: 15px;
+        font-size: $font-size-lg;
         padding: 0 0;
         min-width: 410px;
         overflow: auto;
@@ -366,7 +366,7 @@ a {
         }
     }
     .bi-info-circle-fill {
-        font-size: 18px;
+        font-size: 1.125rem;
         color: $secondary_icon_button;
     }
     .rotate-icon {
@@ -374,7 +374,7 @@ a {
         line-height: 0;
     }
     .bi-gear {
-        font-size: 18px;
+        font-size: 1.125rem;
         color: $secondary_icon_button;
         
     }

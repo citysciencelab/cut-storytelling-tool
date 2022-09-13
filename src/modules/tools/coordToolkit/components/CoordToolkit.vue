@@ -689,7 +689,7 @@ export default {
 
     @media (max-width: 767px) {
         .checkbox-container .form-inline {
-            font-size: 12px;
+            font-size: $font-size-base;
         }
     }
     .radio-container{

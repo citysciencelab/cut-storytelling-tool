@@ -1123,7 +1123,7 @@ export default {
         overflow-y: auto;
     }
     .snippetTagText {
-        font-size: 12px;
+        font-size: $font-size-base;
         float: left;
         padding: 6px 4px 0 0;
     }

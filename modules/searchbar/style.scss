@@ -4,7 +4,7 @@
 #searchInput {
     &::placeholder {
         font-weight: bold;
-        font-size: 12px;
+        font-size: $font-size-base;
         color:  $dark_grey;
         opacity: 1;
     }
@@ -13,7 +13,7 @@
         font-size: 13px;
     }
     box-shadow: none;
-    font-size: 12px;
+    font-size: $font-size-base;
     padding-right: 32.5px;
     &::-ms-clear {
         display: none;
@@ -57,7 +57,7 @@
         background-color: $white;
     }
     >.bootstrap-icon > .bi-x-lg {
-        font-size: 12px;
+        font-size: $font-size-base;
     }
 }
 .dropdown-menu-search {
@@ -65,7 +65,7 @@
     background-color: $white;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     float: left;
-    font-size: 12px;
+    font-size: $font-size-base;
     list-style: outside none none;
     margin: 2px 0 0;
     min-width: 200px;
@@ -140,7 +140,7 @@
 
 .results {
     background-color: $primary;
-    font-size: 12px;
+    font-size: $font-size-base;
     text-align: right;
     padding: 6px;
     border-top-width: 2px;

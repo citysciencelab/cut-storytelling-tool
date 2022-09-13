@@ -220,7 +220,7 @@ export default {
     .snippetCheckboxContainer .info-text {
         border: 1px solid $light_grey;
         border-radius: 5px;
-        font-size: 10px;
+        font-size: $font-size-sm;
         padding: 15px 10px;
     }
     .snippetCheckboxContainer .bottom {

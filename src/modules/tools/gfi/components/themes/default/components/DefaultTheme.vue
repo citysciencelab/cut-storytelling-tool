@@ -354,7 +354,7 @@ export default {
 
 .table > tbody > tr > td {
     padding: 5px 8px;
-    font-size: 12px;
+    font-size: $font-size-base;
     &.bold{
         font-family: $font_family_accent;
     }
