@@ -160,7 +160,7 @@ WMSLayer.prototype.createLegend = function () {
     if (Array.isArray(legend)) {
         this.setLegend(legend);
     }
-    else if (legend === true) {
+    else if (legend === true && this.get("url")) {
         const layerNames = this.get("layers").split(","),
             legends = [];
 
