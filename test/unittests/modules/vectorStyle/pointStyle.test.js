@@ -86,11 +86,23 @@ describe("textStyleModel", function () {
         });
     });
 
-    describe("createIconPointStyle", function () {
-        it("should create icon point style", function () {
+    describe("createIconPointStyle", () => {
+        it("should create icon point style", () => {
             expect(styleModel.createIconPointStyle()).to.be.an.instanceof(Style);
             expect(styleModel.createIconPointStyle().getImage()).to.be.an.instanceof(Icon);
             expect(styleModel.createIconPointStyle().getImage().getScale()).to.equal(1);
+        });
+
+        it("should create icon point style from imagePath as svg String", () => {
+            styleModel.set("imageName", "<svg xmlns='http://www.w3.org/2000/svg'><path/></svg>");
+            styleModel.set("imagePath", "");
+
+            const pointStyle = styleModel.createIconPointStyle();
+
+            expect(pointStyle).to.be.an.instanceof(Style);
+            expect(pointStyle.getImage()).to.be.an.instanceof(Icon);
+            expect(pointStyle.getImage().getScale()).to.equal(1);
+            expect(pointStyle.getImage().getSrc()).to.equals("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%3E%3Cpath%2F%3E%3C%2Fsvg%3E");
         });
     });
 

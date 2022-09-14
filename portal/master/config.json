@@ -469,7 +469,8 @@
             "filename": "Ausdruck",
             "title": "Mein Titel",
             "currentLayoutName": "A4 Hochformat",
-            "dpiForPdf": 120
+            "dpiForPdf": 120,
+            "printMapMarker": true
           },
           "scaleSwitcher": {
             "name": "translate#common:menu.tools.scaleSwitcher",
