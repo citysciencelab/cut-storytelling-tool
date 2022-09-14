@@ -215,7 +215,7 @@
         "vue/v-slot-style": ["error"],
         // vue plugin Recommended Rules
         "vue/attributes-order": ["error"],
-        "vue/component-tags-order": ["error"],
+        "vue/component-tags-order": ["error", {"order": [ "script", "template" , "style" ]}],
         "vue/no-lone-template": ["error"],
         "vue/no-multiple-slot-args": ["error"],
         "vue/no-v-html": ["off"],
