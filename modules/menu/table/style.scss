@@ -369,9 +369,14 @@ a {
         font-size: 18px;
         color: $secondary_icon_button;
     }
+    .rotate-icon {
+        height: 18px;
+        line-height: 0;
+    }
     .bi-gear {
         font-size: 18px;
         color: $secondary_icon_button;
+        
     }
     .layer-settings-activated {
         background-color: $light_grey;
