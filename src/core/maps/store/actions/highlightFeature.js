@@ -150,14 +150,14 @@ function increaseFeature (commit, getters, highlightObject) {
         clonedImage = null;
 
     if (!clonedStyle) {
-        if (typeof feature.getStyle()?.clone() === "function") {
+        if (typeof feature.getStyle()?.clone === "function") {
             clonedStyle = feature.getStyle()?.clone();
         }
         else {
             clonedStyle = {...feature.getStyle()};
         }
     }
-    clonedImage = clonedStyle ? clonedStyle.getImage() : undefined;
+    clonedImage = clonedStyle && typeof clonedStyle.getImage === "function"? clonedStyle.getImage() : undefined;
 
     if (clonedImage) {
         commit("Maps/setHighlightedFeatures", [feature], {root: true});
