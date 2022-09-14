@@ -5,6 +5,8 @@ import {expect} from "chai";
 import * as proj4 from "proj4";
 
 describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
+    let commit, dispatch, getters;
+
     beforeEach(() => {
         const map = {
             id: "ol",
@@ -22,8 +24,13 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
 
         mapCollection.clear();
         mapCollection.addMap(map, "2D");
+        commit = sinon.spy();
+        dispatch = sinon.spy();
+        getters = sinon.spy();
     });
-    afterEach(sinon.restore);
+    afterEach(() => {
+        sinon.restore();
+    });
 
     describe("supplyCoord actions", () => {
         it("positionClicked without height", done => {
@@ -376,8 +383,8 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                     }
                 },
                 proj1 = {id: "projection 1", name: "projection 1", projName: "utm"},
-                proj2 = {id: "projection 2", name: "projection 2", projName: "longlat"},
-                proj3 = {id: "EPSG:4326-DG", name: "EPSG:4326", projName: "longlat"};
+                proj2 = {id: "http://www.opengis.net/gml/srs/epsg.xml#25832", name: "EPSG:25832", projName: "longlat"},
+                proj3 = {id: "http://www.opengis.net/gml/srs/epsg.xml#4326-DG", name: "EPSG:4326", projName: "longlat"};
 
             it("adjustPosition sets coordinate fields - longlat", done => {
                 const payload = {
@@ -462,15 +469,6 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
         });
     });
     describe("searchByCoord actions", () => {
-        let commit, dispatch, getters;
-
-        beforeEach(() => {
-            commit = sinon.spy();
-            dispatch = sinon.spy();
-            getters = sinon.spy();
-        });
-
-        afterEach(sinon.restore);
 
         describe("validateInput", () => {
             it("Validates the coordinates according to the ETRS89 coordinate system", () => {
@@ -507,7 +505,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Validates the coordinates according to the WGS84 coordinate system", () => {
                 const state = {
-                    currentProjection: {id: "EPSG:4326"},
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326"},
                     coordinatesEasting: {id: "easting", name: "", value: "53° 33′ 25", errorMessage: ""}
                 };
 
@@ -517,7 +515,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Throws an Error for missing coordinates - WGS84", () => {
                 const state = {
-                    currentProjection: {id: "EPSG:4326"},
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326"},
                     coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""}
                 };
 
@@ -528,7 +526,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Throws an Error for wrong coordinates - WGS84", () => {
                 const state = {
-                    currentProjection: {id: "EPSG:4326"},
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326"},
                     coordinatesNorthing: {id: "northing", name: "", value: "falsche Eingabe", errorMessage: ""}
                 };
 
@@ -539,7 +537,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Validates the coordinates according to the WGS84(Dezimalgrad) coordinate system", () => {
                 const state = {
-                    currentProjection: {id: "EPSG:4326-DG"},
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326-DG"},
                     coordinatesEasting: {id: "easting", name: "", value: "53.55555°", errorMessage: ""}
                 };
 
@@ -549,7 +547,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Validates the coordinates without degree symbol according to the WGS84(Dezimalgrad) coordinate system", () => {
                 const state = {
-                    currentProjection: {id: "EPSG:4326-DG"},
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326-DG"},
                     coordinatesEasting: {id: "easting", name: "", value: "9.983193111035327", errorMessage: ""}
                 };
 
@@ -559,7 +557,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Throws an Error for missing coordinates - WGS84(Dezimalgrad)", () => {
                 const state = {
-                    currentProjection: {id: "EPSG:4326-DG"},
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326-DG"},
                     coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""}
                 };
 
@@ -570,7 +568,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Throws an Error for wrong coordinates - WGS84(Dezimalgrad)", () => {
                 const state = {
-                    currentProjection: {id: "EPSG:4326-DG"},
+                    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326-DG"},
                     coordinatesNorthing: {id: "northing", name: "", value: "falsche Eingabe", errorMessage: ""}
                 };
 
@@ -605,14 +603,14 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                             return {
                                 getProjection: () => {
                                     return {
-                                        getCode: () => "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                                        getCode: () => "EPSG:25832"
                                     };
                                 }
                             };
                         }
                     },
                     state = {
-                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
+                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832", name: "EPSG:25832"},
                         selectedCoordinates: ["564459.13", "5935103.67"]
                     };
 
@@ -627,7 +625,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Transforms coordinates of the WGS84 format and moves to coordinates", () => {
                 const state = {
-                        currentProjection: {id: "EPSG:4326"},
+                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326"},
                         selectedCoordinates: [["53", "33", "25"], ["9", "59", "50"]]
                     },
                     proj4Result = Symbol(),
@@ -652,7 +650,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 sinon.stub(proj4, "default").callsFake(proj4Spy);
                 actions.transformCoordinates({state, dispatch});
 
-                expect(proj4Spy.firstCall.args[0]).to.equal("EPSG:4326");
+                expect(proj4Spy.firstCall.args[0]).to.equal("http://www.opengis.net/gml/srs/epsg.xml#4326");
                 expect(proj4Spy.secondCall.args[0]).to.equal("EPSG:25832");
                 expect(dispatch.firstCall.args[0]).to.equal("setZoom");
                 expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
@@ -660,7 +658,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Transforms coordinates of the WGS84(Dezimalgrad) format and moves to coordinates", () => {
                 const state = {
-                        currentProjection: {id: "EPSG:4326-DG"},
+                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326-DG"},
                         selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
                     },
                     proj4Result = Symbol(),
@@ -685,7 +683,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 sinon.stub(proj4, "default").callsFake(proj4Spy);
                 actions.transformCoordinates({state, dispatch});
 
-                expect(proj4Spy.firstCall.args[0]).to.equal("EPSG:4326");
+                expect(proj4Spy.firstCall.args[0]).to.equal("http://www.opengis.net/gml/srs/epsg.xml#4326-DG");
                 expect(proj4Spy.secondCall.args[0]).to.equal("EPSG:25832");
                 expect(dispatch.firstCall.args[0]).to.equal("setZoom");
                 expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
@@ -693,7 +691,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Transforms coordinates of the EPSG:31467 format and moves to coordinates", () => {
                 const state = {
-                        currentProjection: {id: "EPSG:31467"},
+                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#31467"},
                         selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
                     },
                     proj4Result = Symbol(),
@@ -718,7 +716,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 sinon.stub(proj4, "default").callsFake(proj4Spy);
                 actions.transformCoordinates({state, dispatch});
 
-                expect(proj4Spy.firstCall.args[0]).to.equal("EPSG:31467");
+                expect(proj4Spy.firstCall.args[0]).to.equal("http://www.opengis.net/gml/srs/epsg.xml#31467");
                 expect(proj4Spy.secondCall.args[0]).to.equal("EPSG:25832");
                 expect(dispatch.firstCall.args[0]).to.equal("setZoom");
                 expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
@@ -726,7 +724,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Transforms coordinates of the EPSG:8395 format and moves to coordinates", () => {
                 const state = {
-                        currentProjection: {id: "EPSG:8395"},
+                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#8395"},
                         selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
                     },
                     proj4Result = Symbol(),
@@ -751,7 +749,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 sinon.stub(proj4, "default").callsFake(proj4Spy);
                 actions.transformCoordinates({state, dispatch});
 
-                expect(proj4Spy.firstCall.args[0]).to.equal("EPSG:8395");
+                expect(proj4Spy.firstCall.args[0]).to.equal("http://www.opengis.net/gml/srs/epsg.xml#8395");
                 expect(proj4Spy.secondCall.args[0]).to.equal("EPSG:25832");
                 expect(dispatch.firstCall.args[0]).to.equal("setZoom");
                 expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
@@ -759,7 +757,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Transforms coordinates of the http://www.opengis.net/gml/srs/epsg.xml#25832 format and moves to coordinates", () => {
                 const state = {
-                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832"},
+                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832", name: "EPSG:25832"},
                         selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
                     },
                     map = {
@@ -769,7 +767,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                             return {
                                 getProjection: () => {
                                     return {
-                                        getCode: () => "http://www.opengis.net/gml/srs/epsg.xml#25832"
+                                        getCode: () => "EPSG:25832"
                                     };
                                 }
                             };
@@ -786,7 +784,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
             });
             it("Respect mapViews projection is not 'EPSG:25832' - Transforms coordinates of the EPSG:8395 format and moves to coordinates", () => {
                 const state = {
-                        currentProjection: {id: "EPSG:8395"},
+                        currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#8395", projName: "tmerc", name: "EPSG:8395"},
                         selectedCoordinates: [["53.55555", ""], ["10.01234", ""]]
                     },
                     proj4Result = Symbol(),
@@ -813,7 +811,7 @@ describe("src/modules/tools/coord/store/actionsCoordToolkit.js", () => {
                 sinon.stub(proj4, "default").callsFake(proj4Spy);
                 actions.transformCoordinates({state, dispatch});
 
-                expect(proj4Spy.firstCall.args[0]).to.equal("EPSG:8395");
+                expect(proj4Spy.firstCall.args[0]).to.equal("http://www.opengis.net/gml/srs/epsg.xml#8395");
                 expect(proj4Spy.secondCall.args[0]).to.equal("EPSG:25833");
                 expect(dispatch.firstCall.args[0]).to.equal("setZoom");
                 expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");

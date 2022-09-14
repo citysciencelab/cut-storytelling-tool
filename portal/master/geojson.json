@@ -1,0 +1,209 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    10.065947074722418,
+                    53.553959074591255
+                ]
+            },
+            "properties": {
+                "nid": "6",
+                "name": "Testbeitrag Nr. 1",
+                "description": "Hier kommt der Text",
+                "Thema": "Verkehr",
+                "Rubric": "Bitte neu!",
+                "link": "/drupal/de/node/6"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            10.051477145887105,
+                            53.54864576448096
+                        ],
+                        [
+                            10.05075693409709,
+                            53.54778399702756
+                        ],
+                        [
+                            10.0526281258538,
+                            53.54755349007807
+                        ],
+                        [
+                            10.053308740596165,
+                            53.548427486938785
+                        ],
+                        [
+                            10.051477145887105,
+                            53.54864576448096
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "nid": "7",
+                "name": "Winter",
+                "description": "Im Winter ist es kalt und dunkel",
+                "Thema": "Umwelt",
+                "Rubric": "Bitte neu!",
+                "link": "/drupal/de/node/7"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        10.053298382037193,
+                        53.545189583978434
+                    ],
+                    [
+                        10.05361124073021,
+                        53.545727902861955
+                    ],
+                    [
+                        10.05437371272557,
+                        53.54547740178896
+                    ],
+                    [
+                        10.054656496492479,
+                        53.54601003725509
+                    ],
+                    [
+                        10.055160202919843,
+                        53.545791542360575
+                    ],
+                    [
+                        10.055601216100007,
+                        53.54626332063095
+                    ],
+                    [
+                        10.05614721248892,
+                        53.54613958233925
+                    ]
+                ]
+            },
+            "properties": {
+                "nid": "8",
+                "name": "Sommer",
+                "description": "Im Sommer kÃ¶nnen hier alle Leute vor Freude Zickzack laufen",
+                "Thema": "Umwelt",
+                "Rubric": "Alles gut hier",
+                "link": "/drupal/de/node/8"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        10.052848855686827,
+                        53.54558002449627
+                    ],
+                    [
+                        10.053321998059516,
+                        53.546140716365784
+                    ],
+                    [
+                        10.054320590890557,
+                        53.54735676736433
+                    ],
+                    [
+                        10.056004764106385,
+                        53.54723488183717
+                    ],
+                    [
+                        10.057718129857236,
+                        53.54708298496355
+                    ],
+                    [
+                        10.058295112142293,
+                        53.54700058398996
+                    ]
+                ]
+            },
+            "properties": {
+                "nid": "9",
+                "name": "FrÃ¼hling",
+                "description": "lÃ¤sst sein blaues Band",
+                "Thema": "Umwelt",
+                "Rubric": "Alles gut hier",
+                "link": "/drupal/de/node/9"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        10.04367480714317,
+                        53.546425878706195
+                    ],
+                    [
+                        10.04509568279471,
+                        53.5457475323243
+                    ],
+                    [
+                        10.046610438363754,
+                        53.54563915112357
+                    ],
+                    [
+                        10.048877265523661,
+                        53.545262538311846
+                    ]
+                ]
+            },
+            "properties": {
+                "nid": "10",
+                "name": "Noch ein Versuch",
+                "description": "Hier kommt der Test",
+                "Thema": "Wohnen",
+                "Rubric": "Alles gut hier",
+                "link": "/drupal/de/node/10"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        10.049851347064791,
+                        53.54667914284987
+                    ],
+                    [
+                        10.050816375096465,
+                        53.547752816334985
+                    ],
+                    [
+                        10.05336754538542,
+                        53.545958501409416
+                    ],
+                    [
+                        10.049381332373867,
+                        53.546243273380135
+                    ]
+                ]
+            },
+            "properties": {
+                "nid": "13",
+                "name": "Tolle Stelle hier",
+                "description": "hier wohnt es sich sehr angenehm!",
+                "Thema": "Wohnen",
+                "Rubric": "Alles gut hier",
+                "link": "/drupal/de/node/13"
+            }
+        }
+    ]
+}
