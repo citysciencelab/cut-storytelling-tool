@@ -390,6 +390,7 @@ export default {
     transformCoordinates ({state, dispatch}) {
         const mapProjection = mapCollection.getMapView("2D").getProjection().getCode();
 
+
         if (state.selectedCoordinates.length === 2) {
             dispatch("setZoom", state.zoomLevel);
 

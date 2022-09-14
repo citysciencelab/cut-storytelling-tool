@@ -1,5 +1,6 @@
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import isMobile from "../../../../utils/isMobile";
+import {convertSexagesimalFromString} from "../../../../utils/convertSexagesimalCoordinates";
 
 export default {
     /**
@@ -62,8 +63,9 @@ export default {
             // geographical coordinates
             if (targetProjection.projName === "longlat") {
                 coord = toStringHDMS(position);
-                easting = coord.substr(0, 13).trim();
-                northing = coord.substr(14).trim();
+                coord = convertSexagesimalFromString(coord);
+                easting = coord.easting;
+                northing = coord.northing;
             }
             // cartesian coordinates
             else {
