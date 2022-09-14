@@ -183,33 +183,33 @@ li.results {
 
     .list-group-item {
 
-            .bootstrap-icon {
-                float:left;
-            }
-            .list-group-item-theme {
-                float: right;
-            }
-            .list-group-item-name {
-                display: inline-block;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                // has to be normal so the line break works
-                white-space: normal;
-                max-width: 70%;
-                clear: both;
-            }
-            p {
-                padding-top: 10px;
-            }
-
-            > .badge {
-                background-color: $dark_grey;
-                border-radius: 10px;
-                font-size: 12px;
-                color: $white;
-            }
-
+        .bootstrap-icon {
+            float:left;
         }
+        .list-group-item-theme {
+            float: right;
+        }
+        .list-group-item-name {
+            display: inline-block;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            // has to be normal so the line break works
+            white-space: normal;
+            max-width: 70%;
+            clear: both;
+        }
+        p {
+            padding-top: 10px;
+        }
+
+        > .badge {
+            background-color: $dark_grey;
+            border-radius: 10px;
+            font-size: 12px;
+            color: $white;
+        }
+
+    }
 
 }
 #table-searchForm {
@@ -274,6 +274,7 @@ li.results {
             padding-left: 10px;
         }
         .list-group-item {
+            min-width: 100%;
             font-size: 17px;
             color: $dark_grey;
             background-color: $secondary_table_style;
