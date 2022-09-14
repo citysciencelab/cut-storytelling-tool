@@ -211,12 +211,8 @@ export default {
         ];
     },
     mounted () {
-        if (this.isPrecheckedValid()) {
+        if (this.isPrecheckedValid(this.prechecked)) {
             this.emitCurrentRule(this.prechecked, true, true);
-            this.$emit("setSnippetPrechecked", this.visible);
-        }
-        else {
-            this.$emit("setSnippetPrechecked", false);
         }
 
         if (Array.isArray(this.attrName) && this.attrName.length === 2) {
@@ -225,8 +221,15 @@ export default {
                     this.initSlider(listFrom, listUntil);
                     this.$nextTick(() => {
                         this.isInitializing = false;
+                        this.emitSnippetPrechecked(this.prechecked, this.snippetId, this.visible);
                     });
+                }, error => {
+                    this.emitSnippetPrechecked();
+                    console.warn(error);
                 });
+            }, error => {
+                this.emitSnippetPrechecked();
+                console.warn(error);
             });
         }
         else if (typeof this.attrName === "string" && this.attrName) {
@@ -234,13 +237,27 @@ export default {
                 this.initSlider(list);
                 this.$nextTick(() => {
                     this.isInitializing = false;
+                    this.emitSnippetPrechecked(this.prechecked, this.snippetId, this.visible);
                 });
+            }, error => {
+                this.emitSnippetPrechecked();
+                console.warn(error);
             });
         }
     },
     methods: {
         translateKeyWithPlausibilityCheck,
 
+        /**
+         * Emits the setSnippetPrechecked event.
+         * @param {String[]} prechecked The prechecked values.
+         * @param {Number} snippetId The snippet id to emit.
+         * @param {Boolean} visible true if the snippet is visible, false if not.
+         * @returns {void}
+         */
+        emitSnippetPrechecked (prechecked, snippetId, visible) {
+            this.$emit("setSnippetPrechecked", visible && this.isPrecheckedValid(this.prechecked) ? snippetId : false);
+        },
         /**
          * Initializes the slider with the given value lists.
          * @param {String[]} listFrom A sorted list of start dates.
@@ -251,7 +268,7 @@ export default {
             this.initialDateRef = this.getInitialDateReference(listFrom, listUntil);
             this.currentSliderMin = 0;
             this.currentSliderMax = this.initialDateRef.length - 1;
-            if (this.isPrecheckedValid()) {
+            if (this.isPrecheckedValid(this.prechecked)) {
                 this.sliderFrom = this.getSliderIdxCloseToFromDate(moment(this.prechecked[0], this.getFormat("from")).format(this.internalFormat));
                 this.sliderUntil = this.getSliderIdxCloseToUntilDate(moment(this.prechecked[1], this.getFormat("until")).format(this.internalFormat));
             }
@@ -477,10 +494,11 @@ export default {
         },
         /**
          * Checks if the prechecked value is valid.
+         * @param {String[]} prechecked The prechecked value.
          * @returns {Boolean} true if the prechecked value is valid, false if not.
          */
-        isPrecheckedValid () {
-            return Array.isArray(this.prechecked) && this.prechecked.length === 2 && moment(this.prechecked[0], this.getFormat("from")).isValid() && moment(this.prechecked[1], this.getFormat("until")).isValid();
+        isPrecheckedValid (prechecked) {
+            return Array.isArray(prechecked) && prechecked.length === 2 && moment(prechecked[0], this.getFormat("from")).isValid() && moment(prechecked[1], this.getFormat("until")).isValid();
         },
         /**
          * Returns true if the given snippetId equals - or if an array, holds - the own snippetId.

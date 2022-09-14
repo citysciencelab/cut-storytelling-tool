@@ -138,9 +138,9 @@ export default {
             if (this.isStrategyActive() && val.length === this.layerConfig?.snippets.length) {
                 const snippetIds = [];
 
-                val.forEach((v, index) => {
-                    if (v) {
-                        snippetIds.push(index);
+                val.forEach(value => {
+                    if (value !== false) {
+                        snippetIds.push(value);
                     }
                 });
 
@@ -381,12 +381,13 @@ export default {
             }
         },
         /**
-         * Pushing the value if there are prechecked value in snippet
-         * @param {Boolean} value true/false for prechecked value
+         * Snippets with prechecked values are pushing their snippetId on startup, others are pushing false.
+         * @info Pushing false is necessary to trigger actions only if snippet rules are finalized.
+         * @param {Number|Boolean} snippetId The snippetId of a prechecked snippet or false for others.
          * @returns {void}
          */
-        setSnippetPrechecked (value) {
-            this.precheckedSnippets.push(value);
+        setSnippetPrechecked (snippetId) {
+            this.precheckedSnippets.push(snippetId);
         },
         /**
          * Triggered when a rule changed at a snippet.

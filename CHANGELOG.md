@@ -21,6 +21,7 @@
 - Tools are now always rendered in the window in mobile mode, since the sidebar is currently not usable in mobile mode.
 - Filter:
     - For OAF layer, the standard pagination (limit) will be set to 400.
+    - For snippet dropdown + multiselect: It is now possible to initially select all available values by setting "prechecked" to "all".
 - The image of the default MapMarker has been replaced by the icon [geo-alt-fill](https://icons.getbootstrap.com/icons/geo-alt-fill/) from Bootstrap. This means that the marker can now also be printed locally via the print module.
 
 ### Deprecated

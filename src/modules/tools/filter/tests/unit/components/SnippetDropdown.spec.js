@@ -182,6 +182,7 @@ describe("src/modules/tools/filter/components/SnippetDropdown.vue", () => {
         it("should reset the snippet value and call the given onsuccess handler", async () => {
             const wrapper = shallowMount(SnippetDropdown, {
                 propsData: {
+                    value: ["value"],
                     prechecked: ["value"]
                 },
                 localVue
