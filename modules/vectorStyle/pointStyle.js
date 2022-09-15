@@ -196,8 +196,8 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     * @returns {ol/style} - The created style.
     */
     createIconPointStyle: function () {
-        const src = this.get("imagePath") + this.get("imageName"),
-            isSVG = src.indexOf(".svg") > -1,
+        let src = this.get("imagePath") + this.get("imageName");
+        const isSVG = src.indexOf(".svg") > -1,
             width = this.get("imageWidth"),
             height = this.get("imageHeight"),
             scale = parseFloat(this.get("imageScale")),
@@ -205,6 +205,8 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
             offsetXUnit = this.get("imageOffsetXUnit"),
             offsetYUnit = this.get("imageOffsetYUnit"),
             rotation = this.getRotationValue(this.get("rotation"));
+
+        src = src.startsWith("<svg") ? "data:image/svg+xml;charset=utf-8," + encodeURIComponent(src) : src;
 
         return new Style({
             image: new Icon({

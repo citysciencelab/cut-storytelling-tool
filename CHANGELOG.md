@@ -20,16 +20,18 @@
     - The standard limit will be set to 400.
 - Tools are now always rendered in the window in mobile mode, since the sidebar is currently not usable in mobile mode.
 - Filter:
-  - For OAF layer, the standard pagination (limit) will be set to 400.
+    - For OAF layer, the standard pagination (limit) will be set to 400.
+- The image of the default MapMarker has been replaced by the icon [geo-alt-fill](https://icons.getbootstrap.com/icons/geo-alt-fill/) from Bootstrap. This means that the marker can now also be printed locally via the print module.
 
 ### Deprecated
 
 ### Removed
+- The image of the default MapMarker was removed from img folder.
 
 ### Fixed
 - Issue #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
-- Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
 - Issue #825 The Control layerAttributions remain open when a layer with content is activated until they are explicitly collapsed.
+- Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
 - Issue #826: Tool WFS Search did not work with a parcel.json that had "fluren" with local values. This has been resolved.
 
 ---
