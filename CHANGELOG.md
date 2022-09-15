@@ -30,6 +30,7 @@
 - Issue #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
 - Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
 - Issue #825 The Control layerAttributions remain open when a layer with content is activated until they are explicitly collapsed.
+- Issue #826: Tool WFS Search did not work with a parcel.json that had "fluren" with local values. This has been resolved.
 
 ---
 ## v2.25.0 - 2022-09-07
