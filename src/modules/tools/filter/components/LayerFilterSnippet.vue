@@ -211,7 +211,7 @@ export default {
                 return;
             }
 
-            rules.forEach(rule => {
+            rules.forEach((rule, snippetId) => {
                 if (this.isRule(rule)) {
                     if (!Array.isArray(rule?.value)
                         && (this.snippets[rule.snippetId]?.type === "dropdown"
@@ -223,6 +223,9 @@ export default {
                         return;
                     }
                     this.snippets[rule.snippetId].prechecked = rule?.value;
+                }
+                else {
+                    this.snippets[snippetId].prechecked = [];
                 }
             });
         },
