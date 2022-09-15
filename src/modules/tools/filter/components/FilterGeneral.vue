@@ -47,8 +47,7 @@ export default {
             }),
             layerConfigs: [],
             layerLoaded: {},
-            layerFilterSnippetPostKey: "",
-            filterGeometry: false
+            layerFilterSnippetPostKey: ""
         };
     },
     computed: {
@@ -199,7 +198,23 @@ export default {
          * @returns {void}
          */
         updateFilterGeometry (geometry) {
-            this.filterGeometry = geometry;
+            this.setFilterGeometry(geometry);
+        },
+        /**
+         * Sets the geometry feature
+         * @param {ol/Feature} feature The geometry feature.
+         * @returns {void}
+         */
+        updateGeometryFeature (feature) {
+            this.setGeometryFeature(feature);
+        },
+        /**
+         * Sets the geometry selector options
+         * @param {Object} options The geometry select options
+         * @returns {void}
+         */
+        updateGeometrySelectorOptions (options) {
+            this.setGeometrySelectorOptions(Object.assign({}, this.geometrySelectorOptions, options));
         },
         /**
          * Checks if the geometry selector should be visible.
@@ -247,7 +262,12 @@ export default {
                     :fill-color="geometrySelectorOptions.fillColor"
                     :stroke-color="geometrySelectorOptions.strokeColor"
                     :stroke-width="geometrySelectorOptions.strokeWidth"
+                    :filter-geometry="filterGeometry"
+                    :geometry-feature="geometryFeature"
+                    :selected-geometry-index="geometrySelectorOptions.selectedGeometry"
                     @updateFilterGeometry="updateFilterGeometry"
+                    @updateGeometryFeature="updateGeometryFeature"
+                    @updateGeometrySelectorOptions="updateGeometrySelectorOptions"
                     @setGfiActive="setGfiActive"
                 />
                 <LayerCategory

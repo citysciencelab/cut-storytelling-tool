@@ -31,5 +31,7 @@ export default {
     serializedString: "",
     selectedAccordions: [],
     selectedCategories: [],
-    filtersHits: []
+    filtersHits: [],
+    filterGeometry: false,
+    geometryFeature: undefined
 };

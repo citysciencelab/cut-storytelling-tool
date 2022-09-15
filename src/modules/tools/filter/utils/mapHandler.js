@@ -376,15 +376,17 @@ export default class MapHandler {
             }
             return;
         }
-        else if (typeof geometry?.getExtent !== "function") {
+        else if (typeof geometry?.getExtent !== "function" && !Array.isArray(geometry?.extent_)) {
             if (typeof onerror === "function") {
                 onerror(new Error("Filter MapHandler.zoomToGeometry: The given geometry has not function to get the extent."));
             }
             return;
         }
 
+        const extent = typeof geometry?.getExtent === "function" ? geometry.getExtent() : geometry?.extent_;
+
         this.isZooming = true;
-        this.handlers.zoomToExtent(geometry.getExtent(), minScale, () => {
+        this.handlers.zoomToExtent(extent, minScale, () => {
             this.isZooming = false;
         });
     }
