@@ -31,6 +31,7 @@
 ### Fixed
 - Issue #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
 - Issue #825 The Control layerAttributions remain open when a layer with content is activated until they are explicitly collapsed.
+- Issue #829: xml2json parser (used in meta data context) broke on valid XML. It has been extended for the unattended cases.
 - Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
 
 ---
