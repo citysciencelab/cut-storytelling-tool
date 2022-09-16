@@ -912,7 +912,4 @@ export default {
         position: absolute;
         right: 0;
     }
-    .category-layer .panel .right {
-        right: 30px;
-    }
 </style>

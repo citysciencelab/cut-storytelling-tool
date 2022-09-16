@@ -231,7 +231,4 @@ export default {
         position: absolute;
         right: 0;
     }
-    .category-layer .right {
-        right: 30px;
-    }
 </style>

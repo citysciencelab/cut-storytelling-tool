@@ -131,11 +131,9 @@ export default {
      */
     serializeState: (context) => {
         const rulesOfFilters = context.state.rulesOfFilters,
-            selectedCategories = context.state.selectedCategories,
             selectedAccordions = context.state.selectedAccordions,
             result = {
                 rulesOfFilters,
-                selectedCategories,
                 selectedAccordions
             };
         let resultString = "";
@@ -155,13 +153,11 @@ export default {
      * @param {Object} context the context Vue instance
      * @param {Object} payload The payload
      * @param {Object[]} payload.rulesOfFilters The rules of the filters
-     * @param {Object[]} payload.selectedCategories The selected accordions
      * @param {Object[]} payload.selectedAccordions The selected accordions
      * @return {void}
      */
     deserializeState: (context, payload) => {
         const rulesOfFilters = payload?.rulesOfFilters,
-            selectedCategories = payload?.selectedCategories,
             selectedAccordions = payload?.selectedAccordions;
         let rulesOfFiltersCopy;
 
@@ -174,7 +170,6 @@ export default {
                 }
             });
             context.dispatch("setRulesArray", {rulesOfFilters: rulesOfFiltersCopy});
-            context.commit("setSelectedCategories", selectedCategories);
             context.commit("setSelectedAccordions", selectedAccordions);
             context.commit("setActive", true);
         }

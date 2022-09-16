@@ -725,10 +725,6 @@ export default {
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
 
-    .category-layer .right {
-        right: 30px;
-    }
-
     .snippetDateRangeContainer {
         height: auto;
 

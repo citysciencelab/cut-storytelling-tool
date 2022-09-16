@@ -30,7 +30,6 @@ export default {
     rulesOfFilters: [],
     serializedString: "",
     selectedAccordions: [],
-    selectedCategories: [],
     filtersHits: [],
     filterGeometry: false,
     geometryFeature: undefined

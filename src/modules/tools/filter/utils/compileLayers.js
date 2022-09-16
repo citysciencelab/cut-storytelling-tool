@@ -18,7 +18,7 @@ function compileLayers (originalLayers) {
 }
 
 /**
- * Removes all non object and non string layers from the given array and all its category layers. Returns the result.
+ * Removes all non object and non string layers from the given array. Returns the result.
  * @param {*[]} layers a list of layers with a potential object string mix
  * @returns {Object[]|String[]} a list of layers with a object and string mix
  */
@@ -31,9 +31,6 @@ function removeInvalidLayers (layers) {
     layers.forEach(layer => {
         if (!isObject(layer) && typeof layer !== "string") {
             return;
-        }
-        if (typeof layer?.category === "string") {
-            layer.layers = removeInvalidLayers(layer.layers);
         }
         result.push(layer);
     });
@@ -52,9 +49,6 @@ function convertStringLayersIntoObjects (layers) {
             layers[idx] = {
                 layerId: layer
             };
-        }
-        else if (typeof layer.category === "string") {
-            convertStringLayersIntoObjects(layer.layers);
         }
     });
 }
@@ -79,9 +73,6 @@ function addFilterIds (layers, nextFilterId = {}) {
     layers.forEach(layer => {
         layer.filterId = nextFilterId.get();
         nextFilterId.inc();
-        if (typeof layer.category === "string") {
-            addFilterIds(layer.layers, nextFilterId);
-        }
     });
 }
 
@@ -92,10 +83,7 @@ function addFilterIds (layers, nextFilterId = {}) {
  */
 function addSnippetArrayIfMissing (layers) {
     layers.forEach(layer => {
-        if (typeof layer.category === "string") {
-            addSnippetArrayIfMissing(layer.layers);
-        }
-        else if (!Array.isArray(layer.snippets)) {
+        if (!Array.isArray(layer.snippets)) {
             layer.snippets = [];
         }
     });
@@ -108,12 +96,7 @@ function addSnippetArrayIfMissing (layers) {
  */
 function addApi (layers) {
     layers.forEach(layer => {
-        if (typeof layer.category === "string") {
-            addApi(layer.layers);
-        }
-        else {
-            layer.api = new FilterApi(layer.filterId);
-        }
+        layer.api = new FilterApi(layer.filterId);
     });
 }
 
@@ -126,9 +109,6 @@ function addApi (layers) {
 function createLayerConfigsAssoc (layers, assoc = {}) {
     layers.forEach(layer => {
         assoc[layer.filterId] = layer;
-        if (typeof layer.category === "string") {
-            createLayerConfigsAssoc(layer.layers, assoc);
-        }
     });
     return assoc;
 }

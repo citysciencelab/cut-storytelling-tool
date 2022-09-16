@@ -20,7 +20,7 @@ import {
     setFilterInTableMenu,
     getSnippetInfos
 } from "../utils/openlayerFunctions.js";
-import LayerCategory from "./LayerCategory.vue";
+import FilterList from "./FilterList.vue";
 import isObject from "../../../../utils/isObject.js";
 import GeometryFilter from "./GeometryFilter.vue";
 
@@ -30,7 +30,7 @@ export default {
         ToolTemplate,
         GeometryFilter,
         LayerFilterSnippet,
-        LayerCategory
+        FilterList
     },
     data () {
         return {
@@ -53,14 +53,9 @@ export default {
     computed: {
         ...mapGetters("Tools/Filter", Object.keys(getters)),
         console: () => console,
-        filtersOnly () {
+        filters () {
             return this.layerConfigs.filter(layer => {
-                return isObject(layer) && !Object.prototype.hasOwnProperty.call(layer, "category");
-            });
-        },
-        categoriesOnly () {
-            return this.layerConfigs.filter(layer => {
-                return isObject(layer) && Object.prototype.hasOwnProperty.call(layer, "category");
+                return isObject(layer);
             });
         }
     },
@@ -100,17 +95,6 @@ export default {
             }
         },
         /**
-         * Updates the selected categories in the store.
-         * @param {String[]} categories An array of the categories name.
-         * @return {void}
-         */
-        updateSelectedCategories (categories) {
-            if (!Array.isArray(categories)) {
-                return;
-            }
-            this.setSelectedCategories(categories);
-        },
-        /**
          * Update selectedAccordions array.
          * @param {String[]|String} filterIds ids which should be added or removed
          * @returns {Object[]} selected layer fetched from config
@@ -119,22 +103,8 @@ export default {
             if (!Array.isArray(filterIds) && typeof filterIds !== "number") {
                 return;
             }
-            const confLayers = this.transformLayerConfig(this.layerConfigs, filterIds);
 
-            for (const layer of this.layerConfigs) {
-                if (layer?.category) {
-                    const filteredSubLayer = this.transformLayerConfig(layer.layers, filterIds);
-
-                    if (filteredSubLayer.length === 0) {
-                        continue;
-                    }
-                    confLayers.push({
-                        category: layer.category,
-                        layers: filteredSubLayer
-                    });
-                }
-            }
-            this.setSelectedAccordions(confLayers);
+            this.setSelectedAccordions(this.transformLayerConfig(this.layerConfigs, filterIds));
         },
         /**
          * Transform given layer config to an lightweight array of layerIds and filterIds.
@@ -171,12 +141,6 @@ export default {
             let selected = false;
 
             this.selectedAccordions.forEach(selectedLayer => {
-                if (selectedLayer.category) {
-                    selected = selectedLayer.layers.filter(subLayer => {
-                        return subLayer.filterId === filterId;
-                    }).length > 0;
-                }
-
                 if (selectedLayer.filterId === filterId) {
                     if (!this.layerLoaded[filterId]) {
                         this.setLayerLoaded(filterId);
@@ -281,16 +245,13 @@ export default {
                     @updateGeometrySelectorOptions="updateGeometrySelectorOptions"
                     @setGfiActive="setGfiActive"
                 />
-                <LayerCategory
+                <FilterList
                     v-if="Array.isArray(layerConfigs) && layerConfigs.length && layerSelectorVisible"
                     class="layerSelector"
-                    :filters-only="filtersOnly"
-                    :categories-only="categoriesOnly"
+                    :filters="filters"
                     :changed-selected-layers="selectedAccordions"
-                    :selected-categories="selectedCategories"
                     :multi-layer-selector="multiLayerSelector"
                     @selectedaccordions="updateSelectedAccordions"
-                    @selectedcategories="updateSelectedCategories"
                     @setLayerLoaded="setLayerLoaded"
                 >
                     <template
@@ -317,10 +278,10 @@ export default {
                             />
                         </div>
                     </template>
-                </LayerCategory>
+                </FilterList>
                 <div v-else-if="Array.isArray(layerConfigs) && layerConfigs.length">
                     <LayerFilterSnippet
-                        v-for="(layerConfig, indexLayer) in filtersOnly"
+                        v-for="(layerConfig, indexLayer) in filters"
                         :key="'layer-' + indexLayer + layerFilterSnippetPostKey"
                         :api="layerConfig.api"
                         :layer-config="layerConfig"
