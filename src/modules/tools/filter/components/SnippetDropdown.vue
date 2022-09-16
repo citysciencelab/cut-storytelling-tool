@@ -70,6 +70,11 @@ export default {
             required: false,
             default: false
         },
+        isChild: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         isParent: {
             type: Boolean,
             required: false,
@@ -230,13 +235,15 @@ export default {
     },
     watch: {
         dropdownSelected (value) {
+            const prechecked = this.getPrecheckedExistingInValue(this.prechecked, this.dropdownValue);
+
             if (
                 !this.isAdjusting
                 && (
                     !this.isInitializing
                     || this.isInitializing && (
-                        Array.isArray(this.prechecked)
-                        && this.prechecked.length
+                        Array.isArray(prechecked)
+                        && prechecked.length
                         || this.prechecked === "all"
                     )
                 )
@@ -271,6 +278,15 @@ export default {
 
                 this.$nextTick(() => {
                     this.isAdjusting = false;
+
+                    if (this.delayedPrechecked === "all") {
+                        this.dropdownSelected = this.dropdownValue;
+                        this.delayedPrechecked = false;
+                    }
+                    else if (Array.isArray(this.delayedPrechecked) && this.delayedPrechecked.length) {
+                        this.dropdownSelected = this.getPrecheckedExistingInValue(this.delayedPrechecked, this.dropdownValue);
+                        this.delayedPrechecked = false;
+                    }
                 });
             }
         },
@@ -282,6 +298,9 @@ export default {
                 this.iconList = getIconListFromLegend(value, this.styleModel);
             }
         }
+    },
+    created () {
+        this.delayedPrechecked = false;
     },
     mounted () {
         this.initializeIcons();
@@ -322,7 +341,10 @@ export default {
         }
         else {
             this.dropdownValue = [];
-            this.dropdownSelected = this.getInitialDropdownSelected(this.prechecked, this.dropdownValue, this.multiselect);
+            this.dropdownSelected = [];
+            if (this.isChild && (Array.isArray(this.prechecked) && this.prechecked.length || this.prechecked === "all")) {
+                this.delayedPrechecked = this.prechecked;
+            }
             this.$nextTick(() => {
                 this.isInitializing = false;
                 this.disable = false;
@@ -356,24 +378,36 @@ export default {
                 return [];
             }
             else if (Array.isArray(prechecked)) {
-                const result = [],
-                    dropdownValueAssoc = {};
-
-                dropdownValue.forEach(value => {
-                    dropdownValueAssoc[value] = true;
-                });
-                prechecked.forEach(value => {
-                    if (!Object.prototype.hasOwnProperty.call(dropdownValueAssoc, value)) {
-                        return;
-                    }
-                    result.push(value);
-                });
-                return result;
+                return this.getPrecheckedExistingInValue(prechecked, dropdownValue);
             }
             else if (prechecked === "all" && multiselect) {
                 return [...dropdownValue];
             }
             return [];
+        },
+        /**
+         * Returns a list of prechecked values that exists in the given dropdown value.
+         * @param {String[]|String} prechecked An array of prechecked values or the "all"-flag to select all.
+         * @param {String[]} dropdownValue All available values.
+         * @returns {String[]} A list of preselected values that exists in dropdown value.
+         */
+        getPrecheckedExistingInValue (prechecked, dropdownValue) {
+            if (!Array.isArray(prechecked) || !Array.isArray(dropdownValue)) {
+                return false;
+            }
+            const result = [],
+                dropdownValueAssoc = {};
+
+            dropdownValue.forEach(value => {
+                dropdownValueAssoc[value] = true;
+            });
+            prechecked.forEach(value => {
+                if (!Object.prototype.hasOwnProperty.call(dropdownValueAssoc, value)) {
+                    return;
+                }
+                result.push(value);
+            });
+            return result;
         },
         /**
          * Initializes the icons if any.

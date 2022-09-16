@@ -135,7 +135,7 @@ export default {
             }
         },
         precheckedSnippets (val) {
-            if (this.isStrategyActive() && val.length === this.layerConfig?.snippets.length) {
+            if (this.isStrategyActive() && val.length === this.snippets.length) {
                 const snippetIds = [];
 
                 val.forEach(value => {
@@ -712,7 +712,7 @@ export default {
             if (!isObject(snippet) || this.hasParentSnippet(snippet.snippetId)) {
                 return null;
             }
-            if (snippet.api instanceof FilterApi) {
+            else if (snippet.api instanceof FilterApi) {
                 return snippet.api;
             }
             return this.api;
@@ -879,6 +879,7 @@ export default {
                     :display="snippet.display"
                     :filter-id="layerConfig.filterId"
                     :info="snippet.info"
+                    :is-child="hasParentSnippet(snippet.snippetId)"
                     :is-parent="isParentSnippet(snippet.snippetId)"
                     :title="getTitle(snippet, layerConfig.layerId)"
                     :layer-id="layerConfig.layerId"
@@ -1043,6 +1044,7 @@ export default {
                     :snippet-id="snippet.snippetId"
                     :visible="snippet.visible"
                     :filtered-items="filteredItems"
+                    @setSnippetPrechecked="setSnippetPrechecked"
                 />
             </div>
         </div>
