@@ -12,6 +12,9 @@
 ### Added
 - Draw-Tool:
   - If there are attributes set on the feature of drawn layer, after clicking on the feature, the attributes will be shown in standard gfi theme.
+- The following NPM package has been added:
+    - devDependencies:
+        - @babel/plugin-transform-modules-commonjs: 7.18.6
 
 ### Changed
 - OAF:
