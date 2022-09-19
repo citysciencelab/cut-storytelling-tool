@@ -179,7 +179,7 @@ export default {
 
         displayAlert = isUnique && isInTime && isNotRestricted;
         if (displayAlert) {
-            if (!newAlert.multipleAlert) {
+            if (newAlert.multipleAlert !== true) {
                 state.alerts = [];
             }
             commit("addToAlerts", alertProtoClone);
