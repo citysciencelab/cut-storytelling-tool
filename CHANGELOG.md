@@ -15,6 +15,7 @@
 - The following NPM package has been added:
     - devDependencies:
         - @babel/plugin-transform-modules-commonjs: 7.18.6
+- Alerting: attribute "multipleAlert" allows to add single alert or multiple-alert as a list.
 
 ### Changed
 - OAF:
