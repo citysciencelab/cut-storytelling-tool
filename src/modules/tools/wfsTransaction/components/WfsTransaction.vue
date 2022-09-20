@@ -1,3 +1,76 @@
+<script>
+import {mapActions, mapGetters, mapMutations} from "vuex";
+import ToolTemplate from "../../ToolTemplate.vue";
+import SimpleButton from "../../../../share-components/SimpleButton.vue";
+import getLayerInformation from "../utils/getLayerInformation";
+
+export default {
+    name: "WfsTransaction",
+    components: {SimpleButton, ToolTemplate},
+    computed: {
+        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "layerSelectDisabled", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"])
+    },
+    watch: {
+        active (val) {
+            this.setActive(val);
+        }
+    },
+    created () {
+        this.$on("close", this.close);
+        Backbone.Events.listenTo(Radio.channel("ModelList"), {
+            "updatedSelectedLayerList": async () => {
+                const newLayerInformation = await getLayerInformation(this.layerIds),
+                    firstActiveLayer = newLayerInformation.findIndex(layer => layer.isSelected),
+                    currentLayerDeactivated = this.currentLayerIndex > -1 && !newLayerInformation[this.currentLayerIndex].isSelected;
+
+                this.setLayerInformation(newLayerInformation);
+                if ((this.currentLayerIndex === -1 && firstActiveLayer > -1) ||
+                    (this.currentLayerIndex > -1 && firstActiveLayer === -1) ||
+                    (currentLayerDeactivated && firstActiveLayer > -1)) {
+                    this.setCurrentLayerIndex(firstActiveLayer);
+                }
+                if (currentLayerDeactivated) {
+                    this.reset();
+                }
+                this.setFeatureProperties();
+            }
+        });
+    },
+    methods: {
+        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setLayerInformation"]),
+        ...mapActions("Tools/WfsTransaction", ["prepareInteraction", "reset", "save", "setActive", "setFeatureProperty", "setFeatureProperties"]),
+        close () {
+            this.setActive(false);
+            const model = Radio.request("ModelList", "getModelByAttributes", {id: "wfsTransaction"});
+
+            if (model) {
+                model.set("isActive", false);
+            }
+        },
+        layerChanged (index) {
+            this.setCurrentLayerIndex(index);
+            this.setFeatureProperties();
+            this.reset();
+        },
+        getInputType (type) {
+            if (type === "string") {
+                return "text";
+            }
+            if (["integer", "int", "decimal"].includes(type)) {
+                return "number";
+            }
+            if (type === "boolean") {
+                return "checkbox";
+            }
+            if (type === "date") {
+                return "date";
+            }
+            return "";
+        }
+    }
+};
+</script>
+
 <template lang="html">
     <ToolTemplate
         :title="$t(name)"
@@ -93,79 +166,6 @@
         </template>
     </ToolTemplate>
 </template>
-
-<script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
-import ToolTemplate from "../../ToolTemplate.vue";
-import SimpleButton from "../../../../share-components/SimpleButton.vue";
-import getLayerInformation from "../utils/getLayerInformation";
-
-export default {
-    name: "WfsTransaction",
-    components: {SimpleButton, ToolTemplate},
-    computed: {
-        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "layerSelectDisabled", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"])
-    },
-    watch: {
-        active (val) {
-            this.setActive(val);
-        }
-    },
-    created () {
-        this.$on("close", this.close);
-        Backbone.Events.listenTo(Radio.channel("ModelList"), {
-            "updatedSelectedLayerList": async () => {
-                const newLayerInformation = await getLayerInformation(this.layerIds),
-                    firstActiveLayer = newLayerInformation.findIndex(layer => layer.isSelected),
-                    currentLayerDeactivated = this.currentLayerIndex > -1 && !newLayerInformation[this.currentLayerIndex].isSelected;
-
-                this.setLayerInformation(newLayerInformation);
-                if ((this.currentLayerIndex === -1 && firstActiveLayer > -1) ||
-                    (this.currentLayerIndex > -1 && firstActiveLayer === -1) ||
-                    (currentLayerDeactivated && firstActiveLayer > -1)) {
-                    this.setCurrentLayerIndex(firstActiveLayer);
-                }
-                if (currentLayerDeactivated) {
-                    this.reset();
-                }
-                this.setFeatureProperties();
-            }
-        });
-    },
-    methods: {
-        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setLayerInformation"]),
-        ...mapActions("Tools/WfsTransaction", ["prepareInteraction", "reset", "save", "setActive", "setFeatureProperty", "setFeatureProperties"]),
-        close () {
-            this.setActive(false);
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: "wfsTransaction"});
-
-            if (model) {
-                model.set("isActive", false);
-            }
-        },
-        layerChanged (index) {
-            this.setCurrentLayerIndex(index);
-            this.setFeatureProperties();
-            this.reset();
-        },
-        getInputType (type) {
-            if (type === "string") {
-                return "text";
-            }
-            if (["integer", "int", "decimal"].includes(type)) {
-                return "number";
-            }
-            if (type === "boolean") {
-                return "checkbox";
-            }
-            if (type === "date") {
-                return "date";
-            }
-            return "";
-        }
-    }
-};
-</script>
 
 <style lang="scss" scoped>
 $margin: 1rem;
