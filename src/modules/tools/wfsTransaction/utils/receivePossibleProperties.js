@@ -15,7 +15,8 @@ export default function (layer) {
             {withCredentials: layer.isSecured}
         )
         .then(response => handleAxiosResponse(response, "wfsTransaction/featureProperties"))
-        .then(data => parseDescribeFeatureTypeResponse(data, layer.featureType));
+        .then(data => parseDescribeFeatureTypeResponse(data, layer.featureType))
+        .catch(error => console.error("An error occurred while fetching information about the featureTypes of the service.", error));
 }
 
 /**
