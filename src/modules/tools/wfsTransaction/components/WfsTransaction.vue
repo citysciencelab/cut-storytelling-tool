@@ -122,7 +122,7 @@ export default {
                     </template>
                 </div>
                 <template v-else>
-                    <div>
+                    <div id="tool-wfsTransaction-form-container">
                         <hr>
                         <p v-if="currentInteractionConfig.Polygon.available">
                             {{ $t("common:modules.tools.wfsTransaction.polygonHint") }}
@@ -202,6 +202,10 @@ $margin: 1rem;
         button:last-child {
             margin-right: 0;
         }
+    }
+
+    #tool-wfsTransaction-form-container {
+        width: 40em;
     }
 
     #tool-wfsTransaction-form {
