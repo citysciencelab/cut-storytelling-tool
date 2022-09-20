@@ -273,11 +273,13 @@ const actions = {
                 }, {root: true});
             });
     },
-    setActive ({commit, dispatch, getters: {layerIds, layerInformation}}, active) {
+    setActive ({commit, dispatch, getters: {layerIds}}, active) {
         commit("setActive", active);
 
         if (active) {
-            commit("setLayerInformation", getLayerInformation(layerIds));
+            const layerInformation = getLayerInformation(layerIds);
+
+            commit("setLayerInformation", layerInformation);
             commit("setCurrentLayerIndex", layerInformation.findIndex(layer => layer.isSelected));
             dispatch("setFeatureProperties");
         }
