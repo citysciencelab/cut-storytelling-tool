@@ -1,3 +1,5 @@
+import getComponent from "../../../../utils/getComponent";
+
 /**
  * Receives relevant information about the layers with the given ids.
  *
@@ -6,7 +8,7 @@
  */
 export default function (layerIds) {
     return layerIds.map(id => {
-        const layer = Radio.request("ModelList", "getModelByAttributes", {id});
+        const layer = getComponent(id);
 
         return ["featureNS", "featurePrefix", "featureType", "gfiAttributes", "style", "isSelected", "name", "url", "version"]
             .reduce((previous, key) => ({...previous, [key]: layer.get(key)}),

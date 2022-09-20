@@ -1,8 +1,9 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
-import ToolTemplate from "../../ToolTemplate.vue";
-import SimpleButton from "../../../../share-components/SimpleButton.vue";
 import getLayerInformation from "../utils/getLayerInformation";
+import ToolTemplate from "../../ToolTemplate.vue";
+import getComponent from "../../../../utils/getComponent";
+import SimpleButton from "../../../../share-components/SimpleButton.vue";
 
 export default {
     name: "WfsTransaction",
@@ -41,7 +42,7 @@ export default {
         ...mapActions("Tools/WfsTransaction", ["prepareInteraction", "reset", "save", "setActive", "setFeatureProperty", "setFeatureProperties"]),
         close () {
             this.setActive(false);
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: "wfsTransaction"});
+            const model = getComponent(this.id);
 
             if (model) {
                 model.set("isActive", false);

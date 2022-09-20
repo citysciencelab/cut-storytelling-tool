@@ -6,6 +6,7 @@ import addFeaturePropertiesToFeature from "../utils/addFeaturePropertiesToFeatur
 import getLayerInformation from "../utils/getLayerInformation";
 import prepareFeatureProperties from "../utils/prepareFeatureProperties";
 import writeTransaction from "../utils/writeTransaction";
+import getComponent from "../../../../utils/getComponent";
 import loader from "../../../../utils/loaderOverlay";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
 
@@ -77,7 +78,7 @@ const actions = {
             }
 
             drawInteraction.on("drawend", () => {
-                if (Radio.request("ModelList", "getModelByAttributes", {id: currentLayerId}).get("isOutOfRange")) {
+                if (getComponent(currentLayerId).get("isOutOfRange")) {
                     drawLayer.getSource().once("change", () => drawLayer.getSource().clear());
                     dispatch("Alerting/addSingleAlert", {
                         category: "Info",
@@ -263,7 +264,7 @@ const actions = {
             .finally(() => {
                 loader.hide();
                 dispatch("reset");
-                Radio.request("ModelList", "getModelByAttributes", {id: layer.id}).layer.getSource().refresh();
+                getComponent(layer.id).layer.getSource().refresh();
                 dispatch("Alerting/addSingleAlert", {
                     category: "Info",
                     displayClass: "info",
