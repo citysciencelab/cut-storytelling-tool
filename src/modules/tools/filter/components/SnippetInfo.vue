@@ -82,7 +82,7 @@ export default {
     }
     .info-icon {
         float: right;
-        font-size: 16px;
+        font-size: $font-size-lg;
         color: $dark_grey;
     }
     .info-icon .opened {

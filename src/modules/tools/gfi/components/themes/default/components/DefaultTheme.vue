@@ -390,7 +390,7 @@ export default {
     display: flex;
     justify-content: center;
     .bootstrap-icon {
-        font-size: 28px;
+        font-size: $font_size_huge;
         padding: 0 2px;
     }
 }

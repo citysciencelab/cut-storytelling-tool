@@ -1089,7 +1089,7 @@ export default {
         padding: 5px;
     }
     .filter-result {
-        font-size: 16px;
+        font-size: $font-size-lg;
         color: $light_red;
         margin-top: 10px;
         display: inline-block;

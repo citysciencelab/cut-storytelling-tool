@@ -431,8 +431,9 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@import "~variables";
     form {
-        font-size: 16px;
+        font-size: $font-size-lg;
     }
 
     hr {

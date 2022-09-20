@@ -5,7 +5,7 @@
     max-height: 66vh;
     overflow-y: auto;
     span.title {
-        font-size: 14px;
+        font-size: $font_size_big;
         padding-left: 6px;
         vertical-align: text-bottom;
     }
@@ -74,8 +74,4 @@
     a {
         color: $black;
     }
-}
-
-li {
-    
 }

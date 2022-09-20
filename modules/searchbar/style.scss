@@ -80,7 +80,7 @@
         color: $dark_grey;
         padding-right: 12px;
         padding-left: 3px;
-        font-size: 17px;
+        font-size: $font-size-lg;
     }
     img {
         width: 25px;
@@ -123,7 +123,7 @@
     >.bootstrap-icon {
         color: $secondary_icon_button;
         padding: 5px 5px 3px 5px;
-        font-size: 20px;
+        font-size: $font_size_huge;
         &:hover {
             background-color: $accent_hover;
             color: $accent_contrast;
@@ -224,7 +224,7 @@ li.results {
     }
     .btn-table-search {
         >.icon-search {
-            font-size: 24px;
+            font-size: $font_size_huge;
         }
         &:hover {
             background-color: $light_grey;
@@ -262,7 +262,8 @@ li.results {
             color: $dark_grey;
             padding-right: 12px;
             padding-left: 3px;
-            font-size: 17px;
+            padding-top: 5px;
+            font-size: $font-size-lg;
         }
         img {
             width: 25px;
@@ -275,11 +276,11 @@ li.results {
         }
         .list-group-item {
             min-width: 100%;
-            font-size: 17px;
+            font-size: $font-size-lg;
             color: $dark_grey;
             background-color: $secondary_table_style;
             #searchInputLi {
-                font-size: 17px;
+                font-size: $font-size-lg;
             }
 
             text-overflow: ellipsis;
@@ -344,15 +345,15 @@ li.results {
         border-radius: 12px;
     }
     input#searchInput.form-control {
-        font-size: 22px;
+        font-size: $font_size_huge;
     }
     input#searchInput {
         &::placeholder {
-            font-size: 22px;
+            font-size: $font_size_huge;
             opacity: 0.7;
         }
         &:-ms-input-placeholder {
-            font-size: 22px;
+            font-size: $font_size_huge;
             opacity: 0.7;
         }
     }

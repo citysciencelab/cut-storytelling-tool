@@ -58,7 +58,7 @@
 }
 #table-category-list {
     .icon-categories {
-        font-size: 27.5px;
+        font-size: $font_size_huge;
         color: $black;
     }
     width: 40px;
@@ -103,7 +103,7 @@ a {
     position: relative;
     cursor: pointer;
     >p {
-        font-size: 26px;
+        font-size: $font_size_huge;
     }
 }
 
@@ -168,7 +168,7 @@ a {
 .table-tool {
     margin-bottom: 6px;
     padding-top: 6px;
-    font-size: 17px;
+    font-size: $font-size-lg;
     border-top: 1px solid $light_grey;
     >a {
         color: $dark_grey;
@@ -196,7 +196,7 @@ a {
     bottom: -100%;
 }
 .table-nav-cat-panel {
-    font-size: 17px;
+    font-size: $font-size-lg;
     border-width: 0;
     -webkit-box-shadow: none;
     background-color: $secondary_table_style;
@@ -264,7 +264,7 @@ a {
     &:before {
         display: block;
         left: 0em;
-        font-size: 26px;
+        font-size: $font_size_huge;
     }
 }
 .burger-collapse {
@@ -302,7 +302,7 @@ a {
         overflow-x: auto;
         margin: 4px 4px;
         .layer-item {
-            font-size: 17px;
+            font-size: $font-size-lg;
             flex-
             .title{
                 display: block;
