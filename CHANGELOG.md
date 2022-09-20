@@ -23,6 +23,7 @@
     - The CRS parameter can be turned off via crs: false. The default crs in the master portal for oaf has been set to http://www.opengis.net/def/crs/EPSG/0/25832.
     - The standard limit will be set to 400.
 - Tools are now always rendered in the window in mobile mode, since the sidebar is currently not usable in mobile mode.
+- More variables for fonts were added to the code (not in addons).
 - Filter:
     - For OAF layer, the standard pagination (limit) will be set to 400.
     - For snippet dropdown + multiselect: It is now possible to initially select all available values by setting "prechecked" to "all".
