@@ -251,8 +251,8 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             }
             else {
                 const rawLayer = layerList.find(singleLayer => singleLayer.id === layer.id);
-                
-                if(rawLayer){
+
+                if (rawLayer) {
                     newLayer = Object.assign(rawLayer, Radio.request("Util", "omit", layer, ["id"]));
                 }
             }
