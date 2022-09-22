@@ -261,7 +261,7 @@ describe("src/modules/alerting/components/AlertingItem.vue", function () {
                 global.window = globalWindow;
             });
 
-            it("remove .www and from url", async function () {
+            it("remove www. from url", async function () {
                 const dom = new JSDOM(
                     `<html>
                         <body>
