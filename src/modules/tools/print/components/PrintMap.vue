@@ -667,7 +667,7 @@ export default {
             }
 
             .tool-print-download-icon {
-                font-size: 1.125rem;
+                font-size: $font-size-lg;
                 color: $light_blue;
             }
 
