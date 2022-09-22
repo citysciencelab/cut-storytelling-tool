@@ -386,18 +386,17 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
     });
     describe("setActive", () => {
         const layerIds = ["id"],
-            layerInformation = [{
-                isSelected: true
-            }];
-        let getLayerInfoSpy;
+            layerInformation = [
+                {isSelected: false},
+                {isSelected: true}
+            ];
 
         beforeEach(() => {
-            getLayerInfoSpy = sinon.spy();
             getters = {
                 layerIds,
                 layerInformation
             };
-            sinon.stub(getLayerInformation, "default").callsFake(getLayerInfoSpy);
+            sinon.stub(getLayerInformation, "default").returns(layerInformation);
         });
 
         it("should add the relevant values to the store and dispatch setFeatureProperties if active is true", () => {
@@ -409,12 +408,10 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
             expect(commit.firstCall.args[1]).to.equal(true);
             expect(commit.secondCall.args.length).to.equal(2);
             expect(commit.secondCall.args[0]).to.equal("setLayerInformation");
-            expect(getLayerInfoSpy.calledOnce).to.be.true;
-            expect(getLayerInfoSpy.firstCall.args.length).to.equal(1);
-            expect(getLayerInfoSpy.firstCall.args[0]).to.equal(layerIds);
+            expect(commit.secondCall.args[1]).to.equal(layerInformation);
             expect(commit.thirdCall.args.length).to.equal(2);
             expect(commit.thirdCall.args[0]).to.equal("setCurrentLayerIndex");
-            expect(commit.thirdCall.args[1]).to.equal(0);
+            expect(commit.thirdCall.args[1]).to.equal(1);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args.length).to.equal(1);
             expect(dispatch.firstCall.args[0]).to.equal("setFeatureProperties");
@@ -426,7 +423,6 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
             expect(commit.firstCall.args.length).to.equal(2);
             expect(commit.firstCall.args[0]).to.equal("setActive");
             expect(commit.firstCall.args[1]).to.equal(false);
-            expect(getLayerInfoSpy.notCalled).to.be.true;
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args.length).to.equal(1);
             expect(dispatch.firstCall.args[0]).to.equal("reset");
