@@ -44,6 +44,7 @@
 - Issue #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
 - Issue #825 The Control layerAttributions remain open when a layer with content is activated until they are explicitly collapsed.
 - Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
+- drawTool: circles can be drawn with setting defined again
 
 ---
 ## v2.25.0 - 2022-09-07
