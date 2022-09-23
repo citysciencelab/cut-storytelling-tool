@@ -181,4 +181,38 @@ describe("src/core/maps/store/gettersMap.js", () => {
             ]);
         });
     });
+
+    describe("getLayerById", () => {
+        beforeEach(() => {
+            mapCollection.clear();
+
+            const map = new Map({
+                    id: "ol",
+                    mode: "2D"
+                }),
+                layer1 = new VectorLayer({
+                    id: "1",
+                    name: "ABC",
+                    source: new VectorSource()
+                }),
+                layer2 = new VectorLayer({
+                    id: "2",
+                    name: "ABC",
+                    source: new VectorSource()
+                });
+
+            map.addLayer(layer1);
+            map.addLayer(layer2);
+
+            mapCollection.addMap(map, "2D");
+        });
+
+        it("should return the layer with the id 1", () => {
+            const layerId = "1",
+                foundLayer = gettersMap.getLayerById()({layerId});
+
+            expect(foundLayer.get("id")).to.equals("1");
+            expect(foundLayer).to.be.an.instanceof(VectorLayer);
+        });
+    });
 });

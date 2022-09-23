@@ -1,10 +1,5 @@
 @import "../../../css/variables.scss";
 
-$color_3: #808080;
-$background_color_3: #808080;
-$background_color_5: transparent;
-$background_color_6: #D8D8D8;
-
 /**************** Layer Settings ****************/
 #table-navigation {
     z-index: 5;;
@@ -72,7 +67,7 @@ $background_color_6: #D8D8D8;
     position: relative;
 }
 #table-category-list.table-category-active {
-    background-color: $light_grey;
+    background-color: $dark_grey;
 }
 .table-category-active {
     .icon-categories {
@@ -163,7 +158,7 @@ a {
     }
 }
 .table-tools-active {
-    background-color: $light_grey;
+    background-color: $dark_grey;
     .icon-tools {
         &:before {
             color: $secondary_table_style;
@@ -272,9 +267,9 @@ a {
         font-size: 26px;
     }
 }
-.icon-burgermenu_alt {
+.burger-collapse {
     #table-nav-layers-panel-toggler {
-        background-color: $light_grey;
+        background-color: $dark_grey;
         border-radius: 12px;
         .icon-cross1:before {
             display: block;
@@ -282,29 +277,25 @@ a {
             top: 11px;
             left: 11px;
             font-size: 18px;
-         }
-    }
-}
-.icon-burgermenu_alt.collapsed {
-    #table-nav-layers-panel-toggler {
-        background-color: $white;
-        .icon-cross1:before {
-                display: none;
+        }
+        .icon-burgermenu_alt:before {
+            display: none;
         }
     }
-    &:before {
-        color: $primary;
-        display: block;
+}
+.burger-collapse.collapsed {
+    #table-nav-layers-panel-toggler {
+        background-color: $light_grey;
+        .icon-cross1:before {
+            display: none;
+        }
+        .icon-burgermenu_alt:before {
+            color: $primary;
+            display: block;
+        }
     }
+}
 
-}
-.burgermenu-layer-list {
-    background-color: $background_color_5;
-    margin-bottom: 13px;
-    padding-bottom: 8px;
-    border-radius: 5px;
-    border: none;
-}
 #table-nav-layers-panel {
     .layers {
         max-height: 360px;
@@ -352,8 +343,6 @@ a {
         }
     }
     .layer-settings {
-        clear: both;
-        margin-top: 25px;
         margin-left: -3px;
         font-size: 14px;
         .bootstrap-icon {
@@ -363,7 +352,8 @@ a {
         .badge {
             font-size: 14px;
             padding-top: 6px;
-            background-color: $light_grey;
+            background-color: $dark_grey;
+            color: $white;
         }
         .remove-layer {
             color: $secondary_table_style;
@@ -379,17 +369,18 @@ a {
         font-size: 18px;
         color: $secondary_icon_button;
     }
+    .rotate-icon {
+        height: 18px;
+        line-height: 0;
+    }
     .bi-gear {
         font-size: 18px;
         color: $secondary_icon_button;
+        
     }
     .layer-settings-activated {
-        background-color: $background_color_6;
+        background-color: $light_grey;
     }
-}
-.checkboxicon-left {
-    margin-left: 25px;
-    cursor: pointer;
 }
 #funnel {
     position: absolute;

@@ -135,12 +135,12 @@ export default {
             }
         },
         precheckedSnippets (val) {
-            if (this.isStrategyActive() && val.length === this.layerConfig?.snippets.length) {
+            if (this.isStrategyActive() && val.length === this.snippets.length) {
                 const snippetIds = [];
 
-                val.forEach((v, index) => {
-                    if (v) {
-                        snippetIds.push(index);
+                val.forEach(value => {
+                    if (value !== false) {
+                        snippetIds.push(value);
                     }
                 });
 
@@ -211,7 +211,7 @@ export default {
                 return;
             }
 
-            rules.forEach(rule => {
+            rules.forEach((rule, snippetId) => {
                 if (this.isRule(rule)) {
                     if (!Array.isArray(rule?.value)
                         && (this.snippets[rule.snippetId]?.type === "dropdown"
@@ -223,6 +223,9 @@ export default {
                         return;
                     }
                     this.snippets[rule.snippetId].prechecked = rule?.value;
+                }
+                else {
+                    this.snippets[snippetId].prechecked = [];
                 }
             });
         },
@@ -381,12 +384,13 @@ export default {
             }
         },
         /**
-         * Pushing the value if there are prechecked value in snippet
-         * @param {Boolean} value true/false for prechecked value
+         * Snippets with prechecked values are pushing their snippetId on startup, others are pushing false.
+         * @info Pushing false is necessary to trigger actions only if snippet rules are finalized.
+         * @param {Number|Boolean} snippetId The snippetId of a prechecked snippet or false for others.
          * @returns {void}
          */
-        setSnippetPrechecked (value) {
-            this.precheckedSnippets.push(value);
+        setSnippetPrechecked (snippetId) {
+            this.precheckedSnippets.push(snippetId);
         },
         /**
          * Triggered when a rule changed at a snippet.
@@ -708,7 +712,7 @@ export default {
             if (!isObject(snippet) || this.hasParentSnippet(snippet.snippetId)) {
                 return null;
             }
-            if (snippet.api instanceof FilterApi) {
+            else if (snippet.api instanceof FilterApi) {
                 return snippet.api;
             }
             return this.api;
@@ -875,6 +879,7 @@ export default {
                     :display="snippet.display"
                     :filter-id="layerConfig.filterId"
                     :info="snippet.info"
+                    :is-child="hasParentSnippet(snippet.snippetId)"
                     :is-parent="isParentSnippet(snippet.snippetId)"
                     :title="getTitle(snippet, layerConfig.layerId)"
                     :layer-id="layerConfig.layerId"
@@ -1039,6 +1044,7 @@ export default {
                     :snippet-id="snippet.snippetId"
                     :visible="snippet.visible"
                     :filtered-items="filteredItems"
+                    @setSnippetPrechecked="setSnippetPrechecked"
                 />
             </div>
         </div>

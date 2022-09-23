@@ -411,9 +411,15 @@ export default {
         border-radius: 12px;
         margin-bottom: 30px;
         .win-heading {
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
             font-size: 14px;
             background-color: $dark_grey;
             .heading-element {
+                border-top-right-radius: 12px;
+                :last-child:hover {
+                    border-top-right-radius: 12px;
+                }
                 > .title {
                     color: $white;
                     font-size: 14px;

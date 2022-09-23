@@ -88,7 +88,7 @@ describe("src/modules/tools/coordToolkit/store/mutationsCoordToolkit.js", () => 
         });
         it("Sets the example values according to the WGS84 coordinate system", () => {
             const state = {
-                currentProjection: {id: "EPSG:4326", name: "EPSG:4326"}
+                currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326", name: "EPSG:4326"}
             };
 
             setExample(state);
@@ -98,7 +98,7 @@ describe("src/modules/tools/coordToolkit/store/mutationsCoordToolkit.js", () => 
         });
         it("Sets the example values according to the WGS84(Dezimalgrad) coordinate system", () => {
             const state = {
-                currentProjection: {id: "EPSG:4326-DG", name: "EPSG:4326"}
+                currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#4326-DG", name: "EPSG:4326"}
             };
 
             setExample(state);

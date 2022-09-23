@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import moment from "moment";
 import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig.js";
 
 /** @const {String} [Path array of possible config locations. First one found will be used] */
@@ -94,7 +94,7 @@ export default {
     },
 
     /**
-     * Marks a single alert as read. Triggers callback function if defined. As a coclusion, the callback
+     * Marks a single alert as read. Triggers callback function if defined. As a conclusion, the callback
      * function does only work if the alert must be confirmed and has not been read.
      * @param {object} state state
      * @param {string} hash Hash of read alert
@@ -117,6 +117,7 @@ export default {
      *  2: alert is limited to be displayed in a past time
      *  3: alert is limited to be display in the future
      *  4: alert has already been read and is not ready to be displayed again yet
+     *  5: allows multiple alerts from newsFeedPortaljson (singleAlert.multipleAlert = true) in state.alerts.
      * @param {object} state state
      * @param {object} newAlert alert object to be added to queue
      * @returns {void}
@@ -178,6 +179,9 @@ export default {
 
         displayAlert = isUnique && isInTime && isNotRestricted;
         if (displayAlert) {
+            if (newAlert.multipleAlert !== true) {
+                state.alerts = [];
+            }
             commit("addToAlerts", alertProtoClone);
         }
 

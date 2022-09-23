@@ -161,8 +161,8 @@ export default {
         color: $light_grey;
         padding-top: 8px;
         padding-left: 8px;
-        .tool-window-heading-title {
-            color: $light_grey;
+        .heading-element > h2 {
+            color: $white;
             margin-right: 50px;
             text-overflow: ellipsis;
         }

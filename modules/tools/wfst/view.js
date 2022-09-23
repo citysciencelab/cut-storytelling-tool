@@ -439,9 +439,9 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
      * @fires Core#RadioTriggerMapRemoveInteraction
      * @returns {void}
      */
-    setDrawInteraction: function (geometryType) {
+    setDrawInteraction: async function (geometryType) {
         const that = this,
-            vectorLayer = Radio.request("Map", "createLayerIfNotExists", "wfst_Layer"),
+            vectorLayer = await Radio.request("Map", "createLayerIfNotExists", "wfst_Layer"),
             geometry = this.model.get("geometryName");
         let message,
             properties = this.model.get("featureProperties"),
