@@ -167,14 +167,25 @@ export default {
             if (!this.layerSelectorVisible) {
                 return true;
             }
-            return this.selectedAccordions.filter(selectedLayer => {
+
+            let selected = false;
+
+            this.selectedAccordions.forEach(selectedLayer => {
                 if (selectedLayer.category) {
-                    return selectedLayer.layers.filter(subLayer => {
+                    selected = selectedLayer.layers.filter(subLayer => {
                         return subLayer.filterId === filterId;
                     }).length > 0;
                 }
-                return selectedLayer.filterId === filterId;
-            }).length > 0;
+
+                if (selectedLayer.filterId === filterId) {
+                    if (!this.layerLoaded[filterId]) {
+                        this.setLayerLoaded(filterId);
+                    }
+                    selected = true;
+                }
+            });
+
+            return selected;
         },
         /**
          * Setting the layer loaded true if the layer is clicked from the filter Id
