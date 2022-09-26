@@ -13,44 +13,22 @@
   "steps": [
     {
       "stepNumber": 1,
-      "stepWidth": 800,
+      "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
       "title": "Einleitung",
       "htmlFile": "",
       "centerCoordinate": [
-        555894.6872343315,
-        5931378.984010641
+        563140.367837,
+        5934788.314655
       ],
-      "zoomLevel": 4,
+      "zoomLevel": 7,
       "layers": [],
       "interactionAddons": []
     },
     {
       "stepNumber": 2,
-      "stepWidth": 800,
-      "visible": true,
-      "associatedChapter": 1,
-      "title": "Flug zur weiteren 3D Ansicht. Alles noch im Testmodus.",
-      "htmlFile": "",
-      "centerCoordinate": [],
-      "is3D": true,
-      "navigation3D": {
-      "cameraPosition": [
-        9.946620,
-        53.554060,
-        150.0
-      ],
-      "heading": 0.38138509963163635,
-      "pitch": -0.4525214263618002
-    },
-      "zoomLevel": 0,
-      "layers": ["12883", "12884"],
-      "interactionAddons": []
-    },
-    {
-      "stepNumber": 3,
-      "stepWidth": 800,
+      "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
       "title": "Kamerawinkel verändern",
@@ -67,12 +45,34 @@
         "pitch": -0.4025214263618002
       },
       "zoomLevel": 0,
-      "layers": ["12883", "12884"],
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 3,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Flug zur weiteren 3D Ansicht. Alles noch im Testmodus.",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.951139,
+          53.556209,
+          150.0
+        ],
+        "heading": 0.38138509963163635,
+        "pitch": -0.4525214263618002
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
       "interactionAddons": []
     },
     {
       "stepNumber": 4,
-      "stepWidth": 800,
+      "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
       "title": "Ein weiterer Flug",
@@ -81,20 +81,64 @@
       "is3D": true,
       "navigation3D": {
         "cameraPosition": [
-          9.993736,
-          53.541553,
-          200.0
+          9.951139,
+          53.556209,
+          170.0
         ],
-        "heading": 0.25138509963163635,
-        "pitch": -0.2525214263618002
+        "heading": 0.48138509963163635,
+        "pitch": -0.3525214263618002
       },
       "zoomLevel": 0,
-      "layers": ["12883", "12884"],
+      "layers": ["12883", "12884", "6666"],
       "interactionAddons": []
     },
     {
       "stepNumber": 5,
-      "stepWidth": 800,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Ein weiterer Flug",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.951331,
+          53.559599,
+          170.0
+        ],
+        "heading": 2.58138509963163635,
+        "pitch": -0.5925214263618002
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 6,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Ein weiterer Flug",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.952469,
+          53.557623,
+          60.0
+        ],
+        "heading": 0.08138509963163635,
+        "pitch": -0.6925214263618002
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 7,
+      "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
       "title": "3D deaktiviert",

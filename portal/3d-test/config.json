@@ -110,6 +110,26 @@
           "name": "Oblique",
           "visibility": false,
           "isVisibleInTree": false
+        },
+        {
+          "id": "6666",
+          "name": "3D Bulding Example",
+          "typ": "Entities3D",
+          "visibility": false,
+          "entities": [
+            {
+              "url": "./assets/3dobjects/hotel/scene.gltf",
+              "latitude": 53.558085,
+              "longitude": 9.953076,
+              "height": 12,
+              "heading": -1.2502079000000208,
+              "pitch": 0,
+              "roll": 0,
+              "scale": 1,
+              "allowPicking": false,
+              "show": true
+            }
+          ]
         }
       ]
     }
