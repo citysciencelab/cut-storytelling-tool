@@ -9,6 +9,7 @@ import writeTransaction from "../utils/writeTransaction";
 import getComponent from "../../../../utils/getComponent";
 import loader from "../../../../utils/loaderOverlay";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
+import getProxyUrl from "../../../../utils/getProxyUrl";
 
 let drawInteraction,
     drawLayer,
@@ -216,15 +217,16 @@ const actions = {
      * @returns {Promise} Promise to react to the result of the transaction.
      */
     sendTransaction ({dispatch, getters, rootGetters}, feature) {
-        const {currentLayerIndex, layerInformation, selectedInteraction} = getters,
+        const {currentLayerIndex, layerInformation, selectedInteraction, useProxy} = getters,
             layer = layerInformation[currentLayerIndex],
             transactionMethod = ["LineString", "Point", "Polygon"].includes(selectedInteraction)
                 ? "insert"
-                : selectedInteraction;
+                : selectedInteraction,
+            url = useProxy ? getProxyUrl(layer.url) : layer.url;
         let messageKey = `success.${transactionMethod}`;
 
         loader.show();
-        return axios.post(layer.url, writeTransaction(
+        return axios.post(url, writeTransaction(
             feature,
             layer,
             transactionMethod,
@@ -299,7 +301,7 @@ const actions = {
         }
         commit("setFeatureProperty", {key, value});
     },
-    async setFeatureProperties ({commit, getters: {currentLayerIndex, layerInformation}}) {
+    async setFeatureProperties ({commit, getters: {currentLayerIndex, layerInformation, useProxy}}) {
         if (currentLayerIndex === -1) {
             commit("setFeatureProperties", i18next.t("common:modules.tools.wfsTransaction.error.allLayersNotSelected"));
             return;
@@ -314,7 +316,7 @@ const actions = {
             commit("setFeatureProperties", i18next.t("common:modules.tools.wfsTransaction.error.layerNotSelected"));
             return;
         }
-        commit("setFeatureProperties", await prepareFeatureProperties(layer));
+        commit("setFeatureProperties", await prepareFeatureProperties(layer, useProxy));
     }
 };
 

@@ -1,19 +1,21 @@
 import axios from "axios";
 import handleAxiosResponse from "../../../../utils/handleAxiosResponse";
+import getProxyUrl from "../../../../utils/getProxyUrl";
 
 /**
  * Requests the possible properties of a feature and further values;
  * for more {@see FeatureProperty}.
  *
  * @param {TransactionLayer} layer Layer to request information about the possible properties from.
+ * @param {Boolean} useProxy Whether a proxy should be used for requests. Deprecated in v3.0.0.
  * @returns {Promise<FeatureProperty[]>} If the request is successful, an array of prepared feature properties.
  */
-export default function (layer) {
+export default function (layer, useProxy) {
+    const baseUrl = `${layer.url}?SERVICE=WFS&REQUEST=DescribeFeatureType&VERSION=${layer.version}&TYPENAME=${layer.featureType}`,
+        url = useProxy ? getProxyUrl(baseUrl) : baseUrl;
+
     return axios
-        .get(
-            `${layer.url}?SERVICE=WFS&REQUEST=DescribeFeatureType&VERSION=${layer.version}&TYPENAME=${layer.featureType}`,
-            {withCredentials: layer.isSecured}
-        )
+        .get(url, {withCredentials: layer.isSecured})
         .then(response => handleAxiosResponse(response, "wfsTransaction/featureProperties"))
         .then(data => parseDescribeFeatureTypeResponse(data, layer.featureType))
         .catch(error => console.error("An error occurred while fetching information about the featureTypes of the service.", error));

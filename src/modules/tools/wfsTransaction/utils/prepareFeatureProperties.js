@@ -6,13 +6,14 @@ import receivePossibleProperties from "./receivePossibleProperties";
  * with the gfiAttributes configuration of the layer.
  *
  * @param {TransactionLayer} layer Layer to retrieve information for.
+ * @param {Boolean} useProxy Whether a proxy should be used for requests. Deprecated in v3.0.0.
  * @returns {FeatureProperty[]} If layer.gfiAttributes !== "ignore", then an array of prepared feature properties; else and empty array.
  */
-export default async function (layer) {
+export default async function (layer, useProxy) {
     if (layer.gfiAttributes === "ignore") {
         return [];
     }
-    const properties = await receivePossibleProperties(layer);
+    const properties = await receivePossibleProperties(layer, useProxy);
 
     return layer.gfiAttributes === "showAll"
         ? properties
