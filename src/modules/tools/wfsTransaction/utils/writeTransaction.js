@@ -13,8 +13,8 @@ const transactionPosition = {
  * @param {module:ol/Feature} feature Feature to be inserted, updated or deleted.
  * @param {TransactionLayer} layerInformation Information about the layer to be manipulated.
  * @param {("insert"|"delete"|"selectedUpdate")} transactionMethod Which transaction to perform.
- * @param {string} srsName EPSG code currently used by the map.
- * @returns {string} WFS Transaction as an XML String.
+ * @param {String} srsName EPSG code currently used by the map.
+ * @returns {String} WFS Transaction as an XML String.
  */
 export default function (feature, layerInformation, transactionMethod, srsName) {
     const {featureNS, featurePrefix, featureType, version} = layerInformation,

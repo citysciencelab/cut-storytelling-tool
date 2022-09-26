@@ -23,8 +23,8 @@ export default function (layer) {
  * Parses the response of a DescribeFeatureType request
  * and prepares its values for later use as an input value for the user.
  *
- * @param {string} responseData XML response data
- * @param {string} featureType Name of the feature type of the service.
+ * @param {String} responseData XML response data
+ * @param {String} featureType Name of the feature type of the service.
  * @returns {FeatureProperty[]} If an <element> with a name of the featureType is present, an array of prepared feature properties; else an empty Array.
  */
 export function parseDescribeFeatureTypeResponse (responseData, featureType) {

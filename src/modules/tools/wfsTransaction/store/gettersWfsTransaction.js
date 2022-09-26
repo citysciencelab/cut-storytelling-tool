@@ -10,10 +10,10 @@ const getters = {
      * Interaction configuration regarding which interactions
      * are allowed by the currently selected layer.
      *
-     * @param {object} state Local vuex state.
-     * @param {object} getters Local vuex getters.
-     * @param {string} getters.currentLayerId Id of the currently selected layer
-     * @returns {object} The interaction configuration for the currently selected layer.
+     * @param {Object} state Local vuex state.
+     * @param {Object} getters Local vuex getters.
+     * @param {String} getters.currentLayerId Id of the currently selected layer
+     * @returns {Object} The interaction configuration for the currently selected layer.
      */
     currentInteractionConfig (state, {currentLayerId}) {
         const configuration = deepCopy(defaultInteractionConfig);

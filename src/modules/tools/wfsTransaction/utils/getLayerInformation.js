@@ -3,7 +3,7 @@ import getComponent from "../../../../utils/getComponent";
 /**
  * Receives relevant information about the layers with the given ids.
  *
- * @param {string[]} layerIds Ids of layers to retrieve information for.
+ * @param {String[]} layerIds Ids of layers to retrieve information for.
  * @returns {TransactionLayer[]} Information for each respective layer wrapped in an array.
  */
 export default function (layerIds) {
