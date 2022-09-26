@@ -188,7 +188,7 @@ export default {
             // Updates the map center
             if (this.currentStep.centerCoordinate && this.currentStep.centerCoordinate.length > 0) {
                 if (this.currentStep.is3D) {
-                    console.log("Dont use centerCoordinate for 3D navigation.");
+                    console.warn("Dont use centerCoordinate for 3D navigation.");
                 }
                 else {
                     const map = Radio.request("Map", "getMap"),
@@ -202,7 +202,6 @@ export default {
                         });
                         this.isChangeFrom3D = false;
                     }, this.isChangeFrom3D ? 1500 : 0);
-
                 }
             }
             // Updates the map center for 3D
@@ -233,7 +232,6 @@ export default {
                 );
 
             // Updates the map layers
-
             for (const layer of layerList) {
                 const isStepLayer = (this.currentStep.layers || []).includes(
                     layer.id
@@ -248,6 +246,7 @@ export default {
                     this.disableLayer(layer);
                 }
             }
+
             Radio.trigger("TableMenu", "rerenderLayers");
 
             // Updates the step html content
@@ -267,6 +266,10 @@ export default {
             else {
                 this.loadedContent = null;
             }
+
+            setTimeout(() => {
+                Radio.trigger("Menu", "rerender");
+            }, 500);
 
             if (!this.currentStep.is3D) {
                 // Activates or deactivates tools
