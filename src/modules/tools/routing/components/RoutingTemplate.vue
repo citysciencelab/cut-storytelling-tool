@@ -167,6 +167,6 @@ export default {
   background: #dbdbdb;
 }
 .bi-question-circle-fill {
-    font-size: 20px;
+    font-size: $font_size_huge;
 }
 </style>

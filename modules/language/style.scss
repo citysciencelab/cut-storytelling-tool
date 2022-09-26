@@ -2,7 +2,6 @@
 #languagebar {
     .currentLan {
         cursor: pointer;
-        /* font-size: 12px; */
         text-transform: uppercase;
         color: $primary;
         font-weight: 900;
@@ -34,7 +33,7 @@
             text-align: center;
             padding: 20px 0 0;
             a {
-                font-size: 12px;
+                font-size: $font-size-base;
                 &:hover{
                     background-color: $light_blue;
                     color: $white;

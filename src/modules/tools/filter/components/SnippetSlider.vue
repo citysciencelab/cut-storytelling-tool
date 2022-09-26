@@ -426,7 +426,7 @@ export default {
     }
     input[type="number"] {
         text-align: center;
-        font-size: 12px;
+        font-size: $font-size-base;
         -moz-appearance: textfield;
         width: 80px;
         float: right;

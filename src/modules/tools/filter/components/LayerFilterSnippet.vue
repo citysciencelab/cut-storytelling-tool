@@ -1089,7 +1089,7 @@ export default {
         padding: 5px;
     }
     .filter-result {
-        font-size: 16px;
+        font-size: $font-size-lg;
         color: $light_red;
         margin-top: 10px;
         display: inline-block;
@@ -1123,7 +1123,7 @@ export default {
         overflow-y: auto;
     }
     .snippetTagText {
-        font-size: 12px;
+        font-size: $font-size-base;
         float: left;
         padding: 6px 4px 0 0;
     }

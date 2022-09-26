@@ -241,7 +241,7 @@ export default {
         text-align:center;
         transition: color 0.35s;
         font-family: $font_family_accent;
-        font-size: $font_size_huge;
+        font-size: $font-size-lg;
         color: $accent_disabled;
     }
 }

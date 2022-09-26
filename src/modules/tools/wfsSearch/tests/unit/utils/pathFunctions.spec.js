@@ -14,12 +14,43 @@ describe("src/modules/tools/wfsSearch/utils/pathFunctions.js", () => {
                         value: "1"
                     },
                     zaehler: {
-                        index: 2,
+                        index: 1,
                         value: "2038"
+                    }
+                },
+                parserSource = {
+                    "Waldesch": {
+                        "id": "071386",
+                        "flur": [
+                            {
+                                "id": "1",
+                                "zaehler": [
+                                    {
+                                        "id": "2039",
+                                        "nenner": ["0", "420"]
+                                    },
+                                    {
+                                        "id": "2038",
+                                        "nenner": ["420"]
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 };
 
-            expect(buildPath(optionsObject, currentOption)).to.eql(["Waldesch", "flur", 0, "zaehler", 2, currentOption]);
+            expect(buildPath(optionsObject, currentOption, parserSource)).to.eql(["Waldesch", "flur", 0, "zaehler", 1, currentOption]);
+        });
+
+        it("should resolve unfound keys to ids", () => {
+            const currentOption = "flur",
+                optionsObject = {
+                    "": {
+                        value: 1
+                    }
+                };
+
+            expect(buildPath(optionsObject, currentOption, {"A": {"id": 1, "B": [1]}})).to.eql(["A", "flur"]);
         });
     });
 

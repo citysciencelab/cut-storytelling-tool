@@ -51,6 +51,7 @@ const mutations = {
         state.drawAreaSettings.strokeWidth = styleSettings.strokeWidth;
     },
     setDrawCircleSettings: (state, styleSettings) => {
+        state.drawCircleSettings.circleMethod = styleSettings.circleMethod;
         state.drawCircleSettings.unit = styleSettings.unit;
         state.drawCircleSettings.circleRadius = styleSettings.circleRadius;
         state.drawCircleSettings.circleOuterRadius = styleSettings.circleOuterRadius;

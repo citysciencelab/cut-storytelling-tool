@@ -743,7 +743,7 @@ export default {
     @import "~variables";
     .filter-select-box-container .multiselect, .filter-select-box-container .multiselect__input, .filter-select-box-container .multiselect__single {
         font-family: inherit;
-        font-size: 12px;
+        font-size: $font-size-base;
     }
     .filter-select-box-container .multiselect .multiselect__spinner:after, .multiselect__spinner:before {
         position: absolute;
@@ -806,7 +806,7 @@ export default {
     .filter-select-box-container .multiselect .multiselect__tag-icon::after {
         content: "\D7";
         color: $light_grey;
-        font-size: 14px;
+        font-size: $font_size_big;
     }
     .filter-select-box-container .multiselect .multiselect__tag-icon:hover {
         background: $light_blue;
@@ -816,7 +816,7 @@ export default {
         display: inline-block;
         margin-bottom: 0;
         padding-top: 0;
-        font-size: 14px;
+        font-size: $font_size_big;
     }
     .filter-select-box-container .multiselect .multiselect__tag-icon:focus, .multiselect__tag-icon:hover {
         background: $light_grey;
@@ -837,7 +837,7 @@ export default {
     }
     .filter-select-box-container .multiselect .multiselect__tags {
         min-height: 34px;
-        font-size: 12px;
+        font-size: $font-size-base;
         line-height: 1.428571429;
         color: $dark_grey;
         background-color: $white;

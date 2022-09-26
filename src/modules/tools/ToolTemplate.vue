@@ -316,7 +316,7 @@ export default {
         .heading-element {
             white-space: nowrap;
             color: $secondary_contrast;
-            font-size: 14px;
+            font-size: $font_size_big;
 
             &.flex-grow {
                 flex-grow:99;
@@ -413,7 +413,7 @@ export default {
         .win-heading {
             border-top-left-radius: 12px;
             border-top-right-radius: 12px;
-            font-size: 14px;
+            font-size: $font_size_big;
             background-color: $dark_grey;
             .heading-element {
                 border-top-right-radius: 12px;
@@ -422,7 +422,7 @@ export default {
                 }
                 > .title {
                     color: $white;
-                    font-size: 14px;
+                    font-size: $font_size_big;
                 }
                 > .buttons { color: $white; }
                 > .bootstrap-icon { color: $white; }

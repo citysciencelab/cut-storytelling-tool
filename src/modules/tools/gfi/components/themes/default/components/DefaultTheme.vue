@@ -354,7 +354,7 @@ export default {
 
 .table > tbody > tr > td {
     padding: 5px 8px;
-    font-size: 12px;
+    font-size: $font-size-base;
     &.bold{
         font-family: $font_family_accent;
     }
@@ -390,7 +390,7 @@ export default {
     display: flex;
     justify-content: center;
     .bootstrap-icon {
-        font-size: 28px;
+        font-size: $font_size_huge;
         padding: 0 2px;
     }
 }

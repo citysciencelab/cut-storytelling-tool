@@ -5,21 +5,39 @@ import idx, {badPathSymbol} from "../../../../utils/idx";
  *
  * @param {object} optionsObject The currently set values by the user.
  * @param {string} currentOption The option for which the path needs to be build.
+ * @param {object} parsedSource source to resolve ID keys by
  * @returns {array} The path to the given option as an array.
  */
-function buildPath (optionsObject, currentOption) {
+function buildPath (optionsObject, currentOption, parsedSource) {
     const entries = Object.entries(optionsObject),
         path = [];
 
+    // used to verify path taken
+    let objectWalker = parsedSource;
+
     for (const entry of entries) {
-        const [key, {value, index}] = entry;
+        const [key, {value, index}] = entry,
+            values = key === "" ? [value] : [key, index];
 
         // This would otherwise lead to weird path behaviour as the option of this Field has already been added to the selectedOptions
         if (key === currentOption) {
             break;
         }
 
-        path.push(...key === "" ? [value] : [key, index]);
+        // if value doesn't exist as key, it's an id
+        if (typeof objectWalker[values[0]] === "undefined") {
+            values[0] = Object
+                .entries(objectWalker)
+                .find(pair => pair[1].id === values[0])[0];
+        }
+
+        objectWalker = objectWalker[values[0]];
+
+        if (typeof values[1] !== "undefined") {
+            objectWalker = objectWalker[values[1]];
+        }
+
+        path.push(...values);
     }
     path.push(currentOption);
 

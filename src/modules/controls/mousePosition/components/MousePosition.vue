@@ -73,7 +73,7 @@ export default {
 
         background-color: $primary;
         color: $white;
-        font-size: $font_size_small_custom;
+        font-size: $font-size-sm;
         line-height: $icon_length_small;
         min-height: $icon_length_small;
 

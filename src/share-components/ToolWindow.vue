@@ -145,7 +145,7 @@ export default {
         .heading-element {
             white-space: nowrap;
             color: $dark_grey;
-            font-size: 14px;
+            font-size: $font_size_big;
             padding: 6px;
 
             &.flex-grow {

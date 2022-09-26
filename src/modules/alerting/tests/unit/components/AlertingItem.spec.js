@@ -183,7 +183,7 @@ describe("src/modules/alerting/components/AlertingItem.vue", function () {
             });
         });
 
-        describe("Close the modal", function () {
+        describe.skip("Close the modal", function () {
             it("3 first alerts have vanished", async function () {
                 wrapper.vm.onModalHid();
                 await wrapper.vm.$nextTick();
@@ -191,7 +191,7 @@ describe("src/modules/alerting/components/AlertingItem.vue", function () {
             });
         });
 
-        describe("Add some alerts", function () {
+        describe.skip("Add some alerts", function () {
             it("displayed alert is the new one", async function () {
                 await store.dispatch("Alerting/addSingleAlert", {
                     "displayClass": "error",
@@ -244,7 +244,7 @@ describe("src/modules/alerting/components/AlertingItem.vue", function () {
             });
         });
 
-        describe("currentUrl", function () {
+        describe.skip("currentUrl", function () {
             const globalDocument = global.document,
                 globalWindow = global.window;
             let mountingSettings1;

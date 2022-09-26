@@ -150,7 +150,7 @@ export default {
         h1 {
             color: $secondary_contrast;
             margin-left: 5px;
-            font-size: 26px;
+            font-size: $font_size_huge;
             font-family: $font_family_narrow;
             white-space: nowrap;
             overflow: hidden;

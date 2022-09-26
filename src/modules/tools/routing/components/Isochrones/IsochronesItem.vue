@@ -340,7 +340,7 @@ export default {
 }
 
 h6 {
-    font-size: 12px;
+    font-size: $font-size-base;
 }
 .routing-isochrones-methodoption-lable {
     padding: 0 0 5px 0;

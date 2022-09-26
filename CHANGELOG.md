@@ -23,6 +23,7 @@
     - The CRS parameter can be turned off via crs: false. The default crs in the master portal for oaf has been set to http://www.opengis.net/def/crs/EPSG/0/25832.
     - The standard limit will be set to 400.
 - Tools are now always rendered in the window in mobile mode, since the sidebar is currently not usable in mobile mode.
+- More variables for fonts were added to the code (not in addons).
 - Filter:
     - For OAF layer, the standard pagination (limit) will be set to 400.
     - For snippet dropdown + multiselect: It is now possible to initially select all available values by setting "prechecked" to "all".
@@ -42,8 +43,10 @@
 ### Fixed
 - Issue #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
 - Issue #825 The Control layerAttributions remain open when a layer with content is activated until they are explicitly collapsed.
+- Issue #826: Tool WFS Search did not work with a parcel.json that had "fluren" with local values. This has been resolved.
 - Issue #829: xml2json parser (used in meta data context) broke on valid XML. It has been extended for the unattended cases.
 - Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
+- drawTool: circles can be drawn with setting defined again
 
 ---
 ## v2.25.0 - 2022-09-07
