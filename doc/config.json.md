@@ -3909,6 +3909,7 @@ When editing properties of a feature / adding properties to a new features, the 
 |layerIds|yes|String[]||Array of ids of layer defined in **[services.json](services.json.md)**.|false|
 |icon|no|String|"bi-globe"|Icon displayed for the tool.|false|
 |name|no|String|"WfsTransaction"|Tool name shown in the portal.|false|
+|layerSelectLabel|no|String|"common:modules.tools.wfsTransaction.layerSelectLabel"|_Deprecated in 3.0.0. Please set the value directly in the language files._ If given, overrides the value set for the label of the layer select box. May be a locale key.|false|
 |toggleLayer|no|Boolean|false|Whether the features of the currently selected layer should stay visible when adding a new feature.|false|
 |areaButton|no|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)[]/Boolean|[]|_Deprecated in 3.0.0. Please use `polygonButton` instead. If both are present, `areaButton` is used for now._ Defines which layers of `layerIds` allow insert transactions of polygon geometries.|false|
 |delete|no|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)/Boolean|false|Defines which layers of `layerIds` allow delete transactions.|false|

@@ -9,7 +9,7 @@ export default {
     name: "WfsTransaction",
     components: {SimpleButton, ToolTemplate},
     computed: {
-        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "layerSelectDisabled", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"])
+        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "layerSelectDisabled", "layerSelectLabel", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"])
     },
     watch: {
         active (val) {
@@ -86,7 +86,7 @@ export default {
                         id="tool-wfsTransaction-layerSelect-label"
                         for="tool-wfsTransaction-layerSelect"
                     >
-                        {{ $t("common:modules.tools.wfsTransaction.layerSelectLabel") }}
+                        {{ $t(layerSelectLabel) }}
                     </label>
                     <select
                         id="tool-wfsTransaction-layerSelect"

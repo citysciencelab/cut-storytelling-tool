@@ -47,6 +47,7 @@
  * @property {(ButtonConfig[]|Boolean)} edit Whether the features of the WFS-T layers should be editable. Deprecated in v3.0.0.
  * @property {(ButtonConfig[]|Boolean)} delete Whether it should be possible to delete features of the WFS-T layers.
  * @property {String[]} layerIds Ids of the configured WFS-T layers.
+ * @property {String} layerSelectLabel Label used for the layer select. Deprecated in v3.0.0.
  * @property {(ButtonConfig[]|Boolean)} lineButton Configuration of the different layers whether they should display the button to add lines.
  * @property {(ButtonConfig[]|Boolean)} pointButton Configuration of the different layers whether they should display the button to add points.
  * @property {(ButtonConfig[]|Boolean)} polygonButton Configuration of the different layers whether they should display the button to add polygons.
@@ -70,6 +71,7 @@ const state = {
     update: false,
     delete: false,
     layerIds: [],
+    layerSelectLabel: "common:modules.tools.wfsTransaction.layerSelectLabel",
     lineButton: [],
     pointButton: [],
     polygonButton: [],

@@ -3850,6 +3850,7 @@ Beim Bearbeiten eines Features / Hinzufügen von Attributen zu einem neuen Featu
 |layerIds|ja|String[]||Array an Ids von in **[services.json](services.json.md)** definierten Layern.|false|
 |icon|nein|String|"bi-globe"|Symbol des Werkzeugs zur Anzeige im Portal.|false|
 |name|nein|String|"WfsTransaction"|Name des Werkzeugs zur Anzeige im Portal.|false|
+|layerSelectLabel|nein|String|"common:modules.tools.wfsTransaction.layerSelectLabel"|_Deprecated in 3.0.0. Bitte setzen Sie stattdessen den Wert direkt in den Sprachdateien._ Falls gegeben wird der Wert als Label für die Layerauswahl-Select-Box verwendet. Kann ein Sprachschlüssel sein.|false|
 |toggleLayer|nein|Boolean|false|Legt fest, ob die Feature des ausgewählten Layers weiterhin angezeigt werden sollen, wenn neue Feature hinzugefügt werden.|false|
 |areaButton|nein|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)[]/Boolean|[]|_Deprecated in 3.0.0. Bitte nutzen Sie stattdessen `polygonButton`. Falls beide Konfigurationsparameter vorliegen, wird `areaButton` verwendet._ Legt fest, welche der zu `layerIds` zugehörigen Layer das Hinzufügen von Polygonen erlauben.|false|
 |delete|nein|[TransactionConfig](#markdown-header-portalconfigmenutoolwfstransactiontransactionconfig)/Boolean|false|Legt fest, welche der zu `layerIds` zugehörigen Layer das Löschen von Geometrien erlauben.|false|
