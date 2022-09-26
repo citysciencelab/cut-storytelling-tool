@@ -1,6 +1,6 @@
 <script>
 import Chart from "chart.js";
-import * as moment from "moment";
+import moment from "moment";
 
 import {calculateWorkloadForOneWeekday} from "../utils/calculateWorkloadForOneWeekday";
 import {calculateArithmeticMean} from "../utils/mathematicalOperations";

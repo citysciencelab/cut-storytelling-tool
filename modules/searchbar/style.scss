@@ -4,16 +4,16 @@
 #searchInput {
     &::placeholder {
         font-weight: bold;
-        font-size: 12px;
+        font-size: $font-size-base;
         color:  $dark_grey;
         opacity: 1;
     }
     &:-ms-input-placeholder {
         font-weight: bold;
-        font-size: 13px;
+        font-size: $font_size_big;
     }
     box-shadow: none;
-    font-size: 12px;
+    font-size: $font-size-base;
     padding-right: 32.5px;
     &::-ms-clear {
         display: none;
@@ -57,7 +57,7 @@
         background-color: $white;
     }
     >.bootstrap-icon > .bi-x-lg {
-        font-size: 12px;
+        font-size: $font-size-base;
     }
 }
 .dropdown-menu-search {
@@ -65,7 +65,7 @@
     background-color: $white;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     float: left;
-    font-size: 12px;
+    font-size: $font-size-base;
     list-style: outside none none;
     margin: 2px 0 0;
     min-width: 200px;
@@ -80,7 +80,7 @@
         color: $dark_grey;
         padding-right: 12px;
         padding-left: 3px;
-        font-size: 17px;
+        font-size: $font-size-lg;
     }
     img {
         width: 25px;
@@ -98,16 +98,16 @@
         &:hover {
             cursor: pointer;
             opacity: 1;
-            background-color: $accent_hover;
+            background-color: $light_grey;
             span, small {
-                color: $white;
+                color: $dark_grey;
             }
         }
     }
 }
 .btn-search {
     >.bootstrap-icon > .bi-search {
-        font-size: 13px;
+        font-size: $font_size_big;
     }
     &:hover {
         background-color: $accent_hover;
@@ -123,7 +123,7 @@
     >.bootstrap-icon {
         color: $secondary_icon_button;
         padding: 5px 5px 3px 5px;
-        font-size: 20px;
+        font-size: $font_size_huge;
         &:hover {
             background-color: $accent_hover;
             color: $accent_contrast;
@@ -140,7 +140,7 @@
 
 .results {
     background-color: $primary;
-    font-size: 12px;
+    font-size: $font-size-base;
     text-align: right;
     padding: 6px;
     border-top-width: 2px;
@@ -148,7 +148,7 @@
     >div {
         >.bootstrap-icon {
             color: $white;
-            font-size: 16px;
+            font-size: $font_size_icon_lg;
             vertical-align: middle;
             padding-top: 1px;
         }
@@ -161,7 +161,8 @@ li.results {
     }
 }
 #searchInputUL {
-    div{
+    display: none;
+    div {
         opacity: 1;
         border-radius: 0;
     }
@@ -182,32 +183,33 @@ li.results {
 
     .list-group-item {
 
-            .bootstrap-icon {
-                float:left;
-            }
-            .list-group-item-theme {
-                float: right;
-            }
-            .list-group-item-name {
-                display: inline-block;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                // has to be normal so the line break works
-                white-space: normal;
-                max-width: 70%;
-                clear: both;
-            }
-            p {
-                padding-top: 10px;
-            }
-
-            > .badge {
-                background-color: $dark_grey;
-                border-radius: 10px;
-                font-size: 12px;
-            }
-
+        .bootstrap-icon {
+            float:left;
         }
+        .list-group-item-theme {
+            float: right;
+        }
+        .list-group-item-name {
+            display: inline-block;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            // has to be normal so the line break works
+            white-space: normal;
+            max-width: 70%;
+            clear: both;
+        }
+        p {
+            padding-top: 10px;
+        }
+
+        > .badge {
+            background-color: $dark_grey;
+            border-radius: 10px;
+            font-size: 12px;
+            color: $white;
+        }
+
+    }
 
 }
 #table-searchForm {
@@ -222,7 +224,7 @@ li.results {
     }
     .btn-table-search {
         >.icon-search {
-            font-size: 24px;
+            font-size: $font_size_huge;
         }
         &:hover {
             background-color: $light_grey;
@@ -246,10 +248,11 @@ li.results {
         background-color: $white;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         float: left;
-        font-size: 13px;
+        font-size: $font_size_big;
         list-style: outside none none;
         margin: 2px 0 0;
         min-width: 200px;
+        max-width: none;
         position: absolute;
         bottom: 100%;
         z-index: 1001;
@@ -260,7 +263,7 @@ li.results {
             padding-right: 12px;
             padding-left: 3px;
             padding-top: 5px;
-            font-size: 17px;
+            font-size: $font-size-lg;
         }
         img {
             width: 25px;
@@ -271,15 +274,13 @@ li.results {
             color: $dark_grey;
             padding-left: 10px;
         }
-        li.type {
-            background: $light_grey;
-        }
         .list-group-item {
-            font-size: 17px;
+            min-width: 100%;
+            font-size: $font-size-lg;
             color: $dark_grey;
             background-color: $secondary_table_style;
             #searchInputLi {
-                font-size: 17px;
+                font-size: $font-size-lg;
             }
 
             text-overflow: ellipsis;
@@ -318,7 +319,7 @@ li.results {
     }
     #searchInputUL {
         border-radius: 12px;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         margin-right: -3px;
         background-color: $light_grey;
     }
@@ -344,15 +345,15 @@ li.results {
         border-radius: 12px;
     }
     input#searchInput.form-control {
-        font-size: 22px;
+        font-size: $font_size_huge;
     }
     input#searchInput {
         &::placeholder {
-            font-size: 22px;
+            font-size: $font_size_huge;
             opacity: 0.7;
         }
         &:-ms-input-placeholder {
-            font-size: 22px;
+            font-size: $font_size_huge;
             opacity: 0.7;
         }
     }
@@ -390,7 +391,7 @@ input#searchInput.form-control {
     #searchInput {
         min-width: 200px;
         &+span {
-            font-size: 14px;
+            font-size: $font_size_big;
         }
     }
     #searchInputUL {
@@ -416,12 +417,15 @@ input#searchInput.form-control {
 }
     .search-funnel {
         position: absolute;
+        content: '';
+        left: 0;
         width: 360px;
         height: 15px;
         margin-left: 65px;
         background-image: radial-gradient(circle at 0 100%, transparent 15px, $light_grey 15px);
     }
     .search-right-funnel-corner {
+        content: '';
         position:absolute;
         right: 40px;
         height: 15px;

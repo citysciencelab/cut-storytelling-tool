@@ -98,7 +98,7 @@ describe("src/modules/tools/supplyCoord/store/actionsSupplyCoord.js", () => {
 
             testAction(adjustPosition, payload, {}, rootState, [
                 {type: "setCoordinatesEastingField", payload: "160° 00′ 00″"},
-                {type: "setCoordinatesNorthingField", payload: "100° 00′ 00″ E"}
+                {type: "setCoordinatesNorthingField", payload: "100° 00′ 00″"}
             ], {}, done);
         });
         it("adjustPosition sets coordinate fields - utm", done => {

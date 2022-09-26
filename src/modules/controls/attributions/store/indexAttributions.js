@@ -103,9 +103,6 @@ export default {
          * @returns {void}
          */
         setAttributions (state, attributionList) {
-            if (attributionList.length === 0) {
-                state.open = false;
-            }
             state.attributionList = attributionList;
         },
         /**

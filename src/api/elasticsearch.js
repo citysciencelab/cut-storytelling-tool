@@ -43,6 +43,20 @@ export async function initializeSearch (requestConfig) {
     return result;
 }
 
+
+/**
+ * @deprecated in 3.0.0 – use `${url}?source_content_type=application/json&source=${JSON.stringify(payload)}` in place of function then
+ * @param {string} url url of elasticsearch server
+ * @param {object} payload elasticsearch payload
+ * @returns {string} url ready for call
+ */
+function buildGetUrl (url, payload) {
+    const query = "?source_content_type=application/json&source=",
+        queryUrl = url.includes(query) ? url : url + query;
+
+    return queryUrl + JSON.stringify(payload);
+}
+
 /**
  * Sends the request
  * @param {String} url url to send request.
@@ -56,7 +70,9 @@ export async function initializeSearch (requestConfig) {
 export async function sendRequest (url, requestConfig, result) {
     const type = requestConfig.type || "POST",
         payload = requestConfig.payload || undefined,
-        urlWithPayload = type === "GET" ? url + JSON.stringify(payload) : url,
+        urlWithPayload = type === "GET"
+            ? buildGetUrl(url, payload)
+            : url,
         controller = new AbortController();
     let resultWithHits = result,
         res = null;

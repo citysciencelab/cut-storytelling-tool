@@ -30,7 +30,7 @@ label {
 
 @media (max-width: 767px) {
     .bi-plus-circle-fill, .bi-dash-circle-fill, .bi-info-circle-fill, .bi-check2-square, .bi-square, .bi-envelope-fill, .bi-lightbulb {
-        font-size: 18px !important;
+        font-size: 1.125rem;
     }
     html, body {
         font-size: 16px;

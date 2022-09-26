@@ -5,12 +5,12 @@
     max-height: 66vh;
     overflow-y: auto;
     span.title {
-        font-size: 14px;
+        font-size: $font_size_big;
         padding-left: 6px;
         vertical-align: text-bottom;
     }
     span.bootstrap-icon {
-        font-size: 18px;
+        font-size: $font-size-lg;
         padding: 5px;
     }
     >.dropdown-item {
@@ -36,7 +36,7 @@
     >.form-inline {
         >.form-group {
             >label {
-                font-size: 12px;
+                font-size: $font-size-base;
                 padding-right: 10px;
             }
             >select {
@@ -74,8 +74,4 @@
     a {
         color: $black;
     }
-}
-
-li {
-    
 }

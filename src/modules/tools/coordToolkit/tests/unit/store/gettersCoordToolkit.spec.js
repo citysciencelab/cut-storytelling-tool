@@ -1,11 +1,15 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import getters from "../../../store/gettersCoordToolkit";
-import stateCoord from "../../../store/stateCoordToolkit";
+import toolKitState from "../../../store/stateCoordToolkit";
 
 describe("src/modules/tools/coordToolkit/store/gettersCoordToolkit.js", () => {
+    let stateCoord;
 
     describe("getters supplyCoord", () => {
+        beforeEach(() => {
+            stateCoord = {... toolKitState};
+        });
         it("returns the selectPointerMove from state", () => {
             const emptyFunc = sinon.stub(),
                 state = {
@@ -52,8 +56,8 @@ describe("src/modules/tools/coordToolkit/store/gettersCoordToolkit.js", () => {
             expect(getters.updatePosition(state)).to.be.false;
         });
         it("returns the currentProjection from state", () => {
-            const proj1 = {id: "EPSG:25832", name: "EPSG:25832", projName: "utm"},
-                proj2 = {id: "EPSG:4326", name: "EPSG:4326", projName: "longlat"},
+            const proj1 = {id: "http://www.opengis.net/gml/srs/epsg.xml#25832", name: "EPSG:25832", projName: "utm"},
+                proj2 = {id: "http://www.opengis.net/gml/srs/epsg.xml#4326", name: "EPSG:4326", projName: "longlat"},
                 state = {
                     currentProjection: proj2
                 };

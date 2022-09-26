@@ -89,7 +89,8 @@ export default class FilterApi {
                     layerId,
                     url: layerModel.get("url"),
                     collection: layerModel.get("collection"),
-                    namespace: featureNS
+                    namespace: featureNS,
+                    limit: typeof layerModel.get("limit") === "undefined" ? 400 : layerModel.get("limit")
                 };
             }
             else {

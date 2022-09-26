@@ -29,7 +29,7 @@
         >.title {
             white-space: nowrap;
             min-width: 250px;
-            font-size: 14px;
+            font-size: $font_size_big;
             padding-top: 8px;
             padding-bottom: 5px;
             color: $dark_grey;
@@ -42,7 +42,7 @@
         }
         >.buttons {
             color: $dark_grey;
-            font-size: 14px;
+            font-size: $font_size_big;
             margin: 0;
             >.bootstrap-icon > .bi-dash-lg {
                 top: 3px;

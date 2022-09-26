@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import moment from "moment";
 
 /**
  * Creates a zero time observations for a given observation.

@@ -7,7 +7,7 @@
     overflow: auto;
     >li {
         >a {
-            font-size: 12px;
+            font-size: $font-size-base;
             color: $dark_grey;
             &:focus {
                 opacity: 1.0;

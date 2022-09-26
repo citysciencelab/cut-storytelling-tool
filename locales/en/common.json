@@ -1083,7 +1083,8 @@
                 "location": "location",
                 "subject": "subject (external topics)",
                 "topic": "issues & topics",
-                "general": "topics"
+                "general": "topics",
+                "folder": "folder (topics)"
             },
             "specialWFS": {
                 "ongoing": "in process",

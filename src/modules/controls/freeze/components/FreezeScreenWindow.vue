@@ -115,7 +115,7 @@ export default {
         cursor: pointer;
         position: absolute;
         border-radius: 12px;
-        font-size: 26px;
+        font-size: $font_size_huge;
         left: 30px;
         top: 30px;
         width: 600px;

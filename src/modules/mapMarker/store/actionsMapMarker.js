@@ -57,6 +57,9 @@ export default {
                 featureStyle = styleListModel.createStyle(iconfeature, false);
 
             iconfeature.setStyle(featureStyle);
+            iconfeature.set("styleId", state.pointStyleId);
+            iconfeature.set("featureId", iconfeature.ol_uid);
+
             commit("addFeatureToMarker", {feature: iconfeature, marker: "markerPoint"});
             commit("setVisibilityMarker", {visibility: true, marker: "markerPoint"});
             dispatch("Maps/addLayerOnTop", state.markerPoint, {root: true});

@@ -305,7 +305,7 @@ export default {
 
         font-family: $font_family_narrow;
         color: $secondary_contrast;
-        font-size: $font_size_tiny;
+        font-size: $font-size-sm;
 
         box-shadow: 0 -6px 12px $shadow;
         padding: 4px 10px;
@@ -370,13 +370,13 @@ export default {
 
                 p.info-top-titel {
                     color: $light_grey_inactive_contrast;
-                    font-size: $font_size_huge;
+                    font-size: $font-size-lg;
                     margin-bottom: 1rem;
                 }
                 p.info-top-text {
                     color: $light_grey_inactive_contrast;
                     margin-bottom: 1rem;
-                    font-size: $font_size_default;
+                    font-size: $font-size-base;
                 }
             }
             .info-bottom {
@@ -397,7 +397,7 @@ export default {
                 }
                 p.info-bottom-text {
                     color: $light_grey_inactive_contrast;
-                    font-size: $font_size_default;
+                    font-size: $font-size-base;
                     line-height: inherit;
                 }
             }

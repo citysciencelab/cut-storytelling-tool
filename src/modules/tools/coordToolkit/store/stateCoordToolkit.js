@@ -45,7 +45,7 @@ const state = {
     mapProjection: null,
     positionMapProjection: [],
     updatePosition: true,
-    currentProjection: {id: "EPSG:25832", name: "EPSG:25832", projName: "utm"},
+    currentProjection: {id: "http://www.opengis.net/gml/srs/epsg.xml#25832", name: "EPSG:25832", projName: "utm"},
     eastingNoCoord: false,
     eastingNoMatch: false,
     northingNoCoord: false,

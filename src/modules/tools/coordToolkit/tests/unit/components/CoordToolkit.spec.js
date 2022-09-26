@@ -22,7 +22,9 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             mode: "2D"
         },
         mockMapGetters = {
-            projection: () => sinon.stub(),
+            projection: () => {
+                return {id: "http://www.opengis.net/gml/srs/epsg.xml#25832", name: "EPSG:25832", projName: "utm"};
+            },
             mouseCoordinate: () => sinon.stub(),
             mode: (state) => state.mode
         },
@@ -72,12 +74,21 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         copyCoordinatesSpy = sinon.spy();
     let store,
         wrapper,
-        text = "";
+        text = "",
+        origvalidateInput,
+        originitHeightLayer,
+        origcopyCoordinates,
+        origtransformCoordinatesFromTo;
 
     beforeEach(() => {
-        CoordToolkit.actions.validateInput = sinon.spy(CoordToolkit.actions.validateInput);
-        CoordToolkit.actions.initHeightLayer = sinon.spy(CoordToolkit.actions.initHeightLayer);
-        CoordToolkit.actions.copyCoordinates = sinon.spy(CoordToolkit.actions.copyCoordinates);
+        origvalidateInput = CoordToolkit.actions.validateInput;
+        originitHeightLayer = CoordToolkit.actions.initHeightLayer;
+        origcopyCoordinates = CoordToolkit.actions.copyCoordinates;
+        origtransformCoordinatesFromTo = CoordToolkit.actions.transformCoordinatesFromTo;
+        CoordToolkit.actions.validateInput = sinon.spy();
+        CoordToolkit.actions.initHeightLayer = sinon.spy();
+        CoordToolkit.actions.copyCoordinates = sinon.spy();
+        CoordToolkit.actions.transformCoordinatesFromTo = sinon.spy();
 
         store = new Vuex.Store({
             namespaced: true,
@@ -123,6 +134,15 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             }
         };
         sinon.stub(navigator.clipboard, "writeText").resolves(text);
+    });
+
+    afterEach(() => {
+        sinon.restore();
+        wrapper.destroy();
+        CoordToolkit.actions.validateInput = origvalidateInput;
+        CoordToolkit.actions.initHeightLayer = originitHeightLayer;
+        CoordToolkit.actions.copyCoordinates = origcopyCoordinates;
+        CoordToolkit.actions.transformCoordinatesFromTo = origtransformCoordinatesFromTo;
     });
 
     it("renders CoordToolkit without height field", () => {
@@ -180,8 +200,9 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
         let options = null,
             selected = null;
 
-        store.commit("Tools/CoordToolkit/setActive", true);
+        store.commit("Tools/CoordToolkit/setActive", false);
         wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+        store.commit("Tools/CoordToolkit/setActive", true);
 
         await wrapper.vm.$nextTick();
 
@@ -228,7 +249,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
 
         describe("createInteraction for 3D", () => {
             before(() => {
-                Cesium = {
+                global.Cesium = {
                     ScreenSpaceEventHandler: () => {
                         return {
                             setInputAction: () => sinon.stub(),
@@ -286,7 +307,7 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
             projections = store.state.Tools.CoordToolkit.projections;
             expect(projections.length).to.be.equals(5);
             expect(projections[0].id).to.be.not.null;
-            expect(projections.filter(proj => proj.id === "EPSG:4326-DG").length).to.be.equals(1);
+            expect(projections.filter(proj => proj.id === "http://www.opengis.net/gml/srs/epsg.xml#4326-DG").length).to.be.equals(1);
         });
         it("label returns correct path", () => {
             const key = "key";
@@ -298,8 +319,8 @@ describe("src/modules/tools/coordToolkit/components/CoordToolkit.vue", () => {
                 },
                 ret = "";
 
-            store.commit("Tools/CoordToolkit/setActive", true);
             wrapper = shallowMount(CoordToolkitComponent, {store, localVue});
+            wrapper.vm.initProjections();
             wrapper.vm.selectionChanged(event);
 
             ret = wrapper.vm.getLabel(key);

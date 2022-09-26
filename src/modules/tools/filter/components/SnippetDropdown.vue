@@ -70,6 +70,11 @@ export default {
             required: false,
             default: false
         },
+        isChild: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         isParent: {
             type: Boolean,
             required: false,
@@ -106,7 +111,7 @@ export default {
             default: ""
         },
         prechecked: {
-            type: Array,
+            type: [Array, String],
             required: false,
             default: undefined
         },
@@ -230,7 +235,19 @@ export default {
     },
     watch: {
         dropdownSelected (value) {
-            if (!this.isAdjusting && (!this.isInitializing || this.isInitializing && Array.isArray(this.prechecked))) {
+            const prechecked = this.getPrecheckedExistingInValue(this.prechecked, this.dropdownValue);
+
+            if (
+                !this.isAdjusting
+                && (
+                    !this.isInitializing
+                    || this.isInitializing && (
+                        Array.isArray(prechecked)
+                        && prechecked.length
+                        || this.prechecked === "all"
+                    )
+                )
+            ) {
                 if (typeof value === "string" && value || Array.isArray(value) && value.length) {
                     this.emitCurrentRule(value, this.isInitializing);
                 }
@@ -261,6 +278,15 @@ export default {
 
                 this.$nextTick(() => {
                     this.isAdjusting = false;
+
+                    if (this.delayedPrechecked === "all") {
+                        this.dropdownSelected = this.dropdownValue;
+                        this.delayedPrechecked = false;
+                    }
+                    else if (Array.isArray(this.delayedPrechecked) && this.delayedPrechecked.length) {
+                        this.dropdownSelected = this.getPrecheckedExistingInValue(this.delayedPrechecked, this.dropdownValue);
+                        this.delayedPrechecked = false;
+                    }
                 });
             }
         },
@@ -274,69 +300,134 @@ export default {
         }
     },
     created () {
-        this.dropdownSelected = Array.isArray(this.prechecked) ? this.prechecked : [];
-        if (this.visible && Array.isArray(this.prechecked) && this.prechecked.length) {
-            this.emitCurrentRule(this.prechecked, true);
-        }
+        this.delayedPrechecked = false;
     },
     mounted () {
-        if (this.renderIcons === "fromLegend") {
-            this.styleModel = getStyleModel(this.layerId);
+        this.initializeIcons();
 
-            if (!this.styleModel || !this.styleModel.getLegendInfos() || !Array.isArray(this.styleModel.getLegendInfos())) {
-                this.legendsInfo = [];
-            }
-            else {
-                this.legendsInfo = this.styleModel.getLegendInfos();
-            }
+        if (!this.visible) {
+            this.dropdownValue = Array.isArray(this.prechecked) ? this.prechecked : [];
+            this.dropdownSelected = this.getInitialDropdownSelected(this.prechecked, this.dropdownValue, this.multiselect);
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+                this.emitSnippetPrechecked();
+            });
         }
-        else if (isObject(this.renderIcons)) {
-            this.iconList = this.renderIcons;
+        else if (Array.isArray(this.value)) {
+            this.dropdownValue = this.value;
+            this.dropdownSelected = this.getInitialDropdownSelected(this.prechecked, this.dropdownValue, this.multiselect);
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+                this.emitSnippetPrechecked(this.prechecked, this.snippetId, this.visible);
+            });
         }
-
-        this.$nextTick(() => {
-            if (!this.visible) {
-                this.dropdownValue = Array.isArray(this.prechecked) ? this.prechecked : [];
+        else if (this.api && this.autoInit !== false) {
+            this.api.getUniqueValues(this.attrName, list => {
+                this.dropdownValue = this.splitListWithDelimitor(list, this.delimitor);
+                this.dropdownSelected = this.getInitialDropdownSelected(this.prechecked, this.dropdownValue, this.multiselect);
                 this.$nextTick(() => {
                     this.isInitializing = false;
                     this.disable = false;
+                    this.emitSnippetPrechecked(this.prechecked, this.snippetId, this.visible);
                 });
+            }, error => {
+                this.disable = false;
+                this.isInitializing = false;
+                this.emitSnippetPrechecked();
+                console.warn(error);
+            }, {rules: this.fixedRules, filterId: this.filterId});
+        }
+        else {
+            this.dropdownValue = [];
+            this.dropdownSelected = [];
+            if (this.isChild && (Array.isArray(this.prechecked) && this.prechecked.length || this.prechecked === "all")) {
+                this.delayedPrechecked = this.prechecked;
             }
-            else if (Array.isArray(this.value)) {
-                this.dropdownValue = this.value;
-                this.$nextTick(() => {
-                    this.isInitializing = false;
-                    this.disable = false;
-                });
-            }
-            else if (this.api && this.autoInit !== false) {
-                this.api.getUniqueValues(this.attrName, list => {
-                    this.dropdownValue = this.splitListWithDelimitor(list, this.delimitor);
-                    this.$nextTick(() => {
-                        this.isInitializing = false;
-                        this.disable = false;
-                    });
-                }, error => {
-                    this.disable = false;
-                    this.isInitializing = false;
-                    console.warn(error);
-                }, {rules: this.fixedRules, filterId: this.filterId});
-            }
-            else {
-                this.dropdownValue = [];
-                this.$nextTick(() => {
-                    this.isInitializing = false;
-                    this.disable = false;
-                });
-            }
-
-            this.$emit("setSnippetPrechecked", this.visible && Array.isArray(this.prechecked) && this.prechecked.length);
-        });
+            this.$nextTick(() => {
+                this.isInitializing = false;
+                this.disable = false;
+                this.emitSnippetPrechecked(this.prechecked, this.snippetId, this.visible);
+            });
+        }
     },
     methods: {
         translateKeyWithPlausibilityCheck,
         splitListWithDelimitor,
 
+        /**
+         * Emits the setSnippetPrechecked event.
+         * @param {String[]|String} prechecked The prechecked values.
+         * @param {Number} snippetId The snippet id to emit.
+         * @param {Boolean} visible true if the snippet is visible, false if not.
+         * @returns {void}
+         */
+        emitSnippetPrechecked (prechecked, snippetId, visible) {
+            this.$emit("setSnippetPrechecked", visible && (Array.isArray(prechecked) && prechecked.length || prechecked === "all") ? snippetId : false);
+        },
+        /**
+         * Returns the selected values based on prechecked.
+         * @param {String[]|String} prechecked An array of prechecked values or the "all"-flag to select all.
+         * @param {String[]} dropdownValue All available values.
+         * @param {Boolean} multiselect true if multiselect is activated, false if not.
+         * @returns {String[]} A list of preselected values.
+         */
+        getInitialDropdownSelected (prechecked, dropdownValue, multiselect) {
+            if (!Array.isArray(dropdownValue)) {
+                return [];
+            }
+            else if (Array.isArray(prechecked)) {
+                return this.getPrecheckedExistingInValue(prechecked, dropdownValue);
+            }
+            else if (prechecked === "all" && multiselect) {
+                return [...dropdownValue];
+            }
+            return [];
+        },
+        /**
+         * Returns a list of prechecked values that exists in the given dropdown value.
+         * @param {String[]|String} prechecked An array of prechecked values or the "all"-flag to select all.
+         * @param {String[]} dropdownValue All available values.
+         * @returns {String[]} A list of preselected values that exists in dropdown value.
+         */
+        getPrecheckedExistingInValue (prechecked, dropdownValue) {
+            if (!Array.isArray(prechecked) || !Array.isArray(dropdownValue)) {
+                return false;
+            }
+            const result = [],
+                dropdownValueAssoc = {};
+
+            dropdownValue.forEach(value => {
+                dropdownValueAssoc[value] = true;
+            });
+            prechecked.forEach(value => {
+                if (!Object.prototype.hasOwnProperty.call(dropdownValueAssoc, value)) {
+                    return;
+                }
+                result.push(value);
+            });
+            return result;
+        },
+        /**
+         * Initializes the icons if any.
+         * @returns {void}
+         */
+        initializeIcons () {
+            if (this.renderIcons === "fromLegend") {
+                this.styleModel = getStyleModel(this.layerId);
+
+                if (!this.styleModel || !this.styleModel.getLegendInfos() || !Array.isArray(this.styleModel.getLegendInfos())) {
+                    this.legendsInfo = [];
+                }
+                else {
+                    this.legendsInfo = this.styleModel.getLegendInfos();
+                }
+            }
+            else if (isObject(this.renderIcons)) {
+                this.iconList = this.renderIcons;
+            }
+        },
         /**
          * Returns true if an icon path exists for the given value.
          * @param {String} value the value to check for
@@ -432,12 +523,7 @@ export default {
          * @returns {void}
          */
         selectAll () {
-            this.dropdownSelected = [];
-            for (const item of this.dropdownValue) {
-                if (item) {
-                    this.dropdownSelected.push(item);
-                }
-            }
+            this.dropdownSelected = [...this.dropdownValue];
         },
         /**
          * Deselect all items
@@ -657,7 +743,7 @@ export default {
     @import "~variables";
     .filter-select-box-container .multiselect, .filter-select-box-container .multiselect__input, .filter-select-box-container .multiselect__single {
         font-family: inherit;
-        font-size: 12px;
+        font-size: $font-size-base;
     }
     .filter-select-box-container .multiselect .multiselect__spinner:after, .multiselect__spinner:before {
         position: absolute;
@@ -720,7 +806,7 @@ export default {
     .filter-select-box-container .multiselect .multiselect__tag-icon::after {
         content: "\D7";
         color: $light_grey;
-        font-size: 14px;
+        font-size: $font_size_big;
     }
     .filter-select-box-container .multiselect .multiselect__tag-icon:hover {
         background: $light_blue;
@@ -730,7 +816,7 @@ export default {
         display: inline-block;
         margin-bottom: 0;
         padding-top: 0;
-        font-size: 14px;
+        font-size: $font_size_big;
     }
     .filter-select-box-container .multiselect .multiselect__tag-icon:focus, .multiselect__tag-icon:hover {
         background: $light_grey;
@@ -751,7 +837,7 @@ export default {
     }
     .filter-select-box-container .multiselect .multiselect__tags {
         min-height: 34px;
-        font-size: 12px;
+        font-size: $font-size-base;
         line-height: 1.428571429;
         color: $dark_grey;
         background-color: $white;
