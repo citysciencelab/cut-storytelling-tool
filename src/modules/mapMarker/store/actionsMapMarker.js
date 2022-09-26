@@ -110,43 +110,44 @@ export default {
 
     /**
      * Rotates the point marker in 3D.
-     * @param {Object} param.commit the commit
      * @param {Object} param.rootGetters the rootGetters
      * @param {Number} angle angle to rotate
      * @returns {void}
      */
     rotatePointMarkerIn3D ({rootGetters}, angle) {
-        const clickCartesianCoordinate = rootGetters["Maps/clickCartesianCoordinate"];
+        const clickCartesianCoordinate = rootGetters["Maps/clickCartesianCoordinate"],
+            mapWidth = mapCollection.getMap("3D").getOlMap().getSize()[0],
+            mapHeight = mapCollection.getMap("3D").getOlMap().getSize()[1];
         let pixelOffset;
 
-        mapCollection.getMap("3D").getCesiumScene().drillPick({x: clickCartesianCoordinate[0], y: clickCartesianCoordinate[1]}).forEach((primitiveObject) => {
+        mapCollection.getMap("3D").getCesiumScene().drillPick({x: clickCartesianCoordinate[0], y: clickCartesianCoordinate[1]}, 10, mapWidth, mapHeight).forEach((primitiveObject) => {
             if (primitiveObject?.primitive?.olLayer?.get("id") === "marker_point_layer") {
                 switch (angle) {
                     case 0: {
                         pixelOffset = {
-                            x: 0,
-                            y: -primitiveObject.primitive.height * primitiveObject.primitive.scale / 2
+                            x: ((primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[0] * primitiveObject.primitive.scale) - (((primitiveObject.primitive.width - primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[0]) * primitiveObject.primitive.scale))) / 2,
+                            y: -((primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[1] * primitiveObject.primitive.scale) - (((primitiveObject.primitive.height - primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[1]) * primitiveObject.primitive.scale))) / 2
                         };
                         break;
                     }
                     case 90: {
                         pixelOffset = {
-                            x: primitiveObject.primitive.width * primitiveObject.primitive.scale / 2,
-                            y: 0
+                            x: ((primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[1] * primitiveObject.primitive.scale) - (((primitiveObject.primitive.height - primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[1]) * primitiveObject.primitive.scale))) / 2,
+                            y: ((primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[0] * primitiveObject.primitive.scale) - (((primitiveObject.primitive.width - primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[0]) * primitiveObject.primitive.scale))) / 2
                         };
                         break;
                     }
                     case 180: {
                         pixelOffset = {
-                            x: 0,
-                            y: primitiveObject.primitive.height * primitiveObject.primitive.scale / 2
+                            x: ((primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[0] * primitiveObject.primitive.scale) - (((primitiveObject.primitive.width - primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[0]) * primitiveObject.primitive.scale))) / 2,
+                            y: ((primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[1] * primitiveObject.primitive.scale) - (((primitiveObject.primitive.height - primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[1]) * primitiveObject.primitive.scale))) / 2
                         };
                         break;
                     }
                     case 270: {
                         pixelOffset = {
-                            x: -primitiveObject.primitive.width * primitiveObject.primitive.scale / 2,
-                            y: 0
+                            x: -((primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[1] * primitiveObject.primitive.scale) - (((primitiveObject.primitive.height - primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[1]) * primitiveObject.primitive.scale))) / 2,
+                            y: ((primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[0] * primitiveObject.primitive.scale) - (((primitiveObject.primitive.width - primitiveObject.primitive.olFeature.getStyle().getImage().getAnchor()[0]) * primitiveObject.primitive.scale))) / 2
                         };
                         break;
                     }
