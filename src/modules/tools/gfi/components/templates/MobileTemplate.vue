@@ -136,7 +136,7 @@ export default {
 .modal-header {
     padding: 0 15px;
     button {
-        font-size: 16px;
+        font-size: $font-size-lg;
         padding-top: 13px;
         opacity: 0.6;
     }
@@ -157,7 +157,7 @@ export default {
 .modal-footer {
     color: $dark_grey;
     padding: 0;
-    font-size: 22px;
+    font-size: $font_size_huge;
 
     .pager {
         background-color: $secondary;

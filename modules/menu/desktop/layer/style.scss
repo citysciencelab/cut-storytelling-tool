@@ -8,9 +8,9 @@ ul#tree {
         margin-top: 10px;
         border-top: 1px solid $white;
         padding: 10px 0 10px 5px;
-        font-size: 12px;
+        font-size: $font-size-base;
         .bootstrap-icon {
-            font-size: 15px;
+            font-size: $font-size-lg;
             padding: 0;
         }
         .bi-image {
@@ -30,7 +30,7 @@ ul#tree {
         }
         .badge {
             padding-top: 6px;
-            font-size: 12px;
+            font-size: $font-size-base;
             border-radius: 10px;
             background-color: $dark_grey;
         }

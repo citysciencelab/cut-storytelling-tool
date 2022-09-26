@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import {createZeroTimeObservation, addIndex, processHistoricalDataByWeekdays} from "../../../utils/processHistoricalDataByWeekdays.js";
-import * as moment from "moment";
+import moment from "moment";
 
 describe("src/modules/tools/gfi/components/themes/sensor/utils/processHistoricalDataByWeekdays.js", () => {
     describe("createZeroTimeObservation", function () {

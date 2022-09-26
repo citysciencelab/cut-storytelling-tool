@@ -191,7 +191,7 @@ export default {
         padding: 0 15px;
         border-bottom: 1px solid $light_grey;
         h5 {
-            font-size: 13px;
+            font-size: $font_size_big;
             font-family: $font_family_accent;
             line-height: 17px;
             color: $dark_grey;

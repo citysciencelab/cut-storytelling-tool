@@ -1005,11 +1005,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     showModelInTree: function (modelId) {
         const mode = Radio.request("Map", "getMapMode"),
             lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId}),
-            dropdown = Dropdown.getInstance("#root li:first-child > .dropdown-toggle");
+            dropdownElement = document.querySelector("#searchInputUL"),
+            dropdown = new Dropdown(dropdownElement);
 
         this.closeAllExpandedFolder();
         // open the layerTree
-        // Upgrade to BT5, use JS method instead of class addition
         dropdown.show();
         // Parent and possible siblings are added
         this.addAndExpandModelsRecursive(lightModel.parentId);
@@ -1024,8 +1024,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // für DIPAS Table Ansicht
         if (Radio.request("Util", "getUiStyle") === "TABLE") {
             Radio.request("ModelList", "getModelByAttributes", {id: modelId}).setIsJustAdded(true);
-            // Upgrade to BT5
-            const collapse = Collapse.getInstance($("#table-nav-layers-panel").get(0));
+
+            const collapseElement = document.querySelector("#table-nav-layers-panel"),
+                collapse = new Collapse(collapseElement);
 
             collapse.show();
 

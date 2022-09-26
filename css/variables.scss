@@ -164,11 +164,10 @@ $font_family_accent: "MasterPortalFont Bold", "Arial Narrow Bold", Arial, sans-s
  * $font-size-lg = 15px (based on 12px base font size)
  * for different base-size the font sizes will be different as well, see variables.md
  */
-$font_size_huge: 1rem; //16px should be replaced by font-size-lg
-$font_size_big: 14px;
-$font_size_default: 12px;
-$font_size_small_custom: 11px;
-$font_size_tiny: 10px;
+
+$font_size_big: $font-size-base * 1.167;
+$font_size_huge: $font-size-base * 2;
+$font_size_icon_lg: $font-size-base * 1.33;
 
 $btn-font-size: 1rem;
 

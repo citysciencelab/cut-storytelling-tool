@@ -135,7 +135,7 @@ export default {
                 text-align: center;
                 padding: 20px 0 0;
                 a {
-                    font-size: 12px;
+                    font-size: $font-size-base;
                     &.disabled {
                         background-color: $light_grey;
                     }

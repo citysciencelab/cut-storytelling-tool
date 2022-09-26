@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import moment from "moment";
 
 /**
 * Change the timzone for the phenomenonTime into a target utc.

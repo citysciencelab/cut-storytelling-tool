@@ -12,6 +12,10 @@
 ### Added
 - Draw-Tool:
   - If there are attributes set on the feature of drawn layer, after clicking on the feature, the attributes will be shown in standard gfi theme.
+- The following NPM package has been added:
+    - devDependencies:
+        - @babel/plugin-transform-modules-commonjs: 7.18.6
+- Alerting: attribute "multipleAlert" allows to add single alert or multiple-alert as a list.
 
 ### Changed
 - OAF:
@@ -19,9 +23,17 @@
     - The CRS parameter can be turned off via crs: false. The default crs in the master portal for oaf has been set to http://www.opengis.net/def/crs/EPSG/0/25832.
     - The standard limit will be set to 400.
 - Tools are now always rendered in the window in mobile mode, since the sidebar is currently not usable in mobile mode.
+- More variables for fonts were added to the code (not in addons).
 - Filter:
     - For OAF layer, the standard pagination (limit) will be set to 400.
+    - For snippet dropdown + multiselect: It is now possible to initially select all available values by setting "prechecked" to "all".
 - The image of the default MapMarker has been replaced by the icon [geo-alt-fill](https://icons.getbootstrap.com/icons/geo-alt-fill/) from Bootstrap. This means that the marker can now also be printed locally via the print module.
+- The following NPM packages have been updated:
+    - dependencies:
+        - @masterportal/masterportalapi: 2.6.0 to 2.7.0 (This also raised ol to version 7.1.0 and olcs to 2.13.1)
+        - jsts: 2.9.0 to 2.9.1
+        - @geoblocks/print: 0.7.2 to 0.7.3
+- HighlightFeature is working with AD-Secure services now.
 
 ### Deprecated
 
@@ -31,8 +43,9 @@
 ### Fixed
 - Issue #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
 - Issue #825 The Control layerAttributions remain open when a layer with content is activated until they are explicitly collapsed.
-- Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
 - Issue #826: Tool WFS Search did not work with a parcel.json that had "fluren" with local values. This has been resolved.
+- Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
+- drawTool: circles can be drawn with setting defined again
 
 ---
 ## v2.25.0 - 2022-09-07

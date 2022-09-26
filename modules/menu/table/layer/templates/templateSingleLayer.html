@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<span class="layer-item checkboxicon-left float-start">
+<span class="layer-item col-10">
         <% if (isVisibleInMap === true) { %>
-        <div id="isActivated">
-            <span class="icon-checkbox" title="<%= removeTopicText %>"></span><span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span></span></div>
+            <div id="isActivated">
+                <span class="bootstrap-icon" title="<%= removeTopicText %>"><i class="bi-check2-square mx-2"></i><span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span></span>
+            </div>
         <% } else { %>
-            <span class="icon-checkbox2" title="<%= showTopicText %>"></span><span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span></span>
+            <span class="bootstrap-icon" title="<%= showTopicText %>"><i class="bi-square mx-2"></i><span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span></span>
         <% } %>
 </span>
-<span class="float-end d-flex gap-2">
+<span class="d-flex gap-2 justify-content-end col-2">
     <span class="bootstrap-icon info-icon" title="<%= infosAndLegendText %>"><i class="bi-info-circle-fill"></i></span>
-    <span class="bootstrap-icon settings-icon rotate" title="<%= settingsText %>"><i class="bi-gear"></i></span>
+    <span class="bootstrap-icon settings-icon rotate rotate-icon" title="<%= settingsText %>"><i class="bi-gear"></i></span>
 </span>

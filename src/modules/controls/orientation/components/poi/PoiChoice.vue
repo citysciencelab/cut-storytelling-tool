@@ -174,11 +174,11 @@ export default {
 
     .poi-choice {
         color: $dark_grey;
-        font-size: 14px;
+        font-size: $font_size_big;
         .modal-header {
             padding: 0;
             > .bootstrap-icon {
-                font-size: 16px;
+                font-size: $font_size_icon_lg;
                 padding: 12px;
                 cursor: pointer;
                 &:focus {

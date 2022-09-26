@@ -609,10 +609,9 @@ describe("src/module/tools/filter/components/SnippetDateRange.vue", () => {
             });
             it("should return true if prechecked is valid", () => {
                 wrapper = shallowMount(SnippetDateRange, {localVue, propsData: {
-                    prechecked: ["11.08.2022", "2022/29/08"],
                     format: ["DD.MM.YYYY", "YYYY/DD/MM"]
                 }});
-                expect(wrapper.vm.isPrecheckedValid()).to.be.true;
+                expect(wrapper.vm.isPrecheckedValid(["11.08.2022", "2022/29/08"])).to.be.true;
             });
         });
         describe("getOperator", () => {

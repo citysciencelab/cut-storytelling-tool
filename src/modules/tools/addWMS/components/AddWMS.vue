@@ -378,7 +378,7 @@ export default {
         width: 50%;
     }
     .addwms_error {
-        font-size: 16px;
+        font-size: $font-size-lg;
         color: $light_red;
         margin-bottom: 10px;
     }

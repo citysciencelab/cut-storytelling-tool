@@ -152,6 +152,7 @@ export default {
             }
 
             collectedAlerts.forEach(singleAlert => {
+                singleAlert.multipleAlert = true;
                 this.addSingleAlert(singleAlert);
             });
         },

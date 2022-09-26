@@ -878,7 +878,7 @@ export default {
         margin: 10px 10px 30px 10px;
         z-index: 9999;
         .legend-title-table {
-            font-size: 14px;
+            font-size: $font_size_big;
             color: $white;
             padding: 10px;
             cursor: move;

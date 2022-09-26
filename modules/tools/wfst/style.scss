@@ -15,12 +15,12 @@
         word-break: normal;
         word-wrap: normal;
         white-space: normal;
-        font-size: 12px;
+        font-size: $font-size-base;
 
     }
 
     .record-button > .bootstrap-icon {
-        font-size: 15px;
+        font-size: $font-size-lg;
     }
 
     .record-active {
@@ -99,7 +99,7 @@
 
     .info-sign > .bi-info-circle-fill {
         opacity: 0.8;
-        font-size: 16px;
+        font-size: $font_size_icon_lg;
         padding: 5px;
         color: $secondary_contrast;
         &:focus {
@@ -112,7 +112,7 @@
 
     #wfst-module-infoText {
         display: none;
-        font-size: 12px;
+        font-size: $font-size-base;
         padding: 5px 0;
     }
 
@@ -123,7 +123,7 @@
 
 
     .input-group-sm .input-group-text {
-        font-size: 11px; 
+        font-size: $font-size-sm; 
     }
 
     .datepicker {
@@ -139,7 +139,7 @@
                         background: none;
                         .datepicker-switch {
                             cursor: default;
-                            font-size: 15px;
+                            font-size: $font-size-lg;
                             &:hover {
                                 background: none;							
                             }

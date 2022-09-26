@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as moment from "moment";
+import moment from "moment";
 import xml2json from "../utils/xml2json";
 import getNestedValues from "../../utils/getNestedValues";
 import handleAxiosError from "../utils/handleAxiosError.js";

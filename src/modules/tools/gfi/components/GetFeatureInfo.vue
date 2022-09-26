@@ -270,7 +270,7 @@ export default {
 }
 .gfi-footer {
         color: $dark_grey;
-        font-size: 22px;
+        font-size: $font_size_huge;
          .pager {
             background-color: $secondary;
             padding: 6px;

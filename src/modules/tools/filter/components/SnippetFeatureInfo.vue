@@ -110,6 +110,9 @@ export default {
             this.setGfiAttributes(this.layerId);
         }
     },
+    mounted () {
+        this.$emit("setSnippetPrechecked", false);
+    },
     methods: {
         /**
          * Beautify the keys of an object.
