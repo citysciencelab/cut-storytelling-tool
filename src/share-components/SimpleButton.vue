@@ -1,18 +1,3 @@
-<template>
-    <button
-        class="btn btn-primary"
-        type="button"
-        @click="interaction"
-    >
-        <i
-            v-if="icon !== null"
-            :class="icon"
-            role="img"
-        />
-        {{ $t(text) }}
-    </button>
-</template>
-
 <script>
 export default {
     name: "SimpleButton",
@@ -33,6 +18,21 @@ export default {
     }
 };
 </script>
+
+<template>
+    <button
+        class="btn btn-primary"
+        type="button"
+        @click="interaction"
+    >
+        <i
+            v-if="icon !== null"
+            :class="icon"
+            role="img"
+        />
+        {{ $t(text) }}
+    </button>
+</template>
 
 <style lang="scss" scoped>
 @import "~variables";
