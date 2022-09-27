@@ -36,6 +36,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "~variables";
+@import "~/css/mixins.scss";
 
 .btn {
     display: flex;
@@ -44,10 +45,13 @@ export default {
     i {
         margin-right: 0.5rem;
     }
-    &:focus, &:active, &:hover {
+    &:focus, &:active { /*, &:hover { TODO: Use hover with this rule instead when this component is project wide */
         color: $primary;
         background-color: $white;
         border-color: $primary;
+    }
+    &:hover {
+        @include primary_action_hover;
     }
 }
 </style>
