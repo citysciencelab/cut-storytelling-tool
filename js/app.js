@@ -9,7 +9,6 @@ import StyleList from "../modules/vectorStyle/list";
 import Preparser from "../modules/core/configLoader/preparser";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
-import WFSTransactionModel from "../modules/wfsTransaction/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import featureViaURL from "../src/utils/featureViaURL";
 import SliderView from "../modules/snippets/slider/view";
@@ -41,7 +40,6 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
  */
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import TreeFilterView from "../modules/treeFilter/view";
-import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import SearchbarView from "../modules/searchbar/view";
@@ -134,7 +132,6 @@ async function loadApp () {
 
     app.$mount();
 
-    new WFSTransactionModel();
     new MenuLoader();
 
     if (Object.prototype.hasOwnProperty.call(Config, "featureViaURL")) {
@@ -187,10 +184,6 @@ async function loadApp () {
             }
             case "treeFilter": {
                 new TreeFilterView({model: tool});
-                break;
-            }
-            case "wfst": {
-                new WfstView({model: tool});
                 break;
             }
             case "virtualCity": {

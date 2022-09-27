@@ -1343,7 +1343,6 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "icon" noch d
 [type:wfsFeatureFilter]: # (Portalconfig.menu.tool.wfsFeatureFilter)
 [type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
-[type:wfsTransaction]: # (Portalconfig.menu.tool.wfsTransaction)
 
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 Neben **Portalconfig.menu.tools** können auch die Pfade **Portalconfig.menu.info**, **Portalconfig.menu.simulation** oder **Portalconfig.menu.utilities** verwendet werden.
@@ -1379,8 +1378,7 @@ Neben **Portalconfig.menu.tools** können auch die Pfade **Portalconfig.menu.inf
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |wfsFeatureFilter|nein|**[wfsFeatureFilter](#markdown-header-portalconfigmenutoolwfsFeatureFilter)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt voraus.|false|
 |wfsSearch|nein|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Ermöglicht es ein Formular zu erstellen, um einen WFS Layer abgekoppelt von der Suchleiste mittels Filter anzufragen. Es ist möglich entweder eine gespeicherte Anfrage (Stored Query, WFS@2.0.0) zu nutzen oder eine Anfrage mithilfe der konfigurierten Parameter zu definieren (WFS@1.1.0).|false|
-|wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||_Deprecated in 3.0.0. Bitte Nutzen Sie stattdessen **[wfsTransaction](#markdown-header-portalconfigmenutoolwfstransaction)**._ WFS-T Modul mit dem Features visualisiert, erstellt, aktualisiert und gelöscht werden können.|false|
-|wfsTransaction|nein|**[wfsTransaction](#markdown-header-portalconfigmenutoolwfstransaction)**||WFS-T Modul zur Visualisierung, Erstellung, Veränderung und Löschen von Features eines bestehenden WFS-T Dienstes.|false|
+|wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T Modul zur Visualisierung, Erstellung, Veränderung und Löschen von Features eines bestehenden WFS-T Dienstes.|false|
 |bufferAnalysis|nein|**[bufferAnalysis](#markdown-header-portalconfigmenutoolbufferAnalysis)**||In der Buffer-Analyse muss ein Quell-Layer, ein Buffer-Radius und ein Ziel-Layer ausgewählt werden. Buffer-Radien werden um die Features des Quell-Layers dargestellt. Sobald ein Ziel-Layer gewählt wurde, werden nur die Features dieses Layers hervorgehoben, welche sich außerhalb der Buffer-Radien befinden. Auch eine invertierte Anzeige ist möglich. Bei dieser werden nur die Features des Ziel-Layers innerhalb der Radien hervorgehoben werden. Wenn für das Portal der treeType "custom" gewählt worden ist, werden vom Tool nur die Layer angezeigt, die zur Aktivierungszeit eingeschaltet waren.|false|
 
 ***
@@ -3717,129 +3715,6 @@ Konfiguration für die Vorschläge von Nutzereingaben.
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Das WFS-T Tool bietet die Möglichkeit Features aus Web Feature Services (WFS) in der Oberfläche sowohl zu visualisieren (Get Feature), zu aktualisieren (update) und zu löschen (delete), als auch die Möglichkeit neue Features hizuzufügen (insert).
-Zur Vorbereitung muss ein WFS-T(❗) Service bereitgestellt werden (siehe services.json.de.md).
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|name|ja|String||Name dieses Tools, wie er im Portal angezeigt werden soll.|
-|layerIds|ja|String[]||Array von Layer IDs.|false|
-|toggleLayer|nein|Boolean|false|Flag ob die Features eines Layers beim Hinzufügen eines neuen Features sichtbar bleiben.|
-|layerSelect|nein|String|"aktueller Layer:"|Möglichkeit die Beschriftung der Layer Auswahl zu konfigurieren.|
-|pointButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)[]|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen eines Punktes zur Verfügung steht und welche Beschriftung der Button haben soll.|
-|lineButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)[]|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Linie zur Verfügung steht und welche Beschriftung der Button haben soll.|
-|areaButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)[]|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Fläche zur Verfügung steht und welche Beschriftung der Button haben soll.|
-|edit|nein|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Möglichkeit zu konfigurieren, ob der edit Button angezeigt wird und mit wekcher Beschriftung er angezeigt wird.|
-|delete|nein|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Möglichkeit zu konfigurieren, ob der delete Button angezeigt wird und mit welcher Beschriftung er angezeigt wird.|
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-
-**Beispiel**
-```
-#!json
-{
-    "wfst": {
-        "name": "WFS-T Tool",
-        "icon": "bi-globe",
-        "layerIds": ["1234", "5678"],
-        "toggleLayer": true,
-        "layerSelect": "TestLayer",
-        "pointButton": [
-            {
-                "layerId":"1234",
-                "caption": "Punkt-Test",
-                "show": true
-            },
-            {
-                "layerId": "5678",
-                "show": true
-            }
-        ],
-        "lineButton": false,
-        "areaButton": [
-            {
-                "layerId": "4389",
-                "show": false
-            }
-        ],
-        "edit": "Bearbeiten",
-        "delete": true
-    }
-}
-```
-#### Portalconfig.menu.tool.wfst.Button
-
-Das Attribut pointButton/lineButton/areaButton kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob die Funktion zum Erfassen einer Geometrie für alle Layer zur Verfügung stehen soll. Ist es vom Typ Object so gelten folgende Attribute:
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|layerId|ja|String||Der Layer für den die Konfiguration vorgenommen werden soll|false|
-|show|ja|Boolean|true|Flag ob der Button zur Verfügung stehen soll.|false|
-|caption|nein|String|"Erfassen"|Beschriftung des Buttons. Der Default-Wert wird im Admintool genutzt. Falls hier kein Wert gegeben wird, benutzt das Masterportal je nach Umstand "Punkt erfassen", "Linie erfassen", oder "Fläche erfassen".|false|
-
-
-**Beispiel als Boolean**
-
-```json
-{
-    "pointButton": true
-}
-```
-
-**Beispiel als Object**
-
-```json
-{
-    "layerId": "1234",
-    "show": true,
-    "caption": "Punkt-Test"
-}
-```
-
-```json
-{
-    "layerId": "5678",
-    "show": true
-}
-```
-
-```json
-{
-    "layerId": "5489",
-    "show": false
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.wfst.EditDelete
-
-Das Attribut edit / delete kann vom Typ Boolean oder String sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob der Editier-/ Lösch-Button zur Verfügung stehen soll. Ist es vom Typ String so wird der Button mit der dort angegebenen Beschriftung angezeigt.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|edit|ja|Boolean|true|Flag ob der Editier-Button angezeigt werden soll|false|
-|edit|ja|String|"Geometrie bearbeiten"|Beschriftung des Editier-Buttons|false|
-|delete|ja|Boolean|true|Flag ob der Lösch-Button angezeigt werden soll|false|
-|delete|ja|String|"Geometrie löschen"|Beschriftung des lösch-Buttons|false|
-
-**Beispiel als Boolean**
-```
-#!json
-"edit": true
-```
-
-**Beispiel als String**
-```
-#!json
-"edit": "Editieren"
-```
-
-***
-
-#### Portalconfig.menu.tool.wfsTransaction
-
-[inherits]: # (Portalconfig.menu.tool)
-
 WFS-T Modul zur Visualisierung (*GetFeature*), Erstellung (*insert*), Veränderung (*update*) und Löschen (*delete*) von Features eines bestehenden Web Feature Service (*WFS*), welcher Transaktionen entgegennehmen kann.
 Zur Nutzung dieses Moduls muss ein WFS-T Layer bereitgestellt werden. Bitte beachten Sie **[services.json](services.json.md)** für weitere Konfigurationsinformationen.
 
@@ -3865,7 +3740,7 @@ Beim Bearbeiten eines Features / Hinzufügen von Attributen zu einem neuen Featu
 
 ```json
 {
-    "wfsTransaction": {
+    "wfst": {
         "name": "WFS-T Tool",
         "icon": "bi-globe",
         "layerIds": ["1234", "5678", "4389"],
@@ -3901,7 +3776,7 @@ Beim Bearbeiten eines Features / Hinzufügen von Attributen zu einem neuen Featu
 
 ***
 
-#### Portalconfig.menu.tool.wfsTransaction.TransactionConfig
+#### Portalconfig.menu.tool.wfst.TransactionConfig
 
 Konfiguration der verschiedenen Transaktionsmethoden für den entsprechenden Layer.
 

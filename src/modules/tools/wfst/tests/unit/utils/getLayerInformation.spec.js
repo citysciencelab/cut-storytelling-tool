@@ -77,7 +77,7 @@ const relevantKeys = ["featureNS", "featurePrefix", "featureType", "gfiAttribute
         zIndex: undefined
     };
 
-describe("src/modules/tools/wfsTransaction/utils/getLayerInformation.js", () => {
+describe("src/modules/tools/wfst/utils/getLayerInformation.js", () => {
     const requestFake = sinon.fake.returns(exampleLayer);
 
     beforeEach(() => {

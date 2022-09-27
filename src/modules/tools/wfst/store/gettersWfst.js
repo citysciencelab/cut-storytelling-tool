@@ -1,6 +1,6 @@
 import Feature from "ol/Feature";
-import initialState from "./stateWfsTransaction";
-import {defaultInteractionConfig} from "../constantsWfsTransaction";
+import initialState from "./stateWfst";
+import {defaultInteractionConfig} from "../constantsWfst";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import deepCopy from "../../../../utils/deepCopy";
 

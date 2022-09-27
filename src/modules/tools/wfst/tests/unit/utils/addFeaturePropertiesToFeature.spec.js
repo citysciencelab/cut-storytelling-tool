@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import addFeaturePropertiesToFeature from "../../../utils/addFeaturePropertiesToFeature";
 
-describe("src/modules/tools/wfsTransaction/utils/addFeaturePropertiesToFeature.js", () => {
+describe("src/modules/tools/wfst/utils/addFeaturePropertiesToFeature.js", () => {
     const geometryObject = {
             id: "unique",
             geometryName: "special",

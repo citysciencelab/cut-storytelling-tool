@@ -520,11 +520,6 @@
  */
 
 /**
- * @namespace WfsTransaction
- * @description Serves transactional WFS (WFS-T).
- */
-
-/**
  * @namespace Window
  * @description Creates a window to show different content.
  */

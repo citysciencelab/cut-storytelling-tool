@@ -1400,7 +1400,6 @@ A folder object defined by a name, icon, and its children.
 [type:wfsFeatureFilter]: # (Portalconfig.menu.tool.wfsFeatureFilter)
 [type:wfsSearch]: # (Portalconfig.menu.tool.wfsSearch)
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
-[type:wfsTransaction]: # (Portalconfig.menu.tool.wfsTransaction)
 
 
 List of all configurable tools. Each tool inherits the properties of **[tool](#markdown-header-portalconfigmenutool)** and can (or must, respectively) provide the defined attributes as mentioned in that definition.
@@ -1438,8 +1437,7 @@ Alternatively, also the paths **Portalconfig.menu.info**, **Portalconfig.menu.si
 |virtualcity|no|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||*virtualcityPLANNER* planning viewer|false|
 |wfsFeatureFilter|no|**[wfsFeatureFilter](#markdown-header-portalconfigmenutoolwfsFeatureFilter)**||_Deprecated in 3.0.0. Please use `filter` instead._ Filters WFS features. This required configuring `"filterOptions"` on the WFS layer object.|false|
 |wfsSearch|no|**[wfsSearch](#markdown-header-portalconfigmenutoolwfssearch)**||Makes it possible to create a form to query WFS layers using filters. It is possible to either use a stored query (WFS@2.0.0) or define the query using the defined parameters (WFS@1.1.0).|false|
-|wfst|no|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||_Deprecated in 3.0.0. Please use **[wfsTransaction](#markdown-header-portalconfigmenutoolwfstransaction)** instead._ WFS-T module to visualize, create, update, and delete features.|false|
-|wfsTransaction|no|**[wfsTransaction](#markdown-header-portalconfigmenutoolwfstransaction)**||WFS-T module to visualize, create, update and delete features.|false|
+|wfst|no|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T module to visualize, create, update and delete features.|false|
 
 ***
 
@@ -3775,130 +3773,6 @@ Configuration for the suggestions of the user input.
 
 [inherits]: # (Portalconfig.menu.tool)
 
-WFS-T module to visualize (*GetFeature*), create (*insert*), update (*update*), and delete (*delete*) features of a Web Feature Service (*WFS*). To use this tool, a WFS-T(❗) layer must be provided. See `services.json.md`.
-
-|Name|Required|Type|Default|Description|
-|----|--------|----|-------|-----------|
-|name|yes|String||Tool name shown in the portal.|
-|layerIds|yes|String[]||Array of layer ids.|false|
-|toggleLayer|no|Boolean|false|Whether layer feature stay visible when adding a new feature.|
-|layerSelect|no|String|"aktueller Layer:"|Option to change the layer selection label.|
-|pointButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating points and what label the button should have.|
-|lineButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating lines and what label the button should have.|
-|areaButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating areas and what label the button should have.|
-|edit|no|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Whether the edit button should be shown, and if, with which label.|
-|delete|no|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Whether the delete button should be shown, and if, with which label.|
-
-**Example**
-
-```json
-{
-    "wfst": {
-        "name": "WFS-T Tool",
-        "icon": "bi-globe",
-        "layerIds": ["1234", "5678"],
-        "toggleLayer": true,
-        "layerSelect": "TestLayer",
-        "pointButton": [
-            {
-                "layerId":"1234",
-                "caption": "Point test",
-                "show": true
-            },
-            {
-                "layerId": "5678",
-                "show": true
-            }
-        ],
-        "lineButton": false,
-        "areaButton": [
-            {
-                "layerId": "4389",
-                "show": false
-            }
-        ],
-        "edit": "Edit",
-        "delete": true
-    }
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.wfst.Button
-
-The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or object. When of type boolean, it decides whether the create function is available to all layers. Else, the following attributes may be provided:
-
-|Name|Required|Type|Default|Description|Expert|
-|----|--------|----|-------|-----------|------|
-|layerId|yes|String||Layer to be configured.|false|
-|show|yes|Boolean|true|Whether the button is available.|false|
-|caption|no|String|"Erfassen"|Button text. If no value is given, the Masterportal will use, depending on the type of button, "Punkt erfassen", "Linie erfassen", or "Fläche erfassen".|false|
-
-**Examples**
-
-```json
-{
-    "pointButton": true
-}
-```
-
-```
-#!json
-{
-    "layerId": "1234",
-    "show": true,
-    "caption": "Point test"
-}
-```
-
-```json
-{
-    "layerId": "5678",
-    "show": true
-}
-```
-
-```json
-{
-    "layerId": "5489",
-    "show": false
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.wfst.EditDelete
-
-The attributes `edit` and `delete` may be of type boolean or string. If of type boolean, it indicates whether the respective function is available. When of type string, it is offered with the string as its label.
-
-|Name|Required|Type|Default|Description|Expert|
-|----|--------|----|-------|-----------|------|
-|edit|yes|Boolean|true|Whether to show the edit button.|false|
-|edit|yes|String|"Geometrie bearbeiten"|Edit button label.|false|
-|delete|yes|Boolean|true|Whether to show the delete button.|false|
-|delete|yes|String|"Geometrie löschen"|Delete button label.|false|
-
-**Examples**
-
-```json
-{
-    "edit": true
-}
-```
-
-```json
-{
-    "edit": "Editieren"
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.wfsTransaction
-
-[inherits]: # (Portalconfig.menu.tool)
-
 WFS-T module to visualize (*GetFeature*), create (*insert*), update (*update*) and delete (*delete*) features of a Web Feature Service (*WFS*) which is able to receive transactions.
 To use this tool, a WFS-T layer must be provided. For more configuration information see **[services.json](services.json.md)**.
 
@@ -3924,7 +3798,7 @@ When editing properties of a feature / adding properties to a new features, the 
 
 ```json
 {
-    "wfsTransaction": {
+    "wfst": {
         "name": "WFS-T Tool",
         "icon": "bi-globe",
         "layerIds": ["1234", "5678", "4389"],
@@ -3960,7 +3834,7 @@ When editing properties of a feature / adding properties to a new features, the 
 
 ***
 
-#### Portalconfig.menu.tool.wfsTransaction.TransactionConfig
+#### Portalconfig.menu.tool.wfst.TransactionConfig
 
 Specific configuration for transaction methods of given layers.
 

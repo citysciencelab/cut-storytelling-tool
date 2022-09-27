@@ -1,7 +1,7 @@
 import axios from "axios";
 import {Draw, Modify, Select, Translate} from "ol/interaction";
 import {platformModifierKeyOnly, primaryAction} from "ol/events/condition";
-import {exceptionCodes} from "../constantsWfsTransaction";
+import {exceptionCodes} from "../constantsWfst";
 import addFeaturePropertiesToFeature from "../utils/addFeaturePropertiesToFeature";
 import getLayerInformation from "../utils/getLayerInformation";
 import prepareFeatureProperties from "../utils/prepareFeatureProperties";

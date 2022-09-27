@@ -60,7 +60,7 @@
  * @property {("LineString"|"Point"|"Polygon"|"delete"|"updated"|"selectedUpdate"|null)} selectedInteraction Which selection is currently active, if any.
  */
 const state = {
-    id: "wfsTransaction",
+    id: "wfst",
     // General configuration
     active: false,
     deactivateGFI: true,

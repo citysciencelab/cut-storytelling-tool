@@ -6,10 +6,10 @@ import getComponent from "../../../../utils/getComponent";
 import SimpleButton from "../../../../share-components/SimpleButton.vue";
 
 export default {
-    name: "WfsTransaction",
+    name: "Wfst",
     components: {SimpleButton, ToolTemplate},
     computed: {
-        ...mapGetters("Tools/WfsTransaction", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "layerSelectDisabled", "layerSelectLabel", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"])
+        ...mapGetters("Tools/Wfst", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "layerSelectDisabled", "layerSelectLabel", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"])
     },
     watch: {
         active (val) {
@@ -38,8 +38,8 @@ export default {
         });
     },
     methods: {
-        ...mapMutations("Tools/WfsTransaction", ["setCurrentLayerIndex", "setLayerInformation"]),
-        ...mapActions("Tools/WfsTransaction", ["prepareInteraction", "reset", "save", "setActive", "setFeatureProperty", "setFeatureProperties"]),
+        ...mapMutations("Tools/Wfst", ["setCurrentLayerIndex", "setLayerInformation"]),
+        ...mapActions("Tools/Wfst", ["prepareInteraction", "reset", "save", "setActive", "setFeatureProperty", "setFeatureProperties"]),
         close () {
             this.setActive(false);
             const model = getComponent(this.id);

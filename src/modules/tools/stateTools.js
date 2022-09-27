@@ -21,7 +21,7 @@ import Shadow from "./shadowTool/components/ShadowTool.vue";
 import StyleVT from "./styleVT/components/StyleVT.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import WfsSearch from "./wfsSearch/components/WfsSearch.vue";
-import WfsTransaction from "./wfsTransaction/components/WfsTransaction.vue";
+import Wfst from "./wfst/components/Wfst.vue";
 
 /**
  * User type definition
@@ -54,7 +54,7 @@ const state = {
         styleVT: StyleVT,
         supplyCoord: SupplyCoord,
         wfsSearch: WfsSearch,
-        wfsTransaction: WfsTransaction
+        wfst: Wfst
     },
     configuredTools: []
 };

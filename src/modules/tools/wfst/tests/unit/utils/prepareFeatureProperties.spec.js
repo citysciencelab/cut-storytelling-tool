@@ -54,7 +54,7 @@ const exampleLayerInformation = {
         }
     ];
 
-describe("src/modules/tools/wfsTransaction/utils/prepareFeatureProperties.js", () => {
+describe("src/modules/tools/wfst/utils/prepareFeatureProperties.js", () => {
     beforeEach(() => {
         sinon.stub(receivePossibleProperties, "default").callsFake(() => exampleProperties);
     });

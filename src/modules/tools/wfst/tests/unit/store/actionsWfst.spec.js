@@ -4,9 +4,9 @@ import sinon from "sinon";
 import * as getLayerInformation from "../../../utils/getLayerInformation";
 import * as prepareFeatureProperties from "../../../utils/prepareFeatureProperties";
 import * as writeTransaction from "../../../utils/writeTransaction";
-import actionsWfsTransaction from "../../../store/actionsWfsTransaction";
+import actionsWfst from "../../../store/actionsWfst";
 
-describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () => {
+describe("src/modules/tools/wfst/store/actionsWfst.js", () => {
     let commit,
         dispatch,
         getters,
@@ -20,7 +20,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
 
     describe("clearInteractions", () => {
         it("should remove all interactions as well as the draw layer", () => {
-            actionsWfsTransaction.clearInteractions({commit, dispatch});
+            actionsWfst.clearInteractions({commit, dispatch});
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args.length).to.equal(3);
@@ -59,7 +59,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
         });
 
         it("should reset all values to its default state", () => {
-            actionsWfsTransaction.reset({commit, dispatch, getters, rootGetters});
+            actionsWfst.reset({commit, dispatch, getters, rootGetters});
 
             expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);
@@ -75,7 +75,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
         it("should reset all values to its default state and activate the current layer if it was previously unselected", () => {
             getters.featureProperties = [{symbol: featurePropertiesSymbol}];
 
-            actionsWfsTransaction.reset({commit, dispatch, getters, rootGetters});
+            actionsWfst.reset({commit, dispatch, getters, rootGetters});
 
             expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);
@@ -144,7 +144,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
                 "  </wfs:InsertResults>\n" +
                 "</wfs:TransactionResponse>";
 
-            actionsWfsTransaction.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
+            actionsWfst.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
                 .then(() => {
                     expect(axiosStub.calledOnce).to.be.true;
                     expect(axiosStub.firstCall.args.length).to.equal(3);
@@ -187,7 +187,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
                 "  </wfs:TransactionSummary>\n" +
                 "</wfs:TransactionResponse>";
 
-            actionsWfsTransaction.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
+            actionsWfst.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
                 .then(() => {
                     expect(axiosStub.calledOnce).to.be.true;
                     expect(axiosStub.firstCall.args.length).to.equal(3);
@@ -230,7 +230,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
                 "  </wfs:TransactionSummary>\n" +
                 "</wfs:TransactionResponse>";
 
-            actionsWfsTransaction.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
+            actionsWfst.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
                 .then(() => {
                     expect(axiosStub.calledOnce).to.be.true;
                     expect(axiosStub.firstCall.args.length).to.equal(3);
@@ -270,7 +270,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
                 "  </ows:Exception>\n" +
                 "</ows:ExceptionReport>";
 
-            actionsWfsTransaction.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
+            actionsWfst.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
                 .then(() => {
                     expect(axiosStub.calledOnce).to.be.true;
                     expect(axiosStub.firstCall.args.length).to.equal(3);
@@ -310,7 +310,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
                 "  </ows:Exception>\n" +
                 "</ows:ExceptionReport>";
 
-            actionsWfsTransaction.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
+            actionsWfst.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
                 .then(() => {
                     expect(axiosStub.calledOnce).to.be.true;
                     expect(axiosStub.firstCall.args.length).to.equal(3);
@@ -351,7 +351,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
                 "  <ows:Exception exceptionCode=\"InvalidParameterValue\">\n" +
                 "  </ows:Exception>\n" +
                 "</ows:ExceptionReport>";
-            actionsWfsTransaction.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
+            actionsWfst.sendTransaction({dispatch, getters, rootGetters}, featureSymbol)
                 .then(() => {
                     expect(axiosStub.calledOnce).to.be.true;
                     expect(axiosStub.firstCall.args.length).to.equal(3);
@@ -400,7 +400,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
         });
 
         it("should add the relevant values to the store and dispatch setFeatureProperties if active is true", () => {
-            actionsWfsTransaction.setActive({commit, dispatch, getters}, true);
+            actionsWfst.setActive({commit, dispatch, getters}, true);
 
             expect(commit.calledThrice).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);
@@ -417,7 +417,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
             expect(dispatch.firstCall.args[0]).to.equal("setFeatureProperties");
         });
         it("should dispatch reset if active is false", () => {
-            actionsWfsTransaction.setActive({commit, dispatch, getters}, false);
+            actionsWfst.setActive({commit, dispatch, getters}, false);
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);
@@ -440,7 +440,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
         });
 
         it("should commit the property if the type is fitting to the value", () => {
-            actionsWfsTransaction.setFeatureProperty({commit, dispatch}, featureProperty);
+            actionsWfst.setFeatureProperty({commit, dispatch}, featureProperty);
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);
@@ -451,7 +451,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
         it("should dispatch an alert if the type is a number but the converted value is not", () => {
             featureProperty.value = "noNumber";
 
-            actionsWfsTransaction.setFeatureProperty({commit, dispatch}, featureProperty);
+            actionsWfst.setFeatureProperty({commit, dispatch}, featureProperty);
 
             expect(commit.notCalled).to.be.true;
             expect(dispatch.calledOnce).to.be.true;
@@ -482,7 +482,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
             getters.layerInformation[0].featurePrefix = "pre";
             getters.layerInformation[0].isSelected = true;
 
-            await actionsWfsTransaction.setFeatureProperties({commit, getters});
+            await actionsWfst.setFeatureProperties({commit, getters});
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);
@@ -492,7 +492,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
         it("should commit an error message if no layer is currently selected", async () => {
             getters.currentLayerIndex = -1;
 
-            await actionsWfsTransaction.setFeatureProperties({commit, getters});
+            await actionsWfst.setFeatureProperties({commit, getters});
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);
@@ -501,7 +501,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
             expect(prepareFeaturePropertiesSpy.notCalled).to.be.true;
         });
         it("should commit an error message if the currently selected layer has no featurePrefix configured", async () => {
-            await actionsWfsTransaction.setFeatureProperties({commit, getters});
+            await actionsWfst.setFeatureProperties({commit, getters});
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);
@@ -513,7 +513,7 @@ describe("src/modules/tools/wfsTransaction/store/actionsWfsTransaction.js", () =
             getters.layerInformation[0].featurePrefix = "pre";
             getters.layerInformation[0].isSelected = false;
 
-            await actionsWfsTransaction.setFeatureProperties({commit, getters});
+            await actionsWfst.setFeatureProperties({commit, getters});
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args.length).to.equal(2);

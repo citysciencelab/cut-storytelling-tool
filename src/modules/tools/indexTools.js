@@ -29,7 +29,7 @@ import Shadow from "./shadowTool/store/indexShadowTool";
 import StyleVT from "./styleVT/store/indexStyleVT";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 import WfsSearch from "./wfsSearch/store/indexWfsSearch";
-import WfsTransaction from "./wfsTransaction/store/indexWfsTransaction";
+import Wfst from "./wfst/store/indexWfst";
 
 /**
  * This is here to test app-store/utils/composeModules.
@@ -61,7 +61,7 @@ export default {
         StyleVT,
         SupplyCoord,
         WfsSearch,
-        WfsTransaction
+        Wfst
     },
     state,
     getters,

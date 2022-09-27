@@ -59,7 +59,7 @@ const exampleDescribeFeatureType = "<?xml version='1.0' encoding='UTF-8'?>\n" +
     ];
 
 
-describe("src/modules/tools/wfsTransaction/utils/parseDescribeFeatureTypeResponse.js", () => {
+describe("src/modules/tools/wfst/utils/parseDescribeFeatureTypeResponse.js", () => {
     let featureType;
 
     it("should retrieve the element values (required, type, key) from the parsed XML string if an element with name = featureType can be found in the XML", () => {

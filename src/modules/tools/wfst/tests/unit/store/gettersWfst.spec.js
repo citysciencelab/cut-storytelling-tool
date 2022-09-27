@@ -1,10 +1,10 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import Feature from "ol/Feature";
-import {defaultInteractionConfig} from "../../../constantsWfsTransaction";
-import gettersWfsTransaction from "../../../store/gettersWfsTransaction";
+import {defaultInteractionConfig} from "../../../constantsWfst";
+import gettersWfst from "../../../store/gettersWfst";
 
-describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () => {
+describe("src/modules/tools/wfst/store/gettersWfst.js", () => {
     let state;
 
     describe("currentInteractionConfig", () => {
@@ -28,7 +28,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
         it("should return a parsed configuration for areaButton if both areaButton and polygonButton are configured", () => {
             state.areaButton = [basicGeometryConfig];
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.calledOnce).to.be.true;
             expect(consoleSpy.firstCall.args.length).to.equal(1);
@@ -45,7 +45,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
         it("should return a parsed configuration for lineButton, if configured", () => {
             state.lineButton = [basicGeometryConfig];
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.notCalled).to.be.true;
             expect(interactionConfig.LineString.available).to.be.true;
@@ -60,7 +60,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
         it("should return a parsed configuration for pointButton, if configured", () => {
             state.pointButton = [basicGeometryConfig];
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.notCalled).to.be.true;
             expect(interactionConfig.Point.available).to.be.true;
@@ -80,7 +80,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
                 text: "My WFS-T"
             }];
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.notCalled).to.be.true;
             expect(interactionConfig.update.available).to.be.true;
@@ -92,13 +92,13 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
             expect(interactionConfig.delete).to.eql(defaultInteractionConfig.delete);
         });
         it("should return the default configuration if nothing at all is configured for the respective interaction", () => {
-            expect(gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId})).to.eql(defaultInteractionConfig);
+            expect(gettersWfst.currentInteractionConfig(state, {currentLayerId})).to.eql(defaultInteractionConfig);
             expect(consoleSpy.notCalled).to.be.true;
         });
         it("should return a parsed configuration for edit with the parameter being a boolean", () => {
             state.edit = true;
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.calledOnce).to.be.true;
             expect(consoleSpy.firstCall.args.length).to.equal(1);
@@ -114,7 +114,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
         it("should return a parsed configuration for edit with the parameter being a string", () => {
             state.edit = "My WFS-T";
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.calledOnce).to.be.true;
             expect(consoleSpy.firstCall.args.length).to.equal(1);
@@ -136,7 +136,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
                 text: "My WFS-T"
             }];
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.calledTwice).to.be.true;
             expect(consoleSpy.firstCall.args.length).to.equal(1);
@@ -154,7 +154,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
         it("should return a parsed configuration if the respective interaction configuration is a string", () => {
             state.lineButton = "My WFS-T";
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.calledOnce).to.be.true;
             expect(consoleSpy.firstCall.args.length).to.equal(1);
@@ -171,7 +171,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
         it("should return a parsed configuration if the respective interaction configuration is a boolean", () => {
             state.lineButton = true;
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.notCalled).to.be.true;
             expect(interactionConfig.LineString.available).to.be.true;
@@ -191,7 +191,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
                 text: "My WFS-T"
             }];
 
-            expect(gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId})).to.eql(defaultInteractionConfig);
+            expect(gettersWfst.currentInteractionConfig(state, {currentLayerId})).to.eql(defaultInteractionConfig);
             expect(consoleSpy.notCalled).to.be.true;
         });
         it("should return a parsed configuration utilising show instead of available, if show is given", () => {
@@ -202,7 +202,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
                 text: "My WFS-T"
             }];
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.calledOnce).to.be.true;
             expect(consoleSpy.firstCall.args.length).to.equal(1);
@@ -223,7 +223,7 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
                 caption: "My WFS-T"
             }];
 
-            const interactionConfig = gettersWfsTransaction.currentInteractionConfig(state, {currentLayerId});
+            const interactionConfig = gettersWfst.currentInteractionConfig(state, {currentLayerId});
 
             expect(consoleSpy.calledOnce).to.be.true;
             expect(consoleSpy.firstCall.args.length).to.equal(1);
@@ -262,15 +262,15 @@ describe("src/modules/tools/wfsTransaction/store/gettersWfsTransaction.js", () =
         it("should return an error message indicating that no feature has been drawn if the feature given to the getter is not an ol/Feature", () => {
             feature = "somethingDifferent";
 
-            expect(gettersWfsTransaction.savingErrorMessage(state)(feature)).to.equal("modules.tools.wfsTransaction.error.noFeature");
+            expect(gettersWfst.savingErrorMessage(state)(feature)).to.equal("modules.tools.wfsTransaction.error.noFeature");
         });
         it("should return an error message indicating that at least one required property has not received a value", () => {
-            expect(gettersWfsTransaction.savingErrorMessage(state)(feature)).to.equal("modules.tools.wfsTransaction.error.requiredPropertiesNotSet");
+            expect(gettersWfst.savingErrorMessage(state)(feature)).to.equal("modules.tools.wfsTransaction.error.requiredPropertiesNotSet");
         });
         it("should return an empty string if the feature given to the getter is not undefined and all required properties have received a value", () => {
             state.featureProperties[0].value = 42;
 
-            expect(gettersWfsTransaction.savingErrorMessage(state)(feature)).to.equal("");
+            expect(gettersWfst.savingErrorMessage(state)(feature)).to.equal("");
         });
     });
 });

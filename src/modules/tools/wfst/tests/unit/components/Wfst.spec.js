@@ -2,8 +2,8 @@ import Vuex from "vuex";
 import {config, mount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import sinon from "sinon";
-import WfsTransaction from "../../../components/WfsTransaction.vue";
-import WfsTransactionModule from "../../../store/indexWfsTransaction";
+import Wfst from "../../../components/Wfst.vue";
+import WfstModule from "../../../store/indexWfst";
 import * as prepareFeatureProperties from "../../../utils/prepareFeatureProperties";
 
 const localVue = createLocalVue();
@@ -11,7 +11,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("src/modules/tools/wfsTransaction/components/WfsTransaction.vue", () => {
+describe("src/modules/tools/wfst/components/Wfst.vue", () => {
     const layerIds = ["wfstOne", "wfstTwo"],
         exampleLayerOne = {
             get: key => exampleLayerOne[key],
@@ -77,7 +77,7 @@ describe("src/modules/tools/wfsTransaction/components/WfsTransaction.vue", () =>
                 Tools: {
                     namespaced: true,
                     modules: {
-                        WfsTransaction: WfsTransactionModule
+                        Wfst: WfstModule
                     }
                 }
             },
@@ -94,8 +94,8 @@ describe("src/modules/tools/wfsTransaction/components/WfsTransaction.vue", () =>
 
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[0]}).returns(exampleLayerOne);
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
-        store.dispatch("Tools/WfsTransaction/setActive", true).then(() => {
-            wrapper = mount(WfsTransaction, {
+        store.dispatch("Tools/Wfst/setActive", true).then(() => {
+            wrapper = mount(Wfst, {
                 localVue,
                 store
             });
@@ -108,9 +108,9 @@ describe("src/modules/tools/wfsTransaction/components/WfsTransaction.vue", () =>
 
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[0]}).returns(exampleLayerOne);
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
-        store.commit("Tools/WfsTransaction/setLayerIds", layerIds);
-        store.dispatch("Tools/WfsTransaction/setActive", true).then(() => {
-            wrapper = mount(WfsTransaction, {
+        store.commit("Tools/Wfst/setLayerIds", layerIds);
+        store.dispatch("Tools/Wfst/setActive", true).then(() => {
+            wrapper = mount(Wfst, {
                 localVue,
                 store
             });
@@ -132,9 +132,9 @@ describe("src/modules/tools/wfsTransaction/components/WfsTransaction.vue", () =>
         exampleLayerOne.isSelected = false;
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[0]}).returns(exampleLayerOne);
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
-        store.commit("Tools/WfsTransaction/setLayerIds", layerIds);
-        store.dispatch("Tools/WfsTransaction/setActive", true).then(() => {
-            wrapper = mount(WfsTransaction, {
+        store.commit("Tools/Wfst/setLayerIds", layerIds);
+        store.dispatch("Tools/Wfst/setActive", true).then(() => {
+            wrapper = mount(Wfst, {
                 localVue,
                 store
             });
@@ -149,14 +149,14 @@ describe("src/modules/tools/wfsTransaction/components/WfsTransaction.vue", () =>
         exampleLayerOne.isSelected = true;
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[0]}).returns(exampleLayerOne);
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
-        store.commit("Tools/WfsTransaction/setLayerIds", layerIds);
-        store.dispatch("Tools/WfsTransaction/setActive", true)
+        store.commit("Tools/Wfst/setLayerIds", layerIds);
+        store.dispatch("Tools/Wfst/setActive", true)
             .then(() => {
-                store.commit("Tools/WfsTransaction/setLayerInformation", [{...exampleLayerOne, isSelected: false}, exampleLayerTwo]);
-                return store.dispatch("Tools/WfsTransaction/setFeatureProperties");
+                store.commit("Tools/Wfst/setLayerInformation", [{...exampleLayerOne, isSelected: false}, exampleLayerTwo]);
+                return store.dispatch("Tools/Wfst/setFeatureProperties");
             })
             .then(() => {
-                wrapper = mount(WfsTransaction, {
+                wrapper = mount(Wfst, {
                     localVue,
                     store
                 });
@@ -172,9 +172,9 @@ describe("src/modules/tools/wfsTransaction/components/WfsTransaction.vue", () =>
         delete exampleLayerOne.featurePrefix;
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[0]}).returns(exampleLayerOne);
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
-        store.commit("Tools/WfsTransaction/setLayerIds", layerIds);
-        store.dispatch("Tools/WfsTransaction/setActive", true).then(() => {
-            wrapper = mount(WfsTransaction, {
+        store.commit("Tools/Wfst/setLayerIds", layerIds);
+        store.dispatch("Tools/Wfst/setActive", true).then(() => {
+            wrapper = mount(Wfst, {
                 localVue,
                 store
             });
@@ -190,13 +190,13 @@ describe("src/modules/tools/wfsTransaction/components/WfsTransaction.vue", () =>
         exampleLayerOne.featurePrefix = "app";
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[0]}).returns(exampleLayerOne);
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
-        store.commit("Tools/WfsTransaction/setLineButton", [{
+        store.commit("Tools/Wfst/setLineButton", [{
             layerId: exampleLayerOne.id,
             available: true
         }]);
-        store.commit("Tools/WfsTransaction/setLayerIds", layerIds);
-        store.dispatch("Tools/WfsTransaction/setActive", true).then(() => {
-            wrapper = mount(WfsTransaction, {
+        store.commit("Tools/Wfst/setLayerIds", layerIds);
+        store.dispatch("Tools/Wfst/setActive", true).then(() => {
+            wrapper = mount(Wfst, {
                 localVue,
                 store
             });
@@ -210,14 +210,14 @@ describe("src/modules/tools/wfsTransaction/components/WfsTransaction.vue", () =>
         exampleLayerOne.isSelected = true;
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[0]}).returns(exampleLayerOne);
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
-        store.commit("Tools/WfsTransaction/setLineButton", [{
+        store.commit("Tools/Wfst/setLineButton", [{
             layerId: exampleLayerOne.id,
             available: true
         }]);
-        store.commit("Tools/WfsTransaction/setSelectedInteraction", "insert");
-        store.commit("Tools/WfsTransaction/setLayerIds", layerIds);
-        store.dispatch("Tools/WfsTransaction/setActive", true).then(() => {
-            wrapper = mount(WfsTransaction, {
+        store.commit("Tools/Wfst/setSelectedInteraction", "insert");
+        store.commit("Tools/Wfst/setLayerIds", layerIds);
+        store.dispatch("Tools/Wfst/setActive", true).then(() => {
+            wrapper = mount(Wfst, {
                 localVue,
                 store
             });
