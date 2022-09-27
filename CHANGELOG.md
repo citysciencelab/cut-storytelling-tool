@@ -48,6 +48,7 @@
 - Issue #829: xml2json parser (used in meta data context) broke on valid XML. It has been extended for the unattended cases.
 - Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
 - drawTool: circles can be drawn with setting defined again
+- Issue #835: small quickHelp issue has been fixed (showed topic 3 again instead of 5).
 
 ---
 ## v2.25.0 - 2022-09-07

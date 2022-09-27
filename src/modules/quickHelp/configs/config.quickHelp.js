@@ -105,7 +105,7 @@ const configQuickHelp = {
                 title: "common:modules.quickHelp.topicTree.selection",
                 list: [
                     {
-                        text: "common:modules.quickHelp.topicTree.topicsHelp3",
+                        text: "common:modules.quickHelp.topicTree.topicsHelp5",
                         type: "text/html",
                         interpolation: {iconCls: "bi-gear rotate"}
                     }
