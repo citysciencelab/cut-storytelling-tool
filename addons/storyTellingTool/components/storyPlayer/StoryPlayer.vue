@@ -162,6 +162,12 @@ export default {
             this.toggleLayer(layer, false);
         },
 
+        toDegrees (cartesian3Pos) {
+            const pos = Cesium.Cartographic.fromCartesian(cartesian3Pos);
+
+            return [pos.longitude / Math.PI * 180, pos.latitude / Math.PI * 180, pos.height];
+        },
+
         /**
          * Sets up the tool window and content for the selected step.
          * @returns {void}
@@ -210,6 +216,10 @@ export default {
                     map3d = Radio.request("Map", "getMap3d"),
                     camera = map3d.getCesiumScene().camera,
                     destination = Cesium.Cartesian3.fromDegrees(position[0], position[1], position[2]);
+
+                console.log("position", this.toDegrees(camera.position));
+                console.log("heading", camera.heading);
+                console.log("pitch", camera.pitch);
 
                 camera.flyTo({
                     destination: destination,
