@@ -112,7 +112,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                         if (objFromRawList !== null && objFromRawList !== undefined) {
                             return Object.assign(objFromRawList, childLayer, {"isChildLayer": true});
                         }
-
+                        console.error("A layer of the group \"" + layerExtended.name + "\" with id: " + childLayer.id + " was not created. Id not contained in services.json.");
                         return undefined;
                     });
 

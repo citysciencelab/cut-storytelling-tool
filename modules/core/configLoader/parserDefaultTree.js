@@ -247,7 +247,15 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             let newLayer;
 
             if (Array.isArray(layer.id)) {
-                newLayer = Object.assign(this.mergeObjectsByIds(layer.id, layerList), Radio.request("Util", "omit", layer, ["id"]));
+                const mergedLayer = this.mergeObjectsByIds(layer.id, layerList);
+
+                if (mergedLayer) {
+                    newLayer = Object.assign(mergedLayer, Radio.request("Util", "omit", layer, ["id"]));
+                }
+                else {
+                    console.error("Background-layer with ids: " + layer.id + " was not created. Not all ids are contained in services.json.");
+                    return;
+                }
             }
             else {
                 const rawLayer = layerList.find(singleLayer => singleLayer.id === layer.id);
