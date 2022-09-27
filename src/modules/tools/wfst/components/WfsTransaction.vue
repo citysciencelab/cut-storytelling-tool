@@ -6,7 +6,7 @@ import getComponent from "../../../../utils/getComponent";
 import SimpleButton from "../../../../share-components/SimpleButton.vue";
 
 export default {
-    name: "Wfst",
+    name: "WfsTransaction",
     components: {SimpleButton, ToolTemplate},
     computed: {
         ...mapGetters("Tools/Wfst", ["currentInteractionConfig", "currentLayerIndex", "featureProperties", "layerIds", "layerInformation", "layerSelectDisabled", "layerSelectLabel", "selectedInteraction", "showInteractionsButtons", "active", "deactivateGFI", "icon", "name"])

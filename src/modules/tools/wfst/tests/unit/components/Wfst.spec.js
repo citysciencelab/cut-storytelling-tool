@@ -2,7 +2,7 @@ import Vuex from "vuex";
 import {config, mount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import sinon from "sinon";
-import Wfst from "../../../components/Wfst.vue";
+import WfsTransaction from "../../../components/WfsTransaction.vue";
 import WfstModule from "../../../store/indexWfst";
 import * as prepareFeatureProperties from "../../../utils/prepareFeatureProperties";
 
@@ -11,7 +11,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("src/modules/tools/wfst/components/Wfst.vue", () => {
+describe("src/modules/tools/wfst/components/WfsTransaction.vue", () => {
     const layerIds = ["wfstOne", "wfstTwo"],
         exampleLayerOne = {
             get: key => exampleLayerOne[key],
@@ -95,7 +95,7 @@ describe("src/modules/tools/wfst/components/Wfst.vue", () => {
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[0]}).returns(exampleLayerOne);
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
         store.dispatch("Tools/Wfst/setActive", true).then(() => {
-            wrapper = mount(Wfst, {
+            wrapper = mount(WfsTransaction, {
                 localVue,
                 store
             });
@@ -110,7 +110,7 @@ describe("src/modules/tools/wfst/components/Wfst.vue", () => {
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
         store.commit("Tools/Wfst/setLayerIds", layerIds);
         store.dispatch("Tools/Wfst/setActive", true).then(() => {
-            wrapper = mount(Wfst, {
+            wrapper = mount(WfsTransaction, {
                 localVue,
                 store
             });
@@ -134,7 +134,7 @@ describe("src/modules/tools/wfst/components/Wfst.vue", () => {
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
         store.commit("Tools/Wfst/setLayerIds", layerIds);
         store.dispatch("Tools/Wfst/setActive", true).then(() => {
-            wrapper = mount(Wfst, {
+            wrapper = mount(WfsTransaction, {
                 localVue,
                 store
             });
@@ -156,7 +156,7 @@ describe("src/modules/tools/wfst/components/Wfst.vue", () => {
                 return store.dispatch("Tools/Wfst/setFeatureProperties");
             })
             .then(() => {
-                wrapper = mount(Wfst, {
+                wrapper = mount(WfsTransaction, {
                     localVue,
                     store
                 });
@@ -174,7 +174,7 @@ describe("src/modules/tools/wfst/components/Wfst.vue", () => {
         requestStub.withArgs("ModelList", "getModelByAttributes", {id: layerIds[1]}).returns(exampleLayerTwo);
         store.commit("Tools/Wfst/setLayerIds", layerIds);
         store.dispatch("Tools/Wfst/setActive", true).then(() => {
-            wrapper = mount(Wfst, {
+            wrapper = mount(WfsTransaction, {
                 localVue,
                 store
             });
@@ -196,7 +196,7 @@ describe("src/modules/tools/wfst/components/Wfst.vue", () => {
         }]);
         store.commit("Tools/Wfst/setLayerIds", layerIds);
         store.dispatch("Tools/Wfst/setActive", true).then(() => {
-            wrapper = mount(Wfst, {
+            wrapper = mount(WfsTransaction, {
                 localVue,
                 store
             });
@@ -217,7 +217,7 @@ describe("src/modules/tools/wfst/components/Wfst.vue", () => {
         store.commit("Tools/Wfst/setSelectedInteraction", "insert");
         store.commit("Tools/Wfst/setLayerIds", layerIds);
         store.dispatch("Tools/Wfst/setActive", true).then(() => {
-            wrapper = mount(Wfst, {
+            wrapper = mount(WfsTransaction, {
                 localVue,
                 store
             });
