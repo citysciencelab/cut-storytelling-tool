@@ -35,6 +35,7 @@
         - jsts: 2.9.0 to 2.9.1
         - @geoblocks/print: 0.7.2 to 0.7.3
 - HighlightFeature is working with AD-Secure services now.
+- Refactored tool wfst.
 
 ### Deprecated
 
@@ -61,7 +62,6 @@
         - "css-minimizer-webpack-plugin"
 - #657: Polygon hatch patterns to allow for further design options in the style.json file have been implemented.
 - Possibility for development with self-signed SSL-certificates. See [wiki-doc](https://bitbucket.org/geowerkstatt-hamburg/masterportal/wiki/Entwicklungsumgebung%20mit%20selbstsignierten%20SSL-Zertifikat%20einrichten)
-- Refactored tool wfsTransaction
 - Filter:
     - Added an option to activate a csv download button for filtered data.
     - wmsRefId is also for type array implemented so that multiple wms Layers can be activated or deactivated.
@@ -133,7 +133,6 @@
 - shadow-Tool: the tool is refactored from Backbone to Vue.js.
 
 ### Deprecated
-- Deprecated tool wfst
 - The GeoJson-Layer subTyp: `OpenSenseMap` is deprecated. It will be removed in the next Major-Release!
 
 ### Removed
