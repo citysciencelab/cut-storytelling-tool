@@ -11,7 +11,9 @@ const Config = {
             "2297", // Straßenbaumkataster cache
             "1791", // nachträgliche Bodenrichtwerte lagetypisch 1964
             "20170", "20171", "20172", "20173", "20174", "20175", "20176", // Einzellayer Lapro, Freiraumverbund
-            "19970", "19971", "20058", "20059" // INSPIRE HH Versorgungswirtschaft Wasser und Abwasser
+            "19970", "19971", "20058", "20059", // INSPIRE HH Versorgungswirtschaft Wasser und Abwasser
+            "19347", //Verkehrsdaten Rad (Infrarotdetektoren) Hamburg
+            "937" //Elektro Ladestandorte Hamburg
         ],
         layerIDsToStyle: [
             {

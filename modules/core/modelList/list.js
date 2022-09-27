@@ -1005,8 +1005,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     showModelInTree: function (modelId) {
         const mode = Radio.request("Map", "getMapMode"),
             lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId}),
-            dropdownElement = document.querySelector("#searchInputUL"),
-            dropdown = new Dropdown(dropdownElement);
+            dropdown = Dropdown.getInstance("#root li:first-child > .dropdown-toggle");
 
         this.closeAllExpandedFolder();
         // open the layerTree
