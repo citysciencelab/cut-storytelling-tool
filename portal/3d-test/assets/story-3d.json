@@ -16,7 +16,7 @@
       "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
-      "title": "Einleitung",
+      "title": "Normale 2D Ansicht",
       "htmlFile": "",
       "centerCoordinate": [
         563140.367837,
@@ -31,7 +31,7 @@
       "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
-      "title": "Kamerawinkel verändern",
+      "title": "3D Model aktiviert",
       "htmlFile": "",
       "centerCoordinate": [],
       "is3D": true,
@@ -41,8 +41,8 @@
           53.554060,
           150.0
         ],
-        "heading": 0.37138509963163635,
-        "pitch": -0.4025214263618002
+        "heading": 0.08619862675293799,
+        "pitch": -0.41983749405932813
       },
       "zoomLevel": 0,
       "layers": ["12883", "12884", "6666"],
@@ -53,15 +53,15 @@
       "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
-      "title": "Flug zur weiteren 3D Ansicht. Alles noch im Testmodus.",
+      "title": "GLTF 3D Objekt",
       "htmlFile": "",
       "centerCoordinate": [],
       "is3D": true,
       "navigation3D": {
         "cameraPosition": [
-          9.951139,
-          53.556209,
-          150.0
+          9.948301,
+          53.552374,
+          343.8
         ],
         "heading": 0.38138509963163635,
         "pitch": -0.4525214263618002
@@ -75,7 +75,7 @@
       "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
-      "title": "Ein weiterer Flug",
+      "title": "Veränderung des Blickwinkels",
       "htmlFile": "",
       "centerCoordinate": [],
       "is3D": true,
@@ -97,18 +97,18 @@
       "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
-      "title": "Ein weiterer Flug",
+      "title": "Veränderung des Blickwinkels II",
       "htmlFile": "",
       "centerCoordinate": [],
       "is3D": true,
       "navigation3D": {
         "cameraPosition": [
-          9.951331,
-          53.559599,
-          170.0
+          9.952388,
+          53.558770,
+          138.7
         ],
-        "heading": 2.58138509963163635,
-        "pitch": -0.5925214263618002
+        "heading": 2.581385093478189,
+        "pitch": -0.5925214409342683
       },
       "zoomLevel": 0,
       "layers": ["12883", "12884", "6666"],
@@ -119,18 +119,18 @@
       "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
-      "title": "Ein weiterer Flug",
+      "title": "Veränderung des Blickwinkels III",
       "htmlFile": "",
       "centerCoordinate": [],
       "is3D": true,
       "navigation3D": {
         "cameraPosition": [
-          9.952469,
-          53.557623,
-          60.0
+          9.953082,
+          53.557907,
+          56.7
         ],
-        "heading": 0.08138509963163635,
-        "pitch": -0.6925214263618002
+        "heading": 5.9085336246057905,
+        "pitch": -0.6927398353366296
       },
       "zoomLevel": 0,
       "layers": ["12883", "12884", "6666"],
@@ -138,6 +138,50 @@
     },
     {
       "stepNumber": 7,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Objekte auf Strassenebene",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.963555987544352,
+          53.55717039629356,
+          27.544068712440062
+        ],
+        "heading": 3.730118431106418,
+        "pitch": -0.03720150451527693
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 8,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Beiträge / Kommentare platzieren",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.997999362485409,
+          53.54105506684793,
+          156.27141581455467
+        ],
+        "heading": 1.0799518029894628,
+        "pitch": -0.454418682912086
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 9,
       "stepWidth": 600,
       "visible": true,
       "associatedChapter": 1,
