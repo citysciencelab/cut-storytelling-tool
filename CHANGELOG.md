@@ -16,6 +16,7 @@
     - devDependencies:
         - @babel/plugin-transform-modules-commonjs: 7.18.6
 - Alerting: attribute "multipleAlert" allows to add single alert or multiple-alert as a list.
+- MapMarker: Added function for rotation in 3D.
 
 ### Changed
 - OAF:
@@ -43,8 +44,11 @@
 ### Fixed
 - Issue #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
 - Issue #825 The Control layerAttributions remain open when a layer with content is activated until they are explicitly collapsed.
+- Issue #826: Tool WFS Search did not work with a parcel.json that had "fluren" with local values. This has been resolved.
+- Issue #829: xml2json parser (used in meta data context) broke on valid XML. It has been extended for the unattended cases.
 - Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
 - drawTool: circles can be drawn with setting defined again
+- Issue #835: small quickHelp issue has been fixed (showed topic 3 again instead of 5).
 
 ---
 ## v2.25.0 - 2022-09-07
