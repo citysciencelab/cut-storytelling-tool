@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["populationRequest", "trinkwasser", "verkehrsstaerken", "dataTable", "trafficCount", "solaratlas"],
+    addons: ["obliqueViewer", "populationRequest", "trinkwasser", "verkehrsstaerken", "dataTable", "trafficCount", "solaratlas"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     tree: {

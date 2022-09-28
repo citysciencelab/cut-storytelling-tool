@@ -311,6 +311,12 @@
           "addWMS": {
             "name": "translate#common:menu.tools.addWms",
             "icon": "bi-plus-lg"
+          },
+          "obliqueViewer": {
+            "name": "translate#additional:modules.tools.obliqueViewer.title",
+            "icon": "bi-image",
+            "styleId": "obliqueViewer",
+            "isVisibleInMenu": false
           }
         }
       },
@@ -380,8 +386,12 @@
         "layerId": "452"
       },
       "mousePosition": true,
-      "buttonOblique": true,
-      "button3d": true
+      "button3d": true,
+      "startTool": {
+        "tools": [
+          "obliqueViewer"
+        ]
+      }
     },
     "treeType": "custom",
     "singleBaselayer": true,

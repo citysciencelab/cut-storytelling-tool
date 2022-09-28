@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["trinkwasser", "schulinfo", "trafficCount", "verkehrsstaerken", "solaratlas", "dataTable"],
+    addons: ["obliqueViewer", "trinkwasser", "schulinfo", "trafficCount", "verkehrsstaerken", "solaratlas", "dataTable"],
     footer: {
         urls: [
             {
