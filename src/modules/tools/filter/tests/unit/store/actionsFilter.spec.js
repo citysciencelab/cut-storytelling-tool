@@ -85,11 +85,9 @@ describe("tools/filter/store/actionsFilter", () => {
     describe("serializeState", () => {
         it("serialize the state", done => {
             const rulesOfFilters = state.rulesOfFilters,
-                selectedCategories = state.selectedCategories,
                 selectedAccordions = state.selectedAccordions,
                 result = {
                     rulesOfFilters,
-                    selectedCategories,
                     selectedAccordions
                 },
                 serializiedString = JSON.stringify(result);
@@ -105,16 +103,13 @@ describe("tools/filter/store/actionsFilter", () => {
         it("deserialize the state", done => {
             const rulesOfFilters = [],
                 selectedAccordions = [],
-                selectedCategories = [],
                 payload = {
                     rulesOfFilters,
-                    selectedCategories,
                     selectedAccordions
                 };
 
             testAction(deserializeState, payload, state, {}, [
                 {type: "setRulesArray", payload: {rulesOfFilters}, dispatch: true},
-                {type: "setSelectedCategories", payload: selectedCategories, commit: true},
                 {type: "setSelectedAccordions", payload: selectedAccordions, commit: true},
                 {type: "setActive", payload: true, commit: true}
             ], {}, done);

@@ -1704,7 +1704,6 @@ An object to define a layer to filter with.
 |----|--------|----|-------|-----------|------|
 |layerId|no|String||The layer id of the layer to filter. Must be configured in the `Themenconfig`.|false|
 |title|no|String||The title to use for the selector (if layerSelectorVisible true). Can be a translation key also. If not set, the layerId will be used by default.|false|
-|category|no|String||Instead of a `title`. If set, an additional parameter `layers` is expected as [filterLayer](#markdown-header-portalconfigmenutoolfilterfilterlayer)[] with the same rules applied as described here. The parameters `description` and `shortDescription` are applied as described, when using category (see examples).|false|
 |description|no|String|""|A description of the layer, displayed when the selector is opened or no layerSelectorVisible is set to `false`. Can be a translation key also.|false|
 |shortDescription|no|String|""|The shorter version of the description, displayed under the selector title only if layerSelectorVisible is `true` and the selector is closed. Can be a translation key also.|false|
 |active|no|Boolean|false|Set to `true` to let the layer selector be initialy opened - only if layerSelectorVisible is set to `true`. If multiLayerSelector is set to `false` and more than one filter layer has set active to `true`, the last filter layer with active `true` is initialy opened.|false|
@@ -1745,48 +1744,6 @@ In this example one snippet is set with only an attrName. The snippet type is de
     "snippets": [
         {
             "attrName": "rebbz_homepage"
-        }
-    ]
-}
-```
-
-**Example**
-
-In this example the parameter `category` is used instead of `title` to move the layers back into an additional selector with two more selectors in it.
-
-```json
-{
-    "category": "Schools and Hospitals",
-    "shortDescription": "Numbers of Hamburg schools and hospitals",
-    "description": "Numbers of Hamburg schools and hospitals",
-    "layers": [
-        {
-            "layerId": "8712",
-            "title": "Schools",
-            "strategy": "active",
-            "searchInMapExtent": true,
-            "searchInMapExtentInfo": true,
-            "showHits": true,
-            "shortDescription": "School master data and pupil numbers of Hamburg schools",
-            "description": "School master data and pupil numbers of Hamburg schools",
-            "snippetTags": true,
-            "paging": 100,
-            "snippets": [
-                {
-                    "attrName": "rebbz_homepage"
-                }
-            ]
-        },
-        {
-            "layerId": "8713",
-            "title": "Hospitals",
-            "snippetTags": true,
-            "paging": 100,
-            "snippets": [
-                {
-                    "attrName": "hospital_name"
-                }
-            ]
         }
     ]
 }

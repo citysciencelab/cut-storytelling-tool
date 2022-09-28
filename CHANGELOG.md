@@ -51,6 +51,7 @@
 - Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
 - drawTool: circles can be drawn with setting defined again
 - Issue #835: small quickHelp issue has been fixed (showed topic 3 again instead of 5).
+- TreeType 'default': if a layer, configured in config.json is not found in services.json, no error occurs.
 
 ---
 ## v2.25.0 - 2022-09-07

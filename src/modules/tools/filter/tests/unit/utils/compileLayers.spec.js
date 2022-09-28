@@ -13,29 +13,13 @@ describe("src/modules/tools/filter/utils/compileLayers.js", () => {
             const layers = [
                     {filterId: "A"},
                     {filterId: "B"},
-                    {
-                        filterId: "C",
-                        category: "category",
-                        layers: [
-                            {filterId: "D"},
-                            {filterId: "E"}
-                        ]
-                    },
+                    {filterId: "C"},
                     {filterId: "F"}
                 ],
                 expected = {
                     A: {filterId: "A"},
                     B: {filterId: "B"},
-                    C: {
-                        filterId: "C",
-                        category: "category",
-                        layers: [
-                            {filterId: "D"},
-                            {filterId: "E"}
-                        ]
-                    },
-                    D: {filterId: "D"},
-                    E: {filterId: "E"},
+                    C: {filterId: "C"},
                     F: {filterId: "F"}
                 };
 
@@ -47,27 +31,13 @@ describe("src/modules/tools/filter/utils/compileLayers.js", () => {
             const layers = [
                     {filterId: "A", snippets: [1, 2, 3]},
                     {filterId: "B"},
-                    {
-                        filterId: "C",
-                        category: "category",
-                        layers: [
-                            {filterId: "D"},
-                            {filterId: "E", snippets: [1, 2, 3]}
-                        ]
-                    },
+                    {filterId: "C"},
                     {filterId: "F", snippets: "this is not an array"}
                 ],
                 expected = [
                     {filterId: "A", snippets: [1, 2, 3]},
                     {filterId: "B", snippets: []},
-                    {
-                        filterId: "C",
-                        category: "category",
-                        layers: [
-                            {filterId: "D", snippets: []},
-                            {filterId: "E", snippets: [1, 2, 3]}
-                        ]
-                    },
+                    {filterId: "C", snippets: []},
                     {filterId: "F", snippets: []}
                 ];
 
@@ -80,28 +50,14 @@ describe("src/modules/tools/filter/utils/compileLayers.js", () => {
             const layers = [
                     {filterId: "A"},
                     {filterId: "B"},
-                    {
-                        filterId: "C",
-                        category: "category",
-                        layers: [
-                            {filterId: "D"},
-                            {filterId: "E"}
-                        ]
-                    },
+                    {filterId: "C"},
                     {filterId: "F"}
                 ],
                 expected = [
                     {filterId: 0},
                     {filterId: 1},
-                    {
-                        filterId: 2,
-                        category: "category",
-                        layers: [
-                            {filterId: 3},
-                            {filterId: 4}
-                        ]
-                    },
-                    {filterId: 5}
+                    {filterId: 2},
+                    {filterId: 3}
                 ];
 
             addFilterIds(layers);
@@ -114,12 +70,7 @@ describe("src/modules/tools/filter/utils/compileLayers.js", () => {
                     {filterId: "A"},
                     "filterB",
                     {
-                        filterId: "C",
-                        category: "category",
-                        layers: [
-                            {filterId: "D"},
-                            "filterE"
-                        ]
+                        filterId: "C"
                     },
                     {filterId: "F"}
                 ],
@@ -127,12 +78,7 @@ describe("src/modules/tools/filter/utils/compileLayers.js", () => {
                     {filterId: "A"},
                     {layerId: "filterB"},
                     {
-                        filterId: "C",
-                        category: "category",
-                        layers: [
-                            {filterId: "D"},
-                            {layerId: "filterE"}
-                        ]
+                        filterId: "C"
                     },
                     {filterId: "F"}
                 ];
@@ -156,12 +102,7 @@ describe("src/modules/tools/filter/utils/compileLayers.js", () => {
                     {filterId: "A"},
                     1234,
                     {
-                        filterId: "C",
-                        category: "category",
-                        layers: [
-                            {filterId: "D"},
-                            [1, 2, 3, 4]
-                        ]
+                        filterId: "C"
                     },
                     false,
                     {filterId: "F"}
@@ -169,11 +110,7 @@ describe("src/modules/tools/filter/utils/compileLayers.js", () => {
                 expected = [
                     {filterId: "A"},
                     {
-                        filterId: "C",
-                        category: "category",
-                        layers: [
-                            {filterId: "D"}
-                        ]
+                        filterId: "C"
                     },
                     {filterId: "F"}
                 ];

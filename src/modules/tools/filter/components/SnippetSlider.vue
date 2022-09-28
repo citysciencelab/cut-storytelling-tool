@@ -546,7 +546,4 @@ export default {
     input[type="range"].disabled::-ms-fill-lower {
         background-color: $dark_grey;
     }
-    .category-layer .right {
-        right: 30px;
-    }
 </style>

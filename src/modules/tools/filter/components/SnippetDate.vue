@@ -404,7 +404,4 @@ export default {
         top: 0;
         width: auto;
     }
-    .category-layer .right {
-        right: 30px;
-    }
 </style>

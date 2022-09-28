@@ -146,6 +146,12 @@
             "name": "Schatten",
             "icon": "bi-lamp-fill",
             "isShadowEnabled": true
+          },
+          "obliqueViewer": {
+            "name": "translate#additional:modules.tools.obliqueViewer.title",
+            "icon": "bi-image",
+            "styleId": "obliqueViewer",
+            "isVisibleInMenu": false
           }
         }
       },
@@ -182,7 +188,11 @@
       "orientation": true,
       "mousePosition": true,
       "attributions": true,
-      "buttonOblique": true
+      "startTool": {
+        "tools": [
+          "obliqueViewer"
+        ]
+      }
     },
     "treeType": "default",
     "singleBaselayer": true
