@@ -17,7 +17,7 @@
         - @babel/plugin-transform-modules-commonjs: 7.18.6
 - Alerting: attribute "multipleAlert" allows to add single alert or multiple-alert as a list.
 - MapMarker: Added function for rotation in 3D.
-- Resuable component SimpleButton
+- Reusable component SimpleButton.
 
 ### Changed
 - OAF:
