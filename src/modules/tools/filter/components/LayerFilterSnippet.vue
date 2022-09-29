@@ -75,6 +75,11 @@ export default {
             type: [Object, Boolean],
             required: false,
             default: false
+        },
+        isLayerFilterSelected: {
+            type: [Function, Boolean],
+            required: false,
+            default: false
         }
     },
     data () {
@@ -115,20 +120,27 @@ export default {
             if (val.page >= val.total) {
                 this.setFormDisable(false);
                 if (!this.isRefreshing && !this.getSearchInMapExtent() && this.liveZoomToFeatures) {
-                    this.mapHandler.zoomToFilteredFeature(this.layerConfig?.filterId, this.minScale, error => {
-                        console.warn("map error", error);
-                    });
+                    if (this.filterGeometry) {
+                        this.mapHandler.zoomToGeometry(this.filterGeometry, this.minScale, error => {
+                            console.warn(error);
+                        });
+                    }
+                    else {
+                        this.mapHandler.zoomToFilteredFeature(this.layerConfig?.filterId, this.minScale, error => {
+                            console.warn(error);
+                        });
+                    }
                 }
                 this.isRefreshing = false;
             }
         },
         precheckedSnippets (val) {
-            if (this.isStrategyActive() && val.length === this.layerConfig?.snippets.length) {
+            if (this.isStrategyActive() && val.length === this.snippets.length) {
                 const snippetIds = [];
 
-                val.forEach((v, index) => {
-                    if (v) {
-                        snippetIds.push(index);
+                val.forEach(value => {
+                    if (value !== false) {
+                        snippetIds.push(value);
                     }
                 });
 
@@ -150,6 +162,11 @@ export default {
                 filterId: this.layerConfig?.filterId,
                 hits: amount
             });
+        },
+        filterGeometry () {
+            if (typeof this.isLayerFilterSelected === "function" && this.isLayerFilterSelected(this.layerConfig.filterId) || this.isLayerFilterSelected === true) {
+                this.handleActiveStrategy();
+            }
         }
     },
     created () {
@@ -172,11 +189,10 @@ export default {
     mounted () {
         compileSnippets(this.layerConfig.snippets, this.api, snippets => {
             this.snippets = snippets;
+            this.setSnippetValueByState(this.filterRules);
         }, error => {
             console.warn(error);
         });
-
-        this.setSnippetValueByState(this.filterRules);
         if (typeof this.filterHits === "number" && !this.isStrategyActive()) {
             this.amountOfFilteredItems = this.filterHits;
         }
@@ -195,15 +211,21 @@ export default {
                 return;
             }
 
-            rules.forEach(rule => {
+            rules.forEach((rule, snippetId) => {
                 if (this.isRule(rule)) {
-                    if (this.snippets[rule.snippetId]?.type === "dropdown"
+                    if (!Array.isArray(rule?.value)
+                        && (this.snippets[rule.snippetId]?.type === "dropdown"
                         || this.snippets[rule.snippetId]?.type === "sliderRange"
                         || this.snippets[rule.snippetId]?.type === "dateRange"
-                        && !Array.isArray(rule?.value)) {
+                        )
+                    ) {
                         this.snippets[rule.snippetId].prechecked = [rule?.value];
+                        return;
                     }
                     this.snippets[rule.snippetId].prechecked = rule?.value;
+                }
+                else {
+                    this.snippets[snippetId].prechecked = [];
                 }
             });
         },
@@ -329,7 +351,7 @@ export default {
         /**
          * Handles the active strategy.
          * @param {Number|Number[]} snippetId the snippet Id(s)
-         * @param {Boolean|undefined} reset true if filtering should reset the layer (fuzzy logic)
+         * @param {Boolean|undefined} [reset=undefined] true if filtering should reset the layer (fuzzy logic)
          * @returns {void}
          */
         handleActiveStrategy (snippetId, reset = undefined) {
@@ -362,12 +384,13 @@ export default {
             }
         },
         /**
-         * Pushing the value if there are prechecked value in snippet
-         * @param {Boolean} value true/false for prechecked value
+         * Snippets with prechecked values are pushing their snippetId on startup, others are pushing false.
+         * @info Pushing false is necessary to trigger actions only if snippet rules are finalized.
+         * @param {Number|Boolean} snippetId The snippetId of a prechecked snippet or false for others.
          * @returns {void}
          */
-        setSnippetPrechecked (value) {
-            this.precheckedSnippets.push(value);
+        setSnippetPrechecked (snippetId) {
+            this.precheckedSnippets.push(snippetId);
         },
         /**
          * Triggered when a rule changed at a snippet.
@@ -556,8 +579,8 @@ export default {
             if (this.api instanceof FilterApi && this.mapHandler instanceof MapHandler) {
                 this.mapHandler.activateLayer(filterId, () => {
                     if (Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")) {
-                        this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, !this.hasUnfixedRules(filterQuestion.rules));
-                        this.mapHandler.toggleWFSLayerInTree(filterId, this.hasUnfixedRules(filterQuestion.rules));
+                        this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, !this.hasUnfixedRules(filterQuestion.rules) && !filterQuestion.commands.searchInMapExtent && !filterQuestion.commands.filterGeometry);
+                        this.mapHandler.toggleWFSLayerInTree(filterId, this.hasUnfixedRules(filterQuestion.rules) || filterQuestion.commands.searchInMapExtent || filterQuestion.commands.filterGeometry);
                     }
                     this.api.filter(filterQuestion, filterAnswer => {
                         if (typeof onsuccess === "function" && !alterLayer) {
@@ -575,7 +598,14 @@ export default {
                         }
 
                         if (!this.isParentSnippet(snippetId) && !this.hasOnlyParentRules()) {
-                            if (!this.hasUnfixedRules(filterQuestion.rules) && (this.layerConfig.clearAll || Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId"))) {
+                            if (
+                                !this.hasUnfixedRules(filterQuestion.rules)
+                                && (
+                                    this.layerConfig.clearAll || Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")
+                                )
+                                && !filterQuestion.commands.searchInMapExtent
+                                && !filterQuestion.commands.filterGeometry
+                            ) {
                                 if (this.layerConfig.clearAll && Object.prototype.hasOwnProperty.call(this.layerConfig, "wmsRefId")) {
                                     this.mapHandler.toggleWMSLayer(this.layerConfig.wmsRefId, false, false);
                                 }
@@ -682,7 +712,7 @@ export default {
             if (!isObject(snippet) || this.hasParentSnippet(snippet.snippetId)) {
                 return null;
             }
-            if (snippet.api instanceof FilterApi) {
+            else if (snippet.api instanceof FilterApi) {
                 return snippet.api;
             }
             return this.api;
@@ -723,6 +753,22 @@ export default {
                 result.push(properties);
             });
             onsuccess(result);
+        },
+        /**
+         * Returns the timeout for the input.
+         * @param {Object} snippet The snippet to get the timeout from.
+         * @returns {Number} The timeout for the input or undefined if missing.
+         */
+        getTimeoutInput (snippet) {
+            return snippet?.timeouts?.input ? snippet.timeouts.input : undefined;
+        },
+        /**
+         * Returns the timeout for the slider.
+         * @param {Object} snippet The snippet to get the timeout from.
+         * @returns {Number} The timeout for the slider or undefined if missing.
+         */
+        getTimeoutSlider (snippet) {
+            return snippet?.timeouts?.slider ? snippet.timeouts.slider : undefined;
         }
     }
 };
@@ -833,6 +879,7 @@ export default {
                     :display="snippet.display"
                     :filter-id="layerConfig.filterId"
                     :info="snippet.info"
+                    :is-child="hasParentSnippet(snippet.snippetId)"
                     :is-parent="isParentSnippet(snippet.snippetId)"
                     :title="getTitle(snippet, layerConfig.layerId)"
                     :layer-id="layerConfig.layerId"
@@ -909,17 +956,19 @@ export default {
                     :adjustment="snippet.adjustment"
                     :attr-name="snippet.attrName"
                     :disabled="disabled"
+                    :display="snippet.display"
                     :info="snippet.info"
                     :format="snippet.format"
                     :filter-id="layerConfig.filterId"
                     :is-parent="isParentSnippet(snippet.snippetId)"
                     :title="getTitle(snippet, layerConfig.layerId)"
-                    :max-value="snippet.maxValue"
-                    :min-value="snippet.minValue"
+                    :sub-titles="snippet.subTitles"
+                    :value="snippet.value"
                     :operator="snippet.operator"
                     :prechecked="snippet.prechecked"
                     :fixed-rules="fixedRules"
                     :snippet-id="snippet.snippetId"
+                    :timeout-slider="getTimeoutSlider(snippet)"
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
@@ -974,6 +1023,8 @@ export default {
                     :prechecked="snippet.prechecked"
                     :fixed-rules="fixedRules"
                     :snippet-id="snippet.snippetId"
+                    :timeout-slider="getTimeoutSlider(snippet)"
+                    :timeout-input="getTimeoutInput(snippet)"
                     :visible="snippet.visible"
                     @changeRule="changeRule"
                     @deleteRule="deleteRule"
@@ -993,6 +1044,7 @@ export default {
                     :snippet-id="snippet.snippetId"
                     :visible="snippet.visible"
                     :filtered-items="filteredItems"
+                    @setSnippetPrechecked="setSnippetPrechecked"
                 />
             </div>
         </div>
@@ -1037,7 +1089,7 @@ export default {
         padding: 5px;
     }
     .filter-result {
-        font-size: 16px;
+        font-size: $font-size-lg;
         color: $light_red;
         margin-top: 10px;
         display: inline-block;
@@ -1071,7 +1123,7 @@ export default {
         overflow-y: auto;
     }
     .snippetTagText {
-        font-size: 12px;
+        font-size: $font-size-base;
         float: left;
         padding: 6px 4px 0 0;
     }

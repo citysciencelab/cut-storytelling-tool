@@ -39,11 +39,11 @@ const mutations = {
      */
     setExample (state) {
         if (state.currentProjection) {
-            if (state.currentProjection.id === "EPSG:4326") {
+            if (state.currentProjection.id === "http://www.opengis.net/gml/srs/epsg.xml#4326") {
                 state.coordinatesEastingExample = "53° 33′ 25″";
                 state.coordinatesNorthingExample = "9° 59′ 50″";
             }
-            else if (state.currentProjection.id === "EPSG:4326-DG") {
+            else if (state.currentProjection.id === "http://www.opengis.net/gml/srs/epsg.xml#4326-DG") {
                 state.coordinatesEastingExample = "53.55555°";
                 state.coordinatesNorthingExample = "10.01234°";
             }

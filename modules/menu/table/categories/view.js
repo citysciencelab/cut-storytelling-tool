@@ -33,8 +33,8 @@ const CategoryView = Backbone.View.extend({
     render: function () {
         $("#table-nav").append(this.$el.html(this.template()));
         if (Radio.request("TableMenu", "getActiveElement") === "Category") {
-            // Upgrade to BT5
-            const collapse = Collapse.getInstance($("#table-nav-cat-panel").get(0));
+            const collapseElement = document.querySelector("#table-nav-cat-panel"),
+                collapse = new Collapse(collapseElement);
 
             collapse.show();
         }

@@ -1,4 +1,5 @@
 import {expect} from "chai";
+import Map from "ol/Map";
 import sinon from "sinon";
 import VectorBaseLayer from "../../vectorBase";
 
@@ -7,18 +8,10 @@ describe("src/core/layers/vectorBase.js", () => {
 
     before(() => {
         mapCollection.clear();
-        const map = {
+        const map = new Map({
             id: "ol",
-            mode: "2D",
-            addInteraction: sinon.stub(),
-            removeInteraction: sinon.stub(),
-            addLayer: () => sinon.stub(),
-            getView: () => {
-                return {
-                    getResolutions: () => [2000, 1000]
-                };
-            }
-        };
+            mode: "2D"
+        });
 
         mapCollection.addMap(map, "2D");
     });
@@ -28,7 +21,7 @@ describe("src/core/layers/vectorBase.js", () => {
             id: "id",
             typ: "VectorBase",
             isSelected: false,
-            features: sinon.stub()
+            features: []
         };
     });
 

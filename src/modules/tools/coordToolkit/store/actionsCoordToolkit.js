@@ -171,7 +171,7 @@ export default {
      */
     changedPosition ({dispatch, state, getters}) {
         if (state.mode === "supply") {
-            const targetProjectionName = state.currentProjection?.name,
+            const targetProjectionName = state.currentProjection?.epsg,
                 position = getters.getTransformedPosition(mapCollection.getMap("2D"), targetProjectionName);
 
             if (position) {
@@ -185,7 +185,7 @@ export default {
      */
     setFirstSearchPosition ({dispatch, commit, state, rootState, getters}) {
         if (state.mode === "search" && state.active) {
-            const targetProjectionName = state.currentProjection?.name,
+            const targetProjectionName = state.currentProjection?.epsg,
                 position = getters.getTransformedPosition(mapCollection.getMap("2D"), targetProjectionName);
 
             if (position && position[0] === 0 && position[1] === 0 && rootState.Maps.center) {
@@ -211,7 +211,7 @@ export default {
                 let converted;
 
                 coord = toStringHDMS(position.slice(0, 2));
-                if (targetProjection.id === "EPSG:4326-DG") {
+                if (targetProjection.id === "http://www.opengis.net/gml/srs/epsg.xml#4326-DG") {
                     converted = convertSexagesimalToDecimal(coord);
                 }
                 else {
@@ -296,10 +296,11 @@ export default {
             validators = {
                 "http://www.opengis.net/gml/srs/epsg.xml#25832": validETRS89UTM,
                 "http://www.opengis.net/gml/srs/epsg.xml#25833": validETRS89UTM,
-                "EPSG:31467": validETRS89,
-                "EPSG:8395": validETRS89,
-                "EPSG:4326": validWGS84,
-                "EPSG:4326-DG": validWGS84_dez
+                "http://www.opengis.net/gml/srs/epsg.xml#31467": validETRS89,
+                "http://www.opengis.net/gml/srs/epsg.xml#8395": validETRS89,
+                "http://www.opengis.net/gml/srs/epsg.xml#4326": validWGS84,
+                "http://www.opengis.net/gml/srs/epsg.xml#4326-DG": validWGS84_dez
+
             };
 
         if (coord.id === "easting") {
@@ -335,7 +336,7 @@ export default {
             if (!getters.getEastingError && !getters.getNorthingError) {
                 let formatter;
 
-                if (currentProjection.id === "EPSG:4326-DG") {
+                if (currentProjection.id === "http://www.opengis.net/gml/srs/epsg.xml#4326-DG") {
                     formatter = coordinate=>coordinate.value.split(/[\s°]+/);
                 }
                 else if (currentProjection.projName === "longlat") {
@@ -367,10 +368,10 @@ export default {
                 coordinates = [Math.round(state.selectedCoordinates[0]), Math.round(state.selectedCoordinates[1])];
             }
             transformedCoordinates = proj4(state.currentProjection, targetProjection, coordinates);
-            if (targetProjection.projName === "longlat" && targetProjection.id !== "EPSG:4326-DG") {
+            if (targetProjection.projName === "longlat" && targetProjection.id !== "http://www.opengis.net/gml/srs/epsg.xml#4326-DG") {
                 transformedCoordinates = [convertSexagesimalFromDecimal(transformedCoordinates[1]), convertSexagesimalFromDecimal(transformedCoordinates[0])];
             }
-            else if (targetProjection.id === "EPSG:4326-DG") {
+            else if (targetProjection.id === "http://www.opengis.net/gml/srs/epsg.xml#4326-DG") {
                 transformedCoordinates = [transformedCoordinates[1].toFixed(4) + "°", transformedCoordinates[0].toFixed(4) + "°"];
             }
             else {
@@ -389,28 +390,29 @@ export default {
     transformCoordinates ({state, dispatch}) {
         const mapProjection = mapCollection.getMapView("2D").getProjection().getCode();
 
+
         if (state.selectedCoordinates.length === 2) {
             dispatch("setZoom", state.zoomLevel);
 
-            if (state.currentProjection.id === "EPSG:4326" || state.currentProjection.id === "EPSG:4326-DG") {
+            if (state.currentProjection.id.indexOf("4326") > -1) {
                 const coordinates = convertSexagesimalToDecimal(state.selectedCoordinates);
 
                 state.transformedCoordinates = proj4(proj4("EPSG:4326"), proj4(mapProjection), coordinates);
                 dispatch("moveToCoordinates", state.transformedCoordinates);
             }
-            else if (state.currentProjection.id === "EPSG:31467") {
+            else if (state.currentProjection.id.indexOf("31467") > -1) {
                 const coordinates = [Math.round(state.selectedCoordinates[0]), Math.round(state.selectedCoordinates[1])];
 
                 state.transformedCoordinates = proj4(proj4("EPSG:31467"), proj4(mapProjection), coordinates);
                 dispatch("moveToCoordinates", state.transformedCoordinates);
             }
-            else if (state.currentProjection.id === "EPSG:8395") {
+            else if (state.currentProjection.id.indexOf("8395") > -1) {
                 const coordinates = [Math.round(state.selectedCoordinates[0]), Math.round(state.selectedCoordinates[1])];
 
                 state.transformedCoordinates = proj4(proj4("EPSG:8395"), proj4(mapProjection), coordinates);
                 dispatch("moveToCoordinates", state.transformedCoordinates);
             }
-            else if (state.currentProjection.id !== mapProjection) {
+            else if (state.currentProjection.epsg !== mapProjection) {
                 let coordinates;
 
                 if (state.currentProjection.projName === "longlat") {

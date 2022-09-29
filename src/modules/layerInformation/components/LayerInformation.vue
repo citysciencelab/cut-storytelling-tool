@@ -380,7 +380,7 @@ export default {
         overflow-y: auto;
         overflow-x: hidden;
         padding: 5px 10px;
-        font-size: 12px;
+        font-size: $font-size-base;
     }
 
     .layerInformation {
@@ -419,7 +419,7 @@ export default {
     .nav-tabs {
         display: flex;
         >li {
-            font-size: 12px;
+            font-size: $font-size-base;
             >a {
                 text-overflow: ellipsis;
                 overflow: hidden;
@@ -431,7 +431,7 @@ export default {
             >ul {
                 >li {
                     >a {
-                        font-size: 12px;
+                        font-size: $font-size-base;
                         text-overflow: ellipsis;
                         display: inline-block;
                         max-width: 95%;

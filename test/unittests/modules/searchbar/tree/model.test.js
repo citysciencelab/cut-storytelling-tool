@@ -236,4 +236,44 @@ describe("modules/searchbar/tree", function () {
             );
         });
     });
+
+    describe("getNodeForSearch", function () {
+        const nodeModels = {
+            Ordner: [
+                {
+                    Layer: [],
+                    Titel: "Test Folder",
+                    id: "TestFolder7"
+                },
+                {
+                    Layer: [],
+                    Titel: "Restliche Layer",
+                    id: "RestlicheLayer8"
+                }
+            ]
+        };
+
+        it("Should be an empty array by empty array input", function () {
+            expect(model.getNodeForSearch([])).to.be.an("array").that.is.empty;
+        });
+        it("Should be an empty array by undefined input", function () {
+            expect(model.getNodeForSearch(undefined)).to.be.an("array").that.is.empty;
+        });
+        it("Should be an unique array by id and name are the same properties", function () {
+            expect(model.getNodeForSearch(nodeModels)).to.be.an("array").to.deep.include(
+                {
+                    name: "Test Folder",
+                    type: i18next.t("common:modules.searchbar.type.folder"),
+                    icon: "bi-folder-fill",
+                    id: "TestFolder7"
+                },
+                {
+                    name: "Restliche Layer",
+                    type: i18next.t("common:modules.searchbar.type.folder"),
+                    icon: "bi-folder-fill",
+                    id: "RestlicheLayer8"
+                }
+            );
+        });
+    });
 });

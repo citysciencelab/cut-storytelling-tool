@@ -58,7 +58,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {String[]} supported=["2D"] Array of Strings to show supported modes "2D" and "3D"
      * @property {Boolean} showSettings=true Flag if layer settings have to be shown
      * @property {Number} hitTolerance=0 Hit tolerance used by layer for map interaction
-     * @property {Boolean} styleable=false Flag if wms layer can be styleable via stylewms tool
      * @property {Boolean} isNeverVisibleInTree=false Flag if layer is never visible in layertree
      * @property {String} currentLng="" contains the current language
      * @property {String} isOutOfRange="" will be translated

@@ -134,12 +134,12 @@ export default function ({layers, epsg, zoomTo}) {
                 return;
             }
             if (!features || !Array.isArray(features) || features.length === 0) {
-                store.dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.featureViaURL.messages.featureParsingAll")});
+                store.dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.featureViaURL.messages.featureParsingAll"), "multipleAlert": true});
                 return;
             }
             geoJSON = createGeoJSON(features, geometryType, epsg);
             if (geoJSON.features.length === 0) {
-                store.dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.featureViaURL.messages.featureParsingNoneAdded")});
+                store.dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.featureViaURL.messages.featureParsingNoneAdded"), "multipleAlert": true});
             }
             layerIds.push(layerId);
             if (parentId !== undefined) {
@@ -147,7 +147,7 @@ export default function ({layers, epsg, zoomTo}) {
                 Radio.trigger("Util", "refreshTree");
             }
             else {
-                store.dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.featureViaURL.messages.defaultTreeNotSupported")});
+                store.dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.featureViaURL.messages.defaultTreeNotSupported"), "multipleAlert": true});
                 return;
             }
             if (typeof zoomTo !== "undefined" && (zoomTo === layerId || zoomTo.indexOf(layerId) !== -1)) {

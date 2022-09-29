@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
-import * as moment from "moment";
+import moment from "moment";
 import {expect} from "chai";
 import SensorThemeBartChart from "../../../components/SensorThemeBarChart.vue";
 

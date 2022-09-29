@@ -212,7 +212,7 @@
     width: 1.25rem;
     height: 1.25rem;
     line-height: unset;
-    font-size: 14px;
+    font-size: $font_size_big;
     color: $accent_contrast;
     text-align: center;
     vertical-align: bottom;
@@ -252,7 +252,7 @@
 }
 
 .button3D > .bootstrap-icon {
-    font-size: 17px;
+    font-size: 1.1rem;
     margin-top: .33rem;
     padding: .625rem .375rem .375rem .37rem;
     font-family: $font_family_accent;
@@ -280,7 +280,7 @@
     margin-top: 1.25rem;
 }
 .buttonOblique > .bootstrap-icon {
-    font-size: 1.43rem;
+    font-size: 1.4rem;
     margin-top: .2rem;
     padding: .375rem .44rem .19rem .44rem;
     border: 0;

@@ -1,5 +1,5 @@
 <script>
-import * as moment from "moment";
+import moment from "moment";
 import axios from "axios";
 
 import getComponent from "../../../../../../../utils/getComponent";

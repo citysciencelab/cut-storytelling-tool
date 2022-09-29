@@ -82,7 +82,7 @@ export default {
     }
     .info-icon {
         float: right;
-        font-size: 16px;
+        font-size: $font-size-lg;
         color: $dark_grey;
     }
     .info-icon .opened {
@@ -95,7 +95,7 @@ export default {
     .info-text {
         border: 1px solid $light_grey;
         border-radius: 5px;
-        font-size: 11px;
+        font-size: $font-size-sm;
         padding: 15px 10px;
         cursor: pointer;
     }

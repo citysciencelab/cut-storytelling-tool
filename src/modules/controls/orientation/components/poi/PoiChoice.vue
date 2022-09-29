@@ -48,7 +48,7 @@ export default {
          * @returns {void}
          */
         show () {
-            const el = document.querySelector(".modal"),
+            const el = document.querySelector(".modal.poi-choice"),
                 backdrop = document.querySelector(".modal-backdrop");
 
             if (el) {
@@ -174,11 +174,11 @@ export default {
 
     .poi-choice {
         color: $dark_grey;
-        font-size: 14px;
+        font-size: $font_size_big;
         .modal-header {
             padding: 0;
             > .bootstrap-icon {
-                font-size: 16px;
+                font-size: $font_size_icon_lg;
                 padding: 12px;
                 cursor: pointer;
                 &:focus {

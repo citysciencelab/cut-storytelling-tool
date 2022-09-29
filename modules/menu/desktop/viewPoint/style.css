@@ -1,9 +1,9 @@
 .menu-style {
-    font-size: 14px;
+    font-size: $font_size_big;
 }
 
 .viewpoint-style {
-    font-size: 12px;
+    font-size: $font-size-base;
     padding: 5px 0;
     border-bottom: 1px solid rgb(229, 229, 229);
 }

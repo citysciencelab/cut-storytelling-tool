@@ -26,7 +26,7 @@
 #root {
     >.dropdown {
         color: $dark_grey;
-        font-size: 14px;
+        font-size: $font_size_big;
     }
     .dropdown {
         border-right: 1px solid $light_grey;

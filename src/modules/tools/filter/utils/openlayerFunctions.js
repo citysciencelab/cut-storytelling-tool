@@ -109,11 +109,28 @@ function createLayerIfNotExists (layername) {
  * @param {Function} callback the callback to call when zoom has finished
  * @returns {void}
  */
-function liveZoom (minScale, featureIds, layerId, callback) {
+function zoomToFilteredFeatures (minScale, featureIds, layerId, callback) {
     // eslint-disable-next-line new-cap
     const minResolution = store.getters["Maps/getResolutionByScale"](minScale);
 
     store.dispatch("Maps/zoomToFilteredFeatures", {ids: featureIds, layerId: layerId, zoomOptions: {
+        minResolution,
+        callback
+    }});
+}
+
+/**
+ * Zooms to an extent of a feature considering the min scale.
+ * @param {ol/Extent} extent The extent to zoom to.
+ * @param {Number} minScale the minimum scale
+ * @param {Function} callback the callback to call when zoom has finished
+ * @returns {void}
+ */
+function zoomToExtent (extent, minScale, callback) {
+    // eslint-disable-next-line new-cap
+    const minResolution = store.getters["Maps/getResolutionByScale"](minScale);
+
+    store.dispatch("Maps/zoomToExtent", {extent, options: {
         minResolution,
         callback
     }});
@@ -186,7 +203,8 @@ export {
     getCurrentExtent,
     isFeatureInMapExtent,
     isFeatureInGeometry,
-    liveZoom,
+    zoomToFilteredFeatures,
+    zoomToExtent,
     showFeaturesByIds,
     addLayerByLayerId,
     setParserAttributeByLayerId,

@@ -2,7 +2,6 @@
 #languagebar {
     .currentLan {
         cursor: pointer;
-        /* font-size: 12px; */
         text-transform: uppercase;
         color: $primary;
         font-weight: 900;
@@ -20,7 +19,6 @@
         bottom: 50px;
         .lng-header {
             display: block;
-            float: right;
             width: 100%;
             border-bottom: 1px solid $light_grey;
             padding: 0 0 3px 10px;
@@ -35,7 +33,7 @@
             text-align: center;
             padding: 20px 0 0;
             a {
-                font-size: 12px;
+                font-size: $font-size-base;
                 &:hover{
                     background-color: $light_blue;
                     color: $white;
@@ -46,10 +44,6 @@
             }
         }
     }
-}
-
-.footer #languagebar {
-    float: right;
 }
 
 .ol-overlaycontainer-stopevent #languagebar {

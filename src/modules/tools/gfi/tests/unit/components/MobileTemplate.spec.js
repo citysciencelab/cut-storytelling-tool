@@ -63,54 +63,6 @@ describe("src/modules/tools/gfi/components/templates/MobileTemplate.vue", () => 
         expect(wrapper.find("span.close").exists()).to.be.true;
     });
 
-
-    it("should emitted close event if button is clicked", async () => {
-        const wrapper = shallowMount(MobileTemplate, {
-                data: function () {
-                    return {reactOnOutsideClick: true};
-                },
-                propsData: {
-                    feature: {
-                        getTheme: () => "Default",
-                        getMimeType: () => "text/html",
-                        getTitle: () => "Hallo",
-                        getProperties: () => sinon.stub(),
-                        getFeatures: () => sinon.stub()
-                    }
-                },
-                localVue
-            }),
-            button = wrapper.find(".close");
-
-        await button.trigger("click");
-        expect(wrapper.emitted()).to.have.property("close");
-        expect(wrapper.emitted().close).to.have.lengthOf(1);
-    });
-
-    it("should emitted close event if clicked outside the modal", async () => {
-        const wrapper = shallowMount(MobileTemplate, {
-                data: function () {
-                    return {reactOnOutsideClick: true};
-                },
-                propsData: {
-                    feature: {
-                        getTheme: () => "Default",
-                        getMimeType: () => "text/html",
-                        getTitle: () => "Hallo",
-                        getProperties: () => sinon.stub(),
-                        getFeatures: () => sinon.stub()
-                    }
-                },
-                localVue
-            }),
-            div = wrapper.find(".modal-mask");
-
-
-        await div.trigger("click");
-        expect(wrapper.emitted()).to.have.property("close");
-        expect(wrapper.emitted().close).to.have.lengthOf(1);
-    });
-
     it("should not emitted close event if clicked inside the modal", async () => {
         const wrapper = shallowMount(MobileTemplate, {
                 data: function () {

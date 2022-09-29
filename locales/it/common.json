@@ -54,7 +54,6 @@
             "fileImport": "Importa file",
             "draw": "Disegna / Scrivi",
             "shadow": "Ombre",
-            "styleWMS": "Adatta WMS",
             "commuterLines": "Pendolare (Linea)",
             "commuterAnimation": "Pendolare (Animazione)",
             "layerSlider": "Linea del tempo",
@@ -290,24 +289,6 @@
               "theme": "Livello",
               "chooseTheme": "Seleziona livello attivo",
               "style": "Stile"
-            },
-            "styleWMS": {
-                "noStyleableLayers": "Attualmente non sono disponibili livelli classificabili a cui questo strumento possa essere applicato.",
-                "theme": "Livello",
-                "chooseTheme": "Seleziona livello",
-                "attribute": "Attributo",
-                "chooseAttribute": "Seleziona attributo",
-                "countOfClasses": "Numero di classi",
-                "chooseNumberOfClasses": "Seleziona il numero di classi",
-                "rangeOfValues": "Campo di valori",
-                "from": "da",
-                "to": "a",
-                "reset": "Reimposta",
-                "apply": "Applica",
-                "pleaseEnterInteger": "Si prega di inserire un numero intero.",
-                "pleaseChooseColor": "Si prega di selezionare un colore.",
-                "checkTheValues": "Controlla i valori.",
-                "overlappingValueRanges": "Controlla i valori. I campi di valori non si devono sovrapporsi."
             },
             "featureLister": {
                 "chooseTheme": "Seleziona livello",

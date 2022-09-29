@@ -6,7 +6,7 @@ $background_color_1: rgb(65, 65, 65);
         margin-bottom: 0;
         background-color: $dark_grey;
         color: $white;
-        font-size: 14px;
+        font-size: $font_size_big;
         padding: 14px 15px;
         >li {
             >span {
@@ -24,7 +24,7 @@ $background_color_1: rgb(65, 65, 65);
     }
     span.title {
         padding-left: 6px;
-        font-size: 14px;
+        font-size: $font_size_big;
     }
     span.bootstrap-icon {
         padding: 5px;

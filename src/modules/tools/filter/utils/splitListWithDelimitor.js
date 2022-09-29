@@ -22,5 +22,6 @@ export default function splitListWithDelimitor (list, delimitor) {
             result[part] = true;
         });
     });
+
     return Object.keys(result);
 }

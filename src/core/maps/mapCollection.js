@@ -4,7 +4,7 @@ export default {
     /**
      * Adds a map to the mapCollection.
      * At the moment the architecture only considers one 2D and one 3D map without Ids.
-     * @param {module:ol/PluggableMap~PluggableMap} map The map.
+     * @param {module:ol/Map~Map} map The map.
      * @param {String} mode The map mode.
      * @returns {void}
      */
@@ -25,7 +25,7 @@ export default {
     /**
      * Gets a map by the given mode.
      * @param {String} mode The map mode.
-     * @returns {module:ol/PluggableMap~PluggableMap} The map.
+     * @returns {module:ol/Map~Map} The map.
      */
     getMap: function (mode) {
         return mapCollection.find(map => map?.mode === mode);
@@ -42,7 +42,7 @@ export default {
     /**
      * Gets a mapview of a map by the given mode.
      * @param {String} mode The map mode.
-     * @returns {module:ol/PluggableMap~PluggableMap} The mapview.
+     * @returns {module:ol/Map~Map} The mapview.
      */
     getMapView: function (mode) {
         return this.getMap(mode).getView();

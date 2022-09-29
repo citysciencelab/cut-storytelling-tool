@@ -5,19 +5,23 @@
     max-height: 66vh;
     overflow-y: auto;
     span.title {
-        font-size: 14px;
+        font-size: $font_size_big;
         padding-left: 6px;
         vertical-align: text-bottom;
     }
     span.bootstrap-icon {
-        font-size: 18px;
+        font-size: $font-size-lg;
         padding: 5px;
     }
-    >.list-group-item {
+    >.dropdown-item {
         padding: 12px 5px;
         display: flex;
         flex-flow: row wrap;
         align-items: center;
+        border-bottom: 1px solid rgba(0,0,0,.125);
+    }
+    .dropdown-item.disabled, .dropdown-item:disabled {
+        background-color: $dropdown-item-disabled-bg;
     }
 }
 .selected-layer-item {
@@ -32,7 +36,7 @@
     >.form-inline {
         >.form-group {
             >label {
-                font-size: 12px;
+                font-size: $font-size-base;
                 padding-right: 10px;
             }
             >select {
@@ -56,7 +60,7 @@
         margin-right: 10px;
     }
 }
-.list-group-item {
+.dropdown-item {
     >.layer-info-item {
         >.rotate {
             transform: rotate(0deg);

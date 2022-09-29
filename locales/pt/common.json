@@ -38,7 +38,6 @@
             "routing": "Direções",
             "draw": "Desenhar / Escrever",
             "shadow": "Sombra",
-            "styleWMS": "Stilo WMS",
             "commuterLines": "Mobilidade pendular (linhas)",
             "commuterAnimation": "Mobilidade pendular (animação)",
             "layerSlider": "Série temporal",
@@ -291,24 +290,6 @@
               "theme": "Tópico",
               "chooseTheme": "Por favor seleccione o tópico activo",
               "style": "Estilo"
-            },
-            "styleWMS": {
-                "noStyleableLayers": "Não há actualmente tópicos classificáveis disponíveis aos quais esta ferramenta possa ser aplicada.",
-                "theme": "Tópico",
-                "chooseTheme": "Por favor seleccione um tópico",
-                "attribute": "Atributo",
-                "chooseAttribute": "Seleccione por favor o atributo",
-                "countOfClasses": "Número de classes",
-                "chooseNumberOfClasses": "Por favor, seleccione o número de classes",
-                "rangeOfValues": "Gama de valores Classe",
-                "from": "de",
-                "to": "a",
-                "reset": "Reiniciar",
-                "apply": "Aplicar",
-                "pleaseEnterInteger": "Por favor, introduza um número inteiro.",
-                "pleaseChooseColor": "Por favor, seleccione uma cor.",
-                "checkTheValues": "Verifique os valores.",
-                "overlappingValueRanges": "Verifique os valores. Os intervalos de valores não devem sobrepor-se."
             },
             "featureLister": {
                 "chooseTheme": "Escolha o tópico",

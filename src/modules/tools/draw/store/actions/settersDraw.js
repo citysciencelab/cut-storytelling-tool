@@ -30,6 +30,7 @@ async function setActive ({state, commit, dispatch, rootState}, active) {
         dispatch("createDrawInteractionAndAddToMap", {active: state.currentInteraction === "draw"});
         dispatch("createSelectInteractionAndAddToMap", state.currentInteraction === "delete");
         dispatch("createModifyInteractionAndAddToMap", state.currentInteraction === "modify");
+        dispatch("createModifyAttributesInteractionAndAddToMap", state.currentInteraction === "modifyAttributes");
         dispatch("setDrawLayerVisible", true);
 
         if (state.withoutGUI) {
@@ -158,6 +159,22 @@ function setOuterColorContour ({getters, commit, dispatch}, {target}) {
     dispatch("updateDrawInteraction");
 }
 
+/**
+ * Adds another symbol if it doesn't exist already.
+ *
+ * @param {Object} context actions context object.
+ * @param {Object} symbol The icon to add.
+ * @returns {void}
+ */
+function addSymbolIfNotExists ({state, commit}, symbol) {
+    const iconList = state.iconList;
+
+    if (!iconList.find(icon => icon.id === symbol.id)) {
+        commit("addSymbol", symbol);
+    }
+}
+
+/**
 /**
  * Sets the drawType and triggers other methods to add the new interactions
  * to the map and remove the old one.
@@ -299,21 +316,6 @@ function setSymbol ({state, commit, dispatch}, {target}) {
     // NOTE: caption is deprecated in 3.0.0
     commit("setSymbol", iconList.filter(icon => icon.id ? icon.id === selectedElement.value : icon.caption === selectedElement.value)[0]);
     dispatch("updateDrawInteraction");
-}
-
-/**
- * Adds another symbol if it doesn't exist already.
- *
- * @param {Object} context actions context object.
- * @param {Object} symbol The icon to add.
- * @returns {void}
- */
-function addSymbolIfNotExists ({state, commit}, symbol) {
-    const iconList = state.iconList;
-
-    if (!iconList.find(icon => icon.id === symbol.id)) {
-        commit("addSymbol", symbol);
-    }
 }
 
 /**

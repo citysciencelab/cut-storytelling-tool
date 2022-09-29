@@ -113,7 +113,7 @@ export default {
         }
     },
     mounted () {
-        this.$emit("setSnippetPrechecked", this.visible && this.prechecked);
+        this.$emit("setSnippetPrechecked", this.visible && this.prechecked ? this.snippetId : false);
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -207,7 +207,7 @@ export default {
     }
     .snippetCheckboxContainer .info-icon {
         float: right;
-        font-size: 16px;
+        font-size: $font_size_icon_lg;
         color: $light_grey;
     }
     .snippetCheckboxContainer .info-icon .opened {
@@ -220,7 +220,7 @@ export default {
     .snippetCheckboxContainer .info-text {
         border: 1px solid $light_grey;
         border-radius: 5px;
-        font-size: 10px;
+        font-size: $font-size-sm;
         padding: 15px 10px;
     }
     .snippetCheckboxContainer .bottom {
@@ -246,8 +246,5 @@ export default {
     .snippetCheckboxContainer .right {
         position: absolute;
         right: 0;
-    }
-    .category-layer .right {
-        right: 30px;
     }
 </style>

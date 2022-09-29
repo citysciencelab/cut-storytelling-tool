@@ -23,7 +23,7 @@ export default {
     },
     computed: {
         ...mapGetters(["uiStyle"]),
-        ...mapGetters("Maps", ["initialCenter", "initialZoomLevel"]),
+        ...mapGetters("Maps", ["initialCenter", "initialZoomLevel", "center", "zoom"]),
 
         component () {
             return this.uiStyle === "TABLE" ? TableStyleControl : ControlIcon;
@@ -31,18 +31,17 @@ export default {
         iconToUse () {
             return this.uiStyle === "TABLE" ? this.tableIcon : this.icon;
         },
-
         /**
          * Map was moved.
          * @returns {Boolean} true if map is not in initial zoom/center.
          */
-        mapMoved: function () {
-            const view = mapCollection.getMapView("2D"),
-                center = view.getCenter();
-
-            return this.initialCenter[0] !== center[0] ||
-                this.initialCenter[1] !== center[1] ||
-                this.initialZoomLevel !== view.getZoom();
+        mapMoved () {
+            if (this.center) {
+                return this.initialCenter[0] !== Math.round(this.center[0]) ||
+                    this.initialCenter[1] !== Math.round(this.center[1]) ||
+                    this.initialZoomLevel !== this.zoom;
+            }
+            return false;
         }
     },
     methods: {
