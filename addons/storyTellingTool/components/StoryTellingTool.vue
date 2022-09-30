@@ -407,6 +407,9 @@ $white: #FFFFFF;
 
 #table-nav-layers-panel-toggler {
     background-color: #f5f5f5 !important;
+    .icon-cross1:before {
+        color: rgba(0, 0, 0, .87) !important;
+    }
 }
 
 #funnel, .search-funnel {
