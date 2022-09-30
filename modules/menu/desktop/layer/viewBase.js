@@ -1,6 +1,5 @@
 import axios from "axios";
 import store from "../../../../src/app-store";
-import Dropdown from "bootstrap/js/dist/dropdown";
 
 /**
  * Base class for layer view that provides common functionality.
@@ -15,7 +14,7 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      * @returns {void}
      */
     initializeDomId: function (prefix) {
-        let idPrefix = "layer-list-group-item-";
+        let idPrefix = "layer-dropdown-item-";
 
         if (prefix) {
             idPrefix = prefix;
@@ -312,23 +311,6 @@ const LayerBaseView = Backbone.View.extend(/** @lends LayerBaseView.prototype */
      */
     decTransparency: function () {
         this.model.decTransparency(10);
-    },
-
-    /**
-     * Triggers the styleWMS tool to open
-     * Closes dropdown menu"
-     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
-     * @returns {void}
-     */
-    openStyleWMS: function () {
-        Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        // Upgrade to BT5, use JS method instead of class removal
-        const dropdown = Dropdown.getInstance(".nav li:first-child > .dropdown-toggle");
-
-        dropdown.hide();
-        $(".dropdown-menu.fixed").removeClass("fixed");
-        $(".bi-pin-angle-fill").parent(".bootstrap-icon").removeClass("rotate-pin");
-        $(".bi-pin-angle-fill").parent(".bootstrap-icon").addClass("rotate-pin-back");
     },
 
     /**

@@ -57,7 +57,6 @@
             "fileImport": "Імпорт файлу",
             "draw": "Малювати / писати",
             "shadow": "Тінь",
-            "styleWMS": "Style WMS",
             "commuterLines": "Пасажири (Commuter), які їдуть на роботу (Лінії)",
             "commuterAnimation": "Пасажири (Commuter), які їдуть на роботу (Анімація)",
             "layerSlider": "Часовий ряд",
@@ -380,24 +379,6 @@
               "theme": "Тема",
               "chooseTheme": "Будь ласка, виберіть активну тему",
               "style": "Стиль"
-            },
-            "styleWMS": {
-                "noStyleableLayers": "В даний час немає тем, до яких можна було б застосувати цей інструмент.",
-                "theme": "Тема",
-                "chooseTheme": "Будь ласка, виберіть тему",
-                "attribute": "Атрибут",
-                "chooseAttribute": "Будь ласка, виберіть атрибут",
-                "countOfClasses": "Кількість класів",
-                "chooseNumberOfClasses": "Будь ласка, виберіть кількість класів",
-                "rangeOfValues": "Діапазон значень класу",
-                "from": "від",
-                "to": "до",
-                "reset": "Скинути",
-                "apply": "Застосовувати",
-                "pleaseEnterInteger": "Будь ласка, введіть ціле число.",
-                "pleaseChooseColor": "Будь ласка, виберіть колір.",
-                "checkTheValues": "Перевірте значення.",
-                "overlappingValueRanges": "Перевірте значення. Діапазони значень не повинні перетинатися."
             },
             "featureLister": {
                 "chooseTheme": "Виберіть тему",

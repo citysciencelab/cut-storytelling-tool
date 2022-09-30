@@ -62,7 +62,7 @@
     .info-icon {
         float: right;
         padding: 10px 0 10px 10px;
-        font-size: 16px;
+        font-size: $font_size_icon_lg;
         opacity: 0.4;
         &:hover {
             cursor: pointer;
@@ -71,7 +71,7 @@
     }
     .info-text {
         display: none;
-        font-size: 10px;
+        font-size: $font-size-sm;
         padding: 5px 0;
     }
 }
@@ -79,7 +79,7 @@
     display: inline-block;
     visibility: hidden;
     white-space: pre;
-    font-size: 12px;
+    font-size: $font-size-base;
     height: 24px;
 }
 @media (max-width: 767px) {

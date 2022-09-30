@@ -9,16 +9,13 @@ import StyleList from "../modules/vectorStyle/list";
 import Preparser from "../modules/core/configLoader/preparser";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
-import WFSTransactionModel from "../modules/wfsTransaction/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import featureViaURL from "../src/utils/featureViaURL";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
-import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
-import StyleWMSView from "../modules/tools/styleWMS/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import {initiateVueI18Next} from "./vueI18Next";
 import {handleUrlParamsBeforeVueMount, readUrlParamEarly} from "../src/utils/parametricUrl/ParametricUrlBridge";
@@ -43,7 +40,6 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
  */
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import TreeFilterView from "../modules/treeFilter/view";
-import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import SearchbarView from "../modules/searchbar/view";
@@ -136,7 +132,6 @@ async function loadApp () {
 
     app.$mount();
 
-    new WFSTransactionModel();
     new MenuLoader();
 
     if (Object.prototype.hasOwnProperty.call(Config, "featureViaURL")) {
@@ -167,10 +162,6 @@ async function loadApp () {
 
     Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
-            case "shadow": {
-                new ShadowView({model: tool});
-                break;
-            }
             case "parcelSearch": {
                 new ParcelSearchView({model: tool});
                 break;
@@ -193,14 +184,6 @@ async function loadApp () {
             }
             case "treeFilter": {
                 new TreeFilterView({model: tool});
-                break;
-            }
-            case "styleWMS": {
-                new StyleWMSView({model: tool});
-                break;
-            }
-            case "wfst": {
-                new WfstView({model: tool});
                 break;
             }
             case "virtualCity": {

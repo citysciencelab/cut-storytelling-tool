@@ -49,12 +49,6 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
                 this.setFocus(".transparency .decrease-icon");
             }
         },
-        "click .style-icon": "openStyleWMS",
-        "keydown .style-icon": function (event) {
-            if (this.handleKeyboardTriggeredAction(event, "openStyleWMS")) {
-                this.setFocus(".styleWMS");
-            }
-        },
         "click .remove-layer": "removeLayer",
         "keydown .remove-layer": function (event) {
             if (this.handleKeyboardTriggeredAction(event, "removeLayer")) {
@@ -94,7 +88,7 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
     tagName: "li",
-    className: "layer-item list-group-item",
+    className: "layer-item dropdown-item",
     template: _.template(Template),
     templateSettings: _.template(TemplateSettings),
 

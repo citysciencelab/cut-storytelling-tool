@@ -37,7 +37,7 @@ export default {
         display: inline-block;
         color: $secondary_contrast;
         text-align: center;
-        font-size: 10px;
+        font-size: $font-size-sm;
 
         .scale-line {
             color: lighten($secondary_contrast, 10%);

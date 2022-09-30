@@ -90,7 +90,8 @@ function getNextLinkFromFeatureCollection (featureCollection) {
         if (
             isObject(featureCollection.links[i])
             && typeof featureCollection.links[i].href === "string"
-            && featureCollection.links[i].title === "next page"
+            && featureCollection.links[i].rel === "next"
+            && featureCollection.links[i].type === "application/geo+json"
         ) {
             return featureCollection.links[i].href;
         }

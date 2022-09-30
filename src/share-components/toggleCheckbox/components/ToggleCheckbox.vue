@@ -115,6 +115,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~/css/mixins.scss";
+    @import "~variables";
 
     div.toggleCheckboxComponent {
         width:63px;
@@ -125,5 +126,8 @@ export default {
         &:focus {
             @include primary_action_focus;
         }
+    }
+    .btn-sm {
+        font-size: $font-size-lg;
     }
 </style>

@@ -106,66 +106,14 @@
           "visibility": false
         },
         {
-          "id": "13032",
-          "name": "Oblique",
-          "visibility": false,
-          "isVisibleInTree": false
+          "id": "123456",
+          "name": "EntitiesLayerName",
+          "visibility": false
         },
         {
           "id": "6666",
           "name": "3d objects",
-          "typ": "Entities3D",
-          "visibility": false,
-          "entities": [
-            {
-              "url": "./assets/3dobjects/hotel/scene.gltf",
-              "latitude": 53.558085,
-              "longitude": 9.953076,
-              "height": 16,
-              "heading": -1.2502079000000208,
-              "pitch": 0,
-              "roll": 0,
-              "scale": 1,
-              "allowPicking": false,
-              "show": true
-            },
-            {
-              "url": "./assets/3dobjects/lightpole2/scene.gltf",
-              "latitude": 53.556691,
-              "longitude": 9.962919,
-              "height": 16,
-              "heading": -1.2502079000000208,
-              "pitch": 0,
-              "roll": 0,
-              "scale": 1,
-              "allowPicking": false,
-              "show": true
-            },
-            {
-              "url": "./assets/3dobjects/lightpole2/scene.gltf",
-              "latitude": 53.556627,
-              "longitude": 9.962887,
-              "height": 16,
-              "heading": -1.2502079000000208,
-              "pitch": -0.6927398353366296,
-              "roll": 0,
-              "scale": 1,
-              "allowPicking": false,
-              "show": true
-            },
-            {
-              "url": "./assets/3dobjects/bubble/scene.gltf",
-              "latitude": 53.541884,
-              "longitude": 10.001402,
-              "height": 55,
-              "heading": -1.2502079000000208,
-              "pitch": -0.6927398353366296,
-              "roll": 0,
-              "scale": 0.05,
-              "allowPicking": false,
-              "show": true
-            }
-          ]
+          "typ": "Entities3D"
         }
       ]
     }

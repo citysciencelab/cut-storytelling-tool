@@ -90,7 +90,7 @@ export default {
         padding: 6px 0 0;
 
         color: $dark_grey;
-        font-size: 17px;
+        font-size: $font-size-lg;
 
         border-style: solid;
         border-color: $light_grey;

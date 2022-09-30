@@ -198,6 +198,7 @@ export default {
                 this.$nextTick(() => {
                     this.isInitializing = false;
                     this.disable = false;
+                    this.emitSnippetPrechecked(this.precheckedIsValid, this.snippetId, this.visible);
                 });
             }
             else if (this.api) {
@@ -225,10 +226,12 @@ export default {
                     this.$nextTick(() => {
                         this.isInitializing = false;
                         this.disable = false;
+                        this.emitSnippetPrechecked(this.precheckedIsValid, this.snippetId, this.visible);
                     });
                 }, err => {
                     this.isInitializing = false;
                     this.disable = false;
+                    this.emitSnippetPrechecked();
                     console.warn(err);
                 }, typeof this.minValue === "undefined" && typeof this.maxValue !== "undefined", typeof this.minValue !== "undefined" && typeof this.maxValue === "undefined", true,
                 {rules: this.fixedRules, filterId: this.filterId, format: this.format});
@@ -238,17 +241,27 @@ export default {
                 this.$nextTick(() => {
                     this.isInitializing = false;
                     this.disable = false;
+                    this.emitSnippetPrechecked(this.precheckedIsValid, this.snippetId, this.visible);
                 });
             }
             if (this.visible && this.precheckedIsValid) {
                 this.emitCurrentRule(this.prechecked, true);
             }
         });
-        this.$emit("setSnippetPrechecked", this.visible && this.precheckedIsValid);
     },
     methods: {
         translateKeyWithPlausibilityCheck,
 
+        /**
+         * Emits the setSnippetPrechecked event.
+         * @param {Boolean} precheckedIsValid true if prechecked is valid.
+         * @param {Number} snippetId The snippet id to emit.
+         * @param {Boolean} visible true if the snippet is visible, false if not.
+         * @returns {void}
+         */
+        emitSnippetPrechecked (precheckedIsValid, snippetId, visible) {
+            this.$emit("setSnippetPrechecked", visible && precheckedIsValid ? snippetId : false);
+        },
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -390,8 +403,5 @@ export default {
         right: 0;
         top: 0;
         width: auto;
-    }
-    .category-layer .right {
-        right: 30px;
     }
 </style>

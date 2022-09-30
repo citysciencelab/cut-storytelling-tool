@@ -43,7 +43,6 @@
             "routing": "yol planlayıcısı",
             "draw": "çizmek / yazmak",
             "shadow": "gölge",
-            "styleWMS": "Style WMS",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
             "layerSlider": "zaman serisi",
@@ -299,24 +298,6 @@
               "theme": "Konu",
               "chooseTheme": "Lütfen aktif konu seçin",
               "style": "Stil"
-            },
-            "styleWMS": {
-                "noStyleableLayers": "Şu anda bu aracın uygulanabileceği sınıflandırılabilir bir konu yok.",
-                "theme": "Konu",
-                "chooseTheme": "Lütfen bir konu seçin",
-                "attribute": "özellik",
-                "chooseAttribute": "Lütfen bir özellik seçin",
-                "countOfClasses": "Sınıf sayısı",
-                "chooseNumberOfClasses": "Lütfen sınıf sayısını seçin",
-                "rangeOfValues": "Değer aralığı sınıfı",
-                "from": "'den",
-                "to": "a kadar",
-                "reset": "geriye koymak",
-                "apply": "uygulamak",
-                "pleaseEnterInteger": "Lütfen bir tam sayı girin.",
-                "pleaseChooseColor": "Lütfen bir renk seçiniz.",
-                "checkTheValues": "Değerleri kontrol edin.",
-                "overlappingValueRanges": "Değerleri kontrol edin. Değer aralıkları çakışmamalıdır."
             },
             "featureLister": {
                 "chooseTheme": "Bir konu seç",

@@ -6,23 +6,77 @@
 ## Known Issues
 
 ---
-
 ## Unreleased - in development
 ### __Breaking Changes__
 
 ### Added
+- Draw-Tool:
+  - If there are attributes set on the feature of drawn layer, after clicking on the feature, the attributes will be shown in standard gfi theme.
+- The following NPM package has been added:
+    - devDependencies:
+        - @babel/plugin-transform-modules-commonjs: 7.18.6
+- Alerting: attribute "multipleAlert" allows to add single alert or multiple-alert as a list.
+- MapMarker: Added function for rotation in 3D.
+- Reusable component SimpleButton.
+
+### Changed
+- OAF:
+    - OAF no longer uses title: "next page" as an indicator for the next page but rel: "next".
+    - The CRS parameter can be turned off via crs: false. The default crs in the master portal for oaf has been set to http://www.opengis.net/def/crs/EPSG/0/25832.
+    - The standard limit will be set to 400.
+- Tools are now always rendered in the window in mobile mode, since the sidebar is currently not usable in mobile mode.
+- More variables for fonts were added to the code (not in addons).
+- Filter:
+    - For OAF layer, the standard pagination (limit) will be set to 400.
+    - For snippet dropdown + multiselect: It is now possible to initially select all available values by setting "prechecked" to "all".
+- The image of the default MapMarker has been replaced by the icon [geo-alt-fill](https://icons.getbootstrap.com/icons/geo-alt-fill/) from Bootstrap. This means that the marker can now also be printed locally via the print module.
+- The following NPM packages have been updated:
+    - dependencies:
+        - @masterportal/masterportalapi: 2.6.0 to 2.7.0 (This also raised ol to version 7.1.0 and olcs to 2.13.1)
+        - jsts: 2.9.0 to 2.9.1
+        - @geoblocks/print: 0.7.2 to 0.7.3
+- HighlightFeature is working with AD-Secure services now.
+- Refactored tool wfst.
+
+### Deprecated
+
+### Removed
+- The image of the default MapMarker was removed from img folder.
+
+### Fixed
+- Issue #765: mobile: order of menu entries at first level does no longer change after selected an entry and went back to menu
+- Issue #825 The Control layerAttributions remain open when a layer with content is activated until they are explicitly collapsed.
+- Issue #826: Tool WFS Search did not work with a parcel.json that had "fluren" with local values. This has been resolved.
+- Issue #829: xml2json parser (used in meta data context) broke on valid XML. It has been extended for the unattended cases.
+- Issue #832: ElasticSearch API fixed for GET requests. (URL building was incomplete.)
+- drawTool: circles can be drawn with setting defined again
+- Issue #835: small quickHelp issue has been fixed (showed topic 3 again instead of 5).
+- TreeType 'default': if a layer, configured in config.json is not found in services.json, no error occurs.
+
+---
+## v2.25.0 - 2022-09-07
+### Added
+- KeepOpen attribute for tools:
+    - Allows to keep a tool open (that is rendered in a sidebar) when other tools (that are rendered to the window) are used.
 - The following NPM packages are added:
     - dependencies:
         - "vue2-datepicker"
+        - "css-minimizer-webpack-plugin"
 - #657: Polygon hatch patterns to allow for further design options in the style.json file have been implemented.
 - Possibility for development with self-signed SSL-certificates. See [wiki-doc](https://bitbucket.org/geowerkstatt-hamburg/masterportal/wiki/Entwicklungsumgebung%20mit%20selbstsignierten%20SSL-Zertifikat%20einrichten)
 - Filter:
     - Added an option to activate a csv download button for filtered data.
+    - wmsRefId is also for type array implemented so that multiple wms Layers can be activated or deactivated.
+    - Added a slider for dateRange.
 - Draw-Tool:
     - A new checkbox has been added to the Draw tool that can be used to hide and retrieve the drawing.
     - New Flag `addIconsOfActiveLayers`. Set to `true` to be able to select the icons and symbols of all WFS layers activated in the topic tree as additional symbols besides the icons configured under `drawSymbolSettings`.
+- Searchbar:
+    - Add possibility to search for folders in tree search if 'tree' is configured in 'searchbar' in config.json.
 
 ### Changed
+- Draw-Tool:
+    - You can now configure a button to edit custom attributes of a feature with the parameter `enableAttributesSelector`.
 - Filter:
     - Making intern wfs layer loadingStrategy with 'all' by filtering
     - The checkbox for filtering in the browsers extent now triggers direct filtering with `strategy`: `active`. This can be disabled by setting `searchInMapExtentProactive` to `false`.
@@ -31,11 +85,12 @@
 - Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
 - The following NPM packages have been updated:
     - dependencies:
-        - @masterportal/masterportalapi: 2.4.0 to 2.5.1
+        - @masterportal/masterportalapi: 2.4.0 to 2.6.0
         - @popperjs/core: 2.10.2 to 2.11.5
         - axios: 0.25.0 to 0.27.2
         - bootstrap-icons: 1.7.1 to 1.9.1
         - bootstrap-sass: 3.4.1 to 3.4.3
+        - bootstrap: 5.1.3 to 5.2.0
         - core-js: 3.24.0 to 3.24.1
         - i18next: 21.6.7 to 21.8.16
         - i18next-browser-languagedetector: 6.1.3 to 6.1.4
@@ -75,16 +130,43 @@
 - WfsSearch: `inputLabel` are now translated.
 - In the `light` topic tree, the `singleBaselayer` attribute can now also be used.
 - fileImport: the styles of geoJsons are now retained on reimport of a previously in MP created file
+- drawTool: previously set styles are now reflected in the drawTool and can be changed there.
+- highlightVectorRules: increaseFeature: image scaling works now.
+- shadow-Tool: the tool is refactored from Backbone to Vue.js.
 
 ### Deprecated
+- The GeoJson-Layer subTyp: `OpenSenseMap` is deprecated. It will be removed in the next Major-Release!
 
 ### Removed
 The following NPM package is removed:
     - @intlify/vue-i18n-loader
+    - bootstrap-colorpicker
+
+The Tool StyleWMS was removed.
 
 ### Fixed
 - Issue #808: Fix geometry polygon-with-hole for searchBar/specialWfs.
 - Issue #813: Fix various WMS-T bugs and styling.
+- Issue #818: Back to InitialView works again
+- Issue #823: Fix tree search.
+- Issue #827: fix image scaling for gfi: highlightVectorRules
+- Save Selection: takes over the transparency of the layer again.
+
+---
+
+## v2.24.1 - 2022-08-19
+### Added
+- The following NPM packages are added:
+
+    - dependencies:
+
+        - "vue2-datepicker"
+
+### Changed
+- Enable to configure semicolon or comma as default delimiter for csv text in ExportButtonCSV with a scope parameter useSemicolon.
+
+### Fixed
+- Fix sensor layer extent-display issues caused by url parameter usage.
 
 ---
 

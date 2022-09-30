@@ -28,6 +28,17 @@ function createModifyInteraction (layer) {
         source: layer.getSource()
     });
 }
+/**
+ * Creates a modifyAttributes interaction and returns it.
+ *
+ * @param  {module:ol/layer/Vector} layer The layer in which the features are drawn.
+ * @returns {module:ol/interaction/Modify} The modify interaction.
+ */
+function createModifyAttributesInteraction (layer) {
+    return new Modify({
+        source: layer.getSource()
+    });
+}
 
 /**
  * Creates a select interaction (for deleting features) and returns it.
@@ -46,5 +57,6 @@ function createSelectInteraction (layer, hitTolerance = 0) {
 export {
     createDrawInteraction,
     createModifyInteraction,
+    createModifyAttributesInteraction,
     createSelectInteraction
 };

@@ -43,7 +43,6 @@
             "fileImport": "Datei inföhrn",
             "draw": "Teken / Schrieven",
             "shadow": "Scheem",
-            "styleWMS": "Style WMS",
             "commuterLines": "Pendler (Streck)",
             "commuterAnimation": "Pendler (Animatschon)",
             "layerSlider": "Tiedreeg",
@@ -300,24 +299,6 @@
               "theme": "Thema",
               "chooseTheme": "Bidde Thema utwählen",
               "style": "Style"
-            },
-            "styleWMS": {
-                "noStyleableLayers": "Derzeit sind keine klassifizierbaren Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
-                "theme": "Thema",
-                "chooseTheme": "Bidde Thema utwählen",
-                "attribute": "Attribut",
-                "chooseAttribute": "Bidde Attribut utwählen",
-                "countOfClasses": "Antall vun de Klassen",
-                "chooseNumberOfClasses": "Biddee Antalll vun de Klassen utwählen",
-                "rangeOfValues": "Weertberiek Klasse",
-                "from": "vun",
-                "to": "bit",
-                "reset": "Trüchsetten",
-                "apply": "Anwenden",
-                "pleaseEnterInteger": "Bidde giff een ganze Tahl in.",
-                "pleaseChooseColor": "Bidde giff een Farve an.",
-                "checkTheValues": "Kiek no dien Weert.",
-                "overlappingValueRanges": "Kiek no dien Weert. De Weertberiek kun nich övernanner liggen."
             },
             "featureLister": {
                 "chooseTheme": "Bidde Thema utwählen",

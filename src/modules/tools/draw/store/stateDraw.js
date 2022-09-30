@@ -119,6 +119,7 @@ const symbol = {
             id: "drawSymbol",
             geometry: "Point"
         },
+        enableAttributesSelector: false,
         fId: 0,
         filterList: null,
         freeHand: false,
@@ -138,6 +139,7 @@ const symbol = {
         isVisibleInMenu: true,
         layer: null,
         modifyInteraction: null,
+        modifyAttributesInteraction: null,
         outerBorderColor: "",
         pointSize: 16,
         redoArray: [],
@@ -146,6 +148,7 @@ const symbol = {
         resizableWindow: true,
         selectInteraction: null,
         selectInteractionModify: null,
+        selectInteractionModifyAttributes: null,
         selectedFeature: null,
         symbol,
         tooltipCircleRadiusNode: null,

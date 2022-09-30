@@ -51,6 +51,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @listens Core.ConfigLoader#RadioRequestParserGetItemsByMetaID
      * @listens Core.ConfigLoader#RadioRequestParserGetSnippetInfos
      * @listens Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
+     * @listens Core.ConfigLoader#RadioRequestParserGetOverlayer
      * @listens Core.ConfigLoader#RadioTriggerParsersetCategory
      * @listens Core.ConfigLoader#RadioTriggerParserAddItem
      * @listens Core.ConfigLoader#RadioTriggerParserAddItemAtTop
@@ -98,6 +99,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     return this.get("extendedLayerIdAssoc")[layerId];
                 }
                 return layerId;
+            },
+            "getOverlayer": function () {
+                return this.get("overlayer");
             }
         }, this);
 

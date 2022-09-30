@@ -397,10 +397,16 @@ $white: #FFFFFF;
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(115, 193, 169, 0.0);
     border: 2px solid #73c1a9;
+
+    li {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
 }
 
 #table-nav-layers-panel-toggler {
-    background-color: #bbf0de;
+    background-color: #f5f5f5 !important;
 }
 
 #funnel, .search-funnel {

@@ -52,10 +52,11 @@ export default {
             if (root && this.uiStyle !== "TABLE") {
                 const span = root.querySelector("[name=legend]");
 
-                if (this.mobile && span?.parentNode && this.element) {
-                    root.replaceChild(this.element, span.parentNode);
+                if (this.mobile && span?.parentNode) {
+                    span.parentNode.style.display = "none";
+                    root.insertBefore(this.element, span.parentNode.nextElementSibling);
                 }
-                else if (span?.parentNode?.parentNode && this.childNode) {
+                else if (!this.mobile && span?.parentNode?.parentNode && this.childNode) {
                     root.replaceChild(this.childNode, span.parentNode.parentNode);
                 }
             }
@@ -109,7 +110,7 @@ export default {
             @keydown.enter="toggleLegend"
         >
             <div class="folder-item d-flex align-items-center">
-                <span class="bootstrap-icon d-sm-none d-md-inline-block">
+                <span class="bootstrap-icon d-md-inline-block">
                     <i :class="icon" />
                 </span>
                 <span class="title">{{ $t(name) }}</span>
@@ -132,8 +133,9 @@ export default {
 <style lang="scss" scoped>
     @import "~variables";
     #legend-menu {
-        border-right: 1px solid #e5e5e5;
-        font-size: 14px;
+        border-right: none;
+        border-top: none;
+        font-size: $font_size_big;
         cursor: pointer;
     }
 </style>

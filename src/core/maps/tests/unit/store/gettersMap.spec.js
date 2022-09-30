@@ -169,16 +169,50 @@ describe("src/core/maps/store/gettersMap.js", () => {
         });
 
         it("getCurrentExtent - calculate the extent for the current view state and the passed size", function () {
-            gettersMap.size = size;
+            const state = {size: size};
 
-            expect(gettersMap.getCurrentExtent()).to.deep.equal([
+            expect(gettersMap.getCurrentExtent(state)).to.deep.equal([
                 550634.0082295956, 5927099.441301902, 581113.9917704044, 5941180.558698098
             ]);
 
             map.getView().setZoom(3);
-            expect(gettersMap.getCurrentExtent()).to.not.have.members([
+            expect(gettersMap.getCurrentExtent(state)).to.not.have.members([
                 550634.0082295956, 5927099.441301902, 581113.9917704044, 5941180.558698098
             ]);
+        });
+    });
+
+    describe("getLayerById", () => {
+        beforeEach(() => {
+            mapCollection.clear();
+
+            const map = new Map({
+                    id: "ol",
+                    mode: "2D"
+                }),
+                layer1 = new VectorLayer({
+                    id: "1",
+                    name: "ABC",
+                    source: new VectorSource()
+                }),
+                layer2 = new VectorLayer({
+                    id: "2",
+                    name: "ABC",
+                    source: new VectorSource()
+                });
+
+            map.addLayer(layer1);
+            map.addLayer(layer2);
+
+            mapCollection.addMap(map, "2D");
+        });
+
+        it("should return the layer with the id 1", () => {
+            const layerId = "1",
+                foundLayer = gettersMap.getLayerById()({layerId});
+
+            expect(foundLayer.get("id")).to.equals("1");
+            expect(foundLayer).to.be.an.instanceof(VectorLayer);
         });
     });
 });

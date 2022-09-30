@@ -2,7 +2,7 @@
 
 The Masterportal can display hints to users by using the *Alerting* module. Both simple texts and HTML may be displayed.
 
-Since multiple alert messages may be shown at once, a pool of all available alerts exists. On adding a valid alert to this pool, a modal with all currently active alerts is shown.
+Since multiple alert messages may be shown at once, a pool of all available alerts can be shown with multipleAlert: true. On adding a valid alert to this pool, a modal with all currently active alerts is shown.
 
 An alert may be added in this fashion:
 
@@ -14,7 +14,8 @@ import store from "[...]/src/app-store/index";
 store.dispatch("Alerting/addSingleAlert", {
     "category": "Error",
     "content": "This wasn't supposed to happen! (Error Code 1234)",
-    "displayClass": "error"
+    "displayClass": "error",
+    "multipleAlert": true
 });
 ```
 
@@ -48,11 +49,12 @@ store.dispatch("Alerting/addSingleAlert", {
 |displayFrom|no|Boolean/String|false|Time from which the alert may be displayed. When set to `false`, no limitation is applied. Format: "YYYY-MM-DD HH-II-SS"|
 |displayUntil|no|Boolean/String|false|Time to which the alert may be displayed. When set to `false`, no limitation is applied. Format: "YYYY-MM-DD HH-II-SS"|
 |mustBeConfirmed|no|Boolean|false|Flag indicating whether the alert requires a manual read confirmation.|
+|multipleAlert|no|Boolean|false|Flag indicating whether the alert should be added to the current alert list (true) or is shown as a single alert (false)|
 |once|no|Boolean/Object|false|If `false`, this alert may be shown on each visit. If `true`, it's only shown once. You may also define an object indicating a time span after which the alert may be displayed again: `{"years": 1, "months": 3, "days": 5, "hours": 15, "minutes": 10, "seconds": 3, "milliseconds": 123}` (https://momentjs.com/docs/#/parsing/object/). All keys are optional.|
 
 ## Initially loading an *Alerting* configuration
 
-The *Alerting* module allows specifying an URL in the `config.js` parameter `alerting.fetchBroadcastUrl`, e.g. `"https://localhost:9001/portal/master/resources/broadcastedPortalAlerts.json"`. If such a parameter is set, the module will load the linked configuration file and create the alerts. This may e.g. be used to inform users of new versions or planned down-times. An arbitrary amount of portals may be supplied with such a central user information file.
+The *Alerting* module allows specifying an URL in the `config.js` parameter `alerting.fetchBroadcastUrl`, e.g. `"https://localhost:9001/portal/master/resources/broadcastedPortalAlerts.json"`. If such a parameter is set, the module will load the linked configuration file and create the alerts. Multiple alerts are allowed by default. This may e.g. be used to inform users of new versions or planned down-times. An arbitrary amount of portals may be supplied with such a central user information file.
 
 Configuration file example:
 

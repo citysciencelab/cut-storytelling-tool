@@ -27,6 +27,10 @@ export default {
     minScale: 5000,
     saveTo: "void",
     layers: [],
-    filters: [],
-    filtersHits: []
+    rulesOfFilters: [],
+    serializedString: "",
+    selectedAccordions: [],
+    filtersHits: [],
+    filterGeometry: false,
+    geometryFeature: undefined
 };

@@ -247,14 +247,26 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             let newLayer;
 
             if (Array.isArray(layer.id)) {
-                newLayer = Object.assign(this.mergeObjectsByIds(layer.id, layerList), Radio.request("Util", "omit", layer, ["id"]));
+                const mergedLayer = this.mergeObjectsByIds(layer.id, layerList);
+
+                if (mergedLayer) {
+                    newLayer = Object.assign(mergedLayer, Radio.request("Util", "omit", layer, ["id"]));
+                }
+                else {
+                    console.error("Background-layer with ids: " + layer.id + " was not created. Not all ids are contained in services.json.");
+                    return;
+                }
             }
             else {
-                newLayer = Object.assign(layerList.find(singleLayer => singleLayer.id === layer.id), Radio.request("Util", "omit", layer, ["id"]));
+                const rawLayer = layerList.find(singleLayer => singleLayer.id === layer.id);
+
+                if (rawLayer) {
+                    newLayer = Object.assign(rawLayer, Radio.request("Util", "omit", layer, ["id"]));
+                }
             }
 
             if (newLayer === undefined) {
-                console.error("Layer with id: " + layer.id + " cannot be found in layerlist. Possible error: layer got removed in function 'deleteLayersIncludeCache'.");
+                console.error("Layer with id: " + layer.id + " cannot be found in services.json and is not displayed.");
             }
             else {
                 this.addItem(Object.assign({

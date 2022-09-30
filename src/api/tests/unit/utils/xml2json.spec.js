@@ -12,13 +12,26 @@ describe("src/api/utils/xml2json.js", () => {
                         <review>Nice book</review>
                         <review>This book is not so good</review>
                         <review>Amazing work</review>
-                    </book>`;
-    let xmlDoc, json;
+                    </book>`,
+        funnyXmlString = `<regal xmlns:guten="example.com/guten">
+                            <guten:buch>Die Farben der Magie</guten:buch>
+                            <buch>Telefonbuch</buch>
+                            <buch>Wörterbuch</buch>
+                            <zimmerpflanze>Eiche</zimmerpflanze>
+                            <zimmerpflanze>Ahorn</zimmerpflanze>
+                            <guten:zimmerpflanze>Bonsai</guten:zimmerpflanze>
+                            <lampe>Feuer</lampe>
+                            <guten:lampe>Schreibtischlampe</guten:lampe>
+                            <guten:dekoration>Schmuckkästchen</guten:dekoration>
+                            <dekoration>Ein ausgewachsenes Pferd</dekoration>
+                        </regal>`;
+    let xmlDoc, json, funnyXmlDoc;
 
     before(() => {
         const domParser = new DOMParser();
 
         xmlDoc = domParser.parseFromString(xmlString, "text/xml");
+        funnyXmlDoc = domParser.parseFromString(funnyXmlString, "text/xml");
     });
 
     describe("xml2json with value and attributes", () => {
@@ -79,6 +92,27 @@ describe("src/api/utils/xml2json.js", () => {
 
         it("the second review of the book should be 'This book is not so good'", () => {
             expect(json.book.review[1]).to.equal("This book is not so good");
+        });
+    });
+
+    describe("xml2json on name conflicts", () => {
+        before(() => {
+            json = xml2json(funnyXmlDoc);
+        });
+
+        it("should resolve name conflicts by collecting entries", () => {
+            expect(json.regal.buch.map(x => x.getValue())).to.eql([
+                "Die Farben der Magie", "Telefonbuch", "Wörterbuch"
+            ]);
+            expect(json.regal.zimmerpflanze.map(x => x.getValue())).to.eql([
+                "Eiche", "Ahorn", "Bonsai"
+            ]);
+            expect(json.regal.lampe.map(x => x.getValue())).to.eql([
+                "Feuer", "Schreibtischlampe"
+            ]);
+            expect(json.regal.dekoration.map(x => x.getValue())).to.eql([
+                "Schmuckkästchen", "Ein ausgewachsenes Pferd"
+            ]);
         });
     });
 });

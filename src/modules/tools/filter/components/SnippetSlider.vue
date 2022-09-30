@@ -175,6 +175,7 @@ export default {
                 this.$nextTick(() => {
                     this.isInitializing = false;
                     this.disable = false;
+                    this.emitSnippetPrechecked(this.prechecked, this.snippetId, this.visible);
                 });
             }
             else if (this.api) {
@@ -188,10 +189,12 @@ export default {
                     this.$nextTick(() => {
                         this.isInitializing = false;
                         this.disable = false;
+                        this.emitSnippetPrechecked(this.prechecked, this.snippetId, this.visible);
                     });
                 }, err => {
                     this.isInitializing = false;
                     this.disable = false;
+                    this.emitSnippetPrechecked(this.prechecked, this.snippetId, this.visible);
                     console.warn(err);
                 }, typeof this.minValue === "undefined" && typeof this.maxValue !== "undefined", typeof this.minValue !== "undefined" && typeof this.maxValue === "undefined", false,
                 {rules: this.fixedRules, filterId: this.filterId});
@@ -201,17 +204,27 @@ export default {
                 this.$nextTick(() => {
                     this.isInitializing = false;
                     this.disable = false;
+                    this.emitSnippetPrechecked(this.prechecked, this.snippetId, this.visible);
                 });
             }
             if (this.visible && typeof this.prechecked !== "undefined") {
                 this.emitCurrentRule(this.prechecked, true);
             }
         });
-        this.$emit("setSnippetPrechecked", this.visible && typeof this.prechecked !== "undefined");
     },
     methods: {
         translateKeyWithPlausibilityCheck,
 
+        /**
+         * Emits the setSnippetPrechecked event.
+         * @param {Number} prechecked The prechecked values.
+         * @param {Number} snippetId The snippet id to emit.
+         * @param {Boolean} visible true if the snippet is visible, false if not.
+         * @returns {void}
+         */
+        emitSnippetPrechecked (prechecked, snippetId, visible) {
+            this.$emit("setSnippetPrechecked", visible && typeof prechecked !== "undefined" ? snippetId : false);
+        },
         /**
          * Emits the current rule to whoever is listening.
          * @param {*} value the value to put into the rule
@@ -413,7 +426,7 @@ export default {
     }
     input[type="number"] {
         text-align: center;
-        font-size: 12px;
+        font-size: $font-size-base;
         -moz-appearance: textfield;
         width: 80px;
         float: right;
@@ -532,8 +545,5 @@ export default {
     }
     input[type="range"].disabled::-ms-fill-lower {
         background-color: $dark_grey;
-    }
-    .category-layer .right {
-        right: 30px;
     }
 </style>

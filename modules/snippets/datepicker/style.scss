@@ -20,7 +20,7 @@
                     background: none;
                     .datepicker-switch {
                         cursor: default;
-                        font-size: 15px;
+                        font-size: $font-size-lg;
                         &:hover {
                             background: none;
                         }
@@ -106,7 +106,7 @@
                     background: none;
                     .datepicker-switch {
                         cursor: default;
-                        font-size: 15px;
+                        font-size: $font-size-lg;
                         &:hover {
                             background: none;
                         }

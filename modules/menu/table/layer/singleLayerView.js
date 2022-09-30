@@ -3,7 +3,7 @@ import Template from "text-loader!./templates/templateSingleLayer.html";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .icon-checkbox, .icon-checkbox2, .title": "toggleIsSelected",
+        "click .bi-check2-square, .title, .bi-square": "toggleIsSelected",
         "click .info-icon": "showLayerInformation",
         "click .settings-icon": "toggleIsSettingVisible",
         "click .arrows > .up-icon": "moveModelUp",
@@ -41,7 +41,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         }, this);
     },
     tagName: "li",
-    className: "burgermenu-layer-list list-group-item",
+    className: "burgermenu-layer-list list-item d-flex justify-content-between py-2 row mx-0",
     template: _.template(Template),
     templateSettings: _.template(TemplateSettings),
     render: function () {

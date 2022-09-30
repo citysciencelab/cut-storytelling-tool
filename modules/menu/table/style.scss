@@ -1,10 +1,5 @@
 @import "../../../css/variables.scss";
 
-$color_3: #808080;
-$background_color_3: #808080;
-$background_color_5: transparent;
-$background_color_6: #D8D8D8;
-
 /**************** Layer Settings ****************/
 #table-navigation {
     z-index: 5;;
@@ -63,7 +58,7 @@ $background_color_6: #D8D8D8;
 }
 #table-category-list {
     .icon-categories {
-        font-size: 27.5px;
+        font-size: $font_size_huge;
         color: $black;
     }
     width: 40px;
@@ -72,7 +67,7 @@ $background_color_6: #D8D8D8;
     position: relative;
 }
 #table-category-list.table-category-active {
-    background-color: $light_grey;
+    background-color: $dark_grey;
 }
 .table-category-active {
     .icon-categories {
@@ -108,7 +103,7 @@ a {
     position: relative;
     cursor: pointer;
     >p {
-        font-size: 26px;
+        font-size: $font_size_huge;
     }
 }
 
@@ -163,7 +158,7 @@ a {
     }
 }
 .table-tools-active {
-    background-color: $light_grey;
+    background-color: $dark_grey;
     .icon-tools {
         &:before {
             color: $secondary_table_style;
@@ -173,7 +168,7 @@ a {
 .table-tool {
     margin-bottom: 6px;
     padding-top: 6px;
-    font-size: 17px;
+    font-size: $font-size-lg;
     border-top: 1px solid $light_grey;
     >a {
         color: $dark_grey;
@@ -201,7 +196,7 @@ a {
     bottom: -100%;
 }
 .table-nav-cat-panel {
-    font-size: 17px;
+    font-size: $font-size-lg;
     border-width: 0;
     -webkit-box-shadow: none;
     background-color: $secondary_table_style;
@@ -269,49 +264,45 @@ a {
     &:before {
         display: block;
         left: 0em;
-        font-size: 26px;
+        font-size: $font_size_huge;
     }
 }
-.icon-burgermenu_alt {
+.burger-collapse {
     #table-nav-layers-panel-toggler {
-        background-color: $light_grey;
+        background-color: $dark_grey;
         border-radius: 12px;
         .icon-cross1:before {
             display: block;
             color: $secondary_table_style;
             top: 11px;
             left: 11px;
-            font-size: 18px;
-         }
-    }
-}
-.icon-burgermenu_alt.collapsed {
-    #table-nav-layers-panel-toggler {
-        background-color: $white;
-        .icon-cross1:before {
-                display: none;
+            font-size: 1.125rem;
+        }
+        .icon-burgermenu_alt:before {
+            display: none;
         }
     }
-    &:before {
-        color: $primary;
-        display: block;
+}
+.burger-collapse.collapsed {
+    #table-nav-layers-panel-toggler {
+        background-color: $light_grey;
+        .icon-cross1:before {
+            display: none;
+        }
+        .icon-burgermenu_alt:before {
+            color: $primary;
+            display: block;
+        }
     }
+}
 
-}
-.burgermenu-layer-list {
-    background-color: $background_color_5;
-    margin-bottom: 13px;
-    padding-bottom: 8px;
-    border-radius: 5px;
-    border: none;
-}
 #table-nav-layers-panel {
     .layers {
         max-height: 360px;
         overflow-x: auto;
         margin: 4px 4px;
         .layer-item {
-            font-size: 17px;
+            font-size: $font-size-lg;
             flex-
             .title{
                 display: block;
@@ -336,7 +327,7 @@ a {
     }
     ul#layers {
         border: none;
-        font-size: 15px;
+        font-size: $font-size-lg;
         padding: 0 0;
         min-width: 410px;
         overflow: auto;
@@ -352,18 +343,17 @@ a {
         }
     }
     .layer-settings {
-        clear: both;
-        margin-top: 25px;
         margin-left: -3px;
-        font-size: 14px;
+        font-size: $font_size_big;
         .bootstrap-icon {
             font-size: x-large;
             color: $secondary_icon_button;
         }
         .badge {
-            font-size: 14px;
+            font-size: $font_size_big;
             padding-top: 6px;
-            background-color: $light_grey;
+            background-color: $dark_grey;
+            color: $white;
         }
         .remove-layer {
             color: $secondary_table_style;
@@ -376,20 +366,21 @@ a {
         }
     }
     .bi-info-circle-fill {
-        font-size: 18px;
+        font-size: 1.125rem;
         color: $secondary_icon_button;
+    }
+    .rotate-icon {
+        height: 18px;
+        line-height: 0;
     }
     .bi-gear {
-        font-size: 18px;
+        font-size: 1.125rem;
         color: $secondary_icon_button;
+        
     }
     .layer-settings-activated {
-        background-color: $background_color_6;
+        background-color: $light_grey;
     }
-}
-.checkboxicon-left {
-    margin-left: 25px;
-    cursor: pointer;
 }
 #funnel {
     position: absolute;

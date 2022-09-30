@@ -10,30 +10,45 @@ localVue.use(Vuex);
 config.mocks.$t = key => key;
 
 describe("src/modules/tools/filter/components/SnippetDropdown.vue", () => {
+    let defaultWrapper;
+
+    beforeEach(() => {
+        defaultWrapper = shallowMount(SnippetDropdown, {localVue});
+    });
+    afterEach(() => {
+        defaultWrapper.destroy();
+    });
+
     describe("constructor", () => {
         it("should have correct default values", () => {
-            const wrapper = shallowMount(SnippetDropdown, {localVue});
-
-            expect(wrapper.vm.api).to.be.null;
-            expect(wrapper.vm.addSelectAll).to.be.false;
-            expect(wrapper.vm.autoInit).to.be.true;
-            expect(wrapper.vm.display).to.equal("default");
-            expect(wrapper.vm.info).to.be.false;
-            expect(wrapper.vm.title).to.be.true;
-            expect(wrapper.vm.multiselect).to.be.false;
-            expect(wrapper.vm.operator).to.be.undefined;
-            expect(wrapper.vm.prechecked).to.be.undefined;
-            expect(wrapper.vm.renderIcons).to.be.undefined;
-            expect(wrapper.vm.snippetId).to.equal(0);
-            expect(wrapper.vm.value).to.be.undefined;
-            expect(wrapper.vm.visible).to.be.true;
-            wrapper.destroy();
+            expect(defaultWrapper.vm.api).to.be.null;
+            expect(defaultWrapper.vm.attrName).to.equal("");
+            expect(defaultWrapper.vm.addSelectAll).to.be.false;
+            expect(defaultWrapper.vm.adjustment).to.be.false;
+            expect(defaultWrapper.vm.autoInit).to.be.true;
+            expect(defaultWrapper.vm.localeCompareParams).to.be.undefined;
+            expect(defaultWrapper.vm.delimitor).to.be.undefined;
+            expect(defaultWrapper.vm.disabled).to.be.false;
+            expect(defaultWrapper.vm.display).to.equal("default");
+            expect(defaultWrapper.vm.filterId).to.equal(0);
+            expect(defaultWrapper.vm.info).to.be.false;
+            expect(defaultWrapper.vm.isChild).to.be.false;
+            expect(defaultWrapper.vm.isParent).to.be.false;
+            expect(defaultWrapper.vm.title).to.be.true;
+            expect(defaultWrapper.vm.layerId).to.be.undefined;
+            expect(defaultWrapper.vm.multiselect).to.be.false;
+            expect(defaultWrapper.vm.operator).to.be.undefined;
+            expect(defaultWrapper.vm.optionsLimit).to.be.equal(20000);
+            expect(defaultWrapper.vm.placeholder).to.equal("");
+            expect(defaultWrapper.vm.prechecked).to.be.undefined;
+            expect(defaultWrapper.vm.renderIcons).to.be.undefined;
+            expect(defaultWrapper.vm.fixedRules).to.be.an("array").that.is.empty;
+            expect(defaultWrapper.vm.snippetId).to.equal(0);
+            expect(defaultWrapper.vm.value).to.be.undefined;
+            expect(defaultWrapper.vm.visible).to.be.true;
         });
         it("should render correctly with default values", () => {
-            const wrapper = shallowMount(SnippetDropdown, {localVue});
-
-            expect(wrapper.find(".filter-select-box-container").exists()).to.be.true;
-            wrapper.destroy();
+            expect(defaultWrapper.find(".filter-select-box-container").exists()).to.be.true;
         });
         it("should render hidden if visible is false", () => {
             const wrapper = shallowMount(SnippetDropdown, {
@@ -182,6 +197,7 @@ describe("src/modules/tools/filter/components/SnippetDropdown.vue", () => {
         it("should reset the snippet value and call the given onsuccess handler", async () => {
             const wrapper = shallowMount(SnippetDropdown, {
                 propsData: {
+                    value: ["value"],
                     prechecked: ["value"]
                 },
                 localVue
@@ -234,6 +250,65 @@ describe("src/modules/tools/filter/components/SnippetDropdown.vue", () => {
             expect(wrapper.find(".snippetListContainer .checkbox").exists()).to.be.true;
 
             wrapper.destroy();
+        });
+    });
+
+    describe("methods", () => {
+        describe("getPrecheckedExistingInValue", () => {
+            it("should return false if anything but an array is given as first parameter", () => {
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue(undefined)).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue(null)).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue(1234)).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue("string")).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue(true)).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue(false)).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue({})).to.be.false;
+            });
+            it("should return false if anything but an array is given as second parameter", () => {
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue([], undefined)).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue([], null)).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue([], 1234)).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue([], "string")).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue([], true)).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue([], false)).to.be.false;
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue([], {})).to.be.false;
+            });
+            it("should return entries of prechecked only if exists in dropdownValue", () => {
+                const prechecked = ["yes", "no"],
+                    dropdownValue = ["yes", "maybe"],
+                    expected = ["yes"];
+
+                expect(defaultWrapper.vm.getPrecheckedExistingInValue(prechecked, dropdownValue)).to.deep.equal(expected);
+            });
+        });
+        describe("getInitialDropdownSelected", () => {
+            it("should return an empty array if dropdownValue is not an array", () => {
+                expect(defaultWrapper.vm.getInitialDropdownSelected("prechecked", undefined)).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected("prechecked", null)).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected("prechecked", 1234)).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected("prechecked", "string")).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected("prechecked", true)).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected("prechecked", false)).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected("prechecked", {})).to.be.an("array").that.is.empty;
+            });
+            it("should return prechecked if prechecked is an array", () => {
+                expect(defaultWrapper.vm.getInitialDropdownSelected(["prechecked"], ["prechecked"])).to.deep.equal(["prechecked"]);
+            });
+            it("should return dropdownValue if prechecked is 'all' and multiselect is set", () => {
+                expect(defaultWrapper.vm.getInitialDropdownSelected("all", ["prechecked"], true)).to.deep.equal(["prechecked"]);
+            });
+            it("should return an empty array if prechecked is 'all' and multiselect is not set", () => {
+                expect(defaultWrapper.vm.getInitialDropdownSelected("all", ["prechecked"], false)).to.be.an("array").that.is.empty;
+            });
+            it("should return an empty array if prechecked is neither 'all' nor an array", () => {
+                expect(defaultWrapper.vm.getInitialDropdownSelected(undefined, [])).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected(null, [])).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected(1234, [])).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected("string", [])).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected(true, [])).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected(false, [])).to.be.an("array").that.is.empty;
+                expect(defaultWrapper.vm.getInitialDropdownSelected({}, [])).to.be.an("array").that.is.empty;
+            });
         });
     });
 });

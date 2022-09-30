@@ -204,6 +204,7 @@ GeoJSONLayer.prototype.expandFeaturesBySubTyp = function (subTyp) {
     const expandedFeatures = this.get("layerSource").getFeatures();
 
     if (subTyp === "OpenSenseMap") {
+        console.warn("The GeoJson-Layer subTyp: 'OpenSenseMap' is deprecated. It will be removed in the next Major-Release!");
         expandedFeatures.forEach(feature => {
             const sensors = feature.get("sensors");
 
