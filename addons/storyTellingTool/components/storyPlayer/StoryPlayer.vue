@@ -300,8 +300,6 @@ export default {
         id="tool-storyTellingTool-player"
     >
         <div id="tool-storyTellingTool-currentStep">
-            <!--<h3>{{ storyConf.title }}</h3>-->
-            <p />
             <h2 v-if="currentChapter">
                 {{ currentChapter.chapterTitle }}
             </h2>

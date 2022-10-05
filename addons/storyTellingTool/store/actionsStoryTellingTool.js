@@ -17,6 +17,18 @@ const initialState = JSON.parse(JSON.stringify(stateStoryTellingTool)),
             commit("setHtmlContents", initialState.htmlContents);
             commit("setHtmlContentsImages", initialState.htmlContentsImages);
             commit("setInitialWidth", initialState.initialWidth);
+        },
+
+        /**
+         * Resets the Story Telling Tool without deleting loaded stories
+         *
+         * @param {Object} context actions context object.
+         * @returns {void}
+         */
+        resetCreatorContent ({commit}) {
+            commit("setHtmlContents", initialState.htmlContents);
+            commit("setHtmlContentsImages", initialState.htmlContentsImages);
+            commit("setInitialWidth", initialState.initialWidth);
         }
     };
 

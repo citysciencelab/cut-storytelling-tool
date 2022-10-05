@@ -96,17 +96,23 @@ export default {
      */
     mounted () {
         this.applyTranslationKey(this.name);
-
-        if (this.storyConfPath) {
-            fetchDataFromUrl(this.storyConfPath).then(loadedStoryConf => {
-                this.setStoryConf(loadedStoryConf);
-            });
-        }
+        this.loadStoryFromFile();
     },
     methods: {
         ...mapMutations("Tools/StoryTellingTool", Object.keys(mutations)),
         ...mapActions("Tools/StoryTellingTool", Object.keys(actions)),
 
+        /**
+         * Handles the URL loading of the story from ath
+         * @returns {void}
+         */
+        loadStoryFromFile () {
+            if (this.storyConfPath) {
+                fetchDataFromUrl(this.storyConfPath).then(loadedStoryConf => {
+                    this.setStoryConf(loadedStoryConf);
+                });
+            }
+        },
         /**
          * Handles story telling mode changes.
          * @param {Number} index the index of the new story telling mode
@@ -117,38 +123,70 @@ export default {
         },
 
         /**
+         * Resets the tool to its initial state
+         * @returns {void}
+         */
+        reset () {
+            const resetStoryTellingTool = () => {
+                this.resetCreatorContent();
+                this.loadStoryFromFile();
+                this.mode = null;
+            };
+
+            if (this.isCreatingStory()) {
+                const confirmActionSettings = {
+                    actionConfirmedCallback: resetStoryTellingTool,
+                    confirmCaption: this.$t(
+                        "additional:modules.tools.storyTellingTool.confirm.closeStoryCreation.confirmButton"
+                    ),
+                    denyCaption: this.$t(
+                        "additional:modules.tools.storyTellingTool.confirm.closeStoryCreation.denyButton"
+                    ),
+                    textContent: this.$t(
+                        "additional:modules.tools.storyTellingTool.confirm.closeStoryCreation.description"
+                    ),
+                    headline: this.$t(
+                        "additional:modules.tools.storyTellingTool.confirm.closeStoryCreation.title"
+                    ),
+                    forceClickToClose: true
+                };
+
+                this.$store.dispatch(
+                    "ConfirmAction/addSingleAction",
+                    confirmActionSettings
+                );
+            }
+            else {
+                resetStoryTellingTool();
+            }
+        },
+
+        /**
          * Closes this tool window by setting active to false
          * @returns {void}
          */
         close () {
             const closeStoryTellingTool = () => {
-                    this.setActive(false);
-                    this.resetModule();
+                this.setActive(false);
+                this.resetModule();
 
-                    // TODO replace trigger when Menu is migrated
-                    // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-                    // else the menu-entry for this tool is always highlighted
-                    const model = Radio.request(
-                        "ModelList",
-                        "getModelByAttributes",
-                        {
-                            id: this.$store.state.Tools.StoryTellingTool.id
-                        }
-                    );
-
-                    if (model) {
-                        model.set("isActive", false);
+                // TODO replace trigger when Menu is migrated
+                // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
+                // else the menu-entry for this tool is always highlighted
+                const model = Radio.request(
+                    "ModelList",
+                    "getModelByAttributes",
+                    {
+                        id: this.$store.state.Tools.StoryTellingTool.id
                     }
-                },
+                );
 
-                // Confirm tool closing if user is creating a story
-                isCreatingAStory =
-                    this.mode === this.constants.storyTellingModes.CREATE &&
-                    JSON.stringify(
-                        this.$store.state.Tools.StoryTellingTool.storyConf
-                    ) !== JSON.stringify(this.constants.emptyStoryConf);
+                if (model) {
+                    model.set("isActive", false);
+                }
+            };
 
-            if (isCreatingAStory) {
+            if (this.isCreatingStory()) {
                 const confirmActionSettings = {
                     actionConfirmedCallback: closeStoryTellingTool,
                     confirmCaption: this.$t(
@@ -174,6 +212,17 @@ export default {
             else {
                 closeStoryTellingTool();
             }
+        },
+        /*
+         * Checks if there is a story currently being created
+         * @returns {boolean}
+         */
+        isCreatingStory () {
+            // Confirm tool closing if user is creating a story
+            return this.mode === this.constants.storyTellingModes.CREATE &&
+                JSON.stringify(
+                    this.$store.state.Tools.StoryTellingTool.storyConf
+                ) !== JSON.stringify(this.constants.emptyStoryConf);
         }
     }
 };
@@ -196,6 +245,23 @@ export default {
                 id="tool-storyTellingTool"
                 :class="mode"
             >
+                <span
+                    v-if="mode"
+                    id="tool-storyTellingTool-reset"
+                >
+                    <span @click="reset">
+                        <v-tooltip left>
+                            <template #activator="{ on, attrs }">
+                                <v-icon
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >keyboard_backspace
+                                </v-icon>
+                            </template>
+                            <span>reset</span>
+                        </v-tooltip>
+                    </span>
+                </span>
                 <v-item-group
                     v-if="!mode"
                     id="tool-storyTellingTool-modeSelection"
@@ -268,6 +334,9 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+
+//@import "../scss/fixes.scss";
+
 #tool-storyTellingTool {
     background: none;
 
@@ -284,6 +353,11 @@ export default {
             }
         }
     }
+
+    #tool-storyTellingTool-reset {
+        text-align: right;
+        cursor: pointer;
+    }
 }
 
 #tool-storyTellingTool-modeSelection {
@@ -294,7 +368,6 @@ export default {
 </style>
 
 <style lang="scss">
-// Fix masterportal main menu styles for "TABLE" UI Style
 
 //Colors
 $main-pink: #f2b1b7;
@@ -302,6 +375,8 @@ $main-mint: #73c1a9;
 $scnd-mint: rgba(115, 193, 169, 0.2);
 $main-blue: #8ea0d2;
 $white: #FFFFFF;
+
+// Fix masterportal main menu styles for "TABLE" UI Style
 
 .custom-table-row {
     margin-right: -15px;
