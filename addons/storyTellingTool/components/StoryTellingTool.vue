@@ -53,42 +53,12 @@ export default {
          */
         active (isActive) {
             if (isActive) {
-                this.setFocusToFirstControl();
+                // this.setFocusToFirstControl();
             }
         }
     },
     created () {
         this.$on("close", this.close);
-
-        // Fix masterportal main menu styles for "TABLE" UI Style
-        if (Radio.request("Util", "getUiStyle") === "TABLE") {
-            const tableNavigationElement = document.querySelector("#table-nav");
-
-            if (tableNavigationElement) {
-                tableNavigationElement.classList.remove("row");
-                tableNavigationElement.classList.add("custom-table-row");
-            }
-
-            const tableNavigationMainColumnElement = document.querySelector(
-                "#table-nav > .col-md-4"
-            );
-
-            if (tableNavigationMainColumnElement) {
-                tableNavigationMainColumnElement.classList.remove("col-md-4");
-                tableNavigationMainColumnElement.classList.add(
-                    "custom-table-column"
-                );
-            }
-
-            const tableNavigationSecondaryColumnElements = document.querySelectorAll(
-                "#table-nav > .col-md-2"
-            );
-
-            tableNavigationSecondaryColumnElements.forEach(element => {
-                element.classList.remove("col-md-2");
-                element.classList.add("custom-table-column");
-            });
-        }
     },
     /**
      * Put initialize here if mounting occurs after config parsing
@@ -170,9 +140,6 @@ export default {
                 this.setActive(false);
                 this.resetModule();
 
-                // TODO replace trigger when Menu is migrated
-                // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-                // else the menu-entry for this tool is always highlighted
                 const model = Radio.request(
                     "ModelList",
                     "getModelByAttributes",
@@ -335,8 +302,6 @@ export default {
 
 <style lang="scss" scoped>
 
-//@import "../scss/fixes.scss";
-
 #tool-storyTellingTool {
     background: none;
 
@@ -376,91 +341,27 @@ $scnd-mint: rgba(115, 193, 169, 0.2);
 $main-blue: #8ea0d2;
 $white: #FFFFFF;
 
-// Fix masterportal main menu styles for "TABLE" UI Style
-
-.custom-table-row {
-    margin-right: -15px;
-    margin-left: -15px;
-}
-
-.custom-table-column {
-    position: relative;
-
-    @media (min-width: 992px) {
-        float: left;
-    }
-}
-
-#table-nav-cat-panel-toggler {
-    display: none;
-
-}
-
-.table-nav-main {
-    background-color: rgba(0, 0, 0, 0);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
-    background-color: white;
-    width: 500px;
-    height: 60px;
-    padding: 10px;
-}
+@import "../scss/fixes.scss";
 
 .table-tools {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0);
-    background-color: white;
-    margin-left: -125px;
-    margin-top: 10px;
+    width: 40px !important;
 }
 
-.table-tools-menu {
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(115, 193, 169, 0.0);
-    border: 2px solid #8ea0d2;
-    left: -100px;
-    bottom: 50px;
-}
-
-.table-tool {
-    border: 0;
+#table-nav-main {
+    flex: 0 0 auto;
+    max-width: unset;
     padding: 5px;
-    border-radius: 5px;
-}
 
-.table-tool:hover {
-    background-color: fade($main-blue, 20%);
-}
-
-#table-searchForm input#searchInput.form-control {
-    font-family: "Arial", sans-serif;
-    font-size: 12px;
-    width: 340px;
-}
-
-#searchInput::placeholder, .form-control::placeholder {
-    font-family: "Arial", sans-serif;
-    font-size: 12px;
-}
-
-#table-nav #searchbar {
-    flex-grow: unset;
-    top: -13px;
-
-    @media (min-width: 768px) {
-        margin-top: 0 !important;
-    }
-}
-
-
-#searchInputUL {
+    background-color: rgba(0, 0, 0, 0);
     background-color: white;
 }
 
-#table-tools, #table-category-list {
-    display: none;
+#table-tools, #table-category-list{
+    background-color: white;
 }
 
-.table-tools:hover {
-    background-color: #cddcf2;
+#table-tools-menu, #table-nav-cat-panel {
+    background-color: white;
 }
 
 .icon-burgermenu_alt.collapsed::before {
@@ -471,13 +372,6 @@ $white: #FFFFFF;
     z-index: 10;
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(115, 193, 169, 0.0);
-    border: 2px solid #73c1a9;
-
-    li {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-    }
 }
 
 #table-nav-layers-panel-toggler {
@@ -487,71 +381,33 @@ $white: #FFFFFF;
     }
 }
 
-#funnel, .search-funnel {
-    display: none;
-}
-
-#table-searchForm .btn-table-search:hover {
-    background-color: #f4dadf;
-}
-
-.icon-burgermenu_alt #table-nav-layers-panel-toggler {
-    background-color: #73c1a9;
-    border-radius: 8px;
-}
-
-.icon-burgermenu_alt .icon-cross1::before {
-    color: #FFF;
-}
-
-#table-nav-layers-panel .layer-settings-activated {
-    background-color: rgba(115, 193, 169, 0.1);
-}
-
-.icon-tools::before {
-    color: rgb(116, 132, 176)
-}
-
-.icon-tools::after {
-    color: rgba(142, 180, 210, 1)
-}
-
-.table-tools-active .icon-tools::before {
-    color: rgba(142, 180, 210, 1)
-}
-
-.icon-drag::before {
-    color: #c0c0c0
-}
-
-.icon-search::before {
-    color: #f2b1b7
-}
-
 // New style for the Storytelling tool
 
 .win-heading, .table-tool-win-all-vue {
     background-color: $main-blue !important;
 }
 
+#tool-window-vue {
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 50%)
+}
 
 // Working layout for the legend should be provided by masterportal.css (currently not - recheck)
 
 .legend-window-table[data-v-3b5a1b75] {
-    box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 50%)
 }
 
 .legend-title-table {
     background-color: $main-mint !important;
-    border-bottom: 0 !important;
     padding-bottom: 3px !important;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 }
 
 #legend .legend-title-table div {
     position: absolute;
-    top: 0;
-    right: 3px;
-    padding-top: 10px;
+    top: 20px;
+    right: 10px;
 }
 
 .d-lg-inline-block {
