@@ -161,8 +161,8 @@ export default {
         color: $light_grey;
         padding-top: 8px;
         padding-left: 8px;
-        .tool-window-heading-title {
-            color: $light_grey;
+        .heading-element > h2 {
+            color: $white;
             margin-right: 50px;
             text-overflow: ellipsis;
         }
@@ -198,7 +198,7 @@ export default {
         right: 25px;
         margin: 6px 0 0 10px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: $font_size_icon_lg;
         &:focus {
             @include primary_action_focus;
         }

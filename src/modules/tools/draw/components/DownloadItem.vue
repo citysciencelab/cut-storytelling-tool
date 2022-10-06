@@ -76,44 +76,22 @@ export default {
                 </div>
             </div>
             <div class="form-group form-group-sm row">
-                <div class="col-12">
+                <div class="d-grid gap-2">
                     <a
-                        id="tool-draw-download-file"
-                        class="col-12 d-grid gap-2 downloadFile"
+                        class="btn btn-sm btn-primary downloadFile"
                         :href="download.fileUrl"
                         :download="download.file"
+                        :class="{disabled: disableFileDownload}"
+                        role="button"
+                        @click="fileDownloaded"
                     >
-                        <button
-                            class="btn btn-sm btn-primary"
-                            :disabled="disableFileDownload"
-                            type="button"
-                            @click="fileDownloaded"
-                        >
-                            <span class="bootstrap-icon">
-                                <i class="bi-save-fill" />
-                            </span>
-                            {{ $t("common:modules.tools.draw.button.saveDrawing") }}
-                        </button>
+                        <span class="bootstrap-icon">
+                            <i class="bi-save-fill" />
+                        </span>
+                        {{ $t("common:modules.tools.draw.button.saveDrawing") }}
                     </a>
                 </div>
             </div>
         </form>
     </div>
 </template>
-
-<style lang="scss" scoped>
-@import "~variables";
-
-a {
-    color: $black;
-}
-
-.disabled {
-    cursor: not-allowed;
-}
-
-#tool-draw-download-file {
-    text-decoration: none;
-    padding: 0;
-}
-</style>

@@ -94,7 +94,7 @@ const LayerView = LayerBaseView.extend(/** @lends LayerView.prototype */{
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
     tagName: "li",
-    className: "layer list-group-item",
+    className: "layer dropdown-item",
     template: _.template(Template),
     templateSettings: _.template(templateSettingsTransparency),
 

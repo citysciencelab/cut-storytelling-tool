@@ -14,7 +14,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         "click .layer-sort-item > .up-icon": "moveModelUp",
         "click .layer-sort-item > .down-icon": "moveModelDown",
         "change select": "setTransparency",
-        "click .style-icon": "openStyleWMS",
         "click .remove-layer": "removeLayer"
     },
 
@@ -30,7 +29,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
      * @fires Map#RadioRequestMapGetMapMode
-     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
      * @fires Alerting#RadioTriggerAlertAlert
      */
@@ -60,7 +58,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
     tagName: "li",
-    className: "list-group-item",
+    className: "dropdown-item",
     template: _.template(Template),
     templateSetting: _.template(SettingTemplate),
 
@@ -119,9 +117,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         // Animation cog
         if (layerId === attr.id) {
             this.$(".bi-gear").parent(".bootstrap-icon").toggleClass("rotate rotate-back");
+            this.$(".switch-icon").toggleClass("rotate rotate-back");
+            this.$(".switch-icon").children("i").toggleClass("bi-dash-lg bi-plus-lg");
         }
-        this.$(".switch-icon").toggleClass("rotate rotate-back");
-        this.$(".switch-icon").children("i").toggleClass("bi-dash-lg bi-plus-lg");
         // Slide-Animation templateSetting
         if (this.model.get("isSettingVisible") === false) {
             this.$el.find(".item-settings").slideUp("slow", function () {
@@ -266,16 +264,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (!this.model.get("isVisibleInTree")) {
             this.remove();
         }
-    },
-
-    /**
-     * todo
-     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
-     * @returns {void}
-     */
-    openStyleWMS: function () {
-        Radio.trigger("StyleWMS", "openStyleWMS", this.model);
-        $(".navbar-collapse").removeClass("show");
     },
 
     /**

@@ -233,6 +233,7 @@ async function initializeWithoutGUI ({state, commit, dispatch, getters, rootStat
         dispatch("createDrawInteractionAndAddToMap", {active: true, maxFeatures});
         dispatch("createSelectInteractionAndAddToMap", false);
         dispatch("createModifyInteractionAndAddToMap", false);
+        dispatch("createModifyAttributesInteractionAndAddToMap", false);
 
         if (initialJSON) {
             try {

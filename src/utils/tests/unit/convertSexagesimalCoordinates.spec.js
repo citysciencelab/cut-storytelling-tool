@@ -4,10 +4,12 @@ import {convertSexagesimalFromString, convertSexagesimalToDecimal, convertSexage
 describe("src/utils/convertSexagesimalCoordinates.js", () => {
     describe("convertSexagesimalFromString", () => {
         it("should return the given coord splitted", () => {
-            expect(convertSexagesimalFromString("0° 00′ 00″ 0° 00′ 00″")).to.deep.equal({easting: "0° 00′ 00″", northing: "0° 00′ 00″"});
+            expect(convertSexagesimalFromString("0° 00′ 00″ N 0° 00′ 00″ E")).to.deep.equal({easting: "0° 00′ 00″", northing: "0° 00′ 00″"});
             expect(convertSexagesimalFromString("3° 33′ 04″ N 9° 56′ 29″ E")).to.deep.equal({easting: "3° 33′ 04″", northing: "9° 56′ 29″"});
             expect(convertSexagesimalFromString("53° 33′ 04″ N 19° 56′ 29″ E")).to.deep.equal({easting: "53° 33′ 04″", northing: "19° 56′ 29″"});
             expect(convertSexagesimalFromString("53° 33′ 04″ N 9° 56′ 29″ E")).to.deep.equal({easting: "53° 33′ 04″", northing: "9° 56′ 29″"});
+            expect(convertSexagesimalFromString("53° 35′ N 9° 48′ E")).to.deep.equal({easting: "53° 35′ 00″", northing: "9° 48′ 00″"});
+            expect(convertSexagesimalFromString("53° N 9° E")).to.deep.equal({easting: "53° 00′ 00″", northing: "9° 00′ 00″"});
         });
     });
     describe("convertSexagesimalFromDecimal", () => {
@@ -19,10 +21,12 @@ describe("src/utils/convertSexagesimalCoordinates.js", () => {
     });
     describe("convertSexagesimalToDecimal", () => {
         it("test string - should return the given coord as decimal values", () => {
-            expect(convertSexagesimalToDecimal("0° 00′ 00″ 0° 00′ 00″")).to.deep.equal({easting: "0.0000°", northing: "0.0000°"});
+            expect(convertSexagesimalToDecimal("0° 00′ 00″ N 0° 00′ 00″ E")).to.deep.equal({easting: "0.0000°", northing: "0.0000°"});
             expect(convertSexagesimalToDecimal("3° 33′ 04″ N 9° 56′ 29″ E")).to.deep.equal({easting: "3.5511°", northing: "9.9414°"});
             expect(convertSexagesimalToDecimal("53° 33′ 04″ N 9° 56′ 29″ E")).to.deep.equal({easting: "53.5511°", northing: "9.9414°"});
             expect(convertSexagesimalToDecimal("53° 33′ 04″ N 19° 56′ 29″ E")).to.deep.equal({easting: "53.5511°", northing: "19.9414°"});
+            expect(convertSexagesimalToDecimal("53° 35′ N 9° 48′ E")).to.deep.equal({easting: "53.5833°", northing: "9.8000°"});
+            expect(convertSexagesimalToDecimal("53° N 9° E")).to.deep.equal({easting: "53.0000°", northing: "9.0000°"});
         });
         it("test array", () => {
             let coord = [["53", "33", "18", ""], ["9", "58", "43", ""]];

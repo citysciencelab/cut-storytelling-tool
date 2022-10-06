@@ -6,6 +6,7 @@ import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import Icon from "ol/style/Icon";
 import {createDrawStyle} from "../../draw/utils/style/createDrawStyle";
+import isObject from "../../../../utils/isObject";
 
 const supportedFormats = {
     kml: new KML({extractStyles: true, iconUrlFunction: (url) => proxyGstaticUrl(url)}),
@@ -308,9 +309,9 @@ export default {
      * @returns {void}
      */
     importGeoJSON: ({state, dispatch, rootGetters}, datasrc) => {
-        const
-            vectorLayer = datasrc.layer,
-            format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
+        const vectorLayer = datasrc.layer,
+            format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats),
+            gfiAttributes = {};
 
         let
             alertingMessage,
@@ -358,8 +359,8 @@ export default {
             let style;
 
             if (!drawState) {
-                const defaultColor = [255, 0, 0, 0.9],
-                    defaultFillColor = [200, 0, 0, 0.5],
+                const defaultColor = [226, 26, 28, 0.9],
+                    defaultFillColor = [228, 26, 28, 0.5],
                     defaultPointSize = 16,
                     defaultStrokeWidth = 1,
                     defaultCircleRadius = 300,
@@ -412,7 +413,6 @@ export default {
                 if (drawState.symbol.value !== "simple_point") {
                     style = new Style({
                         image: new Icon({
-                            color: drawState.color,
                             crossOrigin: "anonymous",
                             src: drawState.symbol.value.indexOf("/") > 0 ? drawState.symbol.value : drawState.imgPath + drawState.symbol.value,
                             scale: drawState.symbol.scale
@@ -470,6 +470,12 @@ export default {
         features.forEach(feature => {
             let geometries;
 
+            if (isObject(feature.get("attributes"))) {
+                Object.keys(feature.get("attributes")).forEach(key => {
+                    gfiAttributes[key] = key;
+                });
+            }
+
             if (vectorLayer.getStyleFunction()(feature) !== undefined) {
                 feature.setStyle(vectorLayer.getStyleFunction()(feature));
             }
@@ -494,6 +500,10 @@ export default {
 
             vectorLayer.getSource().addFeature(feature);
         });
+
+        if (!vectorLayer.get("gfiAttributes")) {
+            vectorLayer.set("gfiAttributes", gfiAttributes);
+        }
 
         alertingMessage = {
             category: i18next.t("common:modules.alerting.categories.info"),

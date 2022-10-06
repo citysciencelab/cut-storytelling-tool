@@ -1,6 +1,6 @@
 module.exports = function (api) {
-    api.cache(false);
-    const presets = [
+    const isTest = api.env("unitTest"),
+        presets = [
             [
                 "@babel/preset-env", {
                     "useBuiltIns": "entry",
@@ -13,9 +13,14 @@ module.exports = function (api) {
                 }
             ]
         ],
-        plugins = [
-            "@babel/plugin-syntax-dynamic-import"
-        ];
+        plugins = ["@babel/plugin-syntax-dynamic-import"];
+
+    if (isTest) {
+        plugins.push(
+            "@babel/plugin-transform-modules-commonjs"
+        );
+    }
+    api.cache(false);
 
     return {
         presets,

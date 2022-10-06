@@ -102,35 +102,6 @@ describe("menu/desktop/layer/viewLight", function () {
 
         });
     });
-
-    describe("The style-icon", function () {
-        it("should be visible for stylable layers", function () {
-
-            fakeModel.setIsStyleable(true);
-            fakeModel.setIsSettingVisible(true);
-
-            const layerView = new CustomLayerView({model: fakeModel});
-
-            expect(layerView.$el.find(".bi-paint-bucket").length).to.be.equal(1);
-
-            layerView.rerender();
-
-            expect(layerView.$el.find(".bi-paint-bucket").length).to.be.equal(1);
-        });
-        it("should be hidden for other not styleable layers", function () {
-
-            fakeModel.setIsStyleable(false);
-            fakeModel.setIsSettingVisible(true);
-
-            const layerView = new CustomLayerView({model: fakeModel});
-
-            expect(layerView.$el.find(".bi-paint-bucket").length).to.be.equal(0);
-
-            layerView.rerender();
-
-            expect(layerView.$el.find(".bi-paint-bucket").length).to.be.equal(0);
-        });
-    });
     describe("the layer checkbox", function () {
         it("should react to key events", function () {
 

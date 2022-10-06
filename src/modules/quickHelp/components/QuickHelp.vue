@@ -219,7 +219,7 @@ export default {
 
 .bi-printer-fill {
     cursor: pointer;
-    font-size: 16px;
+    font-size: $font_size_icon_lg;
 }
 
 .table-of-contents {

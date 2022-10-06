@@ -125,7 +125,6 @@ export default {
             box-shadow: $shadow;
 
             .language-header {
-                float: right;
                 width: 100%;
                 border-bottom: 1px solid $light_grey;
                 padding: 0 0 3px 10px;
@@ -136,7 +135,7 @@ export default {
                 text-align: center;
                 padding: 20px 0 0;
                 a {
-                    font-size: 12px;
+                    font-size: $font-size-base;
                     &.disabled {
                         background-color: $light_grey;
                     }
@@ -148,7 +147,6 @@ export default {
     @media (max-width: 767px) {
         #language-bar {
             .current-language {
-                float: right;
                 text-align: right;
             }
             .popup-language {

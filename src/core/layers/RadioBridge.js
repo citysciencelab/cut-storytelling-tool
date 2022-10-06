@@ -12,6 +12,14 @@ export function layerVisibilityChanged (layerModel, value) {
     Radio.trigger("ModelList", "updatedSelectedLayerList", getLayerModelsByAttributes({isSelected: true, type: "layer"}));
 }
 /**
+ * Fires if property transparency changes.
+ * Can be done directly or is no longer needed if all layers are handled by store and modelList is refactored.
+ * @returns {void}
+ */
+export function layerTransparencyChanged () {
+    Radio.trigger("ModelList", "transparencyChanged");
+}
+/**
  * Listens to changes of attribute isVisibleInMap.
  * @param {Object} layerModel the layer
  * @param {Function} listener the observer to call on changes
@@ -41,7 +49,7 @@ export function setLegendLayerList () {
 }
 /**
  * Listens to changes of attribute SLDBody.
- * Can be done directly or is no longer needed if tool styleWMS and tree filter are refactored.
+ * Can be done directly or is no longer needed if tree filter are refactored.
  * @param {Object} layerModel the layer
  * @returns {void}
  */

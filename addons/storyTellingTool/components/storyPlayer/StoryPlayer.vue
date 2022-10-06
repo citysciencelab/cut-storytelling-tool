@@ -162,6 +162,12 @@ export default {
             this.toggleLayer(layer, false);
         },
 
+        toDegrees (cartesian3Pos) {
+            const pos = Cesium.Cartographic.fromCartesian(cartesian3Pos);
+
+            return [pos.longitude / Math.PI * 180, pos.latitude / Math.PI * 180, pos.height];
+        },
+
         /**
          * Sets up the tool window and content for the selected step.
          * @returns {void}
@@ -188,7 +194,7 @@ export default {
             // Updates the map center
             if (this.currentStep.centerCoordinate && this.currentStep.centerCoordinate.length > 0) {
                 if (this.currentStep.is3D) {
-                    console.log("Dont use centerCoordinate for 3D navigation.");
+                    console.warn("Dont use centerCoordinate for 3D navigation.");
                 }
                 else {
                     const map = Radio.request("Map", "getMap"),
@@ -202,7 +208,6 @@ export default {
                         });
                         this.isChangeFrom3D = false;
                     }, this.isChangeFrom3D ? 1500 : 0);
-
                 }
             }
             // Updates the map center for 3D
@@ -211,6 +216,10 @@ export default {
                     map3d = Radio.request("Map", "getMap3d"),
                     camera = map3d.getCesiumScene().camera,
                     destination = Cesium.Cartesian3.fromDegrees(position[0], position[1], position[2]);
+
+                console.log("position", this.toDegrees(camera.position));
+                console.log("heading", camera.heading);
+                console.log("pitch", camera.pitch);
 
                 camera.flyTo({
                     destination: destination,
@@ -233,7 +242,6 @@ export default {
                 );
 
             // Updates the map layers
-
             for (const layer of layerList) {
                 const isStepLayer = (this.currentStep.layers || []).includes(
                     layer.id
@@ -248,6 +256,7 @@ export default {
                     this.disableLayer(layer);
                 }
             }
+
             Radio.trigger("TableMenu", "rerenderLayers");
 
             // Updates the step html content
@@ -268,6 +277,10 @@ export default {
                 this.loadedContent = null;
             }
 
+            setTimeout(() => {
+                Radio.trigger("Menu", "rerender");
+            }, 500);
+
             if (!this.currentStep.is3D) {
                 // Activates or deactivates tools
                 const interactionAddons = this.currentStep.interactionAddons || [],
@@ -287,8 +300,6 @@ export default {
         id="tool-storyTellingTool-player"
     >
         <div id="tool-storyTellingTool-currentStep">
-            <!--<h3>{{ storyConf.title }}</h3>-->
-            <p />
             <h2 v-if="currentChapter">
                 {{ currentChapter.chapterTitle }}
             </h2>

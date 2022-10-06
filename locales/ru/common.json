@@ -57,7 +57,6 @@
             "fileImport": "Импорт файлов",
             "draw": "Чертить / писать",
             "shadow": "Тень",
-            "styleWMS": "Стиль службы веб-карты (WMS)",
             "commuterLines": "Коммутер (линии)",
             "commuterAnimation": "Коммутер (анимация)",
             "layerSlider": "Временной ряд (time series)",
@@ -381,24 +380,6 @@
               "theme": "Тема",
               "chooseTheme": "Пожалуйста, выберите активную тему",
               "style": "Стиль"
-            },
-            "styleWMS": {
-                "noStyleableLayers": "В настоящее время не существует классифицируемых тем, к которым можно было бы применить этот инструмент.",
-                "theme": "Тема",
-                "chooseTheme": "Пожалуйста, выберите тему",
-                "attribute": "Атрибут",
-                "chooseAttribute": "Пожалуйста, выберите атрибут",
-                "countOfClasses": "Количество классов",
-                "chooseNumberOfClasses": "Пожалуйста, выберите количество классов",
-                "rangeOfValues": "Диапазон значений класс",
-                "from": "от",
-                "to": "до",
-                "reset": "сбросить",
-                "apply": "применить",
-                "pleaseEnterInteger": "Пожалуйста, введите целое число.",
-                "pleaseChooseColor": "Пожалуйста, выберите цвет.",
-                "checkTheValues": "Проверьте значения.",
-                "overlappingValueRanges": "Проверьте значения. Диапазоны значений не должны пересекаться."
             },
             "featureLister": {
                 "chooseTheme": "Выбор темы",

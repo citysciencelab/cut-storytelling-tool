@@ -11,7 +11,7 @@ const ItemView = Backbone.View.extend({
         });
     },
     tagName: "li",
-    className: "list-group-item",
+    className: "dropdown-item",
     template: _.template(ItemTemplate),
     render: function () {
         const attr = this.translateName(this.model.toJSON());

@@ -729,14 +729,17 @@ export default {
                 target-sel="#legend"
                 :margin-bottom="100"
             >
-                <div :class="uiStyle === 'TABLE' ? 'legend-title-table': 'legend-title'">
-                    <span class="bootstrap-icon d-md-none d-lg-inline-block">
+                <div
+                    :class="uiStyle === 'TABLE' ? 'legend-title-table': 'legend-title'"
+                    class="row py-3 d-flex align-items-center"
+                >
+                    <span class="bootstrap-icon d-md-none d-lg-inline-block col-2">
                         <i :class="icon" />
                     </span>
-                    <h2 class="title">
+                    <h2 class="title col-5 px-0 pt-1 pb-0">
                         {{ $t(name) }}
                     </h2>
-                    <div class="float-right">
+                    <div class="col-5 d-flex justify-content-end">
                         <span
                             v-if="showCollapseAllButton"
                             ref="collapse-all-icon"
@@ -823,6 +826,7 @@ export default {
             .title{
                 @include tool-headings-h2();
                 display: inline-block;
+                margin: 0;
             }
             .close-legend {
                 padding: 5px;
@@ -874,7 +878,7 @@ export default {
         margin: 10px 10px 30px 10px;
         z-index: 9999;
         .legend-title-table {
-            font-size: 14px;
+            font-size: $font_size_big;
             color: $white;
             padding: 10px;
             cursor: move;

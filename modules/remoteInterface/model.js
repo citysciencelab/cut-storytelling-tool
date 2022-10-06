@@ -55,9 +55,6 @@ const RemoteInterface = Backbone.Model.extend({
         else if (event.data?.showPositionByExtentNoScroll) {
             this.showPositionByExtentNoScroll(event.data.showPositionByExtentNoScroll);
         }
-        else if (event.data?.transactFeatureById) {
-            Radio.trigger("wfsTransaction", "transact", event.data.layerId, event.data.transactFeatureById, event.data.mode, event.data.attributes);
-        }
         else if (event.data?.zoomToExtent) {
             Radio.trigger("Map", "zoomToExtent", {extent: event.data.zoomToExtent});
         }

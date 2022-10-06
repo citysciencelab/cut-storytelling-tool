@@ -17,9 +17,11 @@ import SaveSelection from "./saveSelection/components/SaveSelection.vue";
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import SearchByCoord from "./searchByCoord/components/SearchByCoord.vue";
 import SelectFeatures from "./selectFeatures/components/SelectFeatures.vue";
+import Shadow from "./shadowTool/components/ShadowTool.vue";
 import StyleVT from "./styleVT/components/StyleVT.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import WfsSearch from "./wfsSearch/components/WfsSearch.vue";
+import WfsTransaction from "./wfst/components/WfsTransaction.vue";
 
 /**
  * User type definition
@@ -48,9 +50,11 @@ const state = {
         scaleSwitcher: ScaleSwitcher,
         searchByCoord: SearchByCoord,
         selectFeatures: SelectFeatures,
+        shadow: Shadow,
         styleVT: StyleVT,
         supplyCoord: SupplyCoord,
-        wfsSearch: WfsSearch
+        wfsSearch: WfsSearch,
+        wfst: WfsTransaction
     },
     configuredTools: []
 };

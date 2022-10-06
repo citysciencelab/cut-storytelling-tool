@@ -12,6 +12,7 @@ import {
     Point,
     Polygon
 } from "ol/geom";
+import isObject from "../../../../utils/isObject.js";
 
 export default {
     name: "GeometryFilter",
@@ -50,39 +51,64 @@ export default {
             type: Number,
             required: false,
             default: 1
+        },
+        filterGeometry: {
+            type: [Object, Boolean],
+            required: false,
+            default: false
+        },
+        geometryFeature: {
+            type: Object,
+            required: false,
+            default: undefined
+        },
+        selectedGeometryIndex: {
+            type: Number,
+            required: false,
+            default: 0
         }
     },
     data () {
         return {
             isActive: false,
-            buffer: 0,
+            buffer: this.defaultBuffer,
             isBufferInputVisible: false,
             isGeometryVisible: false,
-            selectedGeometry: 0
+            selectedGeometry: this.selectedGeometryIndex
         };
     },
     watch: {
         selectedGeometry () {
             this.removeInteraction(this.draw);
             this.setDrawInteraction();
-            this.isBufferInputVisible = false;
         },
         isActive (val) {
             this.draw.setActive(val);
             this.$emit("setGfiActive", !val);
         },
-        buffer (val, oldVal) {
+        buffer (val) {
             if (!this.feature) {
                 return;
             }
             const newValue = isNaN(parseInt(val, 10)) ? this.defaultBuffer : val,
-                oldValue = isNaN(parseInt(oldVal, 10)) ? this.defaultBuffer : oldVal,
-                jstsGeom = this.ol3Parser.read(this.feature.getGeometry()),
-                buffered = jstsGeom.buffer(!this.invertGeometry ? newValue - oldValue : oldValue - newValue);
+                jstsGeom = this.ol3Parser.read(this.initFeatureGeometry),
+                buffered = jstsGeom.buffer(newValue);
 
-            // convert back from JSTS and replace the geometry on the feature
-            this.feature.setGeometry(this.ol3Parser.write(buffered));
-            this.emitGeometryOfLineBuffer(this.feature.getGeometry().getCoordinates());
+            if (newValue <= 0) {
+                return;
+            }
+            this.setGeometryAtFeature(this.feature, this.ol3Parser.write(buffered), this.invertGeometry);
+
+            clearInterval(this.intvBuffer);
+            this.intvBuffer = setInterval(() => {
+                clearInterval(this.intvBuffer);
+                this.emitGeometryOfLineBuffer(this.feature.getGeometry().getCoordinates());
+            }, 800);
+            if (!isNaN(parseInt(val, 10))) {
+                this.$emit("updateGeometrySelectorOptions", {
+                    "defaultBuffer": Number(val)
+                });
+            }
         }
     },
     created () {
@@ -94,8 +120,9 @@ export default {
             Polygon
         );
 
-        this.buffer = this.defaultBuffer;
+        this.initFeatureGeometry = null;
 
+        this.initializeLayer(this.filterGeometry);
         this.setLayer();
         this.setDrawInteraction();
     },
@@ -166,15 +193,20 @@ export default {
                 geometryFunction: this.getGeometryFunction(selectedGeometry.type, this.circleSides)
             });
             this.draw.setActive(this.isActive);
-
             this.draw.on("drawend", (evt) => {
                 const geometry = this.getGeometryOnDrawEnd(evt.feature, selectedGeometry.type, this.buffer);
 
                 this.feature = evt.feature;
+                this.initFeatureGeometry = evt.feature.getGeometry();
                 this.isGeometryVisible = true;
                 this.isBufferInputVisible = selectedGeometry.type === "LineString";
                 this.setGeometryAtFeature(this.feature, geometry, this.invertGeometry);
                 this.$emit("updateFilterGeometry", geometry);
+                this.$emit("updateGeometryFeature", this.feature);
+                this.$emit("updateGeometrySelectorOptions", {
+                    "selectedGeometry": this.selectedGeometry,
+                    "defaultBuffer": Number(this.buffer)
+                });
             });
 
             this.draw.on("drawstart", () => {
@@ -207,6 +239,9 @@ export default {
             });
 
             this.addLayer(this.layer);
+            if (typeof this.geometryFeature !== "undefined") {
+                this.layer.getSource().addFeature(this.geometryFeature);
+            }
         },
 
         /**
@@ -218,6 +253,11 @@ export default {
             this.isBufferInputVisible = false;
             this.layer.getSource().clear();
             this.$emit("updateFilterGeometry", false);
+            this.$emit("updateGeometryFeature", undefined);
+            this.$emit("updateGeometrySelectorOptions", {
+                "selectedGeometry": 0,
+                "defaultBuffer": 20
+            });
         },
 
         /**
@@ -292,6 +332,18 @@ export default {
                 return this.ol3Parser.write(buffered);
             }
             return feature.getGeometry();
+        },
+
+        /**
+         * Initializes the layer if the geometry exists already
+         * @param {ol/geom/Geometry|Boolean} filterGeometry The filtered geometry, false if it does not exist.
+         * @returns {void}
+         */
+        initializeLayer (filterGeometry) {
+            if (isObject(filterGeometry)) {
+                this.isGeometryVisible = true;
+                this.isActive = true;
+            }
         }
     }
 };
@@ -361,6 +413,7 @@ export default {
                     v-model="buffer"
                     class="form-control"
                     type="number"
+                    min="1"
                 >
             </div>
             <div v-if="isGeometryVisible">
@@ -378,8 +431,9 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@import "~variables";
     form {
-        font-size: 16px;
+        font-size: $font-size-lg;
     }
 
     hr {

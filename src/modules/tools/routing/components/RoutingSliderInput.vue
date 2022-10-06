@@ -59,18 +59,3 @@ export default {
         >
     </div>
 </template>
-
-<style scoped>
-.d-flex {
-    display: flex;
-}
-.flex-column {
-    flex-direction: column;
-}
-.justify-content-between {
-    justify-content: space-between;
-}
-h6 {
-    font-size: 12px;
-}
-</style>

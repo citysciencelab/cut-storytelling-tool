@@ -44,11 +44,34 @@ export default function xml2json (srcDom, attributeValue = true) {
                 jsonResult[keyName] = [xml2json(child, attributeValue)];
             }
             else {
-                jsonResult[keyName].push(xml2json(child, attributeValue));
+                const jsonResultHasArray = Array.isArray(jsonResult[keyName]);
+
+                if (jsonResultHasArray) {
+                    jsonResult[keyName].push(xml2json(child, attributeValue));
+                }
+                else {
+                    /* may occur on e.g. siblings ['a:x', 'x', 'x'] –
+                     * first object was written, now array comes in ... */
+                    jsonResult[keyName] = [
+                        jsonResult[keyName],
+                        xml2json(child, attributeValue)
+                    ];
+                }
             }
         }
         else {
-            jsonResult[keyName] = xml2json(child, attributeValue);
+            const value = xml2json(child, attributeValue);
+
+            // make sure no name conflict resulting from prefix deletion overrides content
+            if (Array.isArray(jsonResult[keyName])) {
+                jsonResult[keyName].push(value);
+            }
+            else if (jsonResult[keyName] instanceof Object) {
+                jsonResult[keyName] = [jsonResult[keyName], value];
+            }
+            else {
+                jsonResult[keyName] = value;
+            }
         }
     });
 

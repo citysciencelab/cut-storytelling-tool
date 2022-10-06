@@ -139,7 +139,10 @@ export default {
                             .every(option => optionKeysWithoutRoot.includes(option));
 
                     if (previousElementsSelected) {
-                        return getOptions(buildPath(this.selectedOptions, optionsArr[lastIndex]), this.parsedSource);
+                        return getOptions(
+                            buildPath(this.selectedOptions, optionsArr[lastIndex], this.parsedSource),
+                            this.parsedSource
+                        );
                     }
                 }
 

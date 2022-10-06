@@ -273,7 +273,7 @@ export default {
         font-family: $font_family_default;
     }
     #tool-compareFeatures-select-label {
-        font-size: 13px;
+        font-size: $font_size_big;
         font-weight: normal;
         line-height: 17px;
         color: $dark_grey;
@@ -303,7 +303,7 @@ export default {
         p {
             line-height: 22px;
             &:first-child {
-                font-size: 14px;
+                font-size: $font_size_big;
             }
         }
     }

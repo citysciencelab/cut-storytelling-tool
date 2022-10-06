@@ -39,7 +39,7 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
         this.render();
     },
     tagName: "li",
-    className: "themen-folder list-group-item",
+    className: "themen-folder dropdown-item",
     id: "",
     template: _.template(FolderTemplate),
 

@@ -57,7 +57,6 @@
             "fileImport": "Datei-Import",
             "draw": "Zeichnen / Schreiben",
             "shadow": "Schatten",
-            "styleWMS": "Style WMS",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
             "layerSlider": "Zeitreihe",
@@ -379,7 +378,10 @@
                 "invisibleLayer": "Folgende Themen können im ausgewählten Druckmaßstab {{scale}} nicht gedruckt werden:"
             },
             "shadow": {
-                "shadowDisplay": "Schattendarstellung"
+                "shadowDisplay": "Schattendarstellung:",
+                "pickDate": "Wählen Sie ein Datum:",
+                "slideHour": "Wählen Sie eine Uhrzeit:",
+                "slideDate": "Wählen Sie ein Datum:"
               },
             "styleVT": {
               "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
@@ -387,24 +389,6 @@
               "theme": "Thema",
               "chooseTheme": "Bitte aktives Thema auswählen",
               "style": "Style"
-            },
-            "styleWMS": {
-                "noStyleableLayers": "Derzeit sind keine klassifizierbaren Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
-                "theme": "Thema",
-                "chooseTheme": "Bitte Thema auswählen",
-                "attribute": "Attribut",
-                "chooseAttribute": "Bitte Attribut wählen",
-                "countOfClasses": "Anzahl der Klassen",
-                "chooseNumberOfClasses": "Bitte Anzahl der Klassen auswählen",
-                "rangeOfValues": "Wertebereich Klasse",
-                "from": "von",
-                "to": "bis",
-                "reset": "Zurücksetzen",
-                "apply": "Anwenden",
-                "pleaseEnterInteger": "Bitte tragen Sie eine ganze Zahl ein.",
-                "pleaseChooseColor": "Bitte wählen Sie eine Farbe aus.",
-                "checkTheValues": "Überprüfen Sie die Werte.",
-                "overlappingValueRanges": "Überprüfen Sie die Werte. Wertebereiche dürfen sich nicht überschneiden."
             },
             "featureLister": {
                 "chooseTheme": "Thema wählen",
@@ -469,7 +453,7 @@
                     "unit": "{{amountOfFilteredItems}} Treffer"
                 },
                 "geometryFilter": {
-                    "activate": "Gebiets-Filter aktivieren",
+                    "activate": "Gebiet für Filterung setzen",
                     "help": "Wählen Sie auf der Karte ein Gebiet aus um nur innerhalb dieses Gebietes zu filtern.",
                     "selectGeometry": "Wählen Sie eine Geometrie aus.",
                     "buffer": "Puffer [m]",
@@ -767,6 +751,7 @@
                     "undo": "Rückgängig machen",
                     "redo": "Wiederholen",
                     "edit": "Geometrie bearbeiten",
+                    "editAttributes": "Attribute bearbeiten",
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen",
                     "saveDrawing": "Zeichnung speichern"
@@ -779,6 +764,17 @@
                     "iconCloud": "Wolke",
                     "iconMeadow": "Wiese",
                     "gelber Pin": "gelber Pin"
+                },
+                "attributeSelect": {
+                    "attributeKeyError": "Bitte einen Schlüssel fürs Attribut angeben.",
+                    "attributeDuplicatedKeyError": "Der Attribut-Schlüssel existiert bereits.",
+                    "noFeatureSelected": "Derzeit ist noch kein Feature ausgewählt. Bitte wählen Sie ein Feature aus!",
+                    "save": "Speichern",
+                    "remove": "Löschen",
+                    "input": {
+                        "key": "Neuer Schlüssel",
+                        "value": "Neuer Wert"
+                    }
                 }
             },
             "measure": {
@@ -830,6 +826,54 @@
                 },
                 "district": "Gemarkung",
                 "parcelNumber": "Flurstücksnummer"
+            },
+            "wfsTransaction": {
+                "layerSelectLabel" : "Aktueller Layer:",
+                "polygonHint": "Halten Sie die Strg-Taste und bewegen Sie die Maus mit gedrückter Maustaste, um ein Polygon zu bewegen.",
+                "interactionSelect": {
+                    "update": "Geometrie bearbeiten",
+                    "delete": "Geometrie löschen",
+                    "line": "Linie erfassen",
+                    "point": "Punkt erfassen",
+                    "polygon": "Fläche erfassen"
+                },
+                "error": {
+                    "allLayersNotSelected": "Es wurde kein für dieses Werkzeug konfigurierter WFS-T Layer im Themenbaum aktiviert.",
+                    "geometryOutOfRange": "Die gezeichnete Geometrie befindet sich außerhalb des erlaubten Bereiches des Layers.",
+                    "layerNotConfiguredCorrectly": "Es liegen Probleme bei der Konfiguration des ausgewählten Layers für die Nutzung mit diesem Werkzeug vor; möglicherweise fehlt der Parameter 'featurePrefix'.",
+                    "layerNotSelected": "Der ausgewählte Layer wurde noch nicht im Themenbaum aktiviert.",
+                    "noFeature": "Bitte zeichnen Sie eine zu Ihren Einträgen assoziierte Geometrie.",
+                    "onlyNumbersAllowed": "Das Eingabefeld erlaubt nur Zahlen.",
+                    "requiredPropertiesNotSet": "Bitte geben Sie einen validen Wert für die verpflichtenden Felder {{properties}} ein."
+                },
+                "transaction": {
+                    "success": {
+                        "baseSuccess": "Das {{transaction}} der Geometrie und ihrer Parameter war erfolgreich.",
+                        "delete": "$t(common:modules.tools.wfsTransaction.transaction.success.baseSuccess, {\"transaction\": 'Löschen'})",
+                        "insert": "$t(common:modules.tools.wfsTransaction.transaction.success.baseSuccess, {\"transaction\": 'Speichern'})",
+                        "selectedUpdate" : "$t(common:modules.tools.wfsTransaction.transaction.success.baseSuccess, {\"transaction\": 'Bearbeiten'})"
+                    },
+                    "error": {
+                        "genericFailedTransaction": "Das Speichern bzw. Löschen der Geometrie und ihrer Parameter ist leider fehlgeschlagen. Bitte wenden Sie sich an Ihren Administrator.",
+                        "axios": "$t(common:modules.tools.wfsTransaction.transaction.error.genericFailedTransaction)",
+                        "baseError": "Das Speichern der Geometrie und ihrer Parameter ist leider fehlgeschlagen.",
+                        "InvalidValue": "$t(common:modules.tools.wfsTransaction.transaction.error.baseError) Eine der Eingaben ist unzulässig bzw. nicht im richtigen Format.",
+                        "InvalidParameterValue": "$t(common:modules.tools.wfsTransaction.transaction.error.InvalidValue)",
+                        "MissingParameterValue": "$t(common:modules.tools.wfsTransaction.transaction.error.baseError) Einer oder mehrere der Parameter haben keine Eingabe und der Dienst verfügt über keinen Defaultwert.",
+                        "OperationNotSupported": "$t(common:modules.tools.wfsTransaction.transaction.error.baseError) Der Dienst unterstützt die durchgeführte Operation nicht.",
+                        "OperationParsingFailed": "$t(common:modules.tools.wfsTransaction.transaction.error.baseError) Die Transaktion konnte vom Dienst nicht verarbeitet werden. Bitte wenden Sie sich an den Administrator.",
+                        "OperationProcessingFailed": "$t(common:modules.tools.wfsTransaction.transaction.error.baseError) Während der Transaktion ist ein Fehler aufgetreten."
+                    }
+                },
+                "deleteInteraction": {
+                  "confirm": "Löschen",
+                  "headline": "Achtung",
+                  "text": "Sind Sie sich sicher, dass Sie diese Geometrie löschen möchten?"
+                },
+                "form": {
+                    "discard": "Verwerfen",
+                    "save": "Speichern"
+                }
             },
             "routing": {
                 "coordinateInputHelp": "Suchen Sie einen Ort oder fügen Sie einen Punkt durch Klick in die Karte hinzu",
@@ -981,7 +1025,8 @@
             "3d": {
                 "buttonTitle": "3D",
                 "openView3d": "Ansicht einschalten",
-                "closeView3d": "Ansicht ausschalten"
+                "closeView3d": "Ansicht ausschalten",
+                "noCesium": "Cesium/3D-Funktionalität konnte nicht geladen werden - Bitte informieren Sie den Serviceanbieter"
             },
             "oblique": {
                 "buttonTitle": "Schrägluftbilder",
@@ -1038,7 +1083,8 @@
                 "location": "Ort",
                 "subject": "Thema (externe Fachdaten)",
                 "topic": "Thema (Fachdaten)",
-                "general": "Fachdaten"
+                "general": "Fachdaten",
+                "folder": "Ordner (Fachdaten)"
             },
             "specialWFS": {
                 "ongoing": "im Verfahren",

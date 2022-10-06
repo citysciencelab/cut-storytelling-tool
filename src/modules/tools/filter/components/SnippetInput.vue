@@ -105,7 +105,7 @@ export default {
         }
     },
     mounted () {
-        this.$emit("setSnippetPrechecked", this.visible && this.prechecked !== "");
+        this.$emit("setSnippetPrechecked", this.visible && this.prechecked ? this.snippetId : false);
     },
     methods: {
         translateKeyWithPlausibilityCheck,
@@ -230,8 +230,5 @@ export default {
     .snippetInputContainer .right {
         position: absolute;
         right: 0;
-    }
-    .category-layer .right {
-        right: 30px;
     }
 </style>

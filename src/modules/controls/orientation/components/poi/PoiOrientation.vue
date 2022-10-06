@@ -434,7 +434,7 @@ export default {
 
     .poi {
         color: $dark_grey;
-        font-size: 14px;
+        font-size: $font_size_big;
         .modal-header {
             padding: 0;
             border-bottom: 0;
@@ -446,7 +446,7 @@ export default {
             overflow: hidden;
         }
         .bi-x-lg {
-            font-size: 16px;
+            font-size: $font_size_icon_lg;
             float: right;
             padding: 12px;
             cursor: pointer;

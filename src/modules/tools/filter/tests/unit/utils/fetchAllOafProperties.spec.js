@@ -126,16 +126,16 @@ describe("src/modules/tools/filter/utils/fetchAllOafProperties.js", () => {
                 {href: false}
             ]})).to.be.false;
         });
-        it("should return false if featureCollection.links are objects with href string but title doesn't equal 'next page'", () => {
-            expect(getNextLinkFromFeatureCollection({links: [{href: "string", title: "this is not a next page"}]})).to.be.false;
+        it("should return false if featureCollection.links are objects with href string but rel is not equal 'next'", () => {
+            expect(getNextLinkFromFeatureCollection({links: [{href: "string", rel: "this is not a next"}]})).to.be.false;
         });
-        it("should return href if featureCollection.links are objects with href string and one of the titles equals 'next page'", () => {
+        it("should return href if featureCollection.links are objects with href string and one of the rels equals 'next' and type equals 'application/geo+json'", () => {
             expect(getNextLinkFromFeatureCollection({links: [
-                {href: "hrefA", title: "this is not a next page"},
-                {href: "hrefB", title: "this is not a next page"},
-                {href: "hrefC", title: "this is not a next page"},
-                {href: "hrefD", title: "next page"},
-                {href: "hrefE", title: "this is not a next page"}
+                {href: "hrefA", rel: "this is not a next page"},
+                {href: "hrefB", rel: "this is not a next page"},
+                {href: "hrefC", rel: "this is not a next page"},
+                {href: "hrefD", rel: "next", type: "application/geo+json"},
+                {href: "hrefE", rel: "this is not a next page"}
             ]})).to.equal("hrefD");
         });
     });

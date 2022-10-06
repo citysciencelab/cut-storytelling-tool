@@ -15,18 +15,12 @@
 <% if (uiStyle === "TABLE") { %>
 
     <% if (finalHitList.length >= recommendedListLength && finalHitList.length !== 0) { %>
-        <li class="list-group-item results"><div><span><%= showAllResultsText %></span><span class="bootstrap-icon"><i class="bi-play-circle"></i></span></div></li>
+        <li class="list-group-item results"><div><span><%= showAllResultsText %></span><span class="bootstrap-icon"><i class="bi-play-circle"></i></span></div></li>    
 
-        <div class="search-funnel"></div>
-
-        <div class="search-right-funnel-corner"></div>
     <% } else if (finalHitList.length < recommendedListLength && finalHitList.length !== 0) { %>
 
         <li class="list-group-item results"></li>
 
-        <div class="search-funnel"></div>
-
-        <div class="search-right-funnel-corner"></div>
     <% } %>
 <% } else { %>
     <% if (finalHitList.length >= recommendedListLength) { %>

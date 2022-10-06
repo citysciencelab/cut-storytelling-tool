@@ -106,10 +106,14 @@
           "visibility": false
         },
         {
-          "id": "13032",
-          "name": "Oblique",
-          "visibility": false,
-          "isVisibleInTree": false
+          "id": "123456",
+          "name": "EntitiesLayerName",
+          "visibility": false
+        },
+        {
+          "id": "6666",
+          "name": "3d objects",
+          "typ": "Entities3D"
         }
       ]
     }
