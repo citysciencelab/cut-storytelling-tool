@@ -53,42 +53,12 @@ export default {
          */
         active (isActive) {
             if (isActive) {
-                this.setFocusToFirstControl();
+                // this.setFocusToFirstControl();
             }
         }
     },
     created () {
         this.$on("close", this.close);
-
-        // Fix masterportal main menu styles for "TABLE" UI Style
-        if (Radio.request("Util", "getUiStyle") === "TABLE") {
-            const tableNavigationElement = document.querySelector("#table-nav");
-
-            if (tableNavigationElement) {
-                tableNavigationElement.classList.remove("row");
-                tableNavigationElement.classList.add("custom-table-row");
-            }
-
-            const tableNavigationMainColumnElement = document.querySelector(
-                "#table-nav > .col-md-4"
-            );
-
-            if (tableNavigationMainColumnElement) {
-                tableNavigationMainColumnElement.classList.remove("col-md-4");
-                tableNavigationMainColumnElement.classList.add(
-                    "custom-table-column"
-                );
-            }
-
-            const tableNavigationSecondaryColumnElements = document.querySelectorAll(
-                "#table-nav > .col-md-2"
-            );
-
-            tableNavigationSecondaryColumnElements.forEach(element => {
-                element.classList.remove("col-md-2");
-                element.classList.add("custom-table-column");
-            });
-        }
     },
     /**
      * Put initialize here if mounting occurs after config parsing
@@ -96,17 +66,23 @@ export default {
      */
     mounted () {
         this.applyTranslationKey(this.name);
-
-        if (this.storyConfPath) {
-            fetchDataFromUrl(this.storyConfPath).then(loadedStoryConf => {
-                this.setStoryConf(loadedStoryConf);
-            });
-        }
+        this.loadStoryFromFile();
     },
     methods: {
         ...mapMutations("Tools/StoryTellingTool", Object.keys(mutations)),
         ...mapActions("Tools/StoryTellingTool", Object.keys(actions)),
 
+        /**
+         * Handles the URL loading of the story from ath
+         * @returns {void}
+         */
+        loadStoryFromFile () {
+            if (this.storyConfPath) {
+                fetchDataFromUrl(this.storyConfPath).then(loadedStoryConf => {
+                    this.setStoryConf(loadedStoryConf);
+                });
+            }
+        },
         /**
          * Handles story telling mode changes.
          * @param {Number} index the index of the new story telling mode
@@ -117,38 +93,67 @@ export default {
         },
 
         /**
+         * Resets the tool to its initial state
+         * @returns {void}
+         */
+        reset () {
+            const resetStoryTellingTool = () => {
+                this.resetCreatorContent();
+                this.loadStoryFromFile();
+                this.mode = null;
+            };
+
+            if (this.isCreatingStory()) {
+                const confirmActionSettings = {
+                    actionConfirmedCallback: resetStoryTellingTool,
+                    confirmCaption: this.$t(
+                        "additional:modules.tools.storyTellingTool.confirm.closeStoryCreation.confirmButton"
+                    ),
+                    denyCaption: this.$t(
+                        "additional:modules.tools.storyTellingTool.confirm.closeStoryCreation.denyButton"
+                    ),
+                    textContent: this.$t(
+                        "additional:modules.tools.storyTellingTool.confirm.closeStoryCreation.description"
+                    ),
+                    headline: this.$t(
+                        "additional:modules.tools.storyTellingTool.confirm.closeStoryCreation.title"
+                    ),
+                    forceClickToClose: true
+                };
+
+                this.$store.dispatch(
+                    "ConfirmAction/addSingleAction",
+                    confirmActionSettings
+                );
+            }
+            else {
+                resetStoryTellingTool();
+            }
+        },
+
+        /**
          * Closes this tool window by setting active to false
          * @returns {void}
          */
         close () {
             const closeStoryTellingTool = () => {
-                    this.setActive(false);
-                    this.resetModule();
+                this.setActive(false);
+                this.resetModule();
 
-                    // TODO replace trigger when Menu is migrated
-                    // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-                    // else the menu-entry for this tool is always highlighted
-                    const model = Radio.request(
-                        "ModelList",
-                        "getModelByAttributes",
-                        {
-                            id: this.$store.state.Tools.StoryTellingTool.id
-                        }
-                    );
-
-                    if (model) {
-                        model.set("isActive", false);
+                const model = Radio.request(
+                    "ModelList",
+                    "getModelByAttributes",
+                    {
+                        id: this.$store.state.Tools.StoryTellingTool.id
                     }
-                },
+                );
 
-                // Confirm tool closing if user is creating a story
-                isCreatingAStory =
-                    this.mode === this.constants.storyTellingModes.CREATE &&
-                    JSON.stringify(
-                        this.$store.state.Tools.StoryTellingTool.storyConf
-                    ) !== JSON.stringify(this.constants.emptyStoryConf);
+                if (model) {
+                    model.set("isActive", false);
+                }
+            };
 
-            if (isCreatingAStory) {
+            if (this.isCreatingStory()) {
                 const confirmActionSettings = {
                     actionConfirmedCallback: closeStoryTellingTool,
                     confirmCaption: this.$t(
@@ -174,6 +179,17 @@ export default {
             else {
                 closeStoryTellingTool();
             }
+        },
+        /*
+         * Checks if there is a story currently being created
+         * @returns {boolean}
+         */
+        isCreatingStory () {
+            // Confirm tool closing if user is creating a story
+            return this.mode === this.constants.storyTellingModes.CREATE &&
+                JSON.stringify(
+                    this.$store.state.Tools.StoryTellingTool.storyConf
+                ) !== JSON.stringify(this.constants.emptyStoryConf);
         }
     }
 };
