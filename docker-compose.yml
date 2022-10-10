@@ -15,6 +15,8 @@ services:
             - "traefik.http.routers.stt-frontend.rule=Host(`stt.cut.hcu-hamburg.de`)"
             - "traefik.http.routers.stt-frontend.tls=true"
             - "traefik.http.routers.stt-frontend.tls.certresolver=lets-encr"
+            - "traefik.http.middlewares.my-authenticator.basicauth.users=testuser:$$2a$$12$$j7PFu2c/yy4Ng.8xHLZ1OOmn.G8IbzGgaiLdlSvjc.hx8NKYlniUK"
+            - "traefik.http.routers.stt-frontend.middlewares=my-authenticator@docker"
 
 networks:
     proxy:
