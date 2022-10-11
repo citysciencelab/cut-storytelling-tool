@@ -1,6 +1,7 @@
 <script>
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import StoryNavigation from "./StoryNavigation.vue";
+import ScrollyTeller from "./ScrollyTeller.vue";
 import actions from "../../store/actionsStoryTellingTool";
 import getters from "../../store/gettersStoryTellingTool";
 import mutations from "../../store/mutationsStoryTellingTool";
@@ -14,6 +15,7 @@ import store from "../../../../src/app-store";
 export default {
     name: "StoryPlayer",
     components: {
+        ScrollyTeller,
         StoryNavigation
     },
     props: {
@@ -36,7 +38,9 @@ export default {
             currentStepIndex: 0,
             loadedContent: null,
             isHovering: null,
-            isChangeFrom3D: false
+            isChangeFrom3D: false,
+            showMode: "classic",
+            isScrolly: false
         };
     },
     computed: {
@@ -87,6 +91,7 @@ export default {
         if (this.isPreview && this.storyConf) {
             this.loadStep();
         }
+        this.isScrolly = this.$store.state.configJson?.Portalconfig.isScrollyStory;
     },
     beforeDestroy () {
         // Hides all story layers
@@ -166,6 +171,10 @@ export default {
             const pos = Cesium.Cartographic.fromCartesian(cartesian3Pos);
 
             return [pos.longitude / Math.PI * 180, pos.latitude / Math.PI * 180, pos.height];
+        },
+
+        changeMode () {
+            this.showMode = this.showMode === "classic" ? "scrolly" : "classic";
         },
 
         /**
@@ -299,7 +308,23 @@ export default {
         v-if="storyConf !== undefined && storyConf.steps && currentStep"
         id="tool-storyTellingTool-player"
     >
-        <div id="tool-storyTellingTool-currentStep">
+        <span
+            v-if="isScrolly"
+            style="position: absolute; top: 0; right: 35px;"
+            @click="changeMode"
+        >
+            <v-icon>style</v-icon>
+        </span>
+
+        <ScrollyTeller
+            v-if="showMode === 'scrolly'"
+            v-model="currentStepIndex"
+            :steps="storyConf.steps"
+        />
+        <div
+            v-if="showMode === 'classic'"
+            id="tool-storyTellingTool-currentStep"
+        >
             <h2 v-if="currentChapter">
                 {{ currentChapter.chapterTitle }}
             </h2>
@@ -317,6 +342,7 @@ export default {
         </div>
 
         <StoryNavigation
+            v-if="showMode === 'classic'"
             v-model="currentStepIndex"
             :current-chapter="currentStep && currentStep.associatedChapter"
             :steps="storyConf.steps"
