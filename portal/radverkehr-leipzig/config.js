@@ -19,6 +19,8 @@ const Config = {
         showVersion: true
     },
     layerConf: "./assets/services-internet.json",
+    restConf:
+        "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
     scaleLine: true,
 };
 
