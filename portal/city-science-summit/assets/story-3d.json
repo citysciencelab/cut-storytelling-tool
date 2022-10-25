@@ -1,0 +1,273 @@
+{
+  "title": "City Science Summit 2022",
+  "author": "City Science Lab",
+  "description": "This Story showcases different functionalities of the Story Telling Tool in the Story Telling Tool",
+  "coverImagePath": "assets/img/summit.png",
+  "htmlFolder": "story",
+  "chapters": [
+    {
+      "chapterNumber": 1,
+      "chapterTitle": "The Idea"
+    },
+    {
+      "chapterNumber": 2,
+      "chapterTitle": "Functionalies in 2D"
+    },
+    {
+      "chapterNumber": 3,
+      "chapterTitle": "Going further..."
+    },
+    {
+      "chapterNumber": 4,
+      "chapterTitle": "Conclusion and next steps"
+    }
+  ],
+  "steps": [
+    {
+      "stepNumber": 1,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Geolocated data",
+      "htmlFile": "step_1-1.html",
+      "centerCoordinate": [
+        563140.367837,
+        5934788.314655
+      ],
+      "zoomLevel": 2,
+      "layers": [],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 2,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Geolocated data",
+      "htmlFile": "step_1-2.html",
+      "centerCoordinate": [
+        563140.367837,
+        5934788.314655
+      ],
+      "zoomLevel": 0,
+      "layers": ["16100", "48", "49", "50", "11922", "11923", "11925"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 3,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 1,
+      "title": "Telling Stories",
+      "htmlFile": "step_1-3.html",
+      "centerCoordinate": [
+        563140.367837,
+        5934788.314655
+      ],
+      "zoomLevel": 0,
+      "layers": ["16100", "48", "49", "50", "11922", "11923", "11925"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 1,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 2,
+      "title": "Zoom to a specific location",
+      "htmlFile": "step_2-1.html",
+      "centerCoordinate": [
+        563140.367837,
+        5934788.314655
+      ],
+      "zoomLevel": 7,
+      "layers": [],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 2,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 2,
+      "title": "Change Locations",
+      "htmlFile": "step_2-2.html",
+      "centerCoordinate": [
+        563140.367837,
+        5934788.314655
+      ],
+      "zoomLevel": 7,
+      "layers": [],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 1,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 3,
+      "title": "...Change to 3D",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.946620,
+          53.554060,
+          150.0
+        ],
+        "heading": 0.08619862675293799,
+        "pitch": -0.41983749405932813
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 2,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 3,
+      "title": "Show all sorts of 3D models and Data as if they were existent already",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.948301,
+          53.552374,
+          343.8
+        ],
+        "heading": 0.38138509963163635,
+        "pitch": -0.4525214263618002
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 3,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 3,
+      "title": "Change our point of view",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.951139,
+          53.556209,
+          170.0
+        ],
+        "heading": 0.48138509963163635,
+        "pitch": -0.3525214263618002
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 4,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 3,
+      "title": "Fly over the city like a bird",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.952388,
+          53.558770,
+          138.7
+        ],
+        "heading": 2.581385093478189,
+        "pitch": -0.5925214409342683
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 5,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 3,
+      "title": "Inspect things more closely...",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.953082,
+          53.557907,
+          56.7
+        ],
+        "heading": 5.9085336246057905,
+        "pitch": -0.6927398353366296
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 6,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 3,
+      "title": "Or look at the city as if you were a pedestrian",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          9.963555987544352,
+          53.55717039629356,
+          27.544068712440062
+        ],
+        "heading": 3.730118431106418,
+        "pitch": -0.03720150451527693
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 7,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 3,
+      "title": "In that way, we can e.g. integrate participatory data in 3D",
+      "htmlFile": "",
+      "centerCoordinate": [],
+      "is3D": true,
+      "navigation3D": {
+        "cameraPosition": [
+          10.004705231941385,
+          53.541642338681065,
+          99.70853233385624
+        ],
+        "heading": 4.7758579053777375,
+        "pitch": -0.3306013170445623
+      },
+      "zoomLevel": 0,
+      "layers": ["12883", "12884", "6666"],
+      "interactionAddons": []
+    },
+    {
+      "stepNumber": 1,
+      "stepWidth": 600,
+      "visible": true,
+      "associatedChapter": 4,
+      "title": "Or give all sorts of users the possibility to create stories",
+      "htmlFile": "",
+      "centerCoordinate": [
+        567770.5793074201,
+        5936891.307962078
+      ],
+      "is3D": false,
+      "navigation3D": {},
+      "zoomLevel": 0,
+      "layers": [],
+      "interactionAddons": []
+    }
+  ]
+}

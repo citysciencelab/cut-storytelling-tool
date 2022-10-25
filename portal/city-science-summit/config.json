@@ -1,0 +1,178 @@
+{
+  "Portalconfig": {
+    "treeType": "light",
+    "mapView": {
+      "extent": [
+        442800,
+        5809000,
+        738000,
+        6102200
+      ],
+      "startResolution": 5.2916638091682096
+    },
+    "searchBar": {
+      "minChars": 3,
+      "placeholder": "translate#common:modules.searchbar.placeholder.addressTopicParcel",
+      "quickHelp": false,
+      "osm": {
+        "minChars": 3,
+        "serviceId": "10",
+        "limit": 60,
+        "states": "Hamburg, Nordrhein-Westfalen, Niedersachsen",
+        "classes": "place,highway,building,shop,historic,leisure,city,county"
+      }
+    },
+    "menu": {
+      "tree": {
+        "name": "translate#common:menu.topics",
+        "glyphicon": "glyphicon-list",
+        "isAlwaysExpanded": [
+          "SelectedLayer"
+        ]
+      },
+      "tools": {
+        "name": "translate#common:menu.tools.name",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "storyTellingTool": {
+            "name": "translate#additional:modules.tools.storyTellingTool.title",
+            "glyphicon": "glyphicon-book",
+            "active": true
+          },
+          "gfi": {
+            "name": "translate#common:menu.tools.getInfos",
+            "glyphicon": "glyphicon-info-sign",
+            "desktopType": "attached",
+            "active": true
+          }
+        }
+      },
+      "legend": {
+        "name": "common:modules.legend.name",
+        "showCollapseAllButton": true,
+        "showLegend": false
+      }
+    },
+    "controls": {
+      "orientation3d": true,
+      "button3d": false,
+      "toggleMenu": true,
+      "fullScreen": false,
+      "zoom": false,
+      "orientation": false,
+      "mousePosition": false,
+      "attributions": false,
+      "buttonOblique": false
+    },
+    "singleBaselayer": true
+  },
+  "Themenconfig": {
+    "Hintergrundkarten": {
+      "name": "translate#common:tree.backgroundMaps",
+      "Layer": [
+        {
+          "id": [
+            "1043",
+            "1044",
+            "1045",
+            "1046",
+            "13649",
+            "13652",
+            "13654",
+            "13656"
+          ],
+          "name": "Geobasiskarten (grau-blau)",
+          "visibility": true,
+          "isVisibleInTree": false,
+          "legend": false
+        },
+        {
+          "id": "157",
+          "name": "3D-Entities Testlayer",
+          "visibility": true,
+          "typ": "Entities3D",
+          "entities": [
+            {
+              "url": "https://daten-hamburg.de/gdi3d/datasource-data/Simple_Building.glb",
+              "attributes": {
+                "name": "einfaches Haus in Planten und Blomen"
+              },
+              "latitude": 53.5631,
+              "longitude": 9.9800,
+              "height": 12,
+              "heading": 0,
+              "pitch": 0,
+              "roll": 0,
+              "scale": 5,
+              "allowPicking": true,
+              "show": true
+            }
+          ],
+          "gfiAttributes": {
+            "name": "Name"
+          }
+        }
+      ]
+    },
+    "Fachdaten": {
+      "Layer": [
+        {
+          "id": "12883",
+          "name": "Gelände",
+          "visibility": false
+        },
+        {
+          "id": "12884",
+          "name": "Gebäude LoD2",
+          "visibility": false
+        },
+        {
+          "id": "123456",
+          "name": "EntitiesLayerName",
+          "visibility": false
+        },
+        {
+          "id": "6666",
+          "name": "3d objects",
+          "typ": "Entities3D"
+        },
+        {
+          "id": "1132",
+          "styleId": "1132",
+          "name": "100 Jahre Stadtgruen POIs",
+          "transparency": 75
+        },
+        {
+          "id": "16100",
+          "styleId": "16100"
+
+        },
+        {
+          "id": "48",
+          "styleId": "48"
+        },
+        {
+          "id": "49",
+          "styleId": "49"
+        },
+        {
+          "id": "50",
+          "styleId": "50"
+        },
+        {
+          "id": "11922",
+          "styleId": "11922"
+        },
+        {
+          "id": "11923",
+          "styleId": "11923"
+        },
+        {
+          "id": "11925",
+          "styleId": "11925"
+        }
+       
+      ]
+    }
+  }
+}
