@@ -48,6 +48,7 @@ export default {
 
         /**
          * The current selected step of the story.
+         * @returns {number} current step index
          */
         currentStep () {
             return this.currentStepIndex !== null
@@ -57,6 +58,7 @@ export default {
 
         /**
          * The current selected chapter of the story.
+         * @returns {number} current chapter
          */
         currentChapter () {
             return (
@@ -160,7 +162,7 @@ export default {
 
         /**
          * Disables a layer on the map
-         * @returns {Object} layer the layer to disable
+         * @param {Object} layer the layer to disable
          * @returns {void}
          */
         disableLayer (layer) {
@@ -276,7 +278,9 @@ export default {
                     this.storyConf.htmlFolder +
                     "/" +
                     this.currentStep.htmlFile
-                ).then(data => this.loadedContent = data);
+                ).then(data => {
+                    this.loadedContent = data;
+                });
             }
             else if (this.isPreview && this.htmlContents[htmlReference]) {
                 // Get temporary HTML for the story step preview

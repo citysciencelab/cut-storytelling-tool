@@ -18,7 +18,7 @@ export default {
         // All steps of the current story
         steps: {
             type: Array,
-            default: []
+            default: null
         }
     },
     data () {

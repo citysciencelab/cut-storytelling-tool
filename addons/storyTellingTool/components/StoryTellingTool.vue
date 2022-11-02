@@ -29,6 +29,7 @@ export default {
 
         /**
          * The story telling tool options
+         * @returns {Object[]} mode options (icon, title and disabled)
          */
         modeOptions () {
             return Object.values(this.constants.storyTellingModes).map(
@@ -97,6 +98,11 @@ export default {
          * @returns {void}
          */
         reset () {
+
+            /**
+             * Constant that saves all the actions on confirm
+             * @returns {void}
+             */
             const resetStoryTellingTool = () => {
                 this.resetCreatorContent();
                 this.loadStoryFromFile();
@@ -216,7 +222,10 @@ export default {
                     v-if="mode"
                     id="tool-storyTellingTool-reset"
                 >
-                    <span @click="reset">
+                    <span
+                        @click="reset"
+                        @keydown="reset"
+                    >
                         <v-tooltip left>
                             <template #activator="{ on, attrs }">
                                 <v-icon

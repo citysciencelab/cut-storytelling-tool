@@ -84,6 +84,7 @@ export default {
 
         /**
          * All chapter numbers
+         * @returns {Object[]} all chapter numbers
          */
         allChapterNumbers () {
             const chapters = this.storyConf.chapters || [];
@@ -93,6 +94,7 @@ export default {
 
         /**
          * All step numbers of the selected chapter
+         * @returns {Object[]} all step numbers
          */
         allStepNumbers () {
             const steps = this.storyConf.steps || [];
@@ -106,6 +108,7 @@ export default {
 
         /**
          * The chapter options
+         * @returns {Object[]} chapter options (value and text)
          */
         chapterOptions () {
             const chapters = this.storyConf.chapters || [],
@@ -125,6 +128,7 @@ export default {
 
         /**
          * The layer options
+         * @returns {Object[]} layers including id and name
          */
         layerOptions () {
             const layerList = Radio.request(
@@ -141,6 +145,7 @@ export default {
 
         /**
          * The addon options
+         * @returns {Object[]} available addons to activate
          */
         addonOptions () {
             const configuredAddons = this.$store.state.Tools.configuredTools;
@@ -453,7 +458,10 @@ export default {
 
         <form @submit.prevent="onSubmit">
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-associate"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.chapter"
@@ -462,6 +470,7 @@ export default {
                 </label>
 
                 <v-select
+                    id="step-associate"
                     v-model="step.associatedChapter"
                     :items="chapterOptions"
                     required
@@ -475,7 +484,10 @@ export default {
                 v-if="step.associatedChapter === null"
                 class="form-group"
             >
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-number"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.newChapterNumber"
@@ -484,6 +496,7 @@ export default {
                 </label>
 
                 <input
+                    id="step-number"
                     class="form-control"
                     type="number"
                     :value="newChapter.chapterNumber"
@@ -509,7 +522,10 @@ export default {
                 v-if="step.associatedChapter === null"
                 class="form-group"
             >
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-chapter-title"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.newChapterTitle"
@@ -518,6 +534,7 @@ export default {
                 </label>
 
                 <input
+                    id="step-chapter-title"
                     v-model="newChapter.chapterTitle"
                     class="form-control"
                     required
@@ -525,7 +542,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-number"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.stepNumber"
@@ -534,6 +554,7 @@ export default {
                 </label>
 
                 <input
+                    id="step-number"
                     class="form-control"
                     type="number"
                     :value="step.stepNumber"
@@ -560,7 +581,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-title"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.stepTitle"
@@ -569,6 +593,7 @@ export default {
                 </label>
 
                 <input
+                    id="step-title"
                     v-model="step.title"
                     class="form-control"
                     required
@@ -576,7 +601,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-width"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.stepWidth"
@@ -585,6 +613,7 @@ export default {
                 </label>
 
                 <input
+                    id="step-width"
                     class="form-control"
                     type="number"
                     :value="step.stepWidth"
@@ -596,7 +625,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-visible"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.visible"
@@ -605,6 +637,7 @@ export default {
                 </label>
 
                 <input
+                    id="step-visible"
                     class="checkbox"
                     type="checkbox"
                     :checked="step.visible"
@@ -722,7 +755,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-layer"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.layers"
@@ -731,6 +767,7 @@ export default {
                 </label>
 
                 <v-select
+                    id="step-layer"
                     v-model="step.layers"
                     :items="layerOptions"
                     multiple
@@ -741,7 +778,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-addons"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.interactionAddons"
@@ -750,6 +790,7 @@ export default {
                 </label>
 
                 <v-select
+                    id="step-addons"
                     v-model="step.interactionAddons"
                     :items="addonOptions"
                     multiple

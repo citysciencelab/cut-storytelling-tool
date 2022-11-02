@@ -75,6 +75,7 @@ export default {
             <div class="form-group">
                 <label
                     class="form-label"
+                    for="author"
                 >
                     {{
                         $t(
@@ -92,7 +93,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="slide-navigation"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.steps"
@@ -101,6 +105,7 @@ export default {
                 </label>
 
                 <v-slide-group
+                    id="slide-navigation"
                     show-arrows
                     center-active
                     @change="
