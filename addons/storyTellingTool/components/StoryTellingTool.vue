@@ -142,6 +142,11 @@ export default {
          * @returns {void}
          */
         close () {
+
+            /**
+             * Constant that saves all the actions on confirm
+             * @returns {void}
+             */
             const closeStoryTellingTool = () => {
                 this.setActive(false);
                 this.resetModule();

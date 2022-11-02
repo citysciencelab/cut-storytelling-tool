@@ -33,28 +33,22 @@ export default {
     mounted () {
         this.loadStoryContents(0);
 
-        const toolWindow = document.getElementsByClassName("table-tool-win-all-vue")[0];
+        const toolWindow = document.getElementsByClassName("table-tool-win-all-vue")[0],
+            heading = toolWindow.getElementsByClassName("win-heading")[0],
+            toolBody = document.getElementById("vue-tool-content-body"),
+            scroller = scrollama();
 
         toolWindow.style = "background-color: transparent !important; box-shadow: none; height: 100%;";
-
-        const heading = toolWindow.getElementsByClassName("win-heading")[0];
-
         heading.style = "display: none;";
-
-        const toolBody = document.getElementById("vue-tool-content-body");
-
         toolBody.style = "height: 100%; background-color: transparent !important; -ms-overflow-style: none; overflow: overlay; max-height: 100%;";
 
-        // instantiate the scrollama
-        const scroller = scrollama();
-
-        // setup the instance, pass callback functions
+        // Setup the instance, pass callback functions
         scroller
             .setup({
                 step: ".stepper"
             })
             .onStepEnter((response) => {
-                console.log("{element, index, direction}");
+                // console.log("{element, index, direction}");
                 this.currentIndex = response.index;
                 this.$emit("change", response.index);
                 // Check if the next step in line does have the loaded content already
@@ -63,10 +57,10 @@ export default {
                 }
                 // { element, index, direction }
             })
-            .onStepExit((response) => {
+            .onStepExit(() => {
                 this.currentIndex = null;
-                console.log("exit");
-                // Wenn down den content laden ... also exit und down nächstes laden
+                // console.log("exit");
+                // Wenn down den content laden ... also exit und down als nächstes laden
                 // { element, index, direction }
             });
     },
@@ -102,6 +96,7 @@ export default {
     <div id="scrollyteller">
         <div
             v-for="(step, index) in steps"
+            :key="step.title"
             class="stepper"
             :class="{ active: index === currentIndex}"
         >

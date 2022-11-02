@@ -228,9 +228,9 @@ export default {
                     camera = map3d.getCesiumScene().camera,
                     destination = Cesium.Cartesian3.fromDegrees(position[0], position[1], position[2]);
 
-                console.log("position", this.toDegrees(camera.position));
-                console.log("heading", camera.heading);
-                console.log("pitch", camera.pitch);
+                // console.log("position", this.toDegrees(camera.position));
+                // console.log("heading", camera.heading);
+                // console.log("pitch", camera.pitch);
 
                 camera.flyTo({
                     destination: destination,
@@ -296,8 +296,9 @@ export default {
 
             if (!this.currentStep.is3D) {
                 // Activates or deactivates tools
-                const interactionAddons = this.currentStep.interactionAddons || [],
-                    configuredTools = this.$store.state.Tools.configuredTools;
+                const interactionAddons = this.currentStep.interactionAddons || [];
+
+                // configuredTools = this.$store.state.Tools.configuredTools;
 
                 // Activate all tools of the current step
                 interactionAddons.forEach(this.activateTool);
@@ -314,8 +315,9 @@ export default {
     >
         <span
             v-if="isScrolly"
-            style="position: absolute; top: 0; right: 35px;"
+            class="scrolly-button"
             @click="changeMode"
+            @keydown="changeMode"
         >
             <v-icon>style</v-icon>
         </span>
@@ -366,7 +368,10 @@ export default {
         </h2>
 
         <ol class="tableOfContents">
-            <li v-for="chapter in storyConf.chapters">
+            <li
+                v-for="chapter in storyConf.chapters"
+                :key="chapter.chapterNumber"
+            >
                 <span
                     :class="{
                         'primary--text': isHovering === chapter.chapterNumber
@@ -387,6 +392,7 @@ export default {
                     <li
                         v-for="(step, stepIndex) in storyConf.steps"
                         v-if="step.associatedChapter === chapter.chapterNumber"
+                        :key="step.stepNumber"
                         :class="{
                             'primary--text':
                                 isHovering ===
@@ -401,8 +407,15 @@ export default {
                                 step.stepNumber
                             )
                         "
+                        @focus="
+                            isHovering = getStepReference(
+                                step.associatedChapter,
+                                step.stepNumber
+                            )"
                         @mouseout.stop="isHovering = null"
+                        @blur="isHovering = null"
                         @click.stop="currentStepIndex = stepIndex"
+                        @keydown="currentStepIndex = stepIndex"
                     >
                         {{
                             getStepReference(
@@ -467,5 +480,11 @@ export default {
             cursor: pointer;
         }
     }
+}
+
+.scrolly-button {
+    position: absolute;
+    top: 0;
+    right: 35px;
 }
 </style>

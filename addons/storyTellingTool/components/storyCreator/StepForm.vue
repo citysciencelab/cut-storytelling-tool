@@ -366,6 +366,10 @@ export default {
          * @returns {void}
          */
         onDeleteStep () {
+            /**
+             * Constant that saves all the actions on confirm
+             * @returns {void}
+             */
             const deleteStep = () => {
                     const {associatedChapter, stepNumber} =
                     this.initialStep || this.step;
@@ -646,7 +650,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-center"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.centerCoordinate"
@@ -656,6 +663,7 @@ export default {
 
                 <div class="stepForm-inputs-centerCoordinate">
                     <input
+                        id="step-center"
                         class="form-control"
                         :value="
                             step.centerCoordinate && step.centerCoordinate[0]
@@ -705,7 +713,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-zoom"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.zoomLevel"
@@ -715,6 +726,7 @@ export default {
 
                 <div class="stepForm-inputs-zoomLevel">
                     <input
+                        id="step-zoom"
                         class="form-control"
                         :value="step.zoomLevel"
                         readonly
@@ -801,7 +813,10 @@ export default {
             </div>
 
             <div class="form-group">
-                <label class="form-label">
+                <label
+                    class="form-label"
+                    for="step-vue-editor"
+                >
                     {{
                         $t(
                             "additional:modules.tools.storyTellingTool.label.htmlContent"
@@ -811,6 +826,7 @@ export default {
 
                 <div class="stepForm-inputs-htmlEditor">
                     <VueEditor
+                        id="step-vue-editor"
                         v-model="htmlContent"
                         :editor-toolbar="constants.htmlEditorToolbar"
                         use-custom-image-handler
