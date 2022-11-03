@@ -82,7 +82,9 @@ export default {
                     this.storyConf.htmlFolder +
                     "/" +
                     stepToLoad.htmlFile
-                ).then(data => stepToLoad.loadedContent = data);
+                ).then(data => {
+                    stepToLoad.loadedContent = data;
+                });
             }
             else {
                 stepToLoad.loadedContent = null;

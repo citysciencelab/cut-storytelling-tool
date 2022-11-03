@@ -388,10 +388,11 @@ export default {
                     {{ chapter.chapterNumber }}
                     {{ chapter.chapterTitle }}
                 </span>
-                <ol>
+                <ol
+                    v-if="step.associatedChapter === chapter.chapterNumber"
+                >
                     <li
                         v-for="(step, stepIndex) in storyConf.steps"
-                        v-if="step.associatedChapter === chapter.chapterNumber"
                         :key="step.stepNumber"
                         :class="{
                             'primary--text':
