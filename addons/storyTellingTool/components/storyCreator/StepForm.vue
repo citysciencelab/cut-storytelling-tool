@@ -350,11 +350,9 @@ export default {
         /**
          * Handles removing and image from the HTML content
          * @param {String} imageDataUrl the image data url to remove
-         * @param {Object} Editor the HTML editor instance
-         * @param {number} cursorLocation the current cursor location in the HTML editor
          * @returns {void}
          */
-        onRemoveImage (imageDataUrl, Editor, cursorLocation) {
+        onRemoveImage (imageDataUrl) {
             this.htmlContentImages = this.htmlContentImages.filter(
                 image => image.dataUrl !== imageDataUrl
             );

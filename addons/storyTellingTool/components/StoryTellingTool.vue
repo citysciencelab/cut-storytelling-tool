@@ -253,7 +253,7 @@ export default {
                         v-for="option in modeOptions"
                         :key="option.title"
                     >
-                        <v-item v-slot="{ active, toggle }">
+                        <v-item v-slot="{ toggle }">
                             <v-card
                                 :disabled="option.disabled"
                                 class="my-4"

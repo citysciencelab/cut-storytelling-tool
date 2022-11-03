@@ -169,14 +169,47 @@ export default {
             this.toggleLayer(layer, false);
         },
 
+
+        /**
+         * Disables a layer on the map
+         * @param {Object} cartesian3Pos a position defined by longitude, latitude, and height.
+         * @returns {number} value in the resulting object will be in radians
+         */
         toDegrees (cartesian3Pos) {
             const pos = Cesium.Cartographic.fromCartesian(cartesian3Pos);
 
             return [pos.longitude / Math.PI * 180, pos.latitude / Math.PI * 180, pos.height];
         },
 
+        /**
+         * Changing from click to scroll story mode
+         * @returns  {void}
+         */
         changeMode () {
             this.showMode = this.showMode === "classic" ? "scrolly" : "classic";
+        },
+
+        /**
+         * Set the step index on click of a chapter
+         * @param {Object} chapter the current chapter object of the iteration
+         * @returns  {void}
+         */
+        onClickChapter (chapter) {
+            this.currentStepIndex = this.storyConf.steps.findIndex(
+                ({associatedChapter}) => associatedChapter === chapter.chapterNumber
+            );
+        },
+
+        /**
+         * Set the hover flag via stepreference
+         * @param {Object} step the current step object of the iteration
+         * @returns  {void}
+         */
+        onHoverStep (step) {
+            this.isHovering = getStepReference(
+                step.associatedChapter,
+                step.stepNumber
+            );
         },
 
         /**
@@ -377,23 +410,19 @@ export default {
                         'primary--text': isHovering === chapter.chapterNumber
                     }"
                     @mouseover="isHovering = chapter.chapterNumber"
+                    @focus="isHovering = chapter.chapterNumber"
                     @mouseout="isHovering = null"
-                    @click="
-                        currentStepIndex = storyConf.steps.findIndex(
-                            ({ associatedChapter }) =>
-                                associatedChapter === chapter.chapterNumber
-                        )
-                    "
+                    @blur="isHovering = null"
+                    @click="onClickChapter(chapter)"
+                    @keydown="onClickChapter(chapter)"
                 >
                     {{ chapter.chapterNumber }}
                     {{ chapter.chapterTitle }}
                 </span>
-                <ol
-                    v-if="step.associatedChapter === chapter.chapterNumber"
-                >
+                <ol>
                     <li
                         v-for="(step, stepIndex) in storyConf.steps"
-                        :key="step.stepNumber"
+                        :key="step.stepNumber + step.title"
                         :class="{
                             'primary--text':
                                 isHovering ===
@@ -402,29 +431,22 @@ export default {
                                     step.stepNumber
                                 )
                         }"
-                        @mouseover.stop="
-                            isHovering = getStepReference(
-                                step.associatedChapter,
-                                step.stepNumber
-                            )
-                        "
-                        @focus="
-                            isHovering = getStepReference(
-                                step.associatedChapter,
-                                step.stepNumber
-                            )"
+                        @mouseover.stop="onHoverStep(step)"
+                        @focus="onHoverStep(step)"
                         @mouseout.stop="isHovering = null"
                         @blur="isHovering = null"
                         @click.stop="currentStepIndex = stepIndex"
                         @keydown="currentStepIndex = stepIndex"
                     >
-                        {{
-                            getStepReference(
-                                step.associatedChapter,
-                                step.stepNumber
-                            )
-                        }}
-                        {{ step.title }}
+                        <span v-if="step.associatedChapter === chapter.chapterNumber">
+                            {{
+                                getStepReference(
+                                    step.associatedChapter,
+                                    step.stepNumber
+                                )
+                            }}
+                            {{ step.title }}
+                        </span>
                     </li>
                 </ol>
             </li>
