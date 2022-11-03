@@ -23,7 +23,7 @@ export default {
     },
     data () {
         return {
-            currentIndex: [],
+            currentIndex: 1,
             loadedContent: null
         };
     },
@@ -38,9 +38,13 @@ export default {
             toolBody = document.getElementById("vue-tool-content-body"),
             scroller = scrollama();
 
-        toolWindow.style = "background-color: transparent !important; box-shadow: none; height: 100%;";
+        toolWindow.style.setProperty("background-color", "transparent", "important");
+        toolWindow.style.boxShadow = "none";
+        toolWindow.style.height = "100%";
         heading.style = "display: none;";
-        toolBody.style = "height: 100%; background-color: transparent !important; -ms-overflow-style: none; overflow: overlay; max-height: 100%;";
+        toolBody.style = "height: 100%; background-color: transparent !important; -ms-overflow-style: none; overflow: overlay; max-height: 100%; padding: 0;";
+
+        this.loadStoryContents(this.currentIndex);
 
         // Setup the instance, pass callback functions
         scroller
@@ -95,7 +99,9 @@ export default {
 </script>
 
 <template lang="html">
-    <div id="scrollyteller">
+    <div
+        id="scrollyteller"
+    >
         <div
             v-for="(step, index) in steps"
             :key="step.title"
@@ -126,10 +132,18 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+
+@import "../../../../css/mixins.scss";
+
 #scrollyteller {
+
+    width: var(--initialToolWidth);
+    @media (max-width: 767px) {
+        width: var(--initialToolWidthMobile);
+    }
+
     .stepper {
-        //width: 700px;
-        height: 650px;
+        min-height: 450px;
         margin: 400px 0;
         background-color: transparent !important;
         padding: 20px;
