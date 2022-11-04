@@ -51,7 +51,15 @@ export default {
                 layers: [],
                 interactionAddons: [],
                 is3D: false,
-                navigation3D: {}
+                navigation3D: {
+                    cameraPosition: [
+                        null,
+                        null,
+                        null
+                    ],
+                    heading: null,
+                    pitch: null
+                }
             },
             newChapter: {
                 chapterNumber:
@@ -76,7 +84,8 @@ export default {
                             this.initialStep.stepNumber
                         )
                     ]) ||
-                []
+                [],
+            is3DLayerActive: false
         };
     },
     computed: {
@@ -199,6 +208,14 @@ export default {
                     layer.set("isSelected", false);
                 }
             }
+            // Check if there is an active 3D layer
+            const ddLayerlist = Radio.request(
+                "ModelList",
+                "getModelsByAttributes",
+                {isSelected: true, supported: ["3D"]}
+            );
+
+            //this.is3DLayerActive = ddLayerlist.length() > 0;
             Radio.trigger("TableMenu", "rerenderLayers");
         },
 
@@ -445,7 +462,34 @@ export default {
 
             // Trigger submit action to return to story overview
             this.$emit("return");
+        },
+
+        /**
+         * Transform a lon lat position to radians
+         * @param {Object} cartesian3Pos a position defined by longitude, latitude, and height.
+         * @returns {number} value in the resulting object will be in radians
+         */
+        toDegrees (cartesian3Pos) {
+            const pos = Cesium.Cartographic.fromCartesian(cartesian3Pos);
+
+            return [pos.longitude / Math.PI * 180, pos.latitude / Math.PI * 180, pos.height];
+        },
+
+        /**
+         * 3D map center (should be implement in 3DMapRadioBridge)
+         * @returns {Object} returns object in the format of the story attribute 'navigation3D'
+         */
+        get3DMapCenter () {
+            const camera = Radio.request("Map", "getMap3d").getCesiumScene().camera;
+
+            return {
+                "cameraPosition": this.toDegrees(camera.position),
+                "heading": camera.heading,
+                "pitch": camera.pitch
+            };
         }
+
+
     }
 };
 </script>
@@ -647,7 +691,124 @@ export default {
                 >
             </div>
 
-            <div class="form-group">
+            <div
+                v-if="is3DLayerActive"
+                class="form-group"
+            >
+                <label
+                    class="form-label"
+                    for="step-is3d"
+                >
+                    {{
+                        $t(
+                            "additional:modules.tools.storyTellingTool.label.is3D"
+                        )
+                    }}
+                </label>
+                <input
+                    id="step-is3d"
+                    class="checkbox"
+                    type="checkbox"
+                    :checked="step.is3D"
+                    @change="step.is3D = $event.target.checked"
+                >
+            </div>
+
+            <div
+                v-if="is3DLayerActive"
+                class="form-group"
+            >
+                <label
+                    class="form-label"
+                    for="step-center-3d"
+                >
+                    {{
+                        $t(
+                            "additional:modules.tools.storyTellingTool.label.centerCoordinate3D"
+                        )
+                    }}
+                </label>
+                <div class="stepForm-inputs-centerCoordinate">
+                    <input
+                        id="step-center-3d"
+                        class="form-control"
+                        :value="
+                            step.navigation3D.cameraPosition[0]
+                        "
+                        readonly
+                    >
+                    <input
+                        class="form-control"
+                        :value="
+                            step.navigation3D.cameraPosition[1]
+                        "
+                        readonly
+                    >
+                    <input
+                        class="form-control"
+                        :value="
+                            step.navigation3D.cameraPosition[2]
+                        "
+                        readonly
+                    >
+                    <label
+                        class="form-label"
+                        for="step-center-3d"
+                    >
+                        {{
+                            $t(
+                                "additional:modules.tools.storyTellingTool.label.heading"
+                            )
+                        }}
+                    </label>
+                    <input
+                        class="form-control"
+                        :value="
+                            step.navigation3D.heading
+                        "
+                        readonly
+                    >
+                    <label
+                        class="form-label"
+                        for="step-center-3d"
+                    >
+                        {{
+                            $t(
+                                "additional:modules.tools.storyTellingTool.label.pitch"
+                            )
+                        }}
+                    </label>
+                    <input
+                        class="form-control"
+                        :value="
+                            step.navigation3D.pitch
+                        "
+                        readonly
+                    >
+
+                    <div class="input-group">
+                        <button
+                            type="button"
+                            class="btn"
+                            @click="step.navigation3D = get3DMapCenter()"
+                        >
+                            <v-icon>add_circle</v-icon>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn"
+                            @click="step.navigation3D = null"
+                        >
+                            <v-icon>backspace</v-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                v-if="!is3DLayerActive"
+                class="form-group"
+            >
                 <label
                     class="form-label"
                     for="step-center"
