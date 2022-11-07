@@ -5,7 +5,7 @@ import mutations from "../../store/mutationsStoryTellingTool";
 import actions from "../../store/actionsStoryTellingTool";
 import scrollama from "scrollama";
 import "intersection-observer";
-import fetchDataFromUrl from "../../utils/getStoryFromUrl";
+import axios from "axios";
 
 
 export default {
@@ -14,27 +14,31 @@ export default {
         prop: "currentStepIndex",
         event: "change"
     },
-    props: {
-        // All steps of the current story
-        steps: {
-            type: Array,
-            default: null
-        }
-    },
     data () {
         return {
-            currentIndex: 1,
-            loadedContent: null
+            currentIndex: 0,
+            loadedContent: null,
+            steps: null
         };
     },
     computed: {
         ...mapGetters("Tools/StoryTellingTool", Object.keys(getters))
     },
+    created () {
+        this.steps = this.storyConf.steps;
+        this.steps.forEach((step) => {
+            this.loadStoryContents(step.htmlFile).then(data => {
+                this.$set(step, "loadedContent", data);
+            }).catch(err => {
+                console.error(err);
+            });
+        });
+    },
     mounted () {
-        this.loadStoryContents(0);
-
         const toolWindow = document.getElementsByClassName("table-tool-win-all-vue")[0],
             heading = toolWindow.getElementsByClassName("win-heading")[0],
+            scrollyButton = toolWindow.getElementsByClassName("scrolly-button")[0],
+            storyTellingToolReset = document.getElementById("tool-storyTellingTool-reset"),
             toolBody = document.getElementById("vue-tool-content-body"),
             scroller = scrollama();
 
@@ -43,8 +47,12 @@ export default {
         toolWindow.style.height = "100%";
         heading.style = "display: none;";
         toolBody.style = "height: 100%; background-color: transparent !important; -ms-overflow-style: none; overflow: overlay; max-height: 100%; padding: 0;";
-
-        this.loadStoryContents(this.currentIndex);
+        if (scrollyButton) {
+            scrollyButton.style = "display: none;";
+        }
+        if (storyTellingToolReset) {
+            storyTellingToolReset.style = "display: none;";
+        }
 
         // Setup the instance, pass callback functions
         scroller
@@ -52,47 +60,33 @@ export default {
                 step: ".stepper"
             })
             .onStepEnter((response) => {
-                // console.log("{element, index, direction}");
                 this.currentIndex = response.index;
                 this.$emit("change", response.index);
-                // Check if the next step in line does have the loaded content already
-                if (!Object.prototype.hasOwnProperty.call(this.steps[this.currentIndex + 1], "loadedContent")) {
-                    this.loadStoryContents(this.currentIndex + 1);
-                }
-                // { element, index, direction }
             })
             .onStepExit(() => {
                 this.currentIndex = null;
-                // console.log("exit");
-                // Wenn down den content laden ... also exit und down als nächstes laden
-                // { element, index, direction }
             });
+
+        document.getElementsByClassName("stepper")[0].scrollIntoView({block: "center"});
     },
     methods: {
         ...mapMutations("Tools/StoryTellingTool", Object.keys(mutations)),
         ...mapActions("Tools/StoryTellingTool", Object.keys(actions)),
+
         /**
          * Updates the step html content
-         * @param {Object} index pointer to the content to load
+         * @param {Object} htmlFile name of the html file to load
          * @returns {void}
          */
-        loadStoryContents (index) {
-            const stepToLoad = this.steps[index];
+        async loadStoryContents (htmlFile) {
+            if (this.storyConf.htmlFolder && htmlFile) {
+                const response = await axios.get("./assets/" + this.storyConf.htmlFolder + "/" + htmlFile),
+                    data = await response.data;
 
-            if (this.storyConf.htmlFolder && stepToLoad.htmlFile) {
-                // Load HTML file for the story step
-                fetchDataFromUrl(
-                    "./assets/" +
-                    this.storyConf.htmlFolder +
-                    "/" +
-                    stepToLoad.htmlFile
-                ).then(data => {
-                    stepToLoad.loadedContent = data;
-                });
+                return data;
             }
-            else {
-                stepToLoad.loadedContent = null;
-            }
+            return null;
+
         }
     }
 };

@@ -774,8 +774,7 @@ export default {
                     }}
                 </label>
                 <div
-                    class="stepForm-inputs-centerCoordinate"
-                    style="grid-template-columns: 1fr 1fr 1fr 1fr;"
+                    class="stepForm-inputs-centerCoordinate stepForm-inputs-3d-position"
                 >
                     <input
                         id="step-3d-center"
@@ -846,8 +845,7 @@ export default {
                 </label>
 
                 <div
-                    class="stepForm-inputs-centerCoordinate"
-                    style="grid-template-columns: 1fr 1fr;"
+                    class="stepForm-inputs-centerCoordinate stepForm-3d-others"
                 >
                     <input
                         id="step-3d-heading"
@@ -904,8 +902,7 @@ export default {
                     }}
                 </label>
                 <div
-                    class="stepForm-inputs-centerCoordinate"
-                    style="grid-template-columns: 1fr 1fr;"
+                    class="stepForm-inputs-centerCoordinate stepForm-3d-others"
                 >
                     <input
                         id="step-3d-pitch"
@@ -1219,6 +1216,14 @@ export default {
         grid-template-columns: 1fr 1fr 100px;
         grid-gap: 5px;
         align-items: end;
+    }
+
+    .stepForm-3d-others {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .stepForm-inputs-3d-position {
+        grid-template-columns: 1fr 1fr 1fr 1fr !important;
     }
 
     .stepForm-inputs-zoomLevel {

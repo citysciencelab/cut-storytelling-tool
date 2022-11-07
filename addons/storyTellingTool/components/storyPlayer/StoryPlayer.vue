@@ -93,7 +93,11 @@ export default {
         if (this.isPreview && this.storyConf) {
             this.loadStep();
         }
-        this.isScrolly = this.$store.state.configJson?.Portalconfig.isScrollyStory;
+
+        if (Object.prototype.hasOwnProperty.call(this.storyConf, "isScrollytelling") && this.storyConf.isScrollytelling) {
+            this.showMode = "scrolly";
+        }
+
     },
     beforeDestroy () {
         // Hides all story layers
@@ -341,8 +345,6 @@ export default {
 
         <ScrollyTeller
             v-if="showMode === 'scrolly'"
-            v-model="currentStepIndex"
-            :steps="storyConf.steps"
         />
         <div
             v-if="showMode === 'classic'"
