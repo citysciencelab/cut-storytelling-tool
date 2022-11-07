@@ -85,7 +85,17 @@ export default {
                         )
                     ]) ||
                 [],
-            is3DLayerActive: false
+            is3DLayerActive: false,
+            layerTypes3DSpecific: ["Entities3D", "TileSet3D", "Terrain3D"],
+            mapMovedPosition: {
+                cameraPosition: [
+                    null,
+                    null,
+                    null
+                ],
+                heading: null,
+                pitch: null
+            }
         };
     },
     computed: {
@@ -208,14 +218,15 @@ export default {
                     layer.set("isSelected", false);
                 }
             }
-            // Check if there is an active 3D layer
-            const ddLayerlist = Radio.request(
+
+            this.is3DLayerActive = Radio.request(
                 "ModelList",
                 "getModelsByAttributes",
-                {isSelected: true, supported: ["3D"]}
-            );
+                {isVisibleInMap: true}
+            ).filter(layer => {
+                return this.layerTypes3DSpecific.includes(layer.attributes.typ);
+            }).length > 0;
 
-            //this.is3DLayerActive = ddLayerlist.length() > 0;
             Radio.trigger("TableMenu", "rerenderLayers");
         },
 
@@ -269,7 +280,7 @@ export default {
         ...mapMutations("Tools/StoryTellingTool", Object.keys(mutations)),
         ...mapActions("Tools/StoryTellingTool", Object.keys(actions)),
         // These application wide getters and setters can be found in 'src/modules/map/store'
-        ...mapGetters("Maps", ["center", "zoom"]),
+        ...mapGetters("Maps", ["center", "zoom", "getMap3d"]),
 
         /**
          * Handles new chapter number changes
@@ -487,9 +498,43 @@ export default {
                 "heading": camera.heading,
                 "pitch": camera.pitch
             };
+        },
+
+        /**
+         * Toggles 3D map mode via checkbox
+         * @param {boolean} checkboxValue the flag indicating if 3D map should be activated
+         * @returns {void}
+         */
+        async activate3DMap (checkboxValue) {
+            this.step.is3D = checkboxValue;
+            if (this.step.is3D && !Radio.request("Map", "isMap3d")) {
+                await this.$store.dispatch("Maps/activateMap3D");
+
+                Radio.request("Map", "getMap3d").getCesiumScene().camera.moveEnd.addEventListener(this.mapMovedHandler);
+            }
+            else if (!this.step.is3D && Radio.request("Map", "isMap3d")) {
+                await this.$store.dispatch("Maps/deactivateMap3D");
+            }
+        },
+
+        /**
+         * Set new position of the camera after it stopped moving
+         * @returns {void}
+         */
+        mapMovedHandler () {
+            this.mapMovedPosition = this.get3DMapCenter();
+        },
+
+        /**
+         * Complex check for the form warning of new camera position
+         * @returns {void}
+         */
+        isCameraPositionDifferent () {
+            return this.step.navigation3D.cameraPosition[0] && this.mapMovedPosition.cameraPosition[0]
+            && (this.step.navigation3D.cameraPosition[0] !== this.mapMovedPosition.cameraPosition[0]
+            || this.step.navigation3D.cameraPosition[0] !== this.mapMovedPosition.cameraPosition[0]
+            || this.step.navigation3D.cameraPosition[0] !== this.mapMovedPosition.cameraPosition[0]);
         }
-
-
     }
 };
 </script>
@@ -710,17 +755,17 @@ export default {
                     class="checkbox"
                     type="checkbox"
                     :checked="step.is3D"
-                    @change="step.is3D = $event.target.checked"
+                    @change="activate3DMap($event.target.checked)"
                 >
             </div>
 
             <div
-                v-if="is3DLayerActive"
+                v-if="step.is3D"
                 class="form-group"
             >
                 <label
                     class="form-label"
-                    for="step-center-3d"
+                    for="step-3d-center"
                 >
                     {{
                         $t(
@@ -728,9 +773,12 @@ export default {
                         )
                     }}
                 </label>
-                <div class="stepForm-inputs-centerCoordinate">
+                <div
+                    class="stepForm-inputs-centerCoordinate"
+                    style="grid-template-columns: 1fr 1fr 1fr 1fr;"
+                >
                     <input
-                        id="step-center-3d"
+                        id="step-3d-center"
                         class="form-control"
                         :value="
                             step.navigation3D.cameraPosition[0]
@@ -751,34 +799,116 @@ export default {
                         "
                         readonly
                     >
-                    <label
-                        class="form-label"
-                        for="step-center-3d"
-                    >
+
+                    <div class="input-group">
+                        <button
+                            type="button"
+                            class="btn"
+                            @click="step.navigation3D.cameraPosition = get3DMapCenter()['cameraPosition']"
+                        >
+                            <v-icon>add_circle</v-icon>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn"
+                            @click="step.navigation3D.cameraPosition = null"
+                        >
+                            <v-icon>backspace</v-icon>
+                        </button>
+                    </div>
+                </div>
+                <p
+                    v-if="isCameraPositionDifferent()"
+                    class="text-warning"
+                >
+                    <small>
                         {{
                             $t(
-                                "additional:modules.tools.storyTellingTool.label.heading"
+                                "additional:modules.tools.storyTellingTool.warning.mapMoved"
                             )
                         }}
-                    </label>
+                    </small>
+                </p>
+            </div>
+            <div
+                v-if="step.is3D"
+                class="form-group"
+            >
+                <label
+                    class="form-label"
+                    for="step-3d-heading"
+                >
+                    {{
+                        $t(
+                            "additional:modules.tools.storyTellingTool.label.heading"
+                        )
+                    }}
+                </label>
+
+                <div
+                    class="stepForm-inputs-centerCoordinate"
+                    style="grid-template-columns: 1fr 1fr;"
+                >
                     <input
+                        id="step-3d-heading"
                         class="form-control"
                         :value="
                             step.navigation3D.heading
                         "
                         readonly
                     >
-                    <label
-                        class="form-label"
-                        for="step-center-3d"
-                    >
+                    <div class="input-group">
+                        <button
+                            type="button"
+                            class="btn"
+                            @click="step.navigation3D.heading = get3DMapCenter()['heading']"
+                        >
+                            <v-icon>add_circle</v-icon>
+                        </button>
+                        <button
+                            type="button"
+                            class="btn"
+                            @click="step.navigation3D.heading = null"
+                        >
+                            <v-icon>backspace</v-icon>
+                        </button>
+                    </div>
+                </div>
+                <p
+                    v-if="
+                        mapMovedPosition.heading && step.navigation3D.heading &&
+                            step.navigation3D.heading !== mapMovedPosition.heading "
+                    class="text-warning"
+                >
+                    <small>
                         {{
                             $t(
-                                "additional:modules.tools.storyTellingTool.label.pitch"
+                                "additional:modules.tools.storyTellingTool.warning.mapMoved"
                             )
                         }}
-                    </label>
+                    </small>
+                </p>
+            </div>
+            <div
+                v-if="step.is3D"
+                class="form-group"
+            >
+                <label
+                    class="form-label"
+                    for="step-3d-pitch"
+                >
+                    {{
+                        $t(
+                            "additional:modules.tools.storyTellingTool.label.pitch"
+                        )
+                    }}
+                </label>
+                <div
+                    class="stepForm-inputs-centerCoordinate"
+                    style="grid-template-columns: 1fr 1fr;"
+                >
                     <input
+                        id="step-3d-pitch"
                         class="form-control"
                         :value="
                             step.navigation3D.pitch
@@ -790,23 +920,37 @@ export default {
                         <button
                             type="button"
                             class="btn"
-                            @click="step.navigation3D = get3DMapCenter()"
+                            @click="step.navigation3D.pitch = get3DMapCenter()['pitch']"
                         >
                             <v-icon>add_circle</v-icon>
                         </button>
                         <button
                             type="button"
                             class="btn"
-                            @click="step.navigation3D = null"
+                            @click="step.navigation3D.pitch = null"
                         >
                             <v-icon>backspace</v-icon>
                         </button>
                     </div>
                 </div>
+                <p
+                    v-if="
+                        mapMovedPosition.pitch && step.navigation3D.pitch &&
+                            step.navigation3D.pitch !== mapMovedPosition.pitch"
+                    class="text-warning"
+                >
+                    <small>
+                        {{
+                            $t(
+                                "additional:modules.tools.storyTellingTool.warning.mapMoved"
+                            )
+                        }}
+                    </small>
+                </p>
             </div>
 
             <div
-                v-if="!is3DLayerActive"
+                v-if="!step.is3D"
                 class="form-group"
             >
                 <label
@@ -871,7 +1015,10 @@ export default {
                 </p>
             </div>
 
-            <div class="form-group">
+            <div
+                v-if="!step.is3D"
+                class="form-group"
+            >
                 <label
                     class="form-label"
                     for="step-zoom"
