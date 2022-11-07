@@ -12,8 +12,57 @@ The current version of the repository includes an example from the real-life exp
 
 https://user-images.githubusercontent.com/36763878/161025746-b8ac51be-a687-4e63-8bcf-b1da01334ead.mp4
 
-### Setup
+### Story JSON
 
+The main attributes of the story configuration file are the follwing:
+
+1. "title" - The name of the story
+2. "author" - The author visible at the story entry page
+3. "description" - The description of the story shown on the story entry page
+4. "coverImagePath" - The cover image of the story shown on the story entry page (stored locally in the portal config story folder)
+5. "htmlFolder" - The folder that contains the steps html files and images
+6. "isScrollytelling" - Indicator if the story should run as a story to scroll and not to click through
+7. "chapters" - Array of chapters (e.g. [
+   {
+   "chapterNumber": 1,
+   "chapterTitle": "title"
+   },)
+8. "steps" - Array of the story steps
+
+The story JSON attributes are the follwing:
+
+1. "stepNumber" - Number of the index of the step
+2. "stepWidth" -  The maximal width on screen that will be shown
+3. "visible" - Set to true if you want to hide the step
+4. "associatedChapter" - Reference to the chapter number
+5. "title" - Title of the step (e.g. "Intro")
+6. "htmlFile" - String of the .html file containing the steps content (e.g. step_1-1.html)
+7. "centerCoordinate" - Array for the definition of the steps map center position (e.g. [
+   555894.6872343315,
+   5931378.984010641
+   ])
+8. "zoomLevel" - Number of the steps map zoom level (e.g. 3)
+9. "layers" - Array of IDs that define the map layers shown for this step (e.g. [
+   "128",
+   "129"
+   ])
+10. "interactionAddons" - Array of strings that indicating the active addons for this step (e.g. [
+ "gfi",
+ "measure"])
+11. "is3D" - Boolean indicating if the 3D map is activated for this step
+12. "navigation3D": - If 'is3D' is true, then this attribute contains the camera configuration. (e.g. {
+    "cameraPosition": [
+    9.948301,
+    53.552374,
+    343.8
+    ],
+    "heading": 0.38138509963163635,
+    "pitch": -0.4525214263618002
+    })
+In the case of a 3D mode, the attributes 'zoomLevel' and 'centerCoordinate' are obsolete
+
+
+### Setup
 
 1. copy master portal storytelling tool repository and follow the **[Masterportal setup](#masterportal-setup)**
 2. copy portal configuration 'basic' and select desired name for portal
