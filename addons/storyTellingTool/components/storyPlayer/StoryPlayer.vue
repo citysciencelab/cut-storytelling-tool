@@ -345,6 +345,7 @@ export default {
 
         <ScrollyTeller
             v-if="showMode === 'scrolly'"
+            v-model="currentStepIndex"
         />
         <div
             v-if="showMode === 'classic'"
