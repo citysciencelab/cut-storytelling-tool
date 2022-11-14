@@ -24,7 +24,11 @@
           "centerCoordinate": "Position of the Map",
           "zoomLevel": "Zoom Level of the Map",
           "layers": "Layers",
-          "interactionAddons": "AddOns"
+          "interactionAddons": "AddOns",
+          "is3D": "Show map in 3D",
+          "centerCoordinate3D": "Position/Angle of the 3D map",
+          "heading": "Heading",
+          "pitch": "Pitch"
         },
         "warning": {
           "mapMoved": "The entered position doesn't match the current map view.",

@@ -17,7 +17,7 @@
 			"placeholder": "Suche nach: - Adresse - Aktiven WFS"
 		},
 		"mapView": {
-			"backgroundImage": "./assets/img/backgroundCanvas.jpeg",
+			"backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [318194.171858, 5691233.323061],
       "extent": [-2465144.8, 4102893.55, 750106.63, 9465228.24],
 			"startZoomLevel": 4,

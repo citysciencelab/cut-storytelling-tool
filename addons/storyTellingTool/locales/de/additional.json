@@ -24,7 +24,11 @@
           "centerCoordinate": "Position der Karte",
           "zoomLevel": "Zoomstufe der Karte",
           "layers": "Layer",
-          "interactionAddons": "Erweiterungen"
+          "interactionAddons": "Erweiterungen",
+          "is3D": "Karte in 3D anzeigen",
+          "centerCoordinate3D": "Position/Winkel der 3D Karte",
+          "heading": "Heading",
+          "pitch": "Pitch"
         },
         "warning": {
           "mapMoved": "Die eingetragene Position entspricht nicht der aktuellen Ansicht der Karte.",
