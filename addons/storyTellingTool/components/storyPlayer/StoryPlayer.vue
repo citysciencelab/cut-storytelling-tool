@@ -1,6 +1,7 @@
 <script>
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import StoryNavigation from "./StoryNavigation.vue";
+import ScrollyTeller from "./ScrollyTeller.vue";
 import actions from "../../store/actionsStoryTellingTool";
 import getters from "../../store/gettersStoryTellingTool";
 import mutations from "../../store/mutationsStoryTellingTool";
@@ -14,6 +15,7 @@ import store from "../../../../src/app-store";
 export default {
     name: "StoryPlayer",
     components: {
+        ScrollyTeller,
         StoryNavigation
     },
     props: {
@@ -36,7 +38,9 @@ export default {
             currentStepIndex: 0,
             loadedContent: null,
             isHovering: null,
-            isChangeFrom3D: false
+            isChangeFrom3D: false,
+            showMode: "classic",
+            isScrolly: false
         };
     },
     computed: {
@@ -44,6 +48,7 @@ export default {
 
         /**
          * The current selected step of the story.
+         * @returns {number} current step index
          */
         currentStep () {
             return this.currentStepIndex !== null
@@ -53,6 +58,7 @@ export default {
 
         /**
          * The current selected chapter of the story.
+         * @returns {number} current chapter
          */
         currentChapter () {
             return (
@@ -87,6 +93,11 @@ export default {
         if (this.isPreview && this.storyConf) {
             this.loadStep();
         }
+
+        if (Object.prototype.hasOwnProperty.call(this.storyConf, "isScrollytelling") && this.storyConf.isScrollytelling) {
+            this.showMode = "scrolly";
+        }
+
     },
     beforeDestroy () {
         // Hides all story layers
@@ -155,17 +166,42 @@ export default {
 
         /**
          * Disables a layer on the map
-         * @returns {Object} layer the layer to disable
+         * @param {Object} layer the layer to disable
          * @returns {void}
          */
         disableLayer (layer) {
             this.toggleLayer(layer, false);
         },
 
-        toDegrees (cartesian3Pos) {
-            const pos = Cesium.Cartographic.fromCartesian(cartesian3Pos);
+        /**
+         * Changing from click to scroll story mode
+         * @returns  {void}
+         */
+        changeMode () {
+            this.showMode = this.showMode === "classic" ? "scrolly" : "classic";
+        },
 
-            return [pos.longitude / Math.PI * 180, pos.latitude / Math.PI * 180, pos.height];
+        /**
+         * Set the step index on click of a chapter
+         * @param {Object} chapter the current chapter object of the iteration
+         * @returns  {void}
+         */
+        onClickChapter (chapter) {
+            this.currentStepIndex = this.storyConf.steps.findIndex(
+                ({associatedChapter}) => associatedChapter === chapter.chapterNumber
+            );
+        },
+
+        /**
+         * Set the hover flag via stepreference
+         * @param {Object} step the current step object of the iteration
+         * @returns  {void}
+         */
+        onHoverStep (step) {
+            this.isHovering = getStepReference(
+                step.associatedChapter,
+                step.stepNumber
+            );
         },
 
         /**
@@ -217,10 +253,6 @@ export default {
                     camera = map3d.getCesiumScene().camera,
                     destination = Cesium.Cartesian3.fromDegrees(position[0], position[1], position[2]);
 
-                console.log("position", this.toDegrees(camera.position));
-                console.log("heading", camera.heading);
-                console.log("pitch", camera.pitch);
-
                 camera.flyTo({
                     destination: destination,
                     orientation: {
@@ -267,7 +299,9 @@ export default {
                     this.storyConf.htmlFolder +
                     "/" +
                     this.currentStep.htmlFile
-                ).then(data => this.loadedContent = data);
+                ).then(data => {
+                    this.loadedContent = data;
+                });
             }
             else if (this.isPreview && this.htmlContents[htmlReference]) {
                 // Get temporary HTML for the story step preview
@@ -283,8 +317,9 @@ export default {
 
             if (!this.currentStep.is3D) {
                 // Activates or deactivates tools
-                const interactionAddons = this.currentStep.interactionAddons || [],
-                    configuredTools = this.$store.state.Tools.configuredTools;
+                const interactionAddons = this.currentStep.interactionAddons || [];
+
+                // configuredTools = this.$store.state.Tools.configuredTools;
 
                 // Activate all tools of the current step
                 interactionAddons.forEach(this.activateTool);
@@ -299,7 +334,23 @@ export default {
         v-if="storyConf !== undefined && storyConf.steps && currentStep"
         id="tool-storyTellingTool-player"
     >
-        <div id="tool-storyTellingTool-currentStep">
+        <span
+            v-if="isScrolly"
+            class="scrolly-button"
+            @click="changeMode"
+            @keydown="changeMode"
+        >
+            <v-icon>style</v-icon>
+        </span>
+
+        <ScrollyTeller
+            v-if="showMode === 'scrolly'"
+            v-model="currentStepIndex"
+        />
+        <div
+            v-if="showMode === 'classic'"
+            id="tool-storyTellingTool-currentStep"
+        >
             <h2 v-if="currentChapter">
                 {{ currentChapter.chapterTitle }}
             </h2>
@@ -317,6 +368,7 @@ export default {
         </div>
 
         <StoryNavigation
+            v-if="showMode === 'classic'"
             v-model="currentStepIndex"
             :current-chapter="currentStep && currentStep.associatedChapter"
             :steps="storyConf.steps"
@@ -336,19 +388,20 @@ export default {
         </h2>
 
         <ol class="tableOfContents">
-            <li v-for="chapter in storyConf.chapters">
+            <li
+                v-for="chapter in storyConf.chapters"
+                :key="chapter.chapterNumber"
+            >
                 <span
                     :class="{
                         'primary--text': isHovering === chapter.chapterNumber
                     }"
                     @mouseover="isHovering = chapter.chapterNumber"
+                    @focus="isHovering = chapter.chapterNumber"
                     @mouseout="isHovering = null"
-                    @click="
-                        currentStepIndex = storyConf.steps.findIndex(
-                            ({ associatedChapter }) =>
-                                associatedChapter === chapter.chapterNumber
-                        )
-                    "
+                    @blur="isHovering = null"
+                    @click="onClickChapter(chapter)"
+                    @keydown="onClickChapter(chapter)"
                 >
                     {{ chapter.chapterNumber }}
                     {{ chapter.chapterTitle }}
@@ -356,7 +409,7 @@ export default {
                 <ol>
                     <li
                         v-for="(step, stepIndex) in storyConf.steps"
-                        v-if="step.associatedChapter === chapter.chapterNumber"
+                        :key="step.stepNumber + step.title"
                         :class="{
                             'primary--text':
                                 isHovering ===
@@ -365,22 +418,22 @@ export default {
                                     step.stepNumber
                                 )
                         }"
-                        @mouseover.stop="
-                            isHovering = getStepReference(
-                                step.associatedChapter,
-                                step.stepNumber
-                            )
-                        "
+                        @mouseover.stop="onHoverStep(step)"
+                        @focus="onHoverStep(step)"
                         @mouseout.stop="isHovering = null"
+                        @blur="isHovering = null"
                         @click.stop="currentStepIndex = stepIndex"
+                        @keydown="currentStepIndex = stepIndex"
                     >
-                        {{
-                            getStepReference(
-                                step.associatedChapter,
-                                step.stepNumber
-                            )
-                        }}
-                        {{ step.title }}
+                        <span v-if="step.associatedChapter === chapter.chapterNumber">
+                            {{
+                                getStepReference(
+                                    step.associatedChapter,
+                                    step.stepNumber
+                                )
+                            }}
+                            {{ step.title }}
+                        </span>
                     </li>
                 </ol>
             </li>
@@ -437,5 +490,11 @@ export default {
             cursor: pointer;
         }
     }
+}
+
+.scrolly-button {
+    position: absolute;
+    top: 0;
+    right: 35px;
 }
 </style>

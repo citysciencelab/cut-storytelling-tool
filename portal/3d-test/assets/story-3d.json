@@ -4,6 +4,7 @@
   "description": "Diese Story soll die Funktionalitäten des 3D Modus im Storytellingtool veranschaulichen.",
   "coverImagePath": "assets/img/3dcover.png",
   "htmlFolder": "story",
+  "isScrollytelling" : true,
   "chapters": [
     {
       "chapterNumber": 1,
