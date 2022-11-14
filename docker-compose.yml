@@ -6,7 +6,6 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-
         networks:
             - proxy
         labels:
