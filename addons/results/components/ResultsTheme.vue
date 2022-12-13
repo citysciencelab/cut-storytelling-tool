@@ -124,6 +124,7 @@ export default {
                     <td v-if="key === 'imageFiles' || key === 'AudioFiles'">
                         <span
                             v-if="value"
+                            @keydown="getFile(value)"
                             @click="getFile(value)"
                         >Link</span>
                     </td>
