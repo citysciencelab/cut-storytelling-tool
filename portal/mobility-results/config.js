@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["storyTellingTool"],
+    addons: ["storyTellingTool", "resultsTheme"],
     ignoredKeys: [
         "BOUNDEDBY",
         "SHAPE",

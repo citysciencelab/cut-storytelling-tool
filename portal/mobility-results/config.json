@@ -130,16 +130,14 @@
           "datasets": [],
           "urlIsVisible": true,
           "visibility": false,
-          "isVisibleInTree": true,
-          "mouseHoverField":
+          "isVisibleInTree": true
         },
         {
           "id" : "111112",
           "name" : "Ergebnisse RE2 Centroids",
           "url" : "resources/new_results_latlon_centroids.json",
           "typ" : "GeoJSON",
-          "gfiAttributes" : "showAll",
-          "gfiTheme" : "default",
+          "gfiTheme" : "schulinfo",
           "layerAttribution" : "nicht vorhanden",
           "legend" : false,
           "datasets": [],
@@ -153,7 +151,7 @@
           "url" : "resources/new_results_latlon_centroids_all.json",
           "typ" : "GeoJSON",
           "gfiAttributes" : "showAll",
-          "gfiTheme" : "default",
+          "gfiTheme": "resultsTheme",
           "styleId": "20221202",
           "layerAttribution" : "nicht vorhanden",
           "legend" : false,
