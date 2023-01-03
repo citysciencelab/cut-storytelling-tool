@@ -99,7 +99,7 @@
         {
           "id" : "11111",
           "name" : "lokale GeoJSON",
-          "url" : "resources/new_results_latlon.json",
+          "url" : "assets/data/new_results_latlon.json",
           "typ" : "GeoJSON",
           "gfiAttributes" : "showAll",
           "gfiTheme" : "default",
@@ -121,7 +121,7 @@
         {
           "id" : "11111",
           "name" : "Ergebnisse RE2",
-          "url" : "resources/new_results_latlon.json",
+          "url" : "assets/data/new_results_latlon.json",
           "typ" : "GeoJSON",
           "gfiAttributes" : "showAll",
           "gfiTheme" : "default",
@@ -135,7 +135,7 @@
         {
           "id" : "111112",
           "name" : "Ergebnisse RE2 Centroids",
-          "url" : "resources/new_results_latlon_centroids.json",
+          "url" : "assets/data/new_results_latlon_centroids.json",
           "typ" : "GeoJSON",
           "gfiTheme" : "schulinfo",
           "layerAttribution" : "nicht vorhanden",
@@ -148,7 +148,7 @@
         {
           "id" : "111113",
           "name" : "Ergebnisse RE2 Centroids Hover",
-          "url" : "resources/new_results_latlon_centroids_all.json",
+          "url" : "assets/data/new_results_latlon_centroids_all.json",
           "typ" : "GeoJSON",
           "gfiAttributes" : "showAll",
           "gfiTheme": "resultsTheme",
