@@ -35,15 +35,15 @@
         "name": "translate#common:menu.tools.name",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          "storyTellingTool": {
-            "name": "translate#additional:modules.tools.storyTellingTool.title",
-            "glyphicon": "glyphicon-book",
-            "active": true
-          },
           "gfi": {
             "name": "translate#common:menu.tools.getInfos",
             "glyphicon": "glyphicon-info-sign",
             "desktopType": "attached",
+            "active": true
+          },
+          "storyTellingTool": {
+            "name": "translate#additional:modules.tools.storyTellingTool.title",
+            "glyphicon": "glyphicon-book",
             "active": true
           },
           "measure": {
@@ -55,7 +55,7 @@
       "legend": {
         "name": "common:modules.legend.name",
         "showCollapseAllButton": true,
-        "showLegend": true
+        "showLegend": false
       }
     },
     "controls": {
@@ -150,7 +150,18 @@
           "name" : "Ergebnisse RE2 Centroids Hover",
           "url" : "assets/data/new_results_latlon_centroids_all.json",
           "typ" : "GeoJSON",
-          "gfiAttributes" : "showAll",
+          "gfiAttributes" : {
+            "Title" : "Title",
+            "DateCreated": {
+              "name": "Datum",
+              "type": "date",
+              "format": "YYYY-MM-DD"
+            },
+            "Comment": "Beschreibung",
+            "MobilityMode" : "Fortbewegungsmittel",
+            "ImageFiles": "Bilder",
+            "AudioFiles": "Audio"
+          },
           "gfiTheme": "resultsTheme",
           "styleId": "20221202",
           "layerAttribution" : "nicht vorhanden",

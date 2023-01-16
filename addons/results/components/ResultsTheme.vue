@@ -17,7 +17,6 @@ export default {
     data () {
         return {
             filteredProps: {},
-
             beautifyKeysParam: true,
             showObjectKeysParam: false
         };
@@ -29,6 +28,11 @@ export default {
     watch: {},
     mounted () {
         this.$parent.$emit("hidemarker");
+        const toolWindow = document.getElementsByClassName("gfi-footer")[0];
+
+        if (toolWindow) {
+            toolWindow.style = "display: none;";
+        }
     },
     methods: {
         ...mapActions("MapMarker", ["removePolygonMarker", "placingPolygonMarker"]),
@@ -83,12 +87,19 @@ export default {
         },
 
         getFile (link) {
+            // window.open("blank so far", "_blank", "noreferrer");
             axios.get("https://re2-api-internal.cut.hcu-hamburg.de/" + link[0], {}, {
                 auth: {
                     username: "csl",
                     password: "cut2022re2!"
                 }
-            });
+            }).then(function (response) {
+                window.open("data:image/jpg," + encodeURI(response.data));
+            })
+                .catch(function (error) {
+                    // Error callback
+                    console.error(error);
+                });
         }
     }
 };
@@ -121,9 +132,10 @@ export default {
                             {{ key }}
                         </span>
                     </td>
-                    <td v-if="key === 'imageFiles' || key === 'AudioFiles'">
+                    <td v-if="key === 'Bilder' && value.length > 0 || key === 'Audio' && value.length > 0">
                         <span
                             v-if="value"
+                            class="external_link"
                             @keydown="getFile(value)"
                             @click="getFile(value)"
                         >Link</span>
@@ -133,11 +145,15 @@ export default {
                         v-html="value.join('<br>')"
                     />
                     <td
+                        v-else-if="key === 'DateCreated'"
+                    >
+                        {{ new Date(value).toLocaleDateString() }}
+                    </td>
+                    <td
                         v-else-if="typeof value === 'string' && value.includes('<br>')"
                         v-html="value"
                     />
                     <td v-else>
-                        plain
                         {{ value }}
                     </td>
                 </tr>
@@ -145,3 +161,13 @@ export default {
         </table>
     </div>
 </template>
+
+<style lang="scss" scoped>
+.table-hover {
+    .external_link {
+        cursor: pointer;
+        text-decoration: underline;
+        color: blue;
+    }
+}
+</style>

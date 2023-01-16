@@ -28,9 +28,10 @@ const state = {
     name: "Story Telling Tool",
     glyphicon: "glyphicon-book",
     renderToWindow: true,
+    keepOpen: true,
     resizableWindow: true,
     isVisibleInMenu: true,
-    deactivateGFI: true,
+    deactivateGFI: false,
     initialWidth: 500,
     initialWidthMobile: 300
 };
