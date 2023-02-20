@@ -29,7 +29,7 @@
           "scale": 5000,
           "zoomLevel": 6
         }
-      ], 
+      ],
       "resolution": 5.2916638091682096
     },
     "menu": {
@@ -52,7 +52,7 @@
           "storyCreationTool": {
             "name": "translate#additional:modules.tools.storyCreationTool.title",
             "glyphicon": "glyphicon-text-size",
-            "active": false
+            "active": true
           }
         }
       }
