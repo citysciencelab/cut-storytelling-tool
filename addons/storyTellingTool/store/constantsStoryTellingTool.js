@@ -33,7 +33,7 @@ const storyTellingModes = {
     ],
 
     backendConfig = {
-        url: "http://localhost:3000/"
+        url: "https://story-api.cut.hcu-hamburg.de/"
     };
 
 export {
