@@ -13,6 +13,7 @@ router.get("/step/:storyId/:step_major/:step_minor/image", controllers.getImage)
 router.get("/step/:storyId/:step_major/:step_minor/image/:imageId", controllers.getImage);
 
 router.get("/step/:storyId/:step_major/:step_minor/html", controllers.getHtml);
+router.get("/step/:storyId/:step_major/:step_minor", controllers.getStoryStep);
 
 
 // POST

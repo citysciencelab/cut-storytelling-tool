@@ -17,7 +17,7 @@ const uuid = require("uuid"),
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 const multer = require("multer"), // Create multer object
@@ -31,8 +31,7 @@ const multer = require("multer"), // Create multer object
                 filename: function (req, file, cb) {
                     cb(
                         null,
-                        new Date().valueOf() +
-        "_" + uuid.v4()
+                        new Date().valueOf() + "_" + uuid.v4()
                     );
                 }
             }
@@ -47,13 +46,14 @@ const multer = require("multer"), // Create multer object
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function getStories (request, response, next) {
     pool.query("SELECT storyid AS id, name, author, description, category  FROM stories", (error, results) => {
         if (error) {
             next(error);
+            return;
         }
         try {
             response.status(200).json(results.rows);
@@ -69,12 +69,10 @@ function getStories (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function getStoryStructure (request, response, next) {
-    // Todo: Connection to the database
-    // var data = require("../dummyData/"+req.params.storyId+"/story.json")
     const query = {
         name: "get-story-structure",
         text: "SELECT story_json FROM stories WHERE storyID = $1",
@@ -85,6 +83,7 @@ function getStoryStructure (request, response, next) {
         (error, results) => {
             if (error) {
                 next(error);
+                return;
             }
 
             try {
@@ -103,13 +102,14 @@ function getStoryStructure (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function getSteps (request, response, next) {
     pool.query("SELECT * FROM steps", (error, results) => {
         if (error) {
             next(error);
+            return;
         }
         try {
             response.status(200).json(results.rows);
@@ -126,13 +126,14 @@ function getSteps (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function getStoriesAllData (request, response, next) {
     pool.query("SELECT * FROM stories", (error, results) => {
         if (error) {
             next(error);
+            return;
         }
         try {
             response.status(200).json(results.rows);
@@ -149,12 +150,10 @@ function getStoriesAllData (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function getStoryStep (request, response, next) {
-    // Todo: Connection to the database
-    // var data = require("../dummyData/"+req.params.storyId+"/story.json")
     console.log(request.params);
     const query = {
         name: "get-story-step",
@@ -167,6 +166,7 @@ function getStoryStep (request, response, next) {
         (error, results) => {
             if (error) {
                 next(error);
+                return;
             }
             try {
                 response.status(200).json(results.rows);
@@ -183,7 +183,7 @@ function getStoryStep (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function getImage (request, response, next) {
@@ -200,6 +200,7 @@ function getImage (request, response, next) {
         (error, results) => {
             if (error) {
                 next(error);
+                return;
             }
 
             try {
@@ -224,7 +225,7 @@ function getImage (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function getHtml (request, response, next) {
@@ -238,6 +239,7 @@ function getHtml (request, response, next) {
         (error, results) => {
             if (error) {
                 next(error);
+                return;
             }
             try {
                 console.log(results.rows.size);
@@ -257,7 +259,7 @@ function getHtml (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function createStory (request, response, next) {
@@ -276,18 +278,20 @@ function createStory (request, response, next) {
         };
 
     pool.query(query_new_story,
-        (error, results) => {
+        (error) => {
             if (error) {
                 next(error);
+                return;
             }
 
             // if successfully inserted, return latest story ID
             const storyID = null;
 
             pool.query(query_latest_story_id,
-                (error, results) => {
-                    if (error) {
-                        next(error);
+                (error2, results) => {
+                    if (error2) {
+                        next(error2);
+                        return;
                     }
                     try {
                         response.status(201).send({success: true, storyID: results.rows[0].max});
@@ -304,7 +308,7 @@ function createStory (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function createStep (request, response, next) {
@@ -315,9 +319,10 @@ function createStep (request, response, next) {
     };
 
     pool.query(query,
-        (error, results) => {
+        (error) => {
             if (error) {
                 next(error);
+                return;
             }
             try {
                 response.status(201).send("step added");
@@ -333,7 +338,7 @@ function createStep (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function addImagePath (request, response, next) {
@@ -350,9 +355,10 @@ function addImagePath (request, response, next) {
     };
 
     pool.query(query,
-        (error, results) => {
+        (error) => {
             if (error) {
                 next(error);
+                return;
             }
             try {
                 response.json({sucess: true, filepath});
@@ -368,7 +374,7 @@ function addImagePath (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function addHtml (request, response, next) {
@@ -380,9 +386,10 @@ function addHtml (request, response, next) {
     };
 
     pool.query(query,
-        (error, results) => {
+        (error) => {
             if (error) {
                 next(error);
+                return;
             }
             try {
                 response.status(201).send("added html");
@@ -401,7 +408,7 @@ function addHtml (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function deleteStory (request, response, next) {
@@ -413,9 +420,10 @@ function deleteStory (request, response, next) {
     };
 
     pool.query(query,
-        (error, results) => {
+        (error) => {
             if (error) {
                 next(error);
+                return;
             }
             // try{response.status(201).send(`all steps of story deleted`)}catch(err){next(err);}
             // THEN delete story itself
@@ -426,9 +434,10 @@ function deleteStory (request, response, next) {
             };
 
             pool.query(query,
-                (error, results) => {
-                    if (error) {
-                        next(error);
+                (error2) => {
+                    if (error2) {
+                        next(error2);
+                        return;
                     }
                     try {
                         response.status(201).send("story deleted");
@@ -445,7 +454,7 @@ function deleteStory (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function deleteAllStorySteps (request, response, next) {
@@ -456,9 +465,10 @@ function deleteAllStorySteps (request, response, next) {
     };
 
     pool.query(query,
-        (error, results) => {
+        (error) => {
             if (error) {
                 next(error);
+                return;
             }
             try {
                 response.status(201).send("all steps of story deleted");
@@ -474,7 +484,7 @@ function deleteAllStorySteps (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function deleteStepMajor (request, response, next) {
@@ -485,9 +495,10 @@ function deleteStepMajor (request, response, next) {
     };
 
     pool.query(query,
-        (error, results) => {
+        (error) => {
             if (error) {
                 next(error);
+                return;
             }
             try {
                 response.status(201).send("major step deleted");
@@ -503,11 +514,10 @@ function deleteStepMajor (request, response, next) {
  *
  * @param {Object} request description
  * @param {Number} response description
- * @param {Number} next description
+ * @param {function} next description
  * @returns {void}
  */
 function deleteStepMinor (request, response, next) {
-
     const query = {
         name: "delete-step-minor",
         text: "DELETE FROM steps WHERE storyID = $1 AND step_major = $2 AND step_minor = $3;",
@@ -515,15 +525,17 @@ function deleteStepMinor (request, response, next) {
     };
 
     pool.query(query,
-        (error, results) => {
+        (error) => {
             if (error) {
                 next(error);
+                return;
             }
             try {
                 response.status(201).send("minor step deleted");
             }
             catch (err) {
                 next(err);
+
             }
         });
 }
