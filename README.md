@@ -3,12 +3,22 @@
 </p>
 
 # Storytelling Tool
+
+:warning::warning:
+This repository is out of date. You can  find the new code in **[this](https://github.com/citysciencelab/cut-data-narrator)** location. 
+:warning::warning:
+
+:wave::wave:
+So long Storytelling Tool; - it has been a blast - welcome **[Data Narrator](https://github.com/citysciencelab/cut-data-narrator)**.
+:wave::wave:
+
+:loop: Same stories different name. :loop:
+
 ## City Science Lab - Connected Urban Twin
 
 The Storytelling Tool is a **[Masterportal](https://www.masterportal.org/)** add-on that can be used to add text, photos and images to geo-referenced data sets. In this way, the usually very technical and purely data-based representations can be supplemented with information and more descriptive representations. The data shown is contextualized and complex relationships become easier to understand. Users click their way through a story step by step.
 
 The current version of the repository includes an example from the real-life experiment 'Mobilities of care'. Topics such as the mobility behavior of unpaid care workers can thus be communicated and located more easily. This is available under the portal configuration called '/mobility-data/'.
-
 
 https://user-images.githubusercontent.com/36763878/161025746-b8ac51be-a687-4e63-8bcf-b1da01334ead.mp4
 
